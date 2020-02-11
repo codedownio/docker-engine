@@ -70,7 +70,7 @@ secretCreate =
   _mkRequest "POST" ["/secrets/create"]
 
 data SecretCreate 
-instance HasBodyParam SecretCreate UNKNOWN_BASE_TYPE 
+instance HasBodyParam SecretCreate SecretSpec
 
 -- | @application/json@
 instance Consumes SecretCreate MimeJSON

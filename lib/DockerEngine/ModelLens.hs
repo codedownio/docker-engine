@@ -2014,7 +2014,7 @@ inlineResponse20013ImagesL f InlineResponse20013{..} = (\inlineResponse20013Imag
 {-# INLINE inlineResponse20013ImagesL #-}
 
 -- | 'inlineResponse20013Containers' Lens
-inlineResponse20013ContainersL :: Lens_' InlineResponse20013 (Maybe [Array])
+inlineResponse20013ContainersL :: Lens_' InlineResponse20013 (Maybe [A.Array])
 inlineResponse20013ContainersL f InlineResponse20013{..} = (\inlineResponse20013Containers -> InlineResponse20013 { inlineResponse20013Containers, ..} ) <$> f inlineResponse20013Containers
 {-# INLINE inlineResponse20013ContainersL #-}
 

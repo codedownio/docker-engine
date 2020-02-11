@@ -64,15 +64,15 @@ import qualified Prelude as P
 -- Create a service
 -- 
 serviceCreate 
-  :: (Consumes ServiceCreate MimeJSON, MimeRender MimeJSON UNKNOWN_BASE_TYPE)
-  => UNKNOWN_BASE_TYPE -- ^ "body"
+  :: (Consumes ServiceCreate MimeJSON, MimeRender MimeJSON ServiceSpec)
+  => ServiceSpec -- ^ "body"
   -> DockerEngineRequest ServiceCreate MimeJSON InlineResponse2012 MimeJSON
 serviceCreate body =
   _mkRequest "POST" ["/services/create"]
     `setBodyParam` body
 
 data ServiceCreate 
-instance HasBodyParam ServiceCreate UNKNOWN_BASE_TYPE 
+instance HasBodyParam ServiceCreate ServiceSpec
 
 -- | /Optional Param/ "X-Registry-Auth" - A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)
 instance HasOptionalParam ServiceCreate XRegistryAuth where
@@ -221,8 +221,8 @@ instance Produces ServiceLogs MimeVndDockerRawStream
 -- Update a service
 -- 
 serviceUpdate 
-  :: (Consumes ServiceUpdate MimeJSON, MimeRender MimeJSON UNKNOWN_BASE_TYPE)
-  => UNKNOWN_BASE_TYPE -- ^ "body"
+  :: (Consumes ServiceUpdate MimeJSON, MimeRender MimeJSON ServiceSpec)
+  => ServiceSpec -- ^ "body"
   -> Id -- ^ "id" -  ID or name of service.
   -> VersionInt -- ^ "version" -  The version number of the service object being updated. This is required to avoid conflicting writes.
   -> DockerEngineRequest ServiceUpdate MimeJSON ServiceUpdateResponse MimeJSON
@@ -232,7 +232,7 @@ serviceUpdate body (Id id) (VersionInt version) =
     `setQuery` toQuery ("version", Just version)
 
 data ServiceUpdate 
-instance HasBodyParam ServiceUpdate UNKNOWN_BASE_TYPE 
+instance HasBodyParam ServiceUpdate ServiceSpec
 
 -- | /Optional Param/ "registryAuthFrom" - If the X-Registry-Auth header is not specified, this parameter indicates where to find registry authorization credentials. The valid values are `spec` and `previous-spec`.
 instance HasOptionalParam ServiceUpdate RegistryAuthFrom where

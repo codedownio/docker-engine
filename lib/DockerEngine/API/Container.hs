@@ -241,9 +241,9 @@ instance Produces ContainerChanges MimeJSON
 -- Create a container
 -- 
 containerCreate 
-  :: (Consumes ContainerCreate contentType, MimeRender contentType UNKNOWN_BASE_TYPE)
+  :: (Consumes ContainerCreate contentType, MimeRender contentType ContainerConfig)
   => ContentType contentType -- ^ request content-type ('MimeType')
-  -> UNKNOWN_BASE_TYPE -- ^ "body" -  Container to create
+  -> ContainerConfig -- ^ "body" -  Container to create
   -> DockerEngineRequest ContainerCreate contentType InlineResponse201 MimeJSON
 containerCreate _ body =
   _mkRequest "POST" ["/containers/create"]
@@ -252,7 +252,7 @@ containerCreate _ body =
 data ContainerCreate 
 
 -- | /Body Param/ "body" - Container to create
-instance HasBodyParam ContainerCreate UNKNOWN_BASE_TYPE 
+instance HasBodyParam ContainerCreate ContainerConfig
 
 -- | /Optional Param/ "name" - Assign the specified name to the container. Must match `/?[a-zA-Z0-9_-]+`.
 instance HasOptionalParam ContainerCreate Name where
@@ -738,8 +738,8 @@ instance Produces ContainerUnpause MimePlainText
 -- Change various configuration options of a container without having to recreate it.
 -- 
 containerUpdate 
-  :: (Consumes ContainerUpdate MimeJSON, MimeRender MimeJSON UNKNOWN_BASE_TYPE)
-  => UNKNOWN_BASE_TYPE -- ^ "update"
+  :: (Consumes ContainerUpdate MimeJSON, MimeRender MimeJSON Resources)
+  => Resources -- ^ "update"
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerUpdate MimeJSON InlineResponse2003 MimeJSON
 containerUpdate update (Id id) =
@@ -747,7 +747,7 @@ containerUpdate update (Id id) =
     `setBodyParam` update
 
 data ContainerUpdate 
-instance HasBodyParam ContainerUpdate UNKNOWN_BASE_TYPE 
+instance HasBodyParam ContainerUpdate Resources
 
 -- | @application/json@
 instance Consumes ContainerUpdate MimeJSON

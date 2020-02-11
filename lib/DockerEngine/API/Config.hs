@@ -70,7 +70,7 @@ configCreate =
   _mkRequest "POST" ["/configs/create"]
 
 data ConfigCreate 
-instance HasBodyParam ConfigCreate UNKNOWN_BASE_TYPE 
+instance HasBodyParam ConfigCreate ConfigSpec
 
 -- | @application/json@
 instance Consumes ConfigCreate MimeJSON
