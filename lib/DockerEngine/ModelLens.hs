@@ -314,6 +314,103 @@ containerConfigVolumesAdditionalPropertiesL f ContainerConfigVolumes{..} = (\con
 
 
 
+-- * ContainerSummary
+
+-- | 'containerSummaryId' Lens
+containerSummaryIdL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryIdL f ContainerSummary{..} = (\containerSummaryId -> ContainerSummary { containerSummaryId, ..} ) <$> f containerSummaryId
+{-# INLINE containerSummaryIdL #-}
+
+-- | 'containerSummaryNames' Lens
+containerSummaryNamesL :: Lens_' ContainerSummary (Maybe [Text])
+containerSummaryNamesL f ContainerSummary{..} = (\containerSummaryNames -> ContainerSummary { containerSummaryNames, ..} ) <$> f containerSummaryNames
+{-# INLINE containerSummaryNamesL #-}
+
+-- | 'containerSummaryImage' Lens
+containerSummaryImageL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryImageL f ContainerSummary{..} = (\containerSummaryImage -> ContainerSummary { containerSummaryImage, ..} ) <$> f containerSummaryImage
+{-# INLINE containerSummaryImageL #-}
+
+-- | 'containerSummaryImageId' Lens
+containerSummaryImageIdL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryImageIdL f ContainerSummary{..} = (\containerSummaryImageId -> ContainerSummary { containerSummaryImageId, ..} ) <$> f containerSummaryImageId
+{-# INLINE containerSummaryImageIdL #-}
+
+-- | 'containerSummaryCommand' Lens
+containerSummaryCommandL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryCommandL f ContainerSummary{..} = (\containerSummaryCommand -> ContainerSummary { containerSummaryCommand, ..} ) <$> f containerSummaryCommand
+{-# INLINE containerSummaryCommandL #-}
+
+-- | 'containerSummaryCreated' Lens
+containerSummaryCreatedL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummaryCreatedL f ContainerSummary{..} = (\containerSummaryCreated -> ContainerSummary { containerSummaryCreated, ..} ) <$> f containerSummaryCreated
+{-# INLINE containerSummaryCreatedL #-}
+
+-- | 'containerSummaryPorts' Lens
+containerSummaryPortsL :: Lens_' ContainerSummary (Maybe [Port])
+containerSummaryPortsL f ContainerSummary{..} = (\containerSummaryPorts -> ContainerSummary { containerSummaryPorts, ..} ) <$> f containerSummaryPorts
+{-# INLINE containerSummaryPortsL #-}
+
+-- | 'containerSummarySizeRw' Lens
+containerSummarySizeRwL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummarySizeRwL f ContainerSummary{..} = (\containerSummarySizeRw -> ContainerSummary { containerSummarySizeRw, ..} ) <$> f containerSummarySizeRw
+{-# INLINE containerSummarySizeRwL #-}
+
+-- | 'containerSummarySizeRootFs' Lens
+containerSummarySizeRootFsL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummarySizeRootFsL f ContainerSummary{..} = (\containerSummarySizeRootFs -> ContainerSummary { containerSummarySizeRootFs, ..} ) <$> f containerSummarySizeRootFs
+{-# INLINE containerSummarySizeRootFsL #-}
+
+-- | 'containerSummaryLabels' Lens
+containerSummaryLabelsL :: Lens_' ContainerSummary (Maybe (Map.Map String Text))
+containerSummaryLabelsL f ContainerSummary{..} = (\containerSummaryLabels -> ContainerSummary { containerSummaryLabels, ..} ) <$> f containerSummaryLabels
+{-# INLINE containerSummaryLabelsL #-}
+
+-- | 'containerSummaryState' Lens
+containerSummaryStateL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryStateL f ContainerSummary{..} = (\containerSummaryState -> ContainerSummary { containerSummaryState, ..} ) <$> f containerSummaryState
+{-# INLINE containerSummaryStateL #-}
+
+-- | 'containerSummaryStatus' Lens
+containerSummaryStatusL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryStatusL f ContainerSummary{..} = (\containerSummaryStatus -> ContainerSummary { containerSummaryStatus, ..} ) <$> f containerSummaryStatus
+{-# INLINE containerSummaryStatusL #-}
+
+-- | 'containerSummaryHostConfig' Lens
+containerSummaryHostConfigL :: Lens_' ContainerSummary (Maybe ContainerSummaryHostConfig)
+containerSummaryHostConfigL f ContainerSummary{..} = (\containerSummaryHostConfig -> ContainerSummary { containerSummaryHostConfig, ..} ) <$> f containerSummaryHostConfig
+{-# INLINE containerSummaryHostConfigL #-}
+
+-- | 'containerSummaryNetworkSettings' Lens
+containerSummaryNetworkSettingsL :: Lens_' ContainerSummary (Maybe ContainerSummaryNetworkSettings)
+containerSummaryNetworkSettingsL f ContainerSummary{..} = (\containerSummaryNetworkSettings -> ContainerSummary { containerSummaryNetworkSettings, ..} ) <$> f containerSummaryNetworkSettings
+{-# INLINE containerSummaryNetworkSettingsL #-}
+
+-- | 'containerSummaryMounts' Lens
+containerSummaryMountsL :: Lens_' ContainerSummary (Maybe [Mount])
+containerSummaryMountsL f ContainerSummary{..} = (\containerSummaryMounts -> ContainerSummary { containerSummaryMounts, ..} ) <$> f containerSummaryMounts
+{-# INLINE containerSummaryMountsL #-}
+
+
+
+-- * ContainerSummaryHostConfig
+
+-- | 'containerSummaryHostConfigNetworkMode' Lens
+containerSummaryHostConfigNetworkModeL :: Lens_' ContainerSummaryHostConfig (Maybe Text)
+containerSummaryHostConfigNetworkModeL f ContainerSummaryHostConfig{..} = (\containerSummaryHostConfigNetworkMode -> ContainerSummaryHostConfig { containerSummaryHostConfigNetworkMode, ..} ) <$> f containerSummaryHostConfigNetworkMode
+{-# INLINE containerSummaryHostConfigNetworkModeL #-}
+
+
+
+-- * ContainerSummaryNetworkSettings
+
+-- | 'containerSummaryNetworkSettingsNetworks' Lens
+containerSummaryNetworkSettingsNetworksL :: Lens_' ContainerSummaryNetworkSettings (Maybe (Map.Map String EndpointSettings))
+containerSummaryNetworkSettingsNetworksL f ContainerSummaryNetworkSettings{..} = (\containerSummaryNetworkSettingsNetworks -> ContainerSummaryNetworkSettings { containerSummaryNetworkSettingsNetworks, ..} ) <$> f containerSummaryNetworkSettingsNetworks
+{-# INLINE containerSummaryNetworkSettingsNetworksL #-}
+
+
+
 -- * CreateImageInfo
 
 -- | 'createImageInfoError' Lens
@@ -2014,7 +2111,7 @@ inlineResponse20013ImagesL f InlineResponse20013{..} = (\inlineResponse20013Imag
 {-# INLINE inlineResponse20013ImagesL #-}
 
 -- | 'inlineResponse20013Containers' Lens
-inlineResponse20013ContainersL :: Lens_' InlineResponse20013 (Maybe [A.Array])
+inlineResponse20013ContainersL :: Lens_' InlineResponse20013 (Maybe [ContainerSummary])
 inlineResponse20013ContainersL f InlineResponse20013{..} = (\inlineResponse20013Containers -> InlineResponse20013 { inlineResponse20013Containers, ..} ) <$> f inlineResponse20013Containers
 {-# INLINE inlineResponse20013ContainersL #-}
 
