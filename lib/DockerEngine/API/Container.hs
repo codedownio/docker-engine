@@ -412,7 +412,22 @@ instance HasOptionalParam ContainerList Size where
   applyOptionalParam req (Size xs) =
     req `setQuery` toQuery ("size", Just xs)
 
--- | /Optional Param/ "filters" - Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{\"status\": [\"paused\"]}` will only return paused containers. Available filters:  - `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`) - `before`=(`<container id>` or `<container name>`) - `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `exited=<int>` containers with exit code of `<int>` - `health`=(`starting`|`healthy`|`unhealthy`|`none`) - `id=<ID>` a container's ID - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only) - `is-task=`(`true`|`false`) - `label=key` or `label=\"key=value\"` of a container label - `name=<name>` a container's name - `network`=(`<network id>` or `<network name>`) - `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `since`=(`<container id>` or `<container name>`) - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`) - `volume`=(`<volume name>` or `<mount point destination>`)
+-- | /Optional Param/ "filters" - Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{\"status\": [\"paused\"]}` will only return paused containers. Available filters:
+-- - `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`)
+-- - `before`=(`<container id>` or `<container name>`)
+-- - `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)
+-- - `exited=<int>` containers with exit code of `<int>`
+-- - `health`=(`starting`|`healthy`|`unhealthy`|`none`)
+-- - `id=<ID>` a container's ID
+-- - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only)
+-- - `is-task=`(`true`|`false`)
+-- - `label=key` or `label=\"key=value\"` of a container label
+-- - `name=<name>` a container's name
+-- - `network`=(`<network id>` or `<network name>`)
+-- - `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)
+-- - `since`=(`<container id>` or `<container name>`)
+-- - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`)
+-- - `volume`=(`<volume name>` or `<mount point destination>`)
 instance HasOptionalParam ContainerList Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
