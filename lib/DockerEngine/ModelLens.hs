@@ -1731,7 +1731,7 @@ iPAMConfigL f IPAM{..} = (\iPAMConfig -> IPAM { iPAMConfig, ..} ) <$> f iPAMConf
 {-# INLINE iPAMConfigL #-}
 
 -- | 'iPAMOptions' Lens
-iPAMOptionsL :: Lens_' IPAM (Maybe [(Map.Map String Text)])
+iPAMOptionsL :: Lens_' IPAM (Maybe (Map.Map String Text))
 iPAMOptionsL f IPAM{..} = (\iPAMOptions -> IPAM { iPAMOptions, ..} ) <$> f iPAMOptions
 {-# INLINE iPAMOptionsL #-}
 

@@ -8301,12 +8301,10 @@ components:
             type: object
           type: array
         Options:
+          additionalProperties:
+            type: string
           description: Driver-specific options, specified as a map.
-          items:
-            additionalProperties:
-              type: string
-            type: object
-          type: array
+          type: object
       type: object
     NetworkContainer:
       properties:

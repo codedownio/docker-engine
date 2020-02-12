@@ -715,7 +715,7 @@ genIPAM n =
   IPAM
     <$> arbitraryReducedMaybe n -- iPAMDriver :: Maybe Text
     <*> arbitraryReducedMaybe n -- iPAMConfig :: Maybe [(Map.Map String Text)]
-    <*> arbitraryReducedMaybe n -- iPAMOptions :: Maybe [(Map.Map String Text)]
+    <*> arbitraryReducedMaybe n -- iPAMOptions :: Maybe (Map.Map String Text)
   
 instance Arbitrary IdResponse where
   arbitrary = sized genIdResponse

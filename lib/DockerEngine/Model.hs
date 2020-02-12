@@ -2621,7 +2621,7 @@ mkHostConfigAllOfLogConfig =
 data IPAM = IPAM
   { iPAMDriver :: !(Maybe Text) -- ^ "Driver" - Name of the IPAM driver to use.
   , iPAMConfig :: !(Maybe [(Map.Map String Text)]) -- ^ "Config" - List of IPAM configuration options, specified as a map: &#x60;{\&quot;Subnet\&quot;: &lt;CIDR&gt;, \&quot;IPRange\&quot;: &lt;CIDR&gt;, \&quot;Gateway\&quot;: &lt;IP address&gt;, \&quot;AuxAddress\&quot;: &lt;device_name:IP address&gt;}&#x60;
-  , iPAMOptions :: !(Maybe [(Map.Map String Text)]) -- ^ "Options" - Driver-specific options, specified as a map.
+  , iPAMOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options, specified as a map.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON IPAM
