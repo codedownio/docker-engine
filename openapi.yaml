@@ -297,7 +297,9 @@ paths:
                       MacAddress: 02:42:ac:11:00:05
                 Mounts: []
               schema:
-                $ref: '#/components/schemas/ContainerSummary'
+                items:
+                  $ref: '#/components/schemas/ContainerSummary'
+                type: array
           description: no error
         "400":
           content:
