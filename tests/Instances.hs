@@ -104,6 +104,15 @@ arbitraryReducedMaybeValue n = do
 
 -- * Models
  
+instance Arbitrary Address where
+  arbitrary = sized genAddress
+
+genAddress :: Int -> Gen Address
+genAddress n =
+  Address
+    <$> arbitraryReducedMaybe n -- addressAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- addressPrefixLen :: Maybe Int
+  
 instance Arbitrary AuthConfig where
   arbitrary = sized genAuthConfig
 
@@ -128,6 +137,15 @@ genBuildInfo n =
     <*> arbitraryReducedMaybe n -- buildInfoStatus :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildInfoProgress :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildInfoProgressDetail :: Maybe ProgressDetail
+    <*> arbitraryReducedMaybe n -- buildInfoAux :: Maybe ImageID
+  
+instance Arbitrary BuildPruneResponse where
+  arbitrary = sized genBuildPruneResponse
+
+genBuildPruneResponse :: Int -> Gen BuildPruneResponse
+genBuildPruneResponse n =
+  BuildPruneResponse
+    <$> arbitraryReducedMaybe n -- buildPruneResponseSpaceReclaimed :: Maybe Integer
   
 instance Arbitrary ClusterInfo where
   arbitrary = sized genClusterInfo
@@ -142,6 +160,15 @@ genClusterInfo n =
     <*> arbitraryReducedMaybe n -- clusterInfoSpec :: Maybe SwarmSpec
     <*> arbitraryReducedMaybe n -- clusterInfoTlsInfo :: Maybe TLSInfo
     <*> arbitraryReducedMaybe n -- clusterInfoRootRotationInProgress :: Maybe Bool
+  
+instance Arbitrary Commit where
+  arbitrary = sized genCommit
+
+genCommit :: Int -> Gen Commit
+genCommit n =
+  Commit
+    <$> arbitraryReducedMaybe n -- commitId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- commitExpected :: Maybe Text
   
 instance Arbitrary Config where
   arbitrary = sized genConfig
@@ -163,7 +190,16 @@ genConfigSpec n =
   ConfigSpec
     <$> arbitraryReducedMaybe n -- configSpecName :: Maybe Text
     <*> arbitraryReducedMaybe n -- configSpecLabels :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- configSpecData :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- configSpecData :: Maybe Text
+  
+instance Arbitrary ContainerChangeResponseItem where
+  arbitrary = sized genContainerChangeResponseItem
+
+genContainerChangeResponseItem :: Int -> Gen ContainerChangeResponseItem
+genContainerChangeResponseItem n =
+  ContainerChangeResponseItem
+    <$> arbitrary -- containerChangeResponseItemPath :: Text
+    <*> arbitrary -- containerChangeResponseItemKind :: Int
   
 instance Arbitrary ContainerConfig where
   arbitrary = sized genContainerConfig
@@ -182,11 +218,13 @@ genContainerConfig n =
     <*> arbitraryReducedMaybe n -- containerConfigOpenStdin :: Maybe Bool
     <*> arbitraryReducedMaybe n -- containerConfigStdinOnce :: Maybe Bool
     <*> arbitraryReducedMaybe n -- containerConfigEnv :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigCmd :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerConfigHealthcheck :: Maybe HealthConfig
     <*> arbitraryReducedMaybe n -- containerConfigArgsEscaped :: Maybe Bool
     <*> arbitraryReducedMaybe n -- containerConfigImage :: Maybe Text
     <*> arbitraryReducedMaybe n -- containerConfigVolumes :: Maybe ContainerConfigVolumes
     <*> arbitraryReducedMaybe n -- containerConfigWorkingDir :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigEntrypoint :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerConfigNetworkDisabled :: Maybe Bool
     <*> arbitraryReducedMaybe n -- containerConfigMacAddress :: Maybe Text
     <*> arbitraryReducedMaybe n -- containerConfigOnBuild :: Maybe [Text]
@@ -203,43 +241,107 @@ genContainerConfigVolumes n =
   ContainerConfigVolumes
     <$> arbitraryReducedMaybeValue n -- containerConfigVolumesAdditionalProperties :: Maybe A.Value
   
-instance Arbitrary ContainerSummary where
-  arbitrary = sized genContainerSummary
+instance Arbitrary ContainerCreateResponse where
+  arbitrary = sized genContainerCreateResponse
 
-genContainerSummary :: Int -> Gen ContainerSummary
-genContainerSummary n =
-  ContainerSummary
-    <$> arbitraryReducedMaybe n -- containerSummaryId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryNames :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- containerSummaryImage :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryImageId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryCommand :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryCreated :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- containerSummaryPorts :: Maybe [Port]
-    <*> arbitraryReducedMaybe n -- containerSummarySizeRw :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- containerSummarySizeRootFs :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- containerSummaryLabels :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- containerSummaryState :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryStatus :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerSummaryHostConfig :: Maybe ContainerSummaryHostConfig
-    <*> arbitraryReducedMaybe n -- containerSummaryNetworkSettings :: Maybe ContainerSummaryNetworkSettings
-    <*> arbitraryReducedMaybe n -- containerSummaryMounts :: Maybe [Mount]
+genContainerCreateResponse :: Int -> Gen ContainerCreateResponse
+genContainerCreateResponse n =
+  ContainerCreateResponse
+    <$> arbitrary -- containerCreateResponseId :: Text
+    <*> arbitrary -- containerCreateResponseWarnings :: [Text]
   
-instance Arbitrary ContainerSummaryHostConfig where
-  arbitrary = sized genContainerSummaryHostConfig
+instance Arbitrary ContainerInspectResponse where
+  arbitrary = sized genContainerInspectResponse
 
-genContainerSummaryHostConfig :: Int -> Gen ContainerSummaryHostConfig
-genContainerSummaryHostConfig n =
-  ContainerSummaryHostConfig
-    <$> arbitraryReducedMaybe n -- containerSummaryHostConfigNetworkMode :: Maybe Text
+genContainerInspectResponse :: Int -> Gen ContainerInspectResponse
+genContainerInspectResponse n =
+  ContainerInspectResponse
+    <$> arbitraryReducedMaybe n -- containerInspectResponseId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseCreated :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponsePath :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseArgs :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerInspectResponseState :: Maybe ContainerInspectResponseState
+    <*> arbitraryReducedMaybe n -- containerInspectResponseImage :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseResolvConfPath :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseHostnamePath :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseHostsPath :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseLogPath :: Maybe Text
+    <*> arbitraryReducedMaybeValue n -- containerInspectResponseNode :: Maybe A.Value
+    <*> arbitraryReducedMaybe n -- containerInspectResponseName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseRestartCount :: Maybe Int
+    <*> arbitraryReducedMaybe n -- containerInspectResponseDriver :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseMountLabel :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseProcessLabel :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseAppArmorProfile :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseExecIDs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseHostConfig :: Maybe HostConfig
+    <*> arbitraryReducedMaybe n -- containerInspectResponseGraphDriver :: Maybe GraphDriverData
+    <*> arbitraryReducedMaybe n -- containerInspectResponseSizeRw :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- containerInspectResponseSizeRootFs :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- containerInspectResponseMounts :: Maybe [MountPoint]
+    <*> arbitraryReducedMaybe n -- containerInspectResponseConfig :: Maybe ContainerConfig
+    <*> arbitraryReducedMaybe n -- containerInspectResponseNetworkSettings :: Maybe NetworkSettings
   
-instance Arbitrary ContainerSummaryNetworkSettings where
-  arbitrary = sized genContainerSummaryNetworkSettings
+instance Arbitrary ContainerInspectResponseState where
+  arbitrary = sized genContainerInspectResponseState
 
-genContainerSummaryNetworkSettings :: Int -> Gen ContainerSummaryNetworkSettings
-genContainerSummaryNetworkSettings n =
-  ContainerSummaryNetworkSettings
-    <$> arbitraryReducedMaybe n -- containerSummaryNetworkSettingsNetworks :: Maybe (Map.Map String EndpointSettings)
+genContainerInspectResponseState :: Int -> Gen ContainerInspectResponseState
+genContainerInspectResponseState n =
+  ContainerInspectResponseState
+    <$> arbitraryReducedMaybe n -- containerInspectResponseStateStatus :: Maybe E'Status
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateRunning :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStatePaused :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateRestarting :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateOomKilled :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateDead :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStatePid :: Maybe Int
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateExitCode :: Maybe Int
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateError :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateStartedAt :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseStateFinishedAt :: Maybe Text
+  
+instance Arbitrary ContainerPruneResponse where
+  arbitrary = sized genContainerPruneResponse
+
+genContainerPruneResponse :: Int -> Gen ContainerPruneResponse
+genContainerPruneResponse n =
+  ContainerPruneResponse
+    <$> arbitraryReducedMaybe n -- containerPruneResponseContainersDeleted :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerPruneResponseSpaceReclaimed :: Maybe Integer
+  
+instance Arbitrary ContainerTopResponse where
+  arbitrary = sized genContainerTopResponse
+
+genContainerTopResponse :: Int -> Gen ContainerTopResponse
+genContainerTopResponse n =
+  ContainerTopResponse
+    <$> arbitraryReducedMaybe n -- containerTopResponseTitles :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerTopResponseProcesses :: Maybe [[Text]]
+  
+instance Arbitrary ContainerUpdateResponse where
+  arbitrary = sized genContainerUpdateResponse
+
+genContainerUpdateResponse :: Int -> Gen ContainerUpdateResponse
+genContainerUpdateResponse n =
+  ContainerUpdateResponse
+    <$> arbitraryReducedMaybe n -- containerUpdateResponseWarnings :: Maybe [Text]
+  
+instance Arbitrary ContainerWaitResponse where
+  arbitrary = sized genContainerWaitResponse
+
+genContainerWaitResponse :: Int -> Gen ContainerWaitResponse
+genContainerWaitResponse n =
+  ContainerWaitResponse
+    <$> arbitrary -- containerWaitResponseStatusCode :: Int
+    <*> arbitraryReducedMaybe n -- containerWaitResponseError :: Maybe ContainerWaitResponseError
+  
+instance Arbitrary ContainerWaitResponseError where
+  arbitrary = sized genContainerWaitResponseError
+
+genContainerWaitResponseError :: Int -> Gen ContainerWaitResponseError
+genContainerWaitResponseError n =
+  ContainerWaitResponseError
+    <$> arbitraryReducedMaybe n -- containerWaitResponseErrorMessage :: Maybe Text
   
 instance Arbitrary CreateImageInfo where
   arbitrary = sized genCreateImageInfo
@@ -247,7 +349,8 @@ instance Arbitrary CreateImageInfo where
 genCreateImageInfo :: Int -> Gen CreateImageInfo
 genCreateImageInfo n =
   CreateImageInfo
-    <$> arbitraryReducedMaybe n -- createImageInfoError :: Maybe Text
+    <$> arbitraryReducedMaybe n -- createImageInfoId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- createImageInfoError :: Maybe Text
     <*> arbitraryReducedMaybe n -- createImageInfoStatus :: Maybe Text
     <*> arbitraryReducedMaybe n -- createImageInfoProgress :: Maybe Text
     <*> arbitraryReducedMaybe n -- createImageInfoProgressDetail :: Maybe ProgressDetail
@@ -262,6 +365,58 @@ genDeviceMapping n =
     <*> arbitraryReducedMaybe n -- deviceMappingPathInContainer :: Maybe Text
     <*> arbitraryReducedMaybe n -- deviceMappingCgroupPermissions :: Maybe Text
   
+instance Arbitrary DistributionInspectResponse where
+  arbitrary = sized genDistributionInspectResponse
+
+genDistributionInspectResponse :: Int -> Gen DistributionInspectResponse
+genDistributionInspectResponse n =
+  DistributionInspectResponse
+    <$> arbitraryReduced n -- distributionInspectResponseDescriptor :: DistributionInspectResponseDescriptor
+    <*> arbitraryReduced n -- distributionInspectResponsePlatforms :: [DistributionInspectResponsePlatforms]
+  
+instance Arbitrary DistributionInspectResponseDescriptor where
+  arbitrary = sized genDistributionInspectResponseDescriptor
+
+genDistributionInspectResponseDescriptor :: Int -> Gen DistributionInspectResponseDescriptor
+genDistributionInspectResponseDescriptor n =
+  DistributionInspectResponseDescriptor
+    <$> arbitraryReducedMaybe n -- distributionInspectResponseDescriptorMediaType :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponseDescriptorSize :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- distributionInspectResponseDescriptorDigest :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponseDescriptorUrLs :: Maybe [Text]
+  
+instance Arbitrary DistributionInspectResponsePlatforms where
+  arbitrary = sized genDistributionInspectResponsePlatforms
+
+genDistributionInspectResponsePlatforms :: Int -> Gen DistributionInspectResponsePlatforms
+genDistributionInspectResponsePlatforms n =
+  DistributionInspectResponsePlatforms
+    <$> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsArchitecture :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsOs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsOsVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsOsFeatures :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsVariant :: Maybe Text
+    <*> arbitraryReducedMaybe n -- distributionInspectResponsePlatformsFeatures :: Maybe [Text]
+  
+instance Arbitrary Driver where
+  arbitrary = sized genDriver
+
+genDriver :: Int -> Gen Driver
+genDriver n =
+  Driver
+    <$> arbitrary -- driverName :: Text
+    <*> arbitraryReducedMaybe n -- driverOptions :: Maybe (Map.Map String Text)
+  
+instance Arbitrary EndpointIPAMConfig where
+  arbitrary = sized genEndpointIPAMConfig
+
+genEndpointIPAMConfig :: Int -> Gen EndpointIPAMConfig
+genEndpointIPAMConfig n =
+  EndpointIPAMConfig
+    <$> arbitraryReducedMaybe n -- endpointIPAMConfigIPv4Address :: Maybe Text
+    <*> arbitraryReducedMaybe n -- endpointIPAMConfigIPv6Address :: Maybe Text
+    <*> arbitraryReducedMaybe n -- endpointIPAMConfigLinkLocalIPs :: Maybe [Text]
+  
 instance Arbitrary EndpointPortConfig where
   arbitrary = sized genEndpointPortConfig
 
@@ -272,6 +427,7 @@ genEndpointPortConfig n =
     <*> arbitraryReducedMaybe n -- endpointPortConfigProtocol :: Maybe E'Type
     <*> arbitraryReducedMaybe n -- endpointPortConfigTargetPort :: Maybe Int
     <*> arbitraryReducedMaybe n -- endpointPortConfigPublishedPort :: Maybe Int
+    <*> arbitraryReducedMaybe n -- endpointPortConfigPublishMode :: Maybe E'PublishMode
   
 instance Arbitrary EndpointSettings where
   arbitrary = sized genEndpointSettings
@@ -279,7 +435,7 @@ instance Arbitrary EndpointSettings where
 genEndpointSettings :: Int -> Gen EndpointSettings
 genEndpointSettings n =
   EndpointSettings
-    <$> arbitraryReducedMaybe n -- endpointSettingsIpamConfig :: Maybe EndpointSettingsIPAMConfig
+    <$> arbitraryReducedMaybe n -- endpointSettingsIpamConfig :: Maybe EndpointIPAMConfig
     <*> arbitraryReducedMaybe n -- endpointSettingsLinks :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- endpointSettingsAliases :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- endpointSettingsNetworkId :: Maybe Text
@@ -291,16 +447,7 @@ genEndpointSettings n =
     <*> arbitraryReducedMaybe n -- endpointSettingsGlobalIPv6Address :: Maybe Text
     <*> arbitraryReducedMaybe n -- endpointSettingsGlobalIPv6PrefixLen :: Maybe Integer
     <*> arbitraryReducedMaybe n -- endpointSettingsMacAddress :: Maybe Text
-  
-instance Arbitrary EndpointSettingsIPAMConfig where
-  arbitrary = sized genEndpointSettingsIPAMConfig
-
-genEndpointSettingsIPAMConfig :: Int -> Gen EndpointSettingsIPAMConfig
-genEndpointSettingsIPAMConfig n =
-  EndpointSettingsIPAMConfig
-    <$> arbitraryReducedMaybe n -- endpointSettingsIPAMConfigIPv4Address :: Maybe Text
-    <*> arbitraryReducedMaybe n -- endpointSettingsIPAMConfigIPv6Address :: Maybe Text
-    <*> arbitraryReducedMaybe n -- endpointSettingsIPAMConfigLinkLocalIPs :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- endpointSettingsDriverOpts :: Maybe (Map.Map String Text)
   
 instance Arbitrary EndpointSpec where
   arbitrary = sized genEndpointSpec
@@ -310,6 +457,25 @@ genEndpointSpec n =
   EndpointSpec
     <$> arbitraryReducedMaybe n -- endpointSpecMode :: Maybe E'Mode
     <*> arbitraryReducedMaybe n -- endpointSpecPorts :: Maybe [EndpointPortConfig]
+  
+instance Arbitrary EngineDescription where
+  arbitrary = sized genEngineDescription
+
+genEngineDescription :: Int -> Gen EngineDescription
+genEngineDescription n =
+  EngineDescription
+    <$> arbitraryReducedMaybe n -- engineDescriptionEngineVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- engineDescriptionLabels :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- engineDescriptionPlugins :: Maybe [EngineDescriptionPlugins]
+  
+instance Arbitrary EngineDescriptionPlugins where
+  arbitrary = sized genEngineDescriptionPlugins
+
+genEngineDescriptionPlugins :: Int -> Gen EngineDescriptionPlugins
+genEngineDescriptionPlugins n =
+  EngineDescriptionPlugins
+    <$> arbitraryReducedMaybe n -- engineDescriptionPluginsType :: Maybe Text
+    <*> arbitraryReducedMaybe n -- engineDescriptionPluginsName :: Maybe Text
   
 instance Arbitrary ErrorDetail where
   arbitrary = sized genErrorDetail
@@ -327,6 +493,24 @@ genErrorResponse :: Int -> Gen ErrorResponse
 genErrorResponse n =
   ErrorResponse
     <$> arbitrary -- errorResponseMessage :: Text
+  
+instance Arbitrary ExecInspectResponse where
+  arbitrary = sized genExecInspectResponse
+
+genExecInspectResponse :: Int -> Gen ExecInspectResponse
+genExecInspectResponse n =
+  ExecInspectResponse
+    <$> arbitraryReducedMaybe n -- execInspectResponseCanRemove :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execInspectResponseDetachKeys :: Maybe Text
+    <*> arbitraryReducedMaybe n -- execInspectResponseId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- execInspectResponseRunning :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execInspectResponseExitCode :: Maybe Int
+    <*> arbitraryReducedMaybe n -- execInspectResponseProcessConfig :: Maybe ProcessConfig
+    <*> arbitraryReducedMaybe n -- execInspectResponseOpenStdin :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execInspectResponseOpenStderr :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execInspectResponseOpenStdout :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execInspectResponseContainerId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- execInspectResponsePid :: Maybe Int
   
 instance Arbitrary GraphDriverData where
   arbitrary = sized genGraphDriverData
@@ -349,6 +533,19 @@ genHealthConfig n =
     <*> arbitraryReducedMaybe n -- healthConfigRetries :: Maybe Int
     <*> arbitraryReducedMaybe n -- healthConfigStartPeriod :: Maybe Int
   
+instance Arbitrary HistoryResponseItem where
+  arbitrary = sized genHistoryResponseItem
+
+genHistoryResponseItem :: Int -> Gen HistoryResponseItem
+genHistoryResponseItem n =
+  HistoryResponseItem
+    <$> arbitrary -- historyResponseItemId :: Text
+    <*> arbitrary -- historyResponseItemCreated :: Integer
+    <*> arbitrary -- historyResponseItemCreatedBy :: Text
+    <*> arbitrary -- historyResponseItemTags :: [Text]
+    <*> arbitrary -- historyResponseItemSize :: Integer
+    <*> arbitrary -- historyResponseItemComment :: Text
+  
 instance Arbitrary HostConfig where
   arbitrary = sized genHostConfig
 
@@ -356,7 +553,7 @@ genHostConfig :: Int -> Gen HostConfig
 genHostConfig n =
   HostConfig
     <$> arbitraryReducedMaybe n -- hostConfigCpuShares :: Maybe Int
-    <*> arbitraryReducedMaybe n -- hostConfigMemory :: Maybe Int
+    <*> arbitraryReducedMaybe n -- hostConfigMemory :: Maybe Integer
     <*> arbitraryReducedMaybe n -- hostConfigCgroupParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- hostConfigBlkioWeight :: Maybe Int
     <*> arbitraryReducedMaybe n -- hostConfigBlkioWeightDevice :: Maybe [ResourcesBlkioWeightDevice]
@@ -389,7 +586,7 @@ genHostConfig n =
     <*> arbitraryReducedMaybe n -- hostConfigContainerIdFile :: Maybe Text
     <*> arbitraryReducedMaybe n -- hostConfigLogConfig :: Maybe HostConfigAllOfLogConfig
     <*> arbitraryReducedMaybe n -- hostConfigNetworkMode :: Maybe Text
-    <*> arbitraryReducedMaybe n -- hostConfigPortBindings :: Maybe (Map.Map String HostConfigAllOfPortBindings)
+    <*> arbitraryReducedMaybe n -- hostConfigPortBindings :: Maybe (Map.Map String [PortBinding])
     <*> arbitraryReducedMaybe n -- hostConfigRestartPolicy :: Maybe RestartPolicy
     <*> arbitraryReducedMaybe n -- hostConfigAutoRemove :: Maybe Bool
     <*> arbitraryReducedMaybe n -- hostConfigVolumeDriver :: Maybe Text
@@ -431,7 +628,7 @@ genHostConfigAllOf n =
     <*> arbitraryReducedMaybe n -- hostConfigAllOfContainerIdFile :: Maybe Text
     <*> arbitraryReducedMaybe n -- hostConfigAllOfLogConfig :: Maybe HostConfigAllOfLogConfig
     <*> arbitraryReducedMaybe n -- hostConfigAllOfNetworkMode :: Maybe Text
-    <*> arbitraryReducedMaybe n -- hostConfigAllOfPortBindings :: Maybe (Map.Map String HostConfigAllOfPortBindings)
+    <*> arbitraryReducedMaybe n -- hostConfigAllOfPortBindings :: Maybe (Map.Map String [PortBinding])
     <*> arbitraryReducedMaybe n -- hostConfigAllOfRestartPolicy :: Maybe RestartPolicy
     <*> arbitraryReducedMaybe n -- hostConfigAllOfAutoRemove :: Maybe Bool
     <*> arbitraryReducedMaybe n -- hostConfigAllOfVolumeDriver :: Maybe Text
@@ -471,15 +668,6 @@ genHostConfigAllOfLogConfig n =
   HostConfigAllOfLogConfig
     <$> arbitraryReducedMaybe n -- hostConfigAllOfLogConfigType :: Maybe E'Type3
     <*> arbitraryReducedMaybe n -- hostConfigAllOfLogConfigConfig :: Maybe (Map.Map String Text)
-  
-instance Arbitrary HostConfigAllOfPortBindings where
-  arbitrary = sized genHostConfigAllOfPortBindings
-
-genHostConfigAllOfPortBindings :: Int -> Gen HostConfigAllOfPortBindings
-genHostConfigAllOfPortBindings n =
-  HostConfigAllOfPortBindings
-    <$> arbitraryReducedMaybe n -- hostConfigAllOfPortBindingsHostIp :: Maybe Text
-    <*> arbitraryReducedMaybe n -- hostConfigAllOfPortBindingsHostPort :: Maybe Text
   
 instance Arbitrary IPAM where
   arbitrary = sized genIPAM
@@ -523,6 +711,7 @@ genImage n =
     <*> arbitrary -- imageVirtualSize :: Integer
     <*> arbitraryReduced n -- imageGraphDriver :: GraphDriverData
     <*> arbitraryReduced n -- imageRootFs :: ImageRootFS
+    <*> arbitraryReducedMaybe n -- imageMetadata :: Maybe ImageMetadata
   
 instance Arbitrary ImageDeleteResponseItem where
   arbitrary = sized genImageDeleteResponseItem
@@ -533,6 +722,31 @@ genImageDeleteResponseItem n =
     <$> arbitraryReducedMaybe n -- imageDeleteResponseItemUntagged :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageDeleteResponseItemDeleted :: Maybe Text
   
+instance Arbitrary ImageID where
+  arbitrary = sized genImageID
+
+genImageID :: Int -> Gen ImageID
+genImageID n =
+  ImageID
+    <$> arbitraryReducedMaybe n -- imageIDId :: Maybe Text
+  
+instance Arbitrary ImageMetadata where
+  arbitrary = sized genImageMetadata
+
+genImageMetadata :: Int -> Gen ImageMetadata
+genImageMetadata n =
+  ImageMetadata
+    <$> arbitraryReducedMaybe n -- imageMetadataLastTagTime :: Maybe Text
+  
+instance Arbitrary ImagePruneResponse where
+  arbitrary = sized genImagePruneResponse
+
+genImagePruneResponse :: Int -> Gen ImagePruneResponse
+genImagePruneResponse n =
+  ImagePruneResponse
+    <$> arbitraryReducedMaybe n -- imagePruneResponseImagesDeleted :: Maybe [ImageDeleteResponseItem]
+    <*> arbitraryReducedMaybe n -- imagePruneResponseSpaceReclaimed :: Maybe Integer
+  
 instance Arbitrary ImageRootFS where
   arbitrary = sized genImageRootFS
 
@@ -542,6 +756,18 @@ genImageRootFS n =
     <$> arbitrary -- imageRootFSType :: Text
     <*> arbitraryReducedMaybe n -- imageRootFSLayers :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- imageRootFSBaseLayer :: Maybe Text
+  
+instance Arbitrary ImageSearchResponseItem where
+  arbitrary = sized genImageSearchResponseItem
+
+genImageSearchResponseItem :: Int -> Gen ImageSearchResponseItem
+genImageSearchResponseItem n =
+  ImageSearchResponseItem
+    <$> arbitraryReducedMaybe n -- imageSearchResponseItemDescription :: Maybe Text
+    <*> arbitraryReducedMaybe n -- imageSearchResponseItemIsOfficial :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- imageSearchResponseItemIsAutomated :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- imageSearchResponseItemName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- imageSearchResponseItemStarCount :: Maybe Int
   
 instance Arbitrary ImageSummary where
   arbitrary = sized genImageSummary
@@ -559,6 +785,17 @@ genImageSummary n =
     <*> arbitrary -- imageSummaryVirtualSize :: Int
     <*> arbitrary -- imageSummaryLabels :: (Map.Map String Text)
     <*> arbitrary -- imageSummaryContainers :: Int
+  
+instance Arbitrary IndexInfo where
+  arbitrary = sized genIndexInfo
+
+genIndexInfo :: Int -> Gen IndexInfo
+genIndexInfo n =
+  IndexInfo
+    <$> arbitraryReducedMaybe n -- indexInfoName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- indexInfoMirrors :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- indexInfoSecure :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- indexInfoOfficial :: Maybe Bool
   
 instance Arbitrary InlineObject where
   arbitrary = sized genInlineObject
@@ -657,373 +894,6 @@ genInlineObject8 n =
   InlineObject8
     <$> arbitraryReducedMaybe n -- inlineObject8UnlockKey :: Maybe Text
   
-instance Arbitrary InlineResponse200 where
-  arbitrary = sized genInlineResponse200
-
-genInlineResponse200 :: Int -> Gen InlineResponse200
-genInlineResponse200 n =
-  InlineResponse200
-    <$> arbitraryReducedMaybe n -- inlineResponse200Titles :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse200Processes :: Maybe [[Text]]
-  
-instance Arbitrary InlineResponse2001 where
-  arbitrary = sized genInlineResponse2001
-
-genInlineResponse2001 :: Int -> Gen InlineResponse2001
-genInlineResponse2001 n =
-  InlineResponse2001
-    <$> arbitrary -- inlineResponse2001Path :: Text
-    <*> arbitrary -- inlineResponse2001Kind :: Int
-  
-instance Arbitrary InlineResponse20010 where
-  arbitrary = sized genInlineResponse20010
-
-genInlineResponse20010 :: Int -> Gen InlineResponse20010
-genInlineResponse20010 n =
-  InlineResponse20010
-    <$> arbitraryReducedMaybe n -- inlineResponse20010Version :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010ApiVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010MinApiVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010GitCommit :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010GoVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010Os :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010Arch :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010KernelVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20010Experimental :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse20010BuildTime :: Maybe Text
-  
-instance Arbitrary InlineResponse20011 where
-  arbitrary = sized genInlineResponse20011
-
-genInlineResponse20011 :: Int -> Gen InlineResponse20011
-genInlineResponse20011 n =
-  InlineResponse20011
-    <$> arbitraryReducedMaybe n -- inlineResponse20011Type :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20011Action :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20011Actor :: Maybe InlineResponse20011Actor
-    <*> arbitraryReducedMaybe n -- inlineResponse20011Time :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse20011TimeNano :: Maybe Integer
-  
-instance Arbitrary InlineResponse20011Actor where
-  arbitrary = sized genInlineResponse20011Actor
-
-genInlineResponse20011Actor :: Int -> Gen InlineResponse20011Actor
-genInlineResponse20011Actor n =
-  InlineResponse20011Actor
-    <$> arbitraryReducedMaybe n -- inlineResponse20011ActorId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20011ActorAttributes :: Maybe (Map.Map String Text)
-  
-instance Arbitrary InlineResponse20012 where
-  arbitrary = sized genInlineResponse20012
-
-genInlineResponse20012 :: Int -> Gen InlineResponse20012
-genInlineResponse20012 n =
-  InlineResponse20012
-    <$> arbitraryReducedMaybe n -- inlineResponse20012LayersSize :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- inlineResponse20012Images :: Maybe [ImageSummary]
-    <*> arbitraryReducedMaybe n -- inlineResponse20012Containers :: Maybe [ContainerSummary]
-    <*> arbitraryReducedMaybe n -- inlineResponse20012Volumes :: Maybe [Volume]
-  
-instance Arbitrary InlineResponse20013 where
-  arbitrary = sized genInlineResponse20013
-
-genInlineResponse20013 :: Int -> Gen InlineResponse20013
-genInlineResponse20013 n =
-  InlineResponse20013
-    <$> arbitraryReducedMaybe n -- inlineResponse20013Id :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20013Running :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse20013ExitCode :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse20013ProcessConfig :: Maybe ProcessConfig
-    <*> arbitraryReducedMaybe n -- inlineResponse20013OpenStdin :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse20013OpenStderr :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse20013OpenStdout :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse20013ContainerId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20013Pid :: Maybe Int
-  
-instance Arbitrary InlineResponse20014 where
-  arbitrary = sized genInlineResponse20014
-
-genInlineResponse20014 :: Int -> Gen InlineResponse20014
-genInlineResponse20014 n =
-  InlineResponse20014
-    <$> arbitraryReduced n -- inlineResponse20014Volumes :: [Volume]
-    <*> arbitrary -- inlineResponse20014Warnings :: [Text]
-  
-instance Arbitrary InlineResponse20015 where
-  arbitrary = sized genInlineResponse20015
-
-genInlineResponse20015 :: Int -> Gen InlineResponse20015
-genInlineResponse20015 n =
-  InlineResponse20015
-    <$> arbitraryReducedMaybe n -- inlineResponse20015VolumesDeleted :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse20015SpaceReclaimed :: Maybe Integer
-  
-instance Arbitrary InlineResponse20016 where
-  arbitrary = sized genInlineResponse20016
-
-genInlineResponse20016 :: Int -> Gen InlineResponse20016
-genInlineResponse20016 n =
-  InlineResponse20016
-    <$> arbitraryReducedMaybe n -- inlineResponse20016NetworksDeleted :: Maybe [Text]
-  
-instance Arbitrary InlineResponse20017 where
-  arbitrary = sized genInlineResponse20017
-
-genInlineResponse20017 :: Int -> Gen InlineResponse20017
-genInlineResponse20017 n =
-  InlineResponse20017
-    <$> arbitraryReducedMaybe n -- inlineResponse20017Name :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20017Description :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20017Value :: Maybe [Text]
-  
-instance Arbitrary InlineResponse20018 where
-  arbitrary = sized genInlineResponse20018
-
-genInlineResponse20018 :: Int -> Gen InlineResponse20018
-genInlineResponse20018 n =
-  InlineResponse20018
-    <$> arbitraryReducedMaybe n -- inlineResponse20018ClusterInfo :: Maybe ClusterInfo
-    <*> arbitraryReducedMaybe n -- inlineResponse20018JoinTokens :: Maybe InlineResponse20018JoinTokens
-  
-instance Arbitrary InlineResponse20018JoinTokens where
-  arbitrary = sized genInlineResponse20018JoinTokens
-
-genInlineResponse20018JoinTokens :: Int -> Gen InlineResponse20018JoinTokens
-genInlineResponse20018JoinTokens n =
-  InlineResponse20018JoinTokens
-    <$> arbitraryReducedMaybe n -- inlineResponse20018JoinTokensWorker :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20018JoinTokensManager :: Maybe Text
-  
-instance Arbitrary InlineResponse20019 where
-  arbitrary = sized genInlineResponse20019
-
-genInlineResponse20019 :: Int -> Gen InlineResponse20019
-genInlineResponse20019 n =
-  InlineResponse20019
-    <$> arbitraryReducedMaybe n -- inlineResponse20019UnlockKey :: Maybe Text
-  
-instance Arbitrary InlineResponse2002 where
-  arbitrary = sized genInlineResponse2002
-
-genInlineResponse2002 :: Int -> Gen InlineResponse2002
-genInlineResponse2002 n =
-  InlineResponse2002
-    <$> arbitraryReducedMaybe n -- inlineResponse2002Warnings :: Maybe [Text]
-  
-instance Arbitrary InlineResponse20020 where
-  arbitrary = sized genInlineResponse20020
-
-genInlineResponse20020 :: Int -> Gen InlineResponse20020
-genInlineResponse20020 n =
-  InlineResponse20020
-    <$> arbitraryReduced n -- inlineResponse20020Descriptor :: InlineResponse20020Descriptor
-    <*> arbitraryReduced n -- inlineResponse20020Platforms :: [InlineResponse20020Platforms]
-  
-instance Arbitrary InlineResponse20020Descriptor where
-  arbitrary = sized genInlineResponse20020Descriptor
-
-genInlineResponse20020Descriptor :: Int -> Gen InlineResponse20020Descriptor
-genInlineResponse20020Descriptor n =
-  InlineResponse20020Descriptor
-    <$> arbitraryReducedMaybe n -- inlineResponse20020DescriptorMediaType :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020DescriptorSize :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- inlineResponse20020DescriptorDigest :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020DescriptorUrLs :: Maybe [Text]
-  
-instance Arbitrary InlineResponse20020Platforms where
-  arbitrary = sized genInlineResponse20020Platforms
-
-genInlineResponse20020Platforms :: Int -> Gen InlineResponse20020Platforms
-genInlineResponse20020Platforms n =
-  InlineResponse20020Platforms
-    <$> arbitraryReducedMaybe n -- inlineResponse20020PlatformsArchitecture :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020PlatformsOs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020PlatformsOsVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020PlatformsOsFeatures :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse20020PlatformsVariant :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse20020PlatformsFeatures :: Maybe [Text]
-  
-instance Arbitrary InlineResponse2003 where
-  arbitrary = sized genInlineResponse2003
-
-genInlineResponse2003 :: Int -> Gen InlineResponse2003
-genInlineResponse2003 n =
-  InlineResponse2003
-    <$> arbitrary -- inlineResponse2003StatusCode :: Int
-  
-instance Arbitrary InlineResponse2004 where
-  arbitrary = sized genInlineResponse2004
-
-genInlineResponse2004 :: Int -> Gen InlineResponse2004
-genInlineResponse2004 n =
-  InlineResponse2004
-    <$> arbitraryReducedMaybe n -- inlineResponse2004ContainersDeleted :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse2004SpaceReclaimed :: Maybe Integer
-  
-instance Arbitrary InlineResponse2005 where
-  arbitrary = sized genInlineResponse2005
-
-genInlineResponse2005 :: Int -> Gen InlineResponse2005
-genInlineResponse2005 n =
-  InlineResponse2005
-    <$> arbitrary -- inlineResponse2005Id :: Text
-    <*> arbitrary -- inlineResponse2005Created :: Integer
-    <*> arbitrary -- inlineResponse2005CreatedBy :: Text
-    <*> arbitrary -- inlineResponse2005Tags :: [Text]
-    <*> arbitrary -- inlineResponse2005Size :: Integer
-    <*> arbitrary -- inlineResponse2005Comment :: Text
-  
-instance Arbitrary InlineResponse2006 where
-  arbitrary = sized genInlineResponse2006
-
-genInlineResponse2006 :: Int -> Gen InlineResponse2006
-genInlineResponse2006 n =
-  InlineResponse2006
-    <$> arbitraryReducedMaybe n -- inlineResponse2006Description :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2006IsOfficial :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2006IsAutomated :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2006Name :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2006StarCount :: Maybe Int
-  
-instance Arbitrary InlineResponse2007 where
-  arbitrary = sized genInlineResponse2007
-
-genInlineResponse2007 :: Int -> Gen InlineResponse2007
-genInlineResponse2007 n =
-  InlineResponse2007
-    <$> arbitraryReducedMaybe n -- inlineResponse2007ImagesDeleted :: Maybe [ImageDeleteResponseItem]
-    <*> arbitraryReducedMaybe n -- inlineResponse2007SpaceReclaimed :: Maybe Integer
-  
-instance Arbitrary InlineResponse2008 where
-  arbitrary = sized genInlineResponse2008
-
-genInlineResponse2008 :: Int -> Gen InlineResponse2008
-genInlineResponse2008 n =
-  InlineResponse2008
-    <$> arbitrary -- inlineResponse2008Status :: Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2008IdentityToken :: Maybe Text
-  
-instance Arbitrary InlineResponse2009 where
-  arbitrary = sized genInlineResponse2009
-
-genInlineResponse2009 :: Int -> Gen InlineResponse2009
-genInlineResponse2009 n =
-  InlineResponse2009
-    <$> arbitraryReducedMaybe n -- inlineResponse2009Architecture :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Containers :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009ContainersRunning :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009ContainersStopped :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009ContainersPaused :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009CpuCfsPeriod :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009CpuCfsQuota :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Debug :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009DiscoveryBackend :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009DockerRootDir :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Driver :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009DriverStatus :: Maybe [[Text]]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009SystemStatus :: Maybe [[Text]]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Plugins :: Maybe InlineResponse2009Plugins
-    <*> arbitraryReducedMaybe n -- inlineResponse2009ExperimentalBuild :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009HttpProxy :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009HttpsProxy :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Id :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009IPv4Forwarding :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Images :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009IndexServerAddress :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009InitPath :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009InitSha1 :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009KernelVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Labels :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009MemTotal :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009MemoryLimit :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Ncpu :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009NEventsListener :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009NFd :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009NGoroutines :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009Name :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009NoProxy :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009OomKillDisable :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009OsType :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009OomScoreAdj :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inlineResponse2009OperatingSystem :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfig :: Maybe InlineResponse2009RegistryConfig
-    <*> arbitraryReducedMaybe n -- inlineResponse2009SwapLimit :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009SystemTime :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009ServerVersion :: Maybe Text
-  
-instance Arbitrary InlineResponse2009Plugins where
-  arbitrary = sized genInlineResponse2009Plugins
-
-genInlineResponse2009Plugins :: Int -> Gen InlineResponse2009Plugins
-genInlineResponse2009Plugins n =
-  InlineResponse2009Plugins
-    <$> arbitraryReducedMaybe n -- inlineResponse2009PluginsVolume :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009PluginsNetwork :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009PluginsLog :: Maybe [Text]
-  
-instance Arbitrary InlineResponse2009RegistryConfig where
-  arbitrary = sized genInlineResponse2009RegistryConfig
-
-genInlineResponse2009RegistryConfig :: Int -> Gen InlineResponse2009RegistryConfig
-genInlineResponse2009RegistryConfig n =
-  InlineResponse2009RegistryConfig
-    <$> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigIndexConfigs :: Maybe (Map.Map String InlineResponse2009RegistryConfigIndexConfigs)
-    <*> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigInsecureRegistryCidRs :: Maybe [Text]
-  
-instance Arbitrary InlineResponse2009RegistryConfigIndexConfigs where
-  arbitrary = sized genInlineResponse2009RegistryConfigIndexConfigs
-
-genInlineResponse2009RegistryConfigIndexConfigs :: Int -> Gen InlineResponse2009RegistryConfigIndexConfigs
-genInlineResponse2009RegistryConfigIndexConfigs n =
-  InlineResponse2009RegistryConfigIndexConfigs
-    <$> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigIndexConfigsMirrors :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigIndexConfigsName :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigIndexConfigsOfficial :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineResponse2009RegistryConfigIndexConfigsSecure :: Maybe Bool
-  
-instance Arbitrary InlineResponse201 where
-  arbitrary = sized genInlineResponse201
-
-genInlineResponse201 :: Int -> Gen InlineResponse201
-genInlineResponse201 n =
-  InlineResponse201
-    <$> arbitrary -- inlineResponse201Id :: Text
-    <*> arbitrary -- inlineResponse201Warnings :: [Text]
-  
-instance Arbitrary InlineResponse2011 where
-  arbitrary = sized genInlineResponse2011
-
-genInlineResponse2011 :: Int -> Gen InlineResponse2011
-genInlineResponse2011 n =
-  InlineResponse2011
-    <$> arbitraryReducedMaybe n -- inlineResponse2011Id :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2011Warning :: Maybe Text
-  
-instance Arbitrary InlineResponse2012 where
-  arbitrary = sized genInlineResponse2012
-
-genInlineResponse2012 :: Int -> Gen InlineResponse2012
-genInlineResponse2012 n =
-  InlineResponse2012
-    <$> arbitraryReducedMaybe n -- inlineResponse2012Id :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineResponse2012Warning :: Maybe Text
-  
-instance Arbitrary InlineResponse2013 where
-  arbitrary = sized genInlineResponse2013
-
-genInlineResponse2013 :: Int -> Gen InlineResponse2013
-genInlineResponse2013 n =
-  InlineResponse2013
-    <$> arbitraryReducedMaybe n -- inlineResponse2013Id :: Maybe Text
-  
-instance Arbitrary InlineResponse2014 where
-  arbitrary = sized genInlineResponse2014
-
-genInlineResponse2014 :: Int -> Gen InlineResponse2014
-genInlineResponse2014 n =
-  InlineResponse2014
-    <$> arbitraryReducedMaybe n -- inlineResponse2014Id :: Maybe Text
-  
 instance Arbitrary InlineResponse400 where
   arbitrary = sized genInlineResponse400
 
@@ -1033,55 +903,24 @@ genInlineResponse400 n =
     <$> arbitraryReducedMaybe n -- inlineResponse400ErrorResponse :: Maybe ErrorResponse
     <*> arbitraryReducedMaybe n -- inlineResponse400Message :: Maybe Text
   
-instance Arbitrary InspectResponse where
-  arbitrary = sized genInspectResponse
+instance Arbitrary JoinTokens where
+  arbitrary = sized genJoinTokens
 
-genInspectResponse :: Int -> Gen InspectResponse
-genInspectResponse n =
-  InspectResponse
-    <$> arbitraryReducedMaybe n -- inspectResponseId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseCreated :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponsePath :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseArgs :: Maybe [Text]
-    <*> arbitraryReducedMaybe n -- inspectResponseState :: Maybe InspectResponseState
-    <*> arbitraryReducedMaybe n -- inspectResponseImage :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseResolvConfPath :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseHostnamePath :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseHostsPath :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseLogPath :: Maybe Text
-    <*> arbitraryReducedMaybeValue n -- inspectResponseNode :: Maybe A.Value
-    <*> arbitraryReducedMaybe n -- inspectResponseName :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseRestartCount :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inspectResponseDriver :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseMountLabel :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseProcessLabel :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseAppArmorProfile :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseExecIDs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseHostConfig :: Maybe HostConfig
-    <*> arbitraryReducedMaybe n -- inspectResponseGraphDriver :: Maybe GraphDriverData
-    <*> arbitraryReducedMaybe n -- inspectResponseSizeRw :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- inspectResponseSizeRootFs :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- inspectResponseMounts :: Maybe [MountPoint]
-    <*> arbitraryReducedMaybe n -- inspectResponseConfig :: Maybe ContainerConfig
-    <*> arbitraryReducedMaybe n -- inspectResponseNetworkSettings :: Maybe NetworkConfig
+genJoinTokens :: Int -> Gen JoinTokens
+genJoinTokens n =
+  JoinTokens
+    <$> arbitraryReducedMaybe n -- joinTokensWorker :: Maybe Text
+    <*> arbitraryReducedMaybe n -- joinTokensManager :: Maybe Text
   
-instance Arbitrary InspectResponseState where
-  arbitrary = sized genInspectResponseState
+instance Arbitrary ManagerStatus where
+  arbitrary = sized genManagerStatus
 
-genInspectResponseState :: Int -> Gen InspectResponseState
-genInspectResponseState n =
-  InspectResponseState
-    <$> arbitraryReducedMaybe n -- inspectResponseStateStatus :: Maybe E'Status
-    <*> arbitraryReducedMaybe n -- inspectResponseStateRunning :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inspectResponseStatePaused :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inspectResponseStateRestarting :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inspectResponseStateOomKilled :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inspectResponseStateDead :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inspectResponseStatePid :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inspectResponseStateExitCode :: Maybe Int
-    <*> arbitraryReducedMaybe n -- inspectResponseStateError :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseStateStartedAt :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inspectResponseStateFinishedAt :: Maybe Text
+genManagerStatus :: Int -> Gen ManagerStatus
+genManagerStatus n =
+  ManagerStatus
+    <$> arbitraryReducedMaybe n -- managerStatusLeader :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- managerStatusReachability :: Maybe Reachability
+    <*> arbitraryReducedMaybe n -- managerStatusAddr :: Maybe Text
   
 instance Arbitrary Mount where
   arbitrary = sized genMount
@@ -1104,7 +943,7 @@ instance Arbitrary MountBindOptions where
 genMountBindOptions :: Int -> Gen MountBindOptions
 genMountBindOptions n =
   MountBindOptions
-    <$> arbitraryReducedMaybeValue n -- mountBindOptionsPropagation :: Maybe A.Value
+    <$> arbitraryReducedMaybe n -- mountBindOptionsPropagation :: Maybe E'Propagation
   
 instance Arbitrary MountPoint where
   arbitrary = sized genMountPoint
@@ -1169,20 +1008,6 @@ genNetwork n =
     <*> arbitraryReducedMaybe n -- networkOptions :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- networkLabels :: Maybe (Map.Map String Text)
   
-instance Arbitrary NetworkConfig where
-  arbitrary = sized genNetworkConfig
-
-genNetworkConfig :: Int -> Gen NetworkConfig
-genNetworkConfig n =
-  NetworkConfig
-    <$> arbitraryReducedMaybe n -- networkConfigBridge :: Maybe Text
-    <*> arbitraryReducedMaybe n -- networkConfigGateway :: Maybe Text
-    <*> arbitraryReducedMaybe n -- networkConfigAddress :: Maybe Text
-    <*> arbitraryReducedMaybe n -- networkConfigIpPrefixLen :: Maybe Int
-    <*> arbitraryReducedMaybe n -- networkConfigMacAddress :: Maybe Text
-    <*> arbitraryReducedMaybe n -- networkConfigPortMapping :: Maybe Text
-    <*> arbitraryReducedMaybe n -- networkConfigPorts :: Maybe [Port]
-  
 instance Arbitrary NetworkContainer where
   arbitrary = sized genNetworkContainer
 
@@ -1194,6 +1019,48 @@ genNetworkContainer n =
     <*> arbitraryReducedMaybe n -- networkContainerMacAddress :: Maybe Text
     <*> arbitraryReducedMaybe n -- networkContainerIPv4Address :: Maybe Text
     <*> arbitraryReducedMaybe n -- networkContainerIPv6Address :: Maybe Text
+  
+instance Arbitrary NetworkCreateResponse where
+  arbitrary = sized genNetworkCreateResponse
+
+genNetworkCreateResponse :: Int -> Gen NetworkCreateResponse
+genNetworkCreateResponse n =
+  NetworkCreateResponse
+    <$> arbitraryReducedMaybe n -- networkCreateResponseId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkCreateResponseWarning :: Maybe Text
+  
+instance Arbitrary NetworkPruneResponse where
+  arbitrary = sized genNetworkPruneResponse
+
+genNetworkPruneResponse :: Int -> Gen NetworkPruneResponse
+genNetworkPruneResponse n =
+  NetworkPruneResponse
+    <$> arbitraryReducedMaybe n -- networkPruneResponseNetworksDeleted :: Maybe [Text]
+  
+instance Arbitrary NetworkSettings where
+  arbitrary = sized genNetworkSettings
+
+genNetworkSettings :: Int -> Gen NetworkSettings
+genNetworkSettings n =
+  NetworkSettings
+    <$> arbitraryReducedMaybe n -- networkSettingsBridge :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsSandboxId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsHairpinMode :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkSettingsLinkLocalIPv6Address :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsLinkLocalIPv6PrefixLen :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkSettingsPorts :: Maybe (Map.Map String [PortBinding])
+    <*> arbitraryReducedMaybe n -- networkSettingsSandboxKey :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsSecondaryIpAddresses :: Maybe [Address]
+    <*> arbitraryReducedMaybe n -- networkSettingsSecondaryIPv6Addresses :: Maybe [Address]
+    <*> arbitraryReducedMaybe n -- networkSettingsEndpointId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsGateway :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsGlobalIPv6Address :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsGlobalIPv6PrefixLen :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkSettingsIpAddress :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsIpPrefixLen :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkSettingsIPv6Gateway :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsMacAddress :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkSettingsNetworks :: Maybe (Map.Map String EndpointSettings)
   
 instance Arbitrary Node where
   arbitrary = sized genNode
@@ -1207,6 +1074,8 @@ genNode n =
     <*> arbitraryReducedMaybe n -- nodeUpdatedAt :: Maybe Text
     <*> arbitraryReducedMaybe n -- nodeSpec :: Maybe NodeSpec
     <*> arbitraryReducedMaybe n -- nodeDescription :: Maybe NodeDescription
+    <*> arbitraryReducedMaybe n -- nodeStatus :: Maybe NodeStatus
+    <*> arbitraryReducedMaybe n -- nodeManagerStatus :: Maybe ManagerStatus
   
 instance Arbitrary NodeDescription where
   arbitrary = sized genNodeDescription
@@ -1215,47 +1084,10 @@ genNodeDescription :: Int -> Gen NodeDescription
 genNodeDescription n =
   NodeDescription
     <$> arbitraryReducedMaybe n -- nodeDescriptionHostname :: Maybe Text
-    <*> arbitraryReducedMaybe n -- nodeDescriptionPlatform :: Maybe NodeDescriptionPlatform
-    <*> arbitraryReducedMaybe n -- nodeDescriptionResources :: Maybe NodeDescriptionResources
-    <*> arbitraryReducedMaybe n -- nodeDescriptionEngine :: Maybe NodeDescriptionEngine
-    <*> arbitraryReducedMaybe n -- nodeDescriptionTlsInfo :: Maybe SwarmSpec
-  
-instance Arbitrary NodeDescriptionEngine where
-  arbitrary = sized genNodeDescriptionEngine
-
-genNodeDescriptionEngine :: Int -> Gen NodeDescriptionEngine
-genNodeDescriptionEngine n =
-  NodeDescriptionEngine
-    <$> arbitraryReducedMaybe n -- nodeDescriptionEngineEngineVersion :: Maybe Text
-    <*> arbitraryReducedMaybe n -- nodeDescriptionEngineLabels :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- nodeDescriptionEnginePlugins :: Maybe [NodeDescriptionEnginePlugins]
-  
-instance Arbitrary NodeDescriptionEnginePlugins where
-  arbitrary = sized genNodeDescriptionEnginePlugins
-
-genNodeDescriptionEnginePlugins :: Int -> Gen NodeDescriptionEnginePlugins
-genNodeDescriptionEnginePlugins n =
-  NodeDescriptionEnginePlugins
-    <$> arbitraryReducedMaybe n -- nodeDescriptionEnginePluginsType :: Maybe Text
-    <*> arbitraryReducedMaybe n -- nodeDescriptionEnginePluginsName :: Maybe Text
-  
-instance Arbitrary NodeDescriptionPlatform where
-  arbitrary = sized genNodeDescriptionPlatform
-
-genNodeDescriptionPlatform :: Int -> Gen NodeDescriptionPlatform
-genNodeDescriptionPlatform n =
-  NodeDescriptionPlatform
-    <$> arbitraryReducedMaybe n -- nodeDescriptionPlatformArchitecture :: Maybe Text
-    <*> arbitraryReducedMaybe n -- nodeDescriptionPlatformOs :: Maybe Text
-  
-instance Arbitrary NodeDescriptionResources where
-  arbitrary = sized genNodeDescriptionResources
-
-genNodeDescriptionResources :: Int -> Gen NodeDescriptionResources
-genNodeDescriptionResources n =
-  NodeDescriptionResources
-    <$> arbitraryReducedMaybe n -- nodeDescriptionResourcesNanoCpUs :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- nodeDescriptionResourcesMemoryBytes :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- nodeDescriptionPlatform :: Maybe Platform
+    <*> arbitraryReducedMaybe n -- nodeDescriptionResources :: Maybe ResourceObject
+    <*> arbitraryReducedMaybe n -- nodeDescriptionEngine :: Maybe EngineDescription
+    <*> arbitraryReducedMaybe n -- nodeDescriptionTlsInfo :: Maybe TLSInfo
   
 instance Arbitrary NodeSpec where
   arbitrary = sized genNodeSpec
@@ -1268,13 +1100,41 @@ genNodeSpec n =
     <*> arbitraryReducedMaybe n -- nodeSpecRole :: Maybe E'Role
     <*> arbitraryReducedMaybe n -- nodeSpecAvailability :: Maybe E'Availability
   
+instance Arbitrary NodeStatus where
+  arbitrary = sized genNodeStatus
+
+genNodeStatus :: Int -> Gen NodeStatus
+genNodeStatus n =
+  NodeStatus
+    <$> arbitraryReducedMaybe n -- nodeStatusState :: Maybe NodeState
+    <*> arbitraryReducedMaybe n -- nodeStatusMessage :: Maybe Text
+    <*> arbitraryReducedMaybe n -- nodeStatusAddr :: Maybe Text
+  
 instance Arbitrary ObjectVersion where
   arbitrary = sized genObjectVersion
 
 genObjectVersion :: Int -> Gen ObjectVersion
 genObjectVersion n =
   ObjectVersion
-    <$> arbitraryReducedMaybe n -- objectVersionIndex :: Maybe Integer
+    <$> arbitraryReducedMaybe n -- objectVersionIndex :: Maybe Int
+  
+instance Arbitrary PeerNode where
+  arbitrary = sized genPeerNode
+
+genPeerNode :: Int -> Gen PeerNode
+genPeerNode n =
+  PeerNode
+    <$> arbitraryReducedMaybe n -- peerNodeNodeId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- peerNodeAddr :: Maybe Text
+  
+instance Arbitrary Platform where
+  arbitrary = sized genPlatform
+
+genPlatform :: Int -> Gen Platform
+genPlatform n =
+  Platform
+    <$> arbitraryReducedMaybe n -- platformArchitecture :: Maybe Text
+    <*> arbitraryReducedMaybe n -- platformOs :: Maybe Text
   
 instance Arbitrary Plugin where
   arbitrary = sized genPlugin
@@ -1414,6 +1274,16 @@ genPluginMount n =
     <*> arbitrary -- pluginMountType :: Text
     <*> arbitrary -- pluginMountOptions :: [Text]
   
+instance Arbitrary PluginPrivilegeItem where
+  arbitrary = sized genPluginPrivilegeItem
+
+genPluginPrivilegeItem :: Int -> Gen PluginPrivilegeItem
+genPluginPrivilegeItem n =
+  PluginPrivilegeItem
+    <$> arbitraryReducedMaybe n -- pluginPrivilegeItemName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- pluginPrivilegeItemDescription :: Maybe Text
+    <*> arbitraryReducedMaybe n -- pluginPrivilegeItemValue :: Maybe [Text]
+  
 instance Arbitrary PluginSettings where
   arbitrary = sized genPluginSettings
 
@@ -1425,6 +1295,17 @@ genPluginSettings n =
     <*> arbitrary -- pluginSettingsArgs :: [Text]
     <*> arbitraryReduced n -- pluginSettingsDevices :: [PluginDevice]
   
+instance Arbitrary PluginsInfo where
+  arbitrary = sized genPluginsInfo
+
+genPluginsInfo :: Int -> Gen PluginsInfo
+genPluginsInfo n =
+  PluginsInfo
+    <$> arbitraryReducedMaybe n -- pluginsInfoVolume :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- pluginsInfoNetwork :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- pluginsInfoAuthorization :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- pluginsInfoLog :: Maybe [Text]
+  
 instance Arbitrary Port where
   arbitrary = sized genPort
 
@@ -1435,6 +1316,15 @@ genPort n =
     <*> arbitrary -- portPrivatePort :: Int
     <*> arbitraryReducedMaybe n -- portPublicPort :: Maybe Int
     <*> arbitrary -- portType :: E'Type
+  
+instance Arbitrary PortBinding where
+  arbitrary = sized genPortBinding
+
+genPortBinding :: Int -> Gen PortBinding
+genPortBinding n =
+  PortBinding
+    <$> arbitraryReducedMaybe n -- portBindingHostIp :: Maybe Text
+    <*> arbitraryReducedMaybe n -- portBindingHostPort :: Maybe Text
   
 instance Arbitrary ProcessConfig where
   arbitrary = sized genProcessConfig
@@ -1454,8 +1344,8 @@ instance Arbitrary ProgressDetail where
 genProgressDetail :: Int -> Gen ProgressDetail
 genProgressDetail n =
   ProgressDetail
-    <$> arbitraryReducedMaybe n -- progressDetailCode :: Maybe Int
-    <*> arbitraryReducedMaybe n -- progressDetailMessage :: Maybe Int
+    <$> arbitraryReducedMaybe n -- progressDetailCurrent :: Maybe Int
+    <*> arbitraryReducedMaybe n -- progressDetailTotal :: Maybe Int
   
 instance Arbitrary PushImageInfo where
   arbitrary = sized genPushImageInfo
@@ -1468,6 +1358,28 @@ genPushImageInfo n =
     <*> arbitraryReducedMaybe n -- pushImageInfoProgress :: Maybe Text
     <*> arbitraryReducedMaybe n -- pushImageInfoProgressDetail :: Maybe ProgressDetail
   
+instance Arbitrary RegistryServiceConfig where
+  arbitrary = sized genRegistryServiceConfig
+
+genRegistryServiceConfig :: Int -> Gen RegistryServiceConfig
+genRegistryServiceConfig n =
+  RegistryServiceConfig
+    <$> arbitraryReducedMaybe n -- registryServiceConfigAllowNondistributableArtifactsCidRs :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- registryServiceConfigAllowNondistributableArtifactsHostnames :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- registryServiceConfigInsecureRegistryCidRs :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- registryServiceConfigIndexConfigs :: Maybe (Map.Map String IndexInfo)
+    <*> arbitraryReducedMaybe n -- registryServiceConfigMirrors :: Maybe [Text]
+  
+instance Arbitrary ResourceObject where
+  arbitrary = sized genResourceObject
+
+genResourceObject :: Int -> Gen ResourceObject
+genResourceObject n =
+  ResourceObject
+    <$> arbitraryReducedMaybe n -- resourceObjectNanoCpUs :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- resourceObjectMemoryBytes :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- resourceObjectGenericResources :: Maybe [A.Value]
+  
 instance Arbitrary Resources where
   arbitrary = sized genResources
 
@@ -1475,7 +1387,7 @@ genResources :: Int -> Gen Resources
 genResources n =
   Resources
     <$> arbitraryReducedMaybe n -- resourcesCpuShares :: Maybe Int
-    <*> arbitraryReducedMaybe n -- resourcesMemory :: Maybe Int
+    <*> arbitraryReducedMaybe n -- resourcesMemory :: Maybe Integer
     <*> arbitraryReducedMaybe n -- resourcesCgroupParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- resourcesBlkioWeight :: Maybe Int
     <*> arbitraryReducedMaybe n -- resourcesBlkioWeightDevice :: Maybe [ResourcesBlkioWeightDevice]
@@ -1533,6 +1445,15 @@ genRestartPolicy n =
     <$> arbitraryReducedMaybe n -- restartPolicyName :: Maybe E'Name
     <*> arbitraryReducedMaybe n -- restartPolicyMaximumRetryCount :: Maybe Int
   
+instance Arbitrary Runtime where
+  arbitrary = sized genRuntime
+
+genRuntime :: Int -> Gen Runtime
+genRuntime n =
+  Runtime
+    <$> arbitraryReducedMaybe n -- runtimePath :: Maybe Text
+    <*> arbitraryReducedMaybe n -- runtimeRuntimeArgs :: Maybe [Text]
+  
 instance Arbitrary Secret where
   arbitrary = sized genSecret
 
@@ -1553,7 +1474,8 @@ genSecretSpec n =
   SecretSpec
     <$> arbitraryReducedMaybe n -- secretSpecName :: Maybe Text
     <*> arbitraryReducedMaybe n -- secretSpecLabels :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- secretSpecData :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- secretSpecData :: Maybe Text
+    <*> arbitraryReducedMaybe n -- secretSpecDriver :: Maybe Driver
   
 instance Arbitrary Service where
   arbitrary = sized genService
@@ -1568,6 +1490,15 @@ genService n =
     <*> arbitraryReducedMaybe n -- serviceSpec :: Maybe ServiceSpec
     <*> arbitraryReducedMaybe n -- serviceEndpoint :: Maybe ServiceEndpoint
     <*> arbitraryReducedMaybe n -- serviceUpdateStatus :: Maybe ServiceUpdateStatus
+  
+instance Arbitrary ServiceCreateResponse where
+  arbitrary = sized genServiceCreateResponse
+
+genServiceCreateResponse :: Int -> Gen ServiceCreateResponse
+genServiceCreateResponse n =
+  ServiceCreateResponse
+    <$> arbitraryReducedMaybe n -- serviceCreateResponseId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- serviceCreateResponseWarning :: Maybe Text
   
 instance Arbitrary ServiceEndpoint where
   arbitrary = sized genServiceEndpoint
@@ -1665,6 +1596,45 @@ genServiceUpdateStatus n =
     <*> arbitraryReducedMaybe n -- serviceUpdateStatusCompletedAt :: Maybe Text
     <*> arbitraryReducedMaybe n -- serviceUpdateStatusMessage :: Maybe Text
   
+instance Arbitrary Swarm where
+  arbitrary = sized genSwarm
+
+genSwarm :: Int -> Gen Swarm
+genSwarm n =
+  Swarm
+    <$> arbitraryReducedMaybe n -- swarmId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmVersion :: Maybe ObjectVersion
+    <*> arbitraryReducedMaybe n -- swarmCreatedAt :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmUpdatedAt :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmSpec :: Maybe SwarmSpec
+    <*> arbitraryReducedMaybe n -- swarmTlsInfo :: Maybe TLSInfo
+    <*> arbitraryReducedMaybe n -- swarmRootRotationInProgress :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- swarmJoinTokens :: Maybe JoinTokens
+  
+instance Arbitrary SwarmAllOf where
+  arbitrary = sized genSwarmAllOf
+
+genSwarmAllOf :: Int -> Gen SwarmAllOf
+genSwarmAllOf n =
+  SwarmAllOf
+    <$> arbitraryReducedMaybe n -- swarmAllOfJoinTokens :: Maybe JoinTokens
+  
+instance Arbitrary SwarmInfo where
+  arbitrary = sized genSwarmInfo
+
+genSwarmInfo :: Int -> Gen SwarmInfo
+genSwarmInfo n =
+  SwarmInfo
+    <$> arbitraryReducedMaybe n -- swarmInfoNodeId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmInfoNodeAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmInfoLocalNodeState :: Maybe LocalNodeState
+    <*> arbitraryReducedMaybe n -- swarmInfoControlAvailable :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- swarmInfoError :: Maybe Text
+    <*> arbitraryReducedMaybe n -- swarmInfoRemoteManagers :: Maybe [PeerNode]
+    <*> arbitraryReducedMaybe n -- swarmInfoNodes :: Maybe Int
+    <*> arbitraryReducedMaybe n -- swarmInfoManagers :: Maybe Int
+    <*> arbitraryReducedMaybe n -- swarmInfoCluster :: Maybe ClusterInfo
+  
 instance Arbitrary SwarmSpec where
   arbitrary = sized genSwarmSpec
 
@@ -1690,7 +1660,7 @@ genSwarmSpecCAConfig n =
     <*> arbitraryReducedMaybe n -- swarmSpecCAConfigExternalCAs :: Maybe [SwarmSpecCAConfigExternalCAs]
     <*> arbitraryReducedMaybe n -- swarmSpecCAConfigSigningCaCert :: Maybe Text
     <*> arbitraryReducedMaybe n -- swarmSpecCAConfigSigningCaKey :: Maybe Text
-    <*> arbitraryReducedMaybeValue n -- swarmSpecCAConfigForceRotate :: Maybe A.Value
+    <*> arbitraryReducedMaybe n -- swarmSpecCAConfigForceRotate :: Maybe Int
   
 instance Arbitrary SwarmSpecCAConfigExternalCAs where
   arbitrary = sized genSwarmSpecCAConfigExternalCAs
@@ -1733,9 +1703,9 @@ instance Arbitrary SwarmSpecRaft where
 genSwarmSpecRaft :: Int -> Gen SwarmSpecRaft
 genSwarmSpecRaft n =
   SwarmSpecRaft
-    <$> arbitraryReducedMaybe n -- swarmSpecRaftSnapshotInterval :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- swarmSpecRaftKeepOldSnapshots :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- swarmSpecRaftLogEntriesForSlowFollowers :: Maybe Integer
+    <$> arbitraryReducedMaybe n -- swarmSpecRaftSnapshotInterval :: Maybe Int
+    <*> arbitraryReducedMaybe n -- swarmSpecRaftKeepOldSnapshots :: Maybe Int
+    <*> arbitraryReducedMaybe n -- swarmSpecRaftLogEntriesForSlowFollowers :: Maybe Int
     <*> arbitraryReducedMaybe n -- swarmSpecRaftElectionTick :: Maybe Int
     <*> arbitraryReducedMaybe n -- swarmSpecRaftHeartbeatTick :: Maybe Int
   
@@ -1755,6 +1725,148 @@ genSwarmSpecTaskDefaultsLogDriver n =
   SwarmSpecTaskDefaultsLogDriver
     <$> arbitraryReducedMaybe n -- swarmSpecTaskDefaultsLogDriverName :: Maybe Text
     <*> arbitraryReducedMaybe n -- swarmSpecTaskDefaultsLogDriverOptions :: Maybe (Map.Map String Text)
+  
+instance Arbitrary SystemAuthResponse where
+  arbitrary = sized genSystemAuthResponse
+
+genSystemAuthResponse :: Int -> Gen SystemAuthResponse
+genSystemAuthResponse n =
+  SystemAuthResponse
+    <$> arbitrary -- systemAuthResponseStatus :: Text
+    <*> arbitraryReducedMaybe n -- systemAuthResponseIdentityToken :: Maybe Text
+  
+instance Arbitrary SystemDataUsageResponse where
+  arbitrary = sized genSystemDataUsageResponse
+
+genSystemDataUsageResponse :: Int -> Gen SystemDataUsageResponse
+genSystemDataUsageResponse n =
+  SystemDataUsageResponse
+    <$> arbitraryReducedMaybe n -- systemDataUsageResponseLayersSize :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- systemDataUsageResponseImages :: Maybe [ImageSummary]
+    <*> arbitraryReducedMaybe n -- systemDataUsageResponseContainers :: Maybe [Array]
+    <*> arbitraryReducedMaybe n -- systemDataUsageResponseVolumes :: Maybe [Volume]
+  
+instance Arbitrary SystemEventsResponse where
+  arbitrary = sized genSystemEventsResponse
+
+genSystemEventsResponse :: Int -> Gen SystemEventsResponse
+genSystemEventsResponse n =
+  SystemEventsResponse
+    <$> arbitraryReducedMaybe n -- systemEventsResponseType :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemEventsResponseAction :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemEventsResponseActor :: Maybe SystemEventsResponseActor
+    <*> arbitraryReducedMaybe n -- systemEventsResponseTime :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemEventsResponseTimeNano :: Maybe Integer
+  
+instance Arbitrary SystemEventsResponseActor where
+  arbitrary = sized genSystemEventsResponseActor
+
+genSystemEventsResponseActor :: Int -> Gen SystemEventsResponseActor
+genSystemEventsResponseActor n =
+  SystemEventsResponseActor
+    <$> arbitraryReducedMaybe n -- systemEventsResponseActorId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemEventsResponseActorAttributes :: Maybe (Map.Map String Text)
+  
+instance Arbitrary SystemInfo where
+  arbitrary = sized genSystemInfo
+
+genSystemInfo :: Int -> Gen SystemInfo
+genSystemInfo n =
+  SystemInfo
+    <$> arbitraryReducedMaybe n -- systemInfoId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoContainers :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoContainersRunning :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoContainersPaused :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoContainersStopped :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoImages :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoDriver :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoDriverStatus :: Maybe [[Text]]
+    <*> arbitraryReducedMaybe n -- systemInfoDockerRootDir :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoSystemStatus :: Maybe [[Text]]
+    <*> arbitraryReducedMaybe n -- systemInfoPlugins :: Maybe PluginsInfo
+    <*> arbitraryReducedMaybe n -- systemInfoMemoryLimit :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoSwapLimit :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoKernelMemory :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoCpuCfsPeriod :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoCpuCfsQuota :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoCpuShares :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoCpuSet :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoOomKillDisable :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoIPv4Forwarding :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoBridgeNfIptables :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoBridgeNfIp6tables :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoDebug :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoNFd :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoNGoroutines :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoSystemTime :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoLoggingDriver :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoCgroupDriver :: Maybe E'CgroupDriver
+    <*> arbitraryReducedMaybe n -- systemInfoNEventsListener :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoKernelVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoOperatingSystem :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoOsType :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoArchitecture :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoNcpu :: Maybe Int
+    <*> arbitraryReducedMaybe n -- systemInfoMemTotal :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- systemInfoIndexServerAddress :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoRegistryConfig :: Maybe RegistryServiceConfig
+    <*> arbitraryReducedMaybe n -- systemInfoGenericResources :: Maybe [A.Value]
+    <*> arbitraryReducedMaybe n -- systemInfoHttpProxy :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoHttpsProxy :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoNoProxy :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoLabels :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- systemInfoExperimentalBuild :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoServerVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoClusterStore :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoClusterAdvertise :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoRuntimes :: Maybe (Map.Map String Runtime)
+    <*> arbitraryReducedMaybe n -- systemInfoDefaultRuntime :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoSwarm :: Maybe SwarmInfo
+    <*> arbitraryReducedMaybe n -- systemInfoLiveRestoreEnabled :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemInfoIsolation :: Maybe E'Isolation2
+    <*> arbitraryReducedMaybe n -- systemInfoInitBinary :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemInfoContainerdCommit :: Maybe Commit
+    <*> arbitraryReducedMaybe n -- systemInfoRuncCommit :: Maybe Commit
+    <*> arbitraryReducedMaybe n -- systemInfoInitCommit :: Maybe Commit
+    <*> arbitraryReducedMaybe n -- systemInfoSecurityOptions :: Maybe [Text]
+  
+instance Arbitrary SystemVersionResponse where
+  arbitrary = sized genSystemVersionResponse
+
+genSystemVersionResponse :: Int -> Gen SystemVersionResponse
+genSystemVersionResponse n =
+  SystemVersionResponse
+    <$> arbitraryReducedMaybe n -- systemVersionResponsePlatform :: Maybe SystemVersionResponsePlatform
+    <*> arbitraryReducedMaybe n -- systemVersionResponseComponents :: Maybe [SystemVersionResponseComponents]
+    <*> arbitraryReducedMaybe n -- systemVersionResponseVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseApiVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseMinApiVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseGitCommit :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseGoVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseOs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseArch :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseKernelVersion :: Maybe Text
+    <*> arbitraryReducedMaybe n -- systemVersionResponseExperimental :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- systemVersionResponseBuildTime :: Maybe Text
+  
+instance Arbitrary SystemVersionResponseComponents where
+  arbitrary = sized genSystemVersionResponseComponents
+
+genSystemVersionResponseComponents :: Int -> Gen SystemVersionResponseComponents
+genSystemVersionResponseComponents n =
+  SystemVersionResponseComponents
+    <$> arbitrary -- systemVersionResponseComponentsName :: Text
+    <*> arbitrary -- systemVersionResponseComponentsVersion :: Text
+    <*> arbitraryReducedMaybeValue n -- systemVersionResponseComponentsDetails :: Maybe A.Value
+  
+instance Arbitrary SystemVersionResponsePlatform where
+  arbitrary = sized genSystemVersionResponsePlatform
+
+genSystemVersionResponsePlatform :: Int -> Gen SystemVersionResponsePlatform
+genSystemVersionResponsePlatform n =
+  SystemVersionResponsePlatform
+    <$> arbitrary -- systemVersionResponsePlatformName :: Text
   
 instance Arbitrary TLSInfo where
   arbitrary = sized genTLSInfo
@@ -1782,6 +1894,7 @@ genTask n =
     <*> arbitraryReducedMaybe n -- taskServiceId :: Maybe Text
     <*> arbitraryReducedMaybe n -- taskSlot :: Maybe Int
     <*> arbitraryReducedMaybe n -- taskNodeId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- taskAssignedGenericResources :: Maybe [A.Value]
     <*> arbitraryReducedMaybe n -- taskStatus :: Maybe TaskStatus
     <*> arbitraryReducedMaybe n -- taskDesiredState :: Maybe TaskState
   
@@ -1791,7 +1904,8 @@ instance Arbitrary TaskSpec where
 genTaskSpec :: Int -> Gen TaskSpec
 genTaskSpec n =
   TaskSpec
-    <$> arbitraryReducedMaybe n -- taskSpecContainerSpec :: Maybe TaskSpecContainerSpec
+    <$> arbitraryReducedMaybe n -- taskSpecPluginSpec :: Maybe TaskSpecPluginSpec
+    <*> arbitraryReducedMaybe n -- taskSpecContainerSpec :: Maybe TaskSpecContainerSpec
     <*> arbitraryReducedMaybe n -- taskSpecResources :: Maybe TaskSpecResources
     <*> arbitraryReducedMaybe n -- taskSpecRestartPolicy :: Maybe TaskSpecRestartPolicy
     <*> arbitraryReducedMaybe n -- taskSpecPlacement :: Maybe TaskSpecPlacement
@@ -1827,6 +1941,7 @@ genTaskSpecContainerSpec n =
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecDnsConfig :: Maybe TaskSpecContainerSpecDNSConfig
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecSecrets :: Maybe [TaskSpecContainerSpecSecrets]
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecConfigs :: Maybe [TaskSpecContainerSpecConfigs]
+    <*> arbitraryReducedMaybe n -- taskSpecContainerSpecIsolation :: Maybe E'Isolation
   
 instance Arbitrary TaskSpecContainerSpecConfigs where
   arbitrary = sized genTaskSpecContainerSpecConfigs
@@ -1925,7 +2040,7 @@ genTaskSpecPlacement n =
   TaskSpecPlacement
     <$> arbitraryReducedMaybe n -- taskSpecPlacementConstraints :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- taskSpecPlacementPreferences :: Maybe [TaskSpecPlacementPreferences]
-    <*> arbitraryReducedMaybe n -- taskSpecPlacementPlatforms :: Maybe [NodeDescriptionPlatform]
+    <*> arbitraryReducedMaybe n -- taskSpecPlacementPlatforms :: Maybe [Platform]
   
 instance Arbitrary TaskSpecPlacementPreferences where
   arbitrary = sized genTaskSpecPlacementPreferences
@@ -1943,32 +2058,25 @@ genTaskSpecPlacementSpread n =
   TaskSpecPlacementSpread
     <$> arbitraryReducedMaybe n -- taskSpecPlacementSpreadSpreadDescriptor :: Maybe Text
   
+instance Arbitrary TaskSpecPluginSpec where
+  arbitrary = sized genTaskSpecPluginSpec
+
+genTaskSpecPluginSpec :: Int -> Gen TaskSpecPluginSpec
+genTaskSpecPluginSpec n =
+  TaskSpecPluginSpec
+    <$> arbitraryReducedMaybe n -- taskSpecPluginSpecName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- taskSpecPluginSpecRemote :: Maybe Text
+    <*> arbitraryReducedMaybe n -- taskSpecPluginSpecDisabled :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- taskSpecPluginSpecPluginPrivilege :: Maybe [InlineObject]
+  
 instance Arbitrary TaskSpecResources where
   arbitrary = sized genTaskSpecResources
 
 genTaskSpecResources :: Int -> Gen TaskSpecResources
 genTaskSpecResources n =
   TaskSpecResources
-    <$> arbitraryReducedMaybe n -- taskSpecResourcesLimits :: Maybe TaskSpecResourcesLimits
-    <*> arbitraryReducedMaybe n -- taskSpecResourcesReservation :: Maybe TaskSpecResourcesReservation
-  
-instance Arbitrary TaskSpecResourcesLimits where
-  arbitrary = sized genTaskSpecResourcesLimits
-
-genTaskSpecResourcesLimits :: Int -> Gen TaskSpecResourcesLimits
-genTaskSpecResourcesLimits n =
-  TaskSpecResourcesLimits
-    <$> arbitraryReducedMaybe n -- taskSpecResourcesLimitsNanoCpUs :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- taskSpecResourcesLimitsMemoryBytes :: Maybe Integer
-  
-instance Arbitrary TaskSpecResourcesReservation where
-  arbitrary = sized genTaskSpecResourcesReservation
-
-genTaskSpecResourcesReservation :: Int -> Gen TaskSpecResourcesReservation
-genTaskSpecResourcesReservation n =
-  TaskSpecResourcesReservation
-    <$> arbitraryReducedMaybe n -- taskSpecResourcesReservationNanoCpUs :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- taskSpecResourcesReservationMemoryBytes :: Maybe Integer
+    <$> arbitraryReducedMaybe n -- taskSpecResourcesLimits :: Maybe ResourceObject
+    <*> arbitraryReducedMaybe n -- taskSpecResourcesReservation :: Maybe ResourceObject
   
 instance Arbitrary TaskSpecRestartPolicy where
   arbitrary = sized genTaskSpecRestartPolicy
@@ -2012,6 +2120,14 @@ genThrottleDevice n =
     <$> arbitraryReducedMaybe n -- throttleDevicePath :: Maybe Text
     <*> arbitraryReducedMaybe n -- throttleDeviceRate :: Maybe Integer
   
+instance Arbitrary UnlockKeyResponse where
+  arbitrary = sized genUnlockKeyResponse
+
+genUnlockKeyResponse :: Int -> Gen UnlockKeyResponse
+genUnlockKeyResponse n =
+  UnlockKeyResponse
+    <$> arbitraryReducedMaybe n -- unlockKeyResponseUnlockKey :: Maybe Text
+  
 instance Arbitrary Volume where
   arbitrary = sized genVolume
 
@@ -2021,11 +2137,30 @@ genVolume n =
     <$> arbitrary -- volumeName :: Text
     <*> arbitrary -- volumeDriver :: Text
     <*> arbitrary -- volumeMountpoint :: Text
+    <*> arbitraryReducedMaybe n -- volumeCreatedAt :: Maybe Text
     <*> arbitraryReducedMaybe n -- volumeStatus :: Maybe (Map.Map String A.Value)
     <*> arbitrary -- volumeLabels :: (Map.Map String Text)
     <*> arbitrary -- volumeScope :: E'Scope
     <*> arbitrary -- volumeOptions :: (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- volumeUsageData :: Maybe VolumeUsageData
+  
+instance Arbitrary VolumeListResponse where
+  arbitrary = sized genVolumeListResponse
+
+genVolumeListResponse :: Int -> Gen VolumeListResponse
+genVolumeListResponse n =
+  VolumeListResponse
+    <$> arbitraryReduced n -- volumeListResponseVolumes :: [Volume]
+    <*> arbitrary -- volumeListResponseWarnings :: [Text]
+  
+instance Arbitrary VolumePruneResponse where
+  arbitrary = sized genVolumePruneResponse
+
+genVolumePruneResponse :: Int -> Gen VolumePruneResponse
+genVolumePruneResponse n =
+  VolumePruneResponse
+    <$> arbitraryReducedMaybe n -- volumePruneResponseVolumesDeleted :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- volumePruneResponseSpaceReclaimed :: Maybe Integer
   
 instance Arbitrary VolumeUsageData where
   arbitrary = sized genVolumeUsageData
@@ -2040,6 +2175,9 @@ genVolumeUsageData n =
 
 
 instance Arbitrary E'Availability where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary E'CgroupDriver where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Condition where
@@ -2057,6 +2195,9 @@ instance Arbitrary E'FailureAction2 where
 instance Arbitrary E'Isolation where
   arbitrary = arbitraryBoundedEnum
 
+instance Arbitrary E'Isolation2 where
+  arbitrary = arbitraryBoundedEnum
+
 instance Arbitrary E'Mode where
   arbitrary = arbitraryBoundedEnum
 
@@ -2066,7 +2207,13 @@ instance Arbitrary E'Name where
 instance Arbitrary E'Order where
   arbitrary = arbitraryBoundedEnum
 
+instance Arbitrary E'Propagation where
+  arbitrary = arbitraryBoundedEnum
+
 instance Arbitrary E'Protocol where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary E'PublishMode where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Role where
@@ -2088,6 +2235,15 @@ instance Arbitrary E'Type2 where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Type3 where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary LocalNodeState where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary NodeState where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary Reachability where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary TaskState where

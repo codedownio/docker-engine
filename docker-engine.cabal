@@ -6,9 +6,9 @@ description:    .
                 .
                 host: localhost
                 .
-                base path: http://localhost/v1.30
+                base path: http://localhost/v1.36
                 .
-                Docker Engine API API version: 1.30
+                Docker Engine API API version: 1.36
                 .
                 OpenAPI version: 3.0.1
                 .
@@ -75,6 +75,7 @@ library
       DockerEngine.API.Plugin
       DockerEngine.API.Secret
       DockerEngine.API.Service
+      DockerEngine.API.SessionExperimental
       DockerEngine.API.Swarm
       DockerEngine.API.System
       DockerEngine.API.Task

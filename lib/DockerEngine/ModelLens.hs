@@ -1,10 +1,10 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release of Docker, so API calls are versioned to ensure that clients don't break.  For Docker Engine 17.06, the API version is 1.30. To lock to this version, you prefix the URL with `/v1.30`. For example, calling `/info` is the same as calling `/v1.30/info`.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  In previous versions of Docker, it was possible to access the API without providing a version. This behaviour is now deprecated will be removed in a future version of Docker.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer Docker daemons.  This documentation is for version 1.30 of the API, which was introduced with Docker 17.06. Use this table to find documentation for previous versions of the API:  Docker version  | API version | Changes ----------------|-------------|--------- 17.05.x | [1.29](https://docs.docker.com/engine/api/v1.29/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-29-api-changes) 17.04.x | [1.28](https://docs.docker.com/engine/api/v1.28/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-28-api-changes) 17.03.1 | [1.27](https://docs.docker.com/engine/api/v1.27/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-27-api-changes) 1.13.1 & 17.03.0 | [1.26](https://docs.docker.com/engine/api/v1.26/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-26-api-changes) 1.13.0 | [1.25](https://docs.docker.com/engine/api/v1.25/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-25-api-changes) 1.12.x | [1.24](https://docs.docker.com/engine/api/v1.24/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-24-api-changes) 1.11.x | [1.23](https://docs.docker.com/engine/api/v1.23/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-23-api-changes) 1.10.x | [1.22](https://docs.docker.com/engine/api/v1.22/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-22-api-changes) 1.9.x | [1.21](https://docs.docker.com/engine/api/v1.21/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-21-api-changes) 1.8.x | [1.20](https://docs.docker.com/engine/api/v1.20/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-20-api-changes) 1.7.x | [1.19](https://docs.docker.com/engine/api/v1.19/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-19-api-changes) 1.6.x | [1.18](https://docs.docker.com/engine/api/v1.18/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-18-api-changes)  # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
 
    OpenAPI Version: 3.0.1
-   Docker Engine API API version: 1.30
+   Docker Engine API API version: 1.36
    Generated by OpenAPI Generator (https://openapi-generator.tech)
 -}
 
@@ -32,8 +32,22 @@ import Data.Text (Text)
 import Prelude (($), (.),(<$>),(<*>),(=<<),Maybe(..),Bool(..),Char,Double,FilePath,Float,Int,Integer,String,fmap,undefined,mempty,maybe,pure,Monad,Applicative,Functor)
 import qualified Prelude as P
 
-import DockerEngine.Model
 import DockerEngine.Core
+import DockerEngine.Model
+
+
+-- * Address
+
+-- | 'addressAddr' Lens
+addressAddrL :: Lens_' Address (Maybe Text)
+addressAddrL f Address{..} = (\addressAddr -> Address { addressAddr, ..} ) <$> f addressAddr
+{-# INLINE addressAddrL #-}
+
+-- | 'addressPrefixLen' Lens
+addressPrefixLenL :: Lens_' Address (Maybe Int)
+addressPrefixLenL f Address{..} = (\addressPrefixLen -> Address { addressPrefixLen, ..} ) <$> f addressPrefixLen
+{-# INLINE addressPrefixLenL #-}
+
 
 
 -- * AuthConfig
@@ -97,6 +111,20 @@ buildInfoProgressDetailL :: Lens_' BuildInfo (Maybe ProgressDetail)
 buildInfoProgressDetailL f BuildInfo{..} = (\buildInfoProgressDetail -> BuildInfo { buildInfoProgressDetail, ..} ) <$> f buildInfoProgressDetail
 {-# INLINE buildInfoProgressDetailL #-}
 
+-- | 'buildInfoAux' Lens
+buildInfoAuxL :: Lens_' BuildInfo (Maybe ImageID)
+buildInfoAuxL f BuildInfo{..} = (\buildInfoAux -> BuildInfo { buildInfoAux, ..} ) <$> f buildInfoAux
+{-# INLINE buildInfoAuxL #-}
+
+
+
+-- * BuildPruneResponse
+
+-- | 'buildPruneResponseSpaceReclaimed' Lens
+buildPruneResponseSpaceReclaimedL :: Lens_' BuildPruneResponse (Maybe Integer)
+buildPruneResponseSpaceReclaimedL f BuildPruneResponse{..} = (\buildPruneResponseSpaceReclaimed -> BuildPruneResponse { buildPruneResponseSpaceReclaimed, ..} ) <$> f buildPruneResponseSpaceReclaimed
+{-# INLINE buildPruneResponseSpaceReclaimedL #-}
+
 
 
 -- * ClusterInfo
@@ -135,6 +163,20 @@ clusterInfoTlsInfoL f ClusterInfo{..} = (\clusterInfoTlsInfo -> ClusterInfo { cl
 clusterInfoRootRotationInProgressL :: Lens_' ClusterInfo (Maybe Bool)
 clusterInfoRootRotationInProgressL f ClusterInfo{..} = (\clusterInfoRootRotationInProgress -> ClusterInfo { clusterInfoRootRotationInProgress, ..} ) <$> f clusterInfoRootRotationInProgress
 {-# INLINE clusterInfoRootRotationInProgressL #-}
+
+
+
+-- * Commit
+
+-- | 'commitId' Lens
+commitIdL :: Lens_' Commit (Maybe Text)
+commitIdL f Commit{..} = (\commitId -> Commit { commitId, ..} ) <$> f commitId
+{-# INLINE commitIdL #-}
+
+-- | 'commitExpected' Lens
+commitExpectedL :: Lens_' Commit (Maybe Text)
+commitExpectedL f Commit{..} = (\commitExpected -> Commit { commitExpected, ..} ) <$> f commitExpected
+{-# INLINE commitExpectedL #-}
 
 
 
@@ -180,9 +222,23 @@ configSpecLabelsL f ConfigSpec{..} = (\configSpecLabels -> ConfigSpec { configSp
 {-# INLINE configSpecLabelsL #-}
 
 -- | 'configSpecData' Lens
-configSpecDataL :: Lens_' ConfigSpec (Maybe [Text])
+configSpecDataL :: Lens_' ConfigSpec (Maybe Text)
 configSpecDataL f ConfigSpec{..} = (\configSpecData -> ConfigSpec { configSpecData, ..} ) <$> f configSpecData
 {-# INLINE configSpecDataL #-}
+
+
+
+-- * ContainerChangeResponseItem
+
+-- | 'containerChangeResponseItemPath' Lens
+containerChangeResponseItemPathL :: Lens_' ContainerChangeResponseItem (Text)
+containerChangeResponseItemPathL f ContainerChangeResponseItem{..} = (\containerChangeResponseItemPath -> ContainerChangeResponseItem { containerChangeResponseItemPath, ..} ) <$> f containerChangeResponseItemPath
+{-# INLINE containerChangeResponseItemPathL #-}
+
+-- | 'containerChangeResponseItemKind' Lens
+containerChangeResponseItemKindL :: Lens_' ContainerChangeResponseItem (Int)
+containerChangeResponseItemKindL f ContainerChangeResponseItem{..} = (\containerChangeResponseItemKind -> ContainerChangeResponseItem { containerChangeResponseItemKind, ..} ) <$> f containerChangeResponseItemKind
+{-# INLINE containerChangeResponseItemKindL #-}
 
 
 
@@ -243,6 +299,11 @@ containerConfigEnvL :: Lens_' ContainerConfig (Maybe [Text])
 containerConfigEnvL f ContainerConfig{..} = (\containerConfigEnv -> ContainerConfig { containerConfigEnv, ..} ) <$> f containerConfigEnv
 {-# INLINE containerConfigEnvL #-}
 
+-- | 'containerConfigCmd' Lens
+containerConfigCmdL :: Lens_' ContainerConfig (Maybe [Text])
+containerConfigCmdL f ContainerConfig{..} = (\containerConfigCmd -> ContainerConfig { containerConfigCmd, ..} ) <$> f containerConfigCmd
+{-# INLINE containerConfigCmdL #-}
+
 -- | 'containerConfigHealthcheck' Lens
 containerConfigHealthcheckL :: Lens_' ContainerConfig (Maybe HealthConfig)
 containerConfigHealthcheckL f ContainerConfig{..} = (\containerConfigHealthcheck -> ContainerConfig { containerConfigHealthcheck, ..} ) <$> f containerConfigHealthcheck
@@ -267,6 +328,11 @@ containerConfigVolumesL f ContainerConfig{..} = (\containerConfigVolumes -> Cont
 containerConfigWorkingDirL :: Lens_' ContainerConfig (Maybe Text)
 containerConfigWorkingDirL f ContainerConfig{..} = (\containerConfigWorkingDir -> ContainerConfig { containerConfigWorkingDir, ..} ) <$> f containerConfigWorkingDir
 {-# INLINE containerConfigWorkingDirL #-}
+
+-- | 'containerConfigEntrypoint' Lens
+containerConfigEntrypointL :: Lens_' ContainerConfig (Maybe [Text])
+containerConfigEntrypointL f ContainerConfig{..} = (\containerConfigEntrypoint -> ContainerConfig { containerConfigEntrypoint, ..} ) <$> f containerConfigEntrypoint
+{-# INLINE containerConfigEntrypointL #-}
 
 -- | 'containerConfigNetworkDisabled' Lens
 containerConfigNetworkDisabledL :: Lens_' ContainerConfig (Maybe Bool)
@@ -314,104 +380,274 @@ containerConfigVolumesAdditionalPropertiesL f ContainerConfigVolumes{..} = (\con
 
 
 
--- * ContainerSummary
+-- * ContainerCreateResponse
 
--- | 'containerSummaryId' Lens
-containerSummaryIdL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryIdL f ContainerSummary{..} = (\containerSummaryId -> ContainerSummary { containerSummaryId, ..} ) <$> f containerSummaryId
-{-# INLINE containerSummaryIdL #-}
+-- | 'containerCreateResponseId' Lens
+containerCreateResponseIdL :: Lens_' ContainerCreateResponse (Text)
+containerCreateResponseIdL f ContainerCreateResponse{..} = (\containerCreateResponseId -> ContainerCreateResponse { containerCreateResponseId, ..} ) <$> f containerCreateResponseId
+{-# INLINE containerCreateResponseIdL #-}
 
--- | 'containerSummaryNames' Lens
-containerSummaryNamesL :: Lens_' ContainerSummary (Maybe [Text])
-containerSummaryNamesL f ContainerSummary{..} = (\containerSummaryNames -> ContainerSummary { containerSummaryNames, ..} ) <$> f containerSummaryNames
-{-# INLINE containerSummaryNamesL #-}
-
--- | 'containerSummaryImage' Lens
-containerSummaryImageL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryImageL f ContainerSummary{..} = (\containerSummaryImage -> ContainerSummary { containerSummaryImage, ..} ) <$> f containerSummaryImage
-{-# INLINE containerSummaryImageL #-}
-
--- | 'containerSummaryImageId' Lens
-containerSummaryImageIdL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryImageIdL f ContainerSummary{..} = (\containerSummaryImageId -> ContainerSummary { containerSummaryImageId, ..} ) <$> f containerSummaryImageId
-{-# INLINE containerSummaryImageIdL #-}
-
--- | 'containerSummaryCommand' Lens
-containerSummaryCommandL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryCommandL f ContainerSummary{..} = (\containerSummaryCommand -> ContainerSummary { containerSummaryCommand, ..} ) <$> f containerSummaryCommand
-{-# INLINE containerSummaryCommandL #-}
-
--- | 'containerSummaryCreated' Lens
-containerSummaryCreatedL :: Lens_' ContainerSummary (Maybe Integer)
-containerSummaryCreatedL f ContainerSummary{..} = (\containerSummaryCreated -> ContainerSummary { containerSummaryCreated, ..} ) <$> f containerSummaryCreated
-{-# INLINE containerSummaryCreatedL #-}
-
--- | 'containerSummaryPorts' Lens
-containerSummaryPortsL :: Lens_' ContainerSummary (Maybe [Port])
-containerSummaryPortsL f ContainerSummary{..} = (\containerSummaryPorts -> ContainerSummary { containerSummaryPorts, ..} ) <$> f containerSummaryPorts
-{-# INLINE containerSummaryPortsL #-}
-
--- | 'containerSummarySizeRw' Lens
-containerSummarySizeRwL :: Lens_' ContainerSummary (Maybe Integer)
-containerSummarySizeRwL f ContainerSummary{..} = (\containerSummarySizeRw -> ContainerSummary { containerSummarySizeRw, ..} ) <$> f containerSummarySizeRw
-{-# INLINE containerSummarySizeRwL #-}
-
--- | 'containerSummarySizeRootFs' Lens
-containerSummarySizeRootFsL :: Lens_' ContainerSummary (Maybe Integer)
-containerSummarySizeRootFsL f ContainerSummary{..} = (\containerSummarySizeRootFs -> ContainerSummary { containerSummarySizeRootFs, ..} ) <$> f containerSummarySizeRootFs
-{-# INLINE containerSummarySizeRootFsL #-}
-
--- | 'containerSummaryLabels' Lens
-containerSummaryLabelsL :: Lens_' ContainerSummary (Maybe (Map.Map String Text))
-containerSummaryLabelsL f ContainerSummary{..} = (\containerSummaryLabels -> ContainerSummary { containerSummaryLabels, ..} ) <$> f containerSummaryLabels
-{-# INLINE containerSummaryLabelsL #-}
-
--- | 'containerSummaryState' Lens
-containerSummaryStateL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryStateL f ContainerSummary{..} = (\containerSummaryState -> ContainerSummary { containerSummaryState, ..} ) <$> f containerSummaryState
-{-# INLINE containerSummaryStateL #-}
-
--- | 'containerSummaryStatus' Lens
-containerSummaryStatusL :: Lens_' ContainerSummary (Maybe Text)
-containerSummaryStatusL f ContainerSummary{..} = (\containerSummaryStatus -> ContainerSummary { containerSummaryStatus, ..} ) <$> f containerSummaryStatus
-{-# INLINE containerSummaryStatusL #-}
-
--- | 'containerSummaryHostConfig' Lens
-containerSummaryHostConfigL :: Lens_' ContainerSummary (Maybe ContainerSummaryHostConfig)
-containerSummaryHostConfigL f ContainerSummary{..} = (\containerSummaryHostConfig -> ContainerSummary { containerSummaryHostConfig, ..} ) <$> f containerSummaryHostConfig
-{-# INLINE containerSummaryHostConfigL #-}
-
--- | 'containerSummaryNetworkSettings' Lens
-containerSummaryNetworkSettingsL :: Lens_' ContainerSummary (Maybe ContainerSummaryNetworkSettings)
-containerSummaryNetworkSettingsL f ContainerSummary{..} = (\containerSummaryNetworkSettings -> ContainerSummary { containerSummaryNetworkSettings, ..} ) <$> f containerSummaryNetworkSettings
-{-# INLINE containerSummaryNetworkSettingsL #-}
-
--- | 'containerSummaryMounts' Lens
-containerSummaryMountsL :: Lens_' ContainerSummary (Maybe [Mount])
-containerSummaryMountsL f ContainerSummary{..} = (\containerSummaryMounts -> ContainerSummary { containerSummaryMounts, ..} ) <$> f containerSummaryMounts
-{-# INLINE containerSummaryMountsL #-}
+-- | 'containerCreateResponseWarnings' Lens
+containerCreateResponseWarningsL :: Lens_' ContainerCreateResponse ([Text])
+containerCreateResponseWarningsL f ContainerCreateResponse{..} = (\containerCreateResponseWarnings -> ContainerCreateResponse { containerCreateResponseWarnings, ..} ) <$> f containerCreateResponseWarnings
+{-# INLINE containerCreateResponseWarningsL #-}
 
 
 
--- * ContainerSummaryHostConfig
+-- * ContainerInspectResponse
 
--- | 'containerSummaryHostConfigNetworkMode' Lens
-containerSummaryHostConfigNetworkModeL :: Lens_' ContainerSummaryHostConfig (Maybe Text)
-containerSummaryHostConfigNetworkModeL f ContainerSummaryHostConfig{..} = (\containerSummaryHostConfigNetworkMode -> ContainerSummaryHostConfig { containerSummaryHostConfigNetworkMode, ..} ) <$> f containerSummaryHostConfigNetworkMode
-{-# INLINE containerSummaryHostConfigNetworkModeL #-}
+-- | 'containerInspectResponseId' Lens
+containerInspectResponseIdL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseIdL f ContainerInspectResponse{..} = (\containerInspectResponseId -> ContainerInspectResponse { containerInspectResponseId, ..} ) <$> f containerInspectResponseId
+{-# INLINE containerInspectResponseIdL #-}
+
+-- | 'containerInspectResponseCreated' Lens
+containerInspectResponseCreatedL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseCreatedL f ContainerInspectResponse{..} = (\containerInspectResponseCreated -> ContainerInspectResponse { containerInspectResponseCreated, ..} ) <$> f containerInspectResponseCreated
+{-# INLINE containerInspectResponseCreatedL #-}
+
+-- | 'containerInspectResponsePath' Lens
+containerInspectResponsePathL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponsePathL f ContainerInspectResponse{..} = (\containerInspectResponsePath -> ContainerInspectResponse { containerInspectResponsePath, ..} ) <$> f containerInspectResponsePath
+{-# INLINE containerInspectResponsePathL #-}
+
+-- | 'containerInspectResponseArgs' Lens
+containerInspectResponseArgsL :: Lens_' ContainerInspectResponse (Maybe [Text])
+containerInspectResponseArgsL f ContainerInspectResponse{..} = (\containerInspectResponseArgs -> ContainerInspectResponse { containerInspectResponseArgs, ..} ) <$> f containerInspectResponseArgs
+{-# INLINE containerInspectResponseArgsL #-}
+
+-- | 'containerInspectResponseState' Lens
+containerInspectResponseStateL :: Lens_' ContainerInspectResponse (Maybe ContainerInspectResponseState)
+containerInspectResponseStateL f ContainerInspectResponse{..} = (\containerInspectResponseState -> ContainerInspectResponse { containerInspectResponseState, ..} ) <$> f containerInspectResponseState
+{-# INLINE containerInspectResponseStateL #-}
+
+-- | 'containerInspectResponseImage' Lens
+containerInspectResponseImageL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseImageL f ContainerInspectResponse{..} = (\containerInspectResponseImage -> ContainerInspectResponse { containerInspectResponseImage, ..} ) <$> f containerInspectResponseImage
+{-# INLINE containerInspectResponseImageL #-}
+
+-- | 'containerInspectResponseResolvConfPath' Lens
+containerInspectResponseResolvConfPathL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseResolvConfPathL f ContainerInspectResponse{..} = (\containerInspectResponseResolvConfPath -> ContainerInspectResponse { containerInspectResponseResolvConfPath, ..} ) <$> f containerInspectResponseResolvConfPath
+{-# INLINE containerInspectResponseResolvConfPathL #-}
+
+-- | 'containerInspectResponseHostnamePath' Lens
+containerInspectResponseHostnamePathL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseHostnamePathL f ContainerInspectResponse{..} = (\containerInspectResponseHostnamePath -> ContainerInspectResponse { containerInspectResponseHostnamePath, ..} ) <$> f containerInspectResponseHostnamePath
+{-# INLINE containerInspectResponseHostnamePathL #-}
+
+-- | 'containerInspectResponseHostsPath' Lens
+containerInspectResponseHostsPathL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseHostsPathL f ContainerInspectResponse{..} = (\containerInspectResponseHostsPath -> ContainerInspectResponse { containerInspectResponseHostsPath, ..} ) <$> f containerInspectResponseHostsPath
+{-# INLINE containerInspectResponseHostsPathL #-}
+
+-- | 'containerInspectResponseLogPath' Lens
+containerInspectResponseLogPathL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseLogPathL f ContainerInspectResponse{..} = (\containerInspectResponseLogPath -> ContainerInspectResponse { containerInspectResponseLogPath, ..} ) <$> f containerInspectResponseLogPath
+{-# INLINE containerInspectResponseLogPathL #-}
+
+-- | 'containerInspectResponseNode' Lens
+containerInspectResponseNodeL :: Lens_' ContainerInspectResponse (Maybe A.Value)
+containerInspectResponseNodeL f ContainerInspectResponse{..} = (\containerInspectResponseNode -> ContainerInspectResponse { containerInspectResponseNode, ..} ) <$> f containerInspectResponseNode
+{-# INLINE containerInspectResponseNodeL #-}
+
+-- | 'containerInspectResponseName' Lens
+containerInspectResponseNameL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseNameL f ContainerInspectResponse{..} = (\containerInspectResponseName -> ContainerInspectResponse { containerInspectResponseName, ..} ) <$> f containerInspectResponseName
+{-# INLINE containerInspectResponseNameL #-}
+
+-- | 'containerInspectResponseRestartCount' Lens
+containerInspectResponseRestartCountL :: Lens_' ContainerInspectResponse (Maybe Int)
+containerInspectResponseRestartCountL f ContainerInspectResponse{..} = (\containerInspectResponseRestartCount -> ContainerInspectResponse { containerInspectResponseRestartCount, ..} ) <$> f containerInspectResponseRestartCount
+{-# INLINE containerInspectResponseRestartCountL #-}
+
+-- | 'containerInspectResponseDriver' Lens
+containerInspectResponseDriverL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseDriverL f ContainerInspectResponse{..} = (\containerInspectResponseDriver -> ContainerInspectResponse { containerInspectResponseDriver, ..} ) <$> f containerInspectResponseDriver
+{-# INLINE containerInspectResponseDriverL #-}
+
+-- | 'containerInspectResponseMountLabel' Lens
+containerInspectResponseMountLabelL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseMountLabelL f ContainerInspectResponse{..} = (\containerInspectResponseMountLabel -> ContainerInspectResponse { containerInspectResponseMountLabel, ..} ) <$> f containerInspectResponseMountLabel
+{-# INLINE containerInspectResponseMountLabelL #-}
+
+-- | 'containerInspectResponseProcessLabel' Lens
+containerInspectResponseProcessLabelL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseProcessLabelL f ContainerInspectResponse{..} = (\containerInspectResponseProcessLabel -> ContainerInspectResponse { containerInspectResponseProcessLabel, ..} ) <$> f containerInspectResponseProcessLabel
+{-# INLINE containerInspectResponseProcessLabelL #-}
+
+-- | 'containerInspectResponseAppArmorProfile' Lens
+containerInspectResponseAppArmorProfileL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseAppArmorProfileL f ContainerInspectResponse{..} = (\containerInspectResponseAppArmorProfile -> ContainerInspectResponse { containerInspectResponseAppArmorProfile, ..} ) <$> f containerInspectResponseAppArmorProfile
+{-# INLINE containerInspectResponseAppArmorProfileL #-}
+
+-- | 'containerInspectResponseExecIDs' Lens
+containerInspectResponseExecIDsL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseExecIDsL f ContainerInspectResponse{..} = (\containerInspectResponseExecIDs -> ContainerInspectResponse { containerInspectResponseExecIDs, ..} ) <$> f containerInspectResponseExecIDs
+{-# INLINE containerInspectResponseExecIDsL #-}
+
+-- | 'containerInspectResponseHostConfig' Lens
+containerInspectResponseHostConfigL :: Lens_' ContainerInspectResponse (Maybe HostConfig)
+containerInspectResponseHostConfigL f ContainerInspectResponse{..} = (\containerInspectResponseHostConfig -> ContainerInspectResponse { containerInspectResponseHostConfig, ..} ) <$> f containerInspectResponseHostConfig
+{-# INLINE containerInspectResponseHostConfigL #-}
+
+-- | 'containerInspectResponseGraphDriver' Lens
+containerInspectResponseGraphDriverL :: Lens_' ContainerInspectResponse (Maybe GraphDriverData)
+containerInspectResponseGraphDriverL f ContainerInspectResponse{..} = (\containerInspectResponseGraphDriver -> ContainerInspectResponse { containerInspectResponseGraphDriver, ..} ) <$> f containerInspectResponseGraphDriver
+{-# INLINE containerInspectResponseGraphDriverL #-}
+
+-- | 'containerInspectResponseSizeRw' Lens
+containerInspectResponseSizeRwL :: Lens_' ContainerInspectResponse (Maybe Integer)
+containerInspectResponseSizeRwL f ContainerInspectResponse{..} = (\containerInspectResponseSizeRw -> ContainerInspectResponse { containerInspectResponseSizeRw, ..} ) <$> f containerInspectResponseSizeRw
+{-# INLINE containerInspectResponseSizeRwL #-}
+
+-- | 'containerInspectResponseSizeRootFs' Lens
+containerInspectResponseSizeRootFsL :: Lens_' ContainerInspectResponse (Maybe Integer)
+containerInspectResponseSizeRootFsL f ContainerInspectResponse{..} = (\containerInspectResponseSizeRootFs -> ContainerInspectResponse { containerInspectResponseSizeRootFs, ..} ) <$> f containerInspectResponseSizeRootFs
+{-# INLINE containerInspectResponseSizeRootFsL #-}
+
+-- | 'containerInspectResponseMounts' Lens
+containerInspectResponseMountsL :: Lens_' ContainerInspectResponse (Maybe [MountPoint])
+containerInspectResponseMountsL f ContainerInspectResponse{..} = (\containerInspectResponseMounts -> ContainerInspectResponse { containerInspectResponseMounts, ..} ) <$> f containerInspectResponseMounts
+{-# INLINE containerInspectResponseMountsL #-}
+
+-- | 'containerInspectResponseConfig' Lens
+containerInspectResponseConfigL :: Lens_' ContainerInspectResponse (Maybe ContainerConfig)
+containerInspectResponseConfigL f ContainerInspectResponse{..} = (\containerInspectResponseConfig -> ContainerInspectResponse { containerInspectResponseConfig, ..} ) <$> f containerInspectResponseConfig
+{-# INLINE containerInspectResponseConfigL #-}
+
+-- | 'containerInspectResponseNetworkSettings' Lens
+containerInspectResponseNetworkSettingsL :: Lens_' ContainerInspectResponse (Maybe NetworkSettings)
+containerInspectResponseNetworkSettingsL f ContainerInspectResponse{..} = (\containerInspectResponseNetworkSettings -> ContainerInspectResponse { containerInspectResponseNetworkSettings, ..} ) <$> f containerInspectResponseNetworkSettings
+{-# INLINE containerInspectResponseNetworkSettingsL #-}
 
 
 
--- * ContainerSummaryNetworkSettings
+-- * ContainerInspectResponseState
 
--- | 'containerSummaryNetworkSettingsNetworks' Lens
-containerSummaryNetworkSettingsNetworksL :: Lens_' ContainerSummaryNetworkSettings (Maybe (Map.Map String EndpointSettings))
-containerSummaryNetworkSettingsNetworksL f ContainerSummaryNetworkSettings{..} = (\containerSummaryNetworkSettingsNetworks -> ContainerSummaryNetworkSettings { containerSummaryNetworkSettingsNetworks, ..} ) <$> f containerSummaryNetworkSettingsNetworks
-{-# INLINE containerSummaryNetworkSettingsNetworksL #-}
+-- | 'containerInspectResponseStateStatus' Lens
+containerInspectResponseStateStatusL :: Lens_' ContainerInspectResponseState (Maybe E'Status)
+containerInspectResponseStateStatusL f ContainerInspectResponseState{..} = (\containerInspectResponseStateStatus -> ContainerInspectResponseState { containerInspectResponseStateStatus, ..} ) <$> f containerInspectResponseStateStatus
+{-# INLINE containerInspectResponseStateStatusL #-}
+
+-- | 'containerInspectResponseStateRunning' Lens
+containerInspectResponseStateRunningL :: Lens_' ContainerInspectResponseState (Maybe Bool)
+containerInspectResponseStateRunningL f ContainerInspectResponseState{..} = (\containerInspectResponseStateRunning -> ContainerInspectResponseState { containerInspectResponseStateRunning, ..} ) <$> f containerInspectResponseStateRunning
+{-# INLINE containerInspectResponseStateRunningL #-}
+
+-- | 'containerInspectResponseStatePaused' Lens
+containerInspectResponseStatePausedL :: Lens_' ContainerInspectResponseState (Maybe Bool)
+containerInspectResponseStatePausedL f ContainerInspectResponseState{..} = (\containerInspectResponseStatePaused -> ContainerInspectResponseState { containerInspectResponseStatePaused, ..} ) <$> f containerInspectResponseStatePaused
+{-# INLINE containerInspectResponseStatePausedL #-}
+
+-- | 'containerInspectResponseStateRestarting' Lens
+containerInspectResponseStateRestartingL :: Lens_' ContainerInspectResponseState (Maybe Bool)
+containerInspectResponseStateRestartingL f ContainerInspectResponseState{..} = (\containerInspectResponseStateRestarting -> ContainerInspectResponseState { containerInspectResponseStateRestarting, ..} ) <$> f containerInspectResponseStateRestarting
+{-# INLINE containerInspectResponseStateRestartingL #-}
+
+-- | 'containerInspectResponseStateOomKilled' Lens
+containerInspectResponseStateOomKilledL :: Lens_' ContainerInspectResponseState (Maybe Bool)
+containerInspectResponseStateOomKilledL f ContainerInspectResponseState{..} = (\containerInspectResponseStateOomKilled -> ContainerInspectResponseState { containerInspectResponseStateOomKilled, ..} ) <$> f containerInspectResponseStateOomKilled
+{-# INLINE containerInspectResponseStateOomKilledL #-}
+
+-- | 'containerInspectResponseStateDead' Lens
+containerInspectResponseStateDeadL :: Lens_' ContainerInspectResponseState (Maybe Bool)
+containerInspectResponseStateDeadL f ContainerInspectResponseState{..} = (\containerInspectResponseStateDead -> ContainerInspectResponseState { containerInspectResponseStateDead, ..} ) <$> f containerInspectResponseStateDead
+{-# INLINE containerInspectResponseStateDeadL #-}
+
+-- | 'containerInspectResponseStatePid' Lens
+containerInspectResponseStatePidL :: Lens_' ContainerInspectResponseState (Maybe Int)
+containerInspectResponseStatePidL f ContainerInspectResponseState{..} = (\containerInspectResponseStatePid -> ContainerInspectResponseState { containerInspectResponseStatePid, ..} ) <$> f containerInspectResponseStatePid
+{-# INLINE containerInspectResponseStatePidL #-}
+
+-- | 'containerInspectResponseStateExitCode' Lens
+containerInspectResponseStateExitCodeL :: Lens_' ContainerInspectResponseState (Maybe Int)
+containerInspectResponseStateExitCodeL f ContainerInspectResponseState{..} = (\containerInspectResponseStateExitCode -> ContainerInspectResponseState { containerInspectResponseStateExitCode, ..} ) <$> f containerInspectResponseStateExitCode
+{-# INLINE containerInspectResponseStateExitCodeL #-}
+
+-- | 'containerInspectResponseStateError' Lens
+containerInspectResponseStateErrorL :: Lens_' ContainerInspectResponseState (Maybe Text)
+containerInspectResponseStateErrorL f ContainerInspectResponseState{..} = (\containerInspectResponseStateError -> ContainerInspectResponseState { containerInspectResponseStateError, ..} ) <$> f containerInspectResponseStateError
+{-# INLINE containerInspectResponseStateErrorL #-}
+
+-- | 'containerInspectResponseStateStartedAt' Lens
+containerInspectResponseStateStartedAtL :: Lens_' ContainerInspectResponseState (Maybe Text)
+containerInspectResponseStateStartedAtL f ContainerInspectResponseState{..} = (\containerInspectResponseStateStartedAt -> ContainerInspectResponseState { containerInspectResponseStateStartedAt, ..} ) <$> f containerInspectResponseStateStartedAt
+{-# INLINE containerInspectResponseStateStartedAtL #-}
+
+-- | 'containerInspectResponseStateFinishedAt' Lens
+containerInspectResponseStateFinishedAtL :: Lens_' ContainerInspectResponseState (Maybe Text)
+containerInspectResponseStateFinishedAtL f ContainerInspectResponseState{..} = (\containerInspectResponseStateFinishedAt -> ContainerInspectResponseState { containerInspectResponseStateFinishedAt, ..} ) <$> f containerInspectResponseStateFinishedAt
+{-# INLINE containerInspectResponseStateFinishedAtL #-}
+
+
+
+-- * ContainerPruneResponse
+
+-- | 'containerPruneResponseContainersDeleted' Lens
+containerPruneResponseContainersDeletedL :: Lens_' ContainerPruneResponse (Maybe [Text])
+containerPruneResponseContainersDeletedL f ContainerPruneResponse{..} = (\containerPruneResponseContainersDeleted -> ContainerPruneResponse { containerPruneResponseContainersDeleted, ..} ) <$> f containerPruneResponseContainersDeleted
+{-# INLINE containerPruneResponseContainersDeletedL #-}
+
+-- | 'containerPruneResponseSpaceReclaimed' Lens
+containerPruneResponseSpaceReclaimedL :: Lens_' ContainerPruneResponse (Maybe Integer)
+containerPruneResponseSpaceReclaimedL f ContainerPruneResponse{..} = (\containerPruneResponseSpaceReclaimed -> ContainerPruneResponse { containerPruneResponseSpaceReclaimed, ..} ) <$> f containerPruneResponseSpaceReclaimed
+{-# INLINE containerPruneResponseSpaceReclaimedL #-}
+
+
+
+-- * ContainerTopResponse
+
+-- | 'containerTopResponseTitles' Lens
+containerTopResponseTitlesL :: Lens_' ContainerTopResponse (Maybe [Text])
+containerTopResponseTitlesL f ContainerTopResponse{..} = (\containerTopResponseTitles -> ContainerTopResponse { containerTopResponseTitles, ..} ) <$> f containerTopResponseTitles
+{-# INLINE containerTopResponseTitlesL #-}
+
+-- | 'containerTopResponseProcesses' Lens
+containerTopResponseProcessesL :: Lens_' ContainerTopResponse (Maybe [[Text]])
+containerTopResponseProcessesL f ContainerTopResponse{..} = (\containerTopResponseProcesses -> ContainerTopResponse { containerTopResponseProcesses, ..} ) <$> f containerTopResponseProcesses
+{-# INLINE containerTopResponseProcessesL #-}
+
+
+
+-- * ContainerUpdateResponse
+
+-- | 'containerUpdateResponseWarnings' Lens
+containerUpdateResponseWarningsL :: Lens_' ContainerUpdateResponse (Maybe [Text])
+containerUpdateResponseWarningsL f ContainerUpdateResponse{..} = (\containerUpdateResponseWarnings -> ContainerUpdateResponse { containerUpdateResponseWarnings, ..} ) <$> f containerUpdateResponseWarnings
+{-# INLINE containerUpdateResponseWarningsL #-}
+
+
+
+-- * ContainerWaitResponse
+
+-- | 'containerWaitResponseStatusCode' Lens
+containerWaitResponseStatusCodeL :: Lens_' ContainerWaitResponse (Int)
+containerWaitResponseStatusCodeL f ContainerWaitResponse{..} = (\containerWaitResponseStatusCode -> ContainerWaitResponse { containerWaitResponseStatusCode, ..} ) <$> f containerWaitResponseStatusCode
+{-# INLINE containerWaitResponseStatusCodeL #-}
+
+-- | 'containerWaitResponseError' Lens
+containerWaitResponseErrorL :: Lens_' ContainerWaitResponse (Maybe ContainerWaitResponseError)
+containerWaitResponseErrorL f ContainerWaitResponse{..} = (\containerWaitResponseError -> ContainerWaitResponse { containerWaitResponseError, ..} ) <$> f containerWaitResponseError
+{-# INLINE containerWaitResponseErrorL #-}
+
+
+
+-- * ContainerWaitResponseError
+
+-- | 'containerWaitResponseErrorMessage' Lens
+containerWaitResponseErrorMessageL :: Lens_' ContainerWaitResponseError (Maybe Text)
+containerWaitResponseErrorMessageL f ContainerWaitResponseError{..} = (\containerWaitResponseErrorMessage -> ContainerWaitResponseError { containerWaitResponseErrorMessage, ..} ) <$> f containerWaitResponseErrorMessage
+{-# INLINE containerWaitResponseErrorMessageL #-}
 
 
 
 -- * CreateImageInfo
+
+-- | 'createImageInfoId' Lens
+createImageInfoIdL :: Lens_' CreateImageInfo (Maybe Text)
+createImageInfoIdL f CreateImageInfo{..} = (\createImageInfoId -> CreateImageInfo { createImageInfoId, ..} ) <$> f createImageInfoId
+{-# INLINE createImageInfoIdL #-}
 
 -- | 'createImageInfoError' Lens
 createImageInfoErrorL :: Lens_' CreateImageInfo (Maybe Text)
@@ -454,6 +690,111 @@ deviceMappingCgroupPermissionsL f DeviceMapping{..} = (\deviceMappingCgroupPermi
 
 
 
+-- * DistributionInspectResponse
+
+-- | 'distributionInspectResponseDescriptor' Lens
+distributionInspectResponseDescriptorL :: Lens_' DistributionInspectResponse (DistributionInspectResponseDescriptor)
+distributionInspectResponseDescriptorL f DistributionInspectResponse{..} = (\distributionInspectResponseDescriptor -> DistributionInspectResponse { distributionInspectResponseDescriptor, ..} ) <$> f distributionInspectResponseDescriptor
+{-# INLINE distributionInspectResponseDescriptorL #-}
+
+-- | 'distributionInspectResponsePlatforms' Lens
+distributionInspectResponsePlatformsL :: Lens_' DistributionInspectResponse ([DistributionInspectResponsePlatforms])
+distributionInspectResponsePlatformsL f DistributionInspectResponse{..} = (\distributionInspectResponsePlatforms -> DistributionInspectResponse { distributionInspectResponsePlatforms, ..} ) <$> f distributionInspectResponsePlatforms
+{-# INLINE distributionInspectResponsePlatformsL #-}
+
+
+
+-- * DistributionInspectResponseDescriptor
+
+-- | 'distributionInspectResponseDescriptorMediaType' Lens
+distributionInspectResponseDescriptorMediaTypeL :: Lens_' DistributionInspectResponseDescriptor (Maybe Text)
+distributionInspectResponseDescriptorMediaTypeL f DistributionInspectResponseDescriptor{..} = (\distributionInspectResponseDescriptorMediaType -> DistributionInspectResponseDescriptor { distributionInspectResponseDescriptorMediaType, ..} ) <$> f distributionInspectResponseDescriptorMediaType
+{-# INLINE distributionInspectResponseDescriptorMediaTypeL #-}
+
+-- | 'distributionInspectResponseDescriptorSize' Lens
+distributionInspectResponseDescriptorSizeL :: Lens_' DistributionInspectResponseDescriptor (Maybe Integer)
+distributionInspectResponseDescriptorSizeL f DistributionInspectResponseDescriptor{..} = (\distributionInspectResponseDescriptorSize -> DistributionInspectResponseDescriptor { distributionInspectResponseDescriptorSize, ..} ) <$> f distributionInspectResponseDescriptorSize
+{-# INLINE distributionInspectResponseDescriptorSizeL #-}
+
+-- | 'distributionInspectResponseDescriptorDigest' Lens
+distributionInspectResponseDescriptorDigestL :: Lens_' DistributionInspectResponseDescriptor (Maybe Text)
+distributionInspectResponseDescriptorDigestL f DistributionInspectResponseDescriptor{..} = (\distributionInspectResponseDescriptorDigest -> DistributionInspectResponseDescriptor { distributionInspectResponseDescriptorDigest, ..} ) <$> f distributionInspectResponseDescriptorDigest
+{-# INLINE distributionInspectResponseDescriptorDigestL #-}
+
+-- | 'distributionInspectResponseDescriptorUrLs' Lens
+distributionInspectResponseDescriptorUrLsL :: Lens_' DistributionInspectResponseDescriptor (Maybe [Text])
+distributionInspectResponseDescriptorUrLsL f DistributionInspectResponseDescriptor{..} = (\distributionInspectResponseDescriptorUrLs -> DistributionInspectResponseDescriptor { distributionInspectResponseDescriptorUrLs, ..} ) <$> f distributionInspectResponseDescriptorUrLs
+{-# INLINE distributionInspectResponseDescriptorUrLsL #-}
+
+
+
+-- * DistributionInspectResponsePlatforms
+
+-- | 'distributionInspectResponsePlatformsArchitecture' Lens
+distributionInspectResponsePlatformsArchitectureL :: Lens_' DistributionInspectResponsePlatforms (Maybe Text)
+distributionInspectResponsePlatformsArchitectureL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsArchitecture -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsArchitecture, ..} ) <$> f distributionInspectResponsePlatformsArchitecture
+{-# INLINE distributionInspectResponsePlatformsArchitectureL #-}
+
+-- | 'distributionInspectResponsePlatformsOs' Lens
+distributionInspectResponsePlatformsOsL :: Lens_' DistributionInspectResponsePlatforms (Maybe Text)
+distributionInspectResponsePlatformsOsL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsOs -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsOs, ..} ) <$> f distributionInspectResponsePlatformsOs
+{-# INLINE distributionInspectResponsePlatformsOsL #-}
+
+-- | 'distributionInspectResponsePlatformsOsVersion' Lens
+distributionInspectResponsePlatformsOsVersionL :: Lens_' DistributionInspectResponsePlatforms (Maybe Text)
+distributionInspectResponsePlatformsOsVersionL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsOsVersion -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsOsVersion, ..} ) <$> f distributionInspectResponsePlatformsOsVersion
+{-# INLINE distributionInspectResponsePlatformsOsVersionL #-}
+
+-- | 'distributionInspectResponsePlatformsOsFeatures' Lens
+distributionInspectResponsePlatformsOsFeaturesL :: Lens_' DistributionInspectResponsePlatforms (Maybe [Text])
+distributionInspectResponsePlatformsOsFeaturesL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsOsFeatures -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsOsFeatures, ..} ) <$> f distributionInspectResponsePlatformsOsFeatures
+{-# INLINE distributionInspectResponsePlatformsOsFeaturesL #-}
+
+-- | 'distributionInspectResponsePlatformsVariant' Lens
+distributionInspectResponsePlatformsVariantL :: Lens_' DistributionInspectResponsePlatforms (Maybe Text)
+distributionInspectResponsePlatformsVariantL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsVariant -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsVariant, ..} ) <$> f distributionInspectResponsePlatformsVariant
+{-# INLINE distributionInspectResponsePlatformsVariantL #-}
+
+-- | 'distributionInspectResponsePlatformsFeatures' Lens
+distributionInspectResponsePlatformsFeaturesL :: Lens_' DistributionInspectResponsePlatforms (Maybe [Text])
+distributionInspectResponsePlatformsFeaturesL f DistributionInspectResponsePlatforms{..} = (\distributionInspectResponsePlatformsFeatures -> DistributionInspectResponsePlatforms { distributionInspectResponsePlatformsFeatures, ..} ) <$> f distributionInspectResponsePlatformsFeatures
+{-# INLINE distributionInspectResponsePlatformsFeaturesL #-}
+
+
+
+-- * Driver
+
+-- | 'driverName' Lens
+driverNameL :: Lens_' Driver (Text)
+driverNameL f Driver{..} = (\driverName -> Driver { driverName, ..} ) <$> f driverName
+{-# INLINE driverNameL #-}
+
+-- | 'driverOptions' Lens
+driverOptionsL :: Lens_' Driver (Maybe (Map.Map String Text))
+driverOptionsL f Driver{..} = (\driverOptions -> Driver { driverOptions, ..} ) <$> f driverOptions
+{-# INLINE driverOptionsL #-}
+
+
+
+-- * EndpointIPAMConfig
+
+-- | 'endpointIPAMConfigIPv4Address' Lens
+endpointIPAMConfigIPv4AddressL :: Lens_' EndpointIPAMConfig (Maybe Text)
+endpointIPAMConfigIPv4AddressL f EndpointIPAMConfig{..} = (\endpointIPAMConfigIPv4Address -> EndpointIPAMConfig { endpointIPAMConfigIPv4Address, ..} ) <$> f endpointIPAMConfigIPv4Address
+{-# INLINE endpointIPAMConfigIPv4AddressL #-}
+
+-- | 'endpointIPAMConfigIPv6Address' Lens
+endpointIPAMConfigIPv6AddressL :: Lens_' EndpointIPAMConfig (Maybe Text)
+endpointIPAMConfigIPv6AddressL f EndpointIPAMConfig{..} = (\endpointIPAMConfigIPv6Address -> EndpointIPAMConfig { endpointIPAMConfigIPv6Address, ..} ) <$> f endpointIPAMConfigIPv6Address
+{-# INLINE endpointIPAMConfigIPv6AddressL #-}
+
+-- | 'endpointIPAMConfigLinkLocalIPs' Lens
+endpointIPAMConfigLinkLocalIPsL :: Lens_' EndpointIPAMConfig (Maybe [Text])
+endpointIPAMConfigLinkLocalIPsL f EndpointIPAMConfig{..} = (\endpointIPAMConfigLinkLocalIPs -> EndpointIPAMConfig { endpointIPAMConfigLinkLocalIPs, ..} ) <$> f endpointIPAMConfigLinkLocalIPs
+{-# INLINE endpointIPAMConfigLinkLocalIPsL #-}
+
+
+
 -- * EndpointPortConfig
 
 -- | 'endpointPortConfigName' Lens
@@ -476,12 +817,17 @@ endpointPortConfigPublishedPortL :: Lens_' EndpointPortConfig (Maybe Int)
 endpointPortConfigPublishedPortL f EndpointPortConfig{..} = (\endpointPortConfigPublishedPort -> EndpointPortConfig { endpointPortConfigPublishedPort, ..} ) <$> f endpointPortConfigPublishedPort
 {-# INLINE endpointPortConfigPublishedPortL #-}
 
+-- | 'endpointPortConfigPublishMode' Lens
+endpointPortConfigPublishModeL :: Lens_' EndpointPortConfig (Maybe E'PublishMode)
+endpointPortConfigPublishModeL f EndpointPortConfig{..} = (\endpointPortConfigPublishMode -> EndpointPortConfig { endpointPortConfigPublishMode, ..} ) <$> f endpointPortConfigPublishMode
+{-# INLINE endpointPortConfigPublishModeL #-}
+
 
 
 -- * EndpointSettings
 
 -- | 'endpointSettingsIpamConfig' Lens
-endpointSettingsIpamConfigL :: Lens_' EndpointSettings (Maybe EndpointSettingsIPAMConfig)
+endpointSettingsIpamConfigL :: Lens_' EndpointSettings (Maybe EndpointIPAMConfig)
 endpointSettingsIpamConfigL f EndpointSettings{..} = (\endpointSettingsIpamConfig -> EndpointSettings { endpointSettingsIpamConfig, ..} ) <$> f endpointSettingsIpamConfig
 {-# INLINE endpointSettingsIpamConfigL #-}
 
@@ -540,24 +886,10 @@ endpointSettingsMacAddressL :: Lens_' EndpointSettings (Maybe Text)
 endpointSettingsMacAddressL f EndpointSettings{..} = (\endpointSettingsMacAddress -> EndpointSettings { endpointSettingsMacAddress, ..} ) <$> f endpointSettingsMacAddress
 {-# INLINE endpointSettingsMacAddressL #-}
 
-
-
--- * EndpointSettingsIPAMConfig
-
--- | 'endpointSettingsIPAMConfigIPv4Address' Lens
-endpointSettingsIPAMConfigIPv4AddressL :: Lens_' EndpointSettingsIPAMConfig (Maybe Text)
-endpointSettingsIPAMConfigIPv4AddressL f EndpointSettingsIPAMConfig{..} = (\endpointSettingsIPAMConfigIPv4Address -> EndpointSettingsIPAMConfig { endpointSettingsIPAMConfigIPv4Address, ..} ) <$> f endpointSettingsIPAMConfigIPv4Address
-{-# INLINE endpointSettingsIPAMConfigIPv4AddressL #-}
-
--- | 'endpointSettingsIPAMConfigIPv6Address' Lens
-endpointSettingsIPAMConfigIPv6AddressL :: Lens_' EndpointSettingsIPAMConfig (Maybe Text)
-endpointSettingsIPAMConfigIPv6AddressL f EndpointSettingsIPAMConfig{..} = (\endpointSettingsIPAMConfigIPv6Address -> EndpointSettingsIPAMConfig { endpointSettingsIPAMConfigIPv6Address, ..} ) <$> f endpointSettingsIPAMConfigIPv6Address
-{-# INLINE endpointSettingsIPAMConfigIPv6AddressL #-}
-
--- | 'endpointSettingsIPAMConfigLinkLocalIPs' Lens
-endpointSettingsIPAMConfigLinkLocalIPsL :: Lens_' EndpointSettingsIPAMConfig (Maybe [Text])
-endpointSettingsIPAMConfigLinkLocalIPsL f EndpointSettingsIPAMConfig{..} = (\endpointSettingsIPAMConfigLinkLocalIPs -> EndpointSettingsIPAMConfig { endpointSettingsIPAMConfigLinkLocalIPs, ..} ) <$> f endpointSettingsIPAMConfigLinkLocalIPs
-{-# INLINE endpointSettingsIPAMConfigLinkLocalIPsL #-}
+-- | 'endpointSettingsDriverOpts' Lens
+endpointSettingsDriverOptsL :: Lens_' EndpointSettings (Maybe (Map.Map String Text))
+endpointSettingsDriverOptsL f EndpointSettings{..} = (\endpointSettingsDriverOpts -> EndpointSettings { endpointSettingsDriverOpts, ..} ) <$> f endpointSettingsDriverOpts
+{-# INLINE endpointSettingsDriverOptsL #-}
 
 
 
@@ -572,6 +904,39 @@ endpointSpecModeL f EndpointSpec{..} = (\endpointSpecMode -> EndpointSpec { endp
 endpointSpecPortsL :: Lens_' EndpointSpec (Maybe [EndpointPortConfig])
 endpointSpecPortsL f EndpointSpec{..} = (\endpointSpecPorts -> EndpointSpec { endpointSpecPorts, ..} ) <$> f endpointSpecPorts
 {-# INLINE endpointSpecPortsL #-}
+
+
+
+-- * EngineDescription
+
+-- | 'engineDescriptionEngineVersion' Lens
+engineDescriptionEngineVersionL :: Lens_' EngineDescription (Maybe Text)
+engineDescriptionEngineVersionL f EngineDescription{..} = (\engineDescriptionEngineVersion -> EngineDescription { engineDescriptionEngineVersion, ..} ) <$> f engineDescriptionEngineVersion
+{-# INLINE engineDescriptionEngineVersionL #-}
+
+-- | 'engineDescriptionLabels' Lens
+engineDescriptionLabelsL :: Lens_' EngineDescription (Maybe (Map.Map String Text))
+engineDescriptionLabelsL f EngineDescription{..} = (\engineDescriptionLabels -> EngineDescription { engineDescriptionLabels, ..} ) <$> f engineDescriptionLabels
+{-# INLINE engineDescriptionLabelsL #-}
+
+-- | 'engineDescriptionPlugins' Lens
+engineDescriptionPluginsL :: Lens_' EngineDescription (Maybe [EngineDescriptionPlugins])
+engineDescriptionPluginsL f EngineDescription{..} = (\engineDescriptionPlugins -> EngineDescription { engineDescriptionPlugins, ..} ) <$> f engineDescriptionPlugins
+{-# INLINE engineDescriptionPluginsL #-}
+
+
+
+-- * EngineDescriptionPlugins
+
+-- | 'engineDescriptionPluginsType' Lens
+engineDescriptionPluginsTypeL :: Lens_' EngineDescriptionPlugins (Maybe Text)
+engineDescriptionPluginsTypeL f EngineDescriptionPlugins{..} = (\engineDescriptionPluginsType -> EngineDescriptionPlugins { engineDescriptionPluginsType, ..} ) <$> f engineDescriptionPluginsType
+{-# INLINE engineDescriptionPluginsTypeL #-}
+
+-- | 'engineDescriptionPluginsName' Lens
+engineDescriptionPluginsNameL :: Lens_' EngineDescriptionPlugins (Maybe Text)
+engineDescriptionPluginsNameL f EngineDescriptionPlugins{..} = (\engineDescriptionPluginsName -> EngineDescriptionPlugins { engineDescriptionPluginsName, ..} ) <$> f engineDescriptionPluginsName
+{-# INLINE engineDescriptionPluginsNameL #-}
 
 
 
@@ -595,6 +960,65 @@ errorDetailMessageL f ErrorDetail{..} = (\errorDetailMessage -> ErrorDetail { er
 errorResponseMessageL :: Lens_' ErrorResponse (Text)
 errorResponseMessageL f ErrorResponse{..} = (\errorResponseMessage -> ErrorResponse { errorResponseMessage, ..} ) <$> f errorResponseMessage
 {-# INLINE errorResponseMessageL #-}
+
+
+
+-- * ExecInspectResponse
+
+-- | 'execInspectResponseCanRemove' Lens
+execInspectResponseCanRemoveL :: Lens_' ExecInspectResponse (Maybe Bool)
+execInspectResponseCanRemoveL f ExecInspectResponse{..} = (\execInspectResponseCanRemove -> ExecInspectResponse { execInspectResponseCanRemove, ..} ) <$> f execInspectResponseCanRemove
+{-# INLINE execInspectResponseCanRemoveL #-}
+
+-- | 'execInspectResponseDetachKeys' Lens
+execInspectResponseDetachKeysL :: Lens_' ExecInspectResponse (Maybe Text)
+execInspectResponseDetachKeysL f ExecInspectResponse{..} = (\execInspectResponseDetachKeys -> ExecInspectResponse { execInspectResponseDetachKeys, ..} ) <$> f execInspectResponseDetachKeys
+{-# INLINE execInspectResponseDetachKeysL #-}
+
+-- | 'execInspectResponseId' Lens
+execInspectResponseIdL :: Lens_' ExecInspectResponse (Maybe Text)
+execInspectResponseIdL f ExecInspectResponse{..} = (\execInspectResponseId -> ExecInspectResponse { execInspectResponseId, ..} ) <$> f execInspectResponseId
+{-# INLINE execInspectResponseIdL #-}
+
+-- | 'execInspectResponseRunning' Lens
+execInspectResponseRunningL :: Lens_' ExecInspectResponse (Maybe Bool)
+execInspectResponseRunningL f ExecInspectResponse{..} = (\execInspectResponseRunning -> ExecInspectResponse { execInspectResponseRunning, ..} ) <$> f execInspectResponseRunning
+{-# INLINE execInspectResponseRunningL #-}
+
+-- | 'execInspectResponseExitCode' Lens
+execInspectResponseExitCodeL :: Lens_' ExecInspectResponse (Maybe Int)
+execInspectResponseExitCodeL f ExecInspectResponse{..} = (\execInspectResponseExitCode -> ExecInspectResponse { execInspectResponseExitCode, ..} ) <$> f execInspectResponseExitCode
+{-# INLINE execInspectResponseExitCodeL #-}
+
+-- | 'execInspectResponseProcessConfig' Lens
+execInspectResponseProcessConfigL :: Lens_' ExecInspectResponse (Maybe ProcessConfig)
+execInspectResponseProcessConfigL f ExecInspectResponse{..} = (\execInspectResponseProcessConfig -> ExecInspectResponse { execInspectResponseProcessConfig, ..} ) <$> f execInspectResponseProcessConfig
+{-# INLINE execInspectResponseProcessConfigL #-}
+
+-- | 'execInspectResponseOpenStdin' Lens
+execInspectResponseOpenStdinL :: Lens_' ExecInspectResponse (Maybe Bool)
+execInspectResponseOpenStdinL f ExecInspectResponse{..} = (\execInspectResponseOpenStdin -> ExecInspectResponse { execInspectResponseOpenStdin, ..} ) <$> f execInspectResponseOpenStdin
+{-# INLINE execInspectResponseOpenStdinL #-}
+
+-- | 'execInspectResponseOpenStderr' Lens
+execInspectResponseOpenStderrL :: Lens_' ExecInspectResponse (Maybe Bool)
+execInspectResponseOpenStderrL f ExecInspectResponse{..} = (\execInspectResponseOpenStderr -> ExecInspectResponse { execInspectResponseOpenStderr, ..} ) <$> f execInspectResponseOpenStderr
+{-# INLINE execInspectResponseOpenStderrL #-}
+
+-- | 'execInspectResponseOpenStdout' Lens
+execInspectResponseOpenStdoutL :: Lens_' ExecInspectResponse (Maybe Bool)
+execInspectResponseOpenStdoutL f ExecInspectResponse{..} = (\execInspectResponseOpenStdout -> ExecInspectResponse { execInspectResponseOpenStdout, ..} ) <$> f execInspectResponseOpenStdout
+{-# INLINE execInspectResponseOpenStdoutL #-}
+
+-- | 'execInspectResponseContainerId' Lens
+execInspectResponseContainerIdL :: Lens_' ExecInspectResponse (Maybe Text)
+execInspectResponseContainerIdL f ExecInspectResponse{..} = (\execInspectResponseContainerId -> ExecInspectResponse { execInspectResponseContainerId, ..} ) <$> f execInspectResponseContainerId
+{-# INLINE execInspectResponseContainerIdL #-}
+
+-- | 'execInspectResponsePid' Lens
+execInspectResponsePidL :: Lens_' ExecInspectResponse (Maybe Int)
+execInspectResponsePidL f ExecInspectResponse{..} = (\execInspectResponsePid -> ExecInspectResponse { execInspectResponsePid, ..} ) <$> f execInspectResponsePid
+{-# INLINE execInspectResponsePidL #-}
 
 
 
@@ -641,6 +1065,40 @@ healthConfigStartPeriodL f HealthConfig{..} = (\healthConfigStartPeriod -> Healt
 
 
 
+-- * HistoryResponseItem
+
+-- | 'historyResponseItemId' Lens
+historyResponseItemIdL :: Lens_' HistoryResponseItem (Text)
+historyResponseItemIdL f HistoryResponseItem{..} = (\historyResponseItemId -> HistoryResponseItem { historyResponseItemId, ..} ) <$> f historyResponseItemId
+{-# INLINE historyResponseItemIdL #-}
+
+-- | 'historyResponseItemCreated' Lens
+historyResponseItemCreatedL :: Lens_' HistoryResponseItem (Integer)
+historyResponseItemCreatedL f HistoryResponseItem{..} = (\historyResponseItemCreated -> HistoryResponseItem { historyResponseItemCreated, ..} ) <$> f historyResponseItemCreated
+{-# INLINE historyResponseItemCreatedL #-}
+
+-- | 'historyResponseItemCreatedBy' Lens
+historyResponseItemCreatedByL :: Lens_' HistoryResponseItem (Text)
+historyResponseItemCreatedByL f HistoryResponseItem{..} = (\historyResponseItemCreatedBy -> HistoryResponseItem { historyResponseItemCreatedBy, ..} ) <$> f historyResponseItemCreatedBy
+{-# INLINE historyResponseItemCreatedByL #-}
+
+-- | 'historyResponseItemTags' Lens
+historyResponseItemTagsL :: Lens_' HistoryResponseItem ([Text])
+historyResponseItemTagsL f HistoryResponseItem{..} = (\historyResponseItemTags -> HistoryResponseItem { historyResponseItemTags, ..} ) <$> f historyResponseItemTags
+{-# INLINE historyResponseItemTagsL #-}
+
+-- | 'historyResponseItemSize' Lens
+historyResponseItemSizeL :: Lens_' HistoryResponseItem (Integer)
+historyResponseItemSizeL f HistoryResponseItem{..} = (\historyResponseItemSize -> HistoryResponseItem { historyResponseItemSize, ..} ) <$> f historyResponseItemSize
+{-# INLINE historyResponseItemSizeL #-}
+
+-- | 'historyResponseItemComment' Lens
+historyResponseItemCommentL :: Lens_' HistoryResponseItem (Text)
+historyResponseItemCommentL f HistoryResponseItem{..} = (\historyResponseItemComment -> HistoryResponseItem { historyResponseItemComment, ..} ) <$> f historyResponseItemComment
+{-# INLINE historyResponseItemCommentL #-}
+
+
+
 -- * HostConfig
 
 -- | 'hostConfigCpuShares' Lens
@@ -649,7 +1107,7 @@ hostConfigCpuSharesL f HostConfig{..} = (\hostConfigCpuShares -> HostConfig { ho
 {-# INLINE hostConfigCpuSharesL #-}
 
 -- | 'hostConfigMemory' Lens
-hostConfigMemoryL :: Lens_' HostConfig (Maybe Int)
+hostConfigMemoryL :: Lens_' HostConfig (Maybe Integer)
 hostConfigMemoryL f HostConfig{..} = (\hostConfigMemory -> HostConfig { hostConfigMemory, ..} ) <$> f hostConfigMemory
 {-# INLINE hostConfigMemoryL #-}
 
@@ -814,7 +1272,7 @@ hostConfigNetworkModeL f HostConfig{..} = (\hostConfigNetworkMode -> HostConfig 
 {-# INLINE hostConfigNetworkModeL #-}
 
 -- | 'hostConfigPortBindings' Lens
-hostConfigPortBindingsL :: Lens_' HostConfig (Maybe (Map.Map String HostConfigAllOfPortBindings))
+hostConfigPortBindingsL :: Lens_' HostConfig (Maybe (Map.Map String [PortBinding]))
 hostConfigPortBindingsL f HostConfig{..} = (\hostConfigPortBindings -> HostConfig { hostConfigPortBindings, ..} ) <$> f hostConfigPortBindings
 {-# INLINE hostConfigPortBindingsL #-}
 
@@ -993,7 +1451,7 @@ hostConfigAllOfNetworkModeL f HostConfigAllOf{..} = (\hostConfigAllOfNetworkMode
 {-# INLINE hostConfigAllOfNetworkModeL #-}
 
 -- | 'hostConfigAllOfPortBindings' Lens
-hostConfigAllOfPortBindingsL :: Lens_' HostConfigAllOf (Maybe (Map.Map String HostConfigAllOfPortBindings))
+hostConfigAllOfPortBindingsL :: Lens_' HostConfigAllOf (Maybe (Map.Map String [PortBinding]))
 hostConfigAllOfPortBindingsL f HostConfigAllOf{..} = (\hostConfigAllOfPortBindings -> HostConfigAllOf { hostConfigAllOfPortBindings, ..} ) <$> f hostConfigAllOfPortBindings
 {-# INLINE hostConfigAllOfPortBindingsL #-}
 
@@ -1163,20 +1621,6 @@ hostConfigAllOfLogConfigConfigL f HostConfigAllOfLogConfig{..} = (\hostConfigAll
 
 
 
--- * HostConfigAllOfPortBindings
-
--- | 'hostConfigAllOfPortBindingsHostIp' Lens
-hostConfigAllOfPortBindingsHostIpL :: Lens_' HostConfigAllOfPortBindings (Maybe Text)
-hostConfigAllOfPortBindingsHostIpL f HostConfigAllOfPortBindings{..} = (\hostConfigAllOfPortBindingsHostIp -> HostConfigAllOfPortBindings { hostConfigAllOfPortBindingsHostIp, ..} ) <$> f hostConfigAllOfPortBindingsHostIp
-{-# INLINE hostConfigAllOfPortBindingsHostIpL #-}
-
--- | 'hostConfigAllOfPortBindingsHostPort' Lens
-hostConfigAllOfPortBindingsHostPortL :: Lens_' HostConfigAllOfPortBindings (Maybe Text)
-hostConfigAllOfPortBindingsHostPortL f HostConfigAllOfPortBindings{..} = (\hostConfigAllOfPortBindingsHostPort -> HostConfigAllOfPortBindings { hostConfigAllOfPortBindingsHostPort, ..} ) <$> f hostConfigAllOfPortBindingsHostPort
-{-# INLINE hostConfigAllOfPortBindingsHostPortL #-}
-
-
-
 -- * IPAM
 
 -- | 'iPAMDriver' Lens
@@ -1297,6 +1741,11 @@ imageRootFsL :: Lens_' Image (ImageRootFS)
 imageRootFsL f Image{..} = (\imageRootFs -> Image { imageRootFs, ..} ) <$> f imageRootFs
 {-# INLINE imageRootFsL #-}
 
+-- | 'imageMetadata' Lens
+imageMetadataL :: Lens_' Image (Maybe ImageMetadata)
+imageMetadataL f Image{..} = (\imageMetadata -> Image { imageMetadata, ..} ) <$> f imageMetadata
+{-# INLINE imageMetadataL #-}
+
 
 
 -- * ImageDeleteResponseItem
@@ -1310,6 +1759,38 @@ imageDeleteResponseItemUntaggedL f ImageDeleteResponseItem{..} = (\imageDeleteRe
 imageDeleteResponseItemDeletedL :: Lens_' ImageDeleteResponseItem (Maybe Text)
 imageDeleteResponseItemDeletedL f ImageDeleteResponseItem{..} = (\imageDeleteResponseItemDeleted -> ImageDeleteResponseItem { imageDeleteResponseItemDeleted, ..} ) <$> f imageDeleteResponseItemDeleted
 {-# INLINE imageDeleteResponseItemDeletedL #-}
+
+
+
+-- * ImageID
+
+-- | 'imageIDId' Lens
+imageIDIdL :: Lens_' ImageID (Maybe Text)
+imageIDIdL f ImageID{..} = (\imageIDId -> ImageID { imageIDId, ..} ) <$> f imageIDId
+{-# INLINE imageIDIdL #-}
+
+
+
+-- * ImageMetadata
+
+-- | 'imageMetadataLastTagTime' Lens
+imageMetadataLastTagTimeL :: Lens_' ImageMetadata (Maybe Text)
+imageMetadataLastTagTimeL f ImageMetadata{..} = (\imageMetadataLastTagTime -> ImageMetadata { imageMetadataLastTagTime, ..} ) <$> f imageMetadataLastTagTime
+{-# INLINE imageMetadataLastTagTimeL #-}
+
+
+
+-- * ImagePruneResponse
+
+-- | 'imagePruneResponseImagesDeleted' Lens
+imagePruneResponseImagesDeletedL :: Lens_' ImagePruneResponse (Maybe [ImageDeleteResponseItem])
+imagePruneResponseImagesDeletedL f ImagePruneResponse{..} = (\imagePruneResponseImagesDeleted -> ImagePruneResponse { imagePruneResponseImagesDeleted, ..} ) <$> f imagePruneResponseImagesDeleted
+{-# INLINE imagePruneResponseImagesDeletedL #-}
+
+-- | 'imagePruneResponseSpaceReclaimed' Lens
+imagePruneResponseSpaceReclaimedL :: Lens_' ImagePruneResponse (Maybe Integer)
+imagePruneResponseSpaceReclaimedL f ImagePruneResponse{..} = (\imagePruneResponseSpaceReclaimed -> ImagePruneResponse { imagePruneResponseSpaceReclaimed, ..} ) <$> f imagePruneResponseSpaceReclaimed
+{-# INLINE imagePruneResponseSpaceReclaimedL #-}
 
 
 
@@ -1329,6 +1810,35 @@ imageRootFSLayersL f ImageRootFS{..} = (\imageRootFSLayers -> ImageRootFS { imag
 imageRootFSBaseLayerL :: Lens_' ImageRootFS (Maybe Text)
 imageRootFSBaseLayerL f ImageRootFS{..} = (\imageRootFSBaseLayer -> ImageRootFS { imageRootFSBaseLayer, ..} ) <$> f imageRootFSBaseLayer
 {-# INLINE imageRootFSBaseLayerL #-}
+
+
+
+-- * ImageSearchResponseItem
+
+-- | 'imageSearchResponseItemDescription' Lens
+imageSearchResponseItemDescriptionL :: Lens_' ImageSearchResponseItem (Maybe Text)
+imageSearchResponseItemDescriptionL f ImageSearchResponseItem{..} = (\imageSearchResponseItemDescription -> ImageSearchResponseItem { imageSearchResponseItemDescription, ..} ) <$> f imageSearchResponseItemDescription
+{-# INLINE imageSearchResponseItemDescriptionL #-}
+
+-- | 'imageSearchResponseItemIsOfficial' Lens
+imageSearchResponseItemIsOfficialL :: Lens_' ImageSearchResponseItem (Maybe Bool)
+imageSearchResponseItemIsOfficialL f ImageSearchResponseItem{..} = (\imageSearchResponseItemIsOfficial -> ImageSearchResponseItem { imageSearchResponseItemIsOfficial, ..} ) <$> f imageSearchResponseItemIsOfficial
+{-# INLINE imageSearchResponseItemIsOfficialL #-}
+
+-- | 'imageSearchResponseItemIsAutomated' Lens
+imageSearchResponseItemIsAutomatedL :: Lens_' ImageSearchResponseItem (Maybe Bool)
+imageSearchResponseItemIsAutomatedL f ImageSearchResponseItem{..} = (\imageSearchResponseItemIsAutomated -> ImageSearchResponseItem { imageSearchResponseItemIsAutomated, ..} ) <$> f imageSearchResponseItemIsAutomated
+{-# INLINE imageSearchResponseItemIsAutomatedL #-}
+
+-- | 'imageSearchResponseItemName' Lens
+imageSearchResponseItemNameL :: Lens_' ImageSearchResponseItem (Maybe Text)
+imageSearchResponseItemNameL f ImageSearchResponseItem{..} = (\imageSearchResponseItemName -> ImageSearchResponseItem { imageSearchResponseItemName, ..} ) <$> f imageSearchResponseItemName
+{-# INLINE imageSearchResponseItemNameL #-}
+
+-- | 'imageSearchResponseItemStarCount' Lens
+imageSearchResponseItemStarCountL :: Lens_' ImageSearchResponseItem (Maybe Int)
+imageSearchResponseItemStarCountL f ImageSearchResponseItem{..} = (\imageSearchResponseItemStarCount -> ImageSearchResponseItem { imageSearchResponseItemStarCount, ..} ) <$> f imageSearchResponseItemStarCount
+{-# INLINE imageSearchResponseItemStarCountL #-}
 
 
 
@@ -1383,6 +1893,30 @@ imageSummaryLabelsL f ImageSummary{..} = (\imageSummaryLabels -> ImageSummary { 
 imageSummaryContainersL :: Lens_' ImageSummary (Int)
 imageSummaryContainersL f ImageSummary{..} = (\imageSummaryContainers -> ImageSummary { imageSummaryContainers, ..} ) <$> f imageSummaryContainers
 {-# INLINE imageSummaryContainersL #-}
+
+
+
+-- * IndexInfo
+
+-- | 'indexInfoName' Lens
+indexInfoNameL :: Lens_' IndexInfo (Maybe Text)
+indexInfoNameL f IndexInfo{..} = (\indexInfoName -> IndexInfo { indexInfoName, ..} ) <$> f indexInfoName
+{-# INLINE indexInfoNameL #-}
+
+-- | 'indexInfoMirrors' Lens
+indexInfoMirrorsL :: Lens_' IndexInfo (Maybe [Text])
+indexInfoMirrorsL f IndexInfo{..} = (\indexInfoMirrors -> IndexInfo { indexInfoMirrors, ..} ) <$> f indexInfoMirrors
+{-# INLINE indexInfoMirrorsL #-}
+
+-- | 'indexInfoSecure' Lens
+indexInfoSecureL :: Lens_' IndexInfo (Maybe Bool)
+indexInfoSecureL f IndexInfo{..} = (\indexInfoSecure -> IndexInfo { indexInfoSecure, ..} ) <$> f indexInfoSecure
+{-# INLINE indexInfoSecureL #-}
+
+-- | 'indexInfoOfficial' Lens
+indexInfoOfficialL :: Lens_' IndexInfo (Maybe Bool)
+indexInfoOfficialL f IndexInfo{..} = (\indexInfoOfficial -> IndexInfo { indexInfoOfficial, ..} ) <$> f indexInfoOfficial
+{-# INLINE indexInfoOfficialL #-}
 
 
 
@@ -1592,818 +2126,6 @@ inlineObject8UnlockKeyL f InlineObject8{..} = (\inlineObject8UnlockKey -> Inline
 
 
 
--- * InlineResponse200
-
--- | 'inlineResponse200Titles' Lens
-inlineResponse200TitlesL :: Lens_' InlineResponse200 (Maybe [Text])
-inlineResponse200TitlesL f InlineResponse200{..} = (\inlineResponse200Titles -> InlineResponse200 { inlineResponse200Titles, ..} ) <$> f inlineResponse200Titles
-{-# INLINE inlineResponse200TitlesL #-}
-
--- | 'inlineResponse200Processes' Lens
-inlineResponse200ProcessesL :: Lens_' InlineResponse200 (Maybe [[Text]])
-inlineResponse200ProcessesL f InlineResponse200{..} = (\inlineResponse200Processes -> InlineResponse200 { inlineResponse200Processes, ..} ) <$> f inlineResponse200Processes
-{-# INLINE inlineResponse200ProcessesL #-}
-
-
-
--- * InlineResponse2001
-
--- | 'inlineResponse2001Path' Lens
-inlineResponse2001PathL :: Lens_' InlineResponse2001 (Text)
-inlineResponse2001PathL f InlineResponse2001{..} = (\inlineResponse2001Path -> InlineResponse2001 { inlineResponse2001Path, ..} ) <$> f inlineResponse2001Path
-{-# INLINE inlineResponse2001PathL #-}
-
--- | 'inlineResponse2001Kind' Lens
-inlineResponse2001KindL :: Lens_' InlineResponse2001 (Int)
-inlineResponse2001KindL f InlineResponse2001{..} = (\inlineResponse2001Kind -> InlineResponse2001 { inlineResponse2001Kind, ..} ) <$> f inlineResponse2001Kind
-{-# INLINE inlineResponse2001KindL #-}
-
-
-
--- * InlineResponse20010
-
--- | 'inlineResponse20010Version' Lens
-inlineResponse20010VersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010VersionL f InlineResponse20010{..} = (\inlineResponse20010Version -> InlineResponse20010 { inlineResponse20010Version, ..} ) <$> f inlineResponse20010Version
-{-# INLINE inlineResponse20010VersionL #-}
-
--- | 'inlineResponse20010ApiVersion' Lens
-inlineResponse20010ApiVersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010ApiVersionL f InlineResponse20010{..} = (\inlineResponse20010ApiVersion -> InlineResponse20010 { inlineResponse20010ApiVersion, ..} ) <$> f inlineResponse20010ApiVersion
-{-# INLINE inlineResponse20010ApiVersionL #-}
-
--- | 'inlineResponse20010MinApiVersion' Lens
-inlineResponse20010MinApiVersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010MinApiVersionL f InlineResponse20010{..} = (\inlineResponse20010MinApiVersion -> InlineResponse20010 { inlineResponse20010MinApiVersion, ..} ) <$> f inlineResponse20010MinApiVersion
-{-# INLINE inlineResponse20010MinApiVersionL #-}
-
--- | 'inlineResponse20010GitCommit' Lens
-inlineResponse20010GitCommitL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010GitCommitL f InlineResponse20010{..} = (\inlineResponse20010GitCommit -> InlineResponse20010 { inlineResponse20010GitCommit, ..} ) <$> f inlineResponse20010GitCommit
-{-# INLINE inlineResponse20010GitCommitL #-}
-
--- | 'inlineResponse20010GoVersion' Lens
-inlineResponse20010GoVersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010GoVersionL f InlineResponse20010{..} = (\inlineResponse20010GoVersion -> InlineResponse20010 { inlineResponse20010GoVersion, ..} ) <$> f inlineResponse20010GoVersion
-{-# INLINE inlineResponse20010GoVersionL #-}
-
--- | 'inlineResponse20010Os' Lens
-inlineResponse20010OsL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010OsL f InlineResponse20010{..} = (\inlineResponse20010Os -> InlineResponse20010 { inlineResponse20010Os, ..} ) <$> f inlineResponse20010Os
-{-# INLINE inlineResponse20010OsL #-}
-
--- | 'inlineResponse20010Arch' Lens
-inlineResponse20010ArchL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010ArchL f InlineResponse20010{..} = (\inlineResponse20010Arch -> InlineResponse20010 { inlineResponse20010Arch, ..} ) <$> f inlineResponse20010Arch
-{-# INLINE inlineResponse20010ArchL #-}
-
--- | 'inlineResponse20010KernelVersion' Lens
-inlineResponse20010KernelVersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010KernelVersionL f InlineResponse20010{..} = (\inlineResponse20010KernelVersion -> InlineResponse20010 { inlineResponse20010KernelVersion, ..} ) <$> f inlineResponse20010KernelVersion
-{-# INLINE inlineResponse20010KernelVersionL #-}
-
--- | 'inlineResponse20010Experimental' Lens
-inlineResponse20010ExperimentalL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010ExperimentalL f InlineResponse20010{..} = (\inlineResponse20010Experimental -> InlineResponse20010 { inlineResponse20010Experimental, ..} ) <$> f inlineResponse20010Experimental
-{-# INLINE inlineResponse20010ExperimentalL #-}
-
--- | 'inlineResponse20010BuildTime' Lens
-inlineResponse20010BuildTimeL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010BuildTimeL f InlineResponse20010{..} = (\inlineResponse20010BuildTime -> InlineResponse20010 { inlineResponse20010BuildTime, ..} ) <$> f inlineResponse20010BuildTime
-{-# INLINE inlineResponse20010BuildTimeL #-}
-
-
-
--- * InlineResponse20011
-
--- | 'inlineResponse20011Type' Lens
-inlineResponse20011TypeL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011TypeL f InlineResponse20011{..} = (\inlineResponse20011Type -> InlineResponse20011 { inlineResponse20011Type, ..} ) <$> f inlineResponse20011Type
-{-# INLINE inlineResponse20011TypeL #-}
-
--- | 'inlineResponse20011Action' Lens
-inlineResponse20011ActionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011ActionL f InlineResponse20011{..} = (\inlineResponse20011Action -> InlineResponse20011 { inlineResponse20011Action, ..} ) <$> f inlineResponse20011Action
-{-# INLINE inlineResponse20011ActionL #-}
-
--- | 'inlineResponse20011Actor' Lens
-inlineResponse20011ActorL :: Lens_' InlineResponse20011 (Maybe InlineResponse20011Actor)
-inlineResponse20011ActorL f InlineResponse20011{..} = (\inlineResponse20011Actor -> InlineResponse20011 { inlineResponse20011Actor, ..} ) <$> f inlineResponse20011Actor
-{-# INLINE inlineResponse20011ActorL #-}
-
--- | 'inlineResponse20011Time' Lens
-inlineResponse20011TimeL :: Lens_' InlineResponse20011 (Maybe Int)
-inlineResponse20011TimeL f InlineResponse20011{..} = (\inlineResponse20011Time -> InlineResponse20011 { inlineResponse20011Time, ..} ) <$> f inlineResponse20011Time
-{-# INLINE inlineResponse20011TimeL #-}
-
--- | 'inlineResponse20011TimeNano' Lens
-inlineResponse20011TimeNanoL :: Lens_' InlineResponse20011 (Maybe Integer)
-inlineResponse20011TimeNanoL f InlineResponse20011{..} = (\inlineResponse20011TimeNano -> InlineResponse20011 { inlineResponse20011TimeNano, ..} ) <$> f inlineResponse20011TimeNano
-{-# INLINE inlineResponse20011TimeNanoL #-}
-
-
-
--- * InlineResponse20011Actor
-
--- | 'inlineResponse20011ActorId' Lens
-inlineResponse20011ActorIdL :: Lens_' InlineResponse20011Actor (Maybe Text)
-inlineResponse20011ActorIdL f InlineResponse20011Actor{..} = (\inlineResponse20011ActorId -> InlineResponse20011Actor { inlineResponse20011ActorId, ..} ) <$> f inlineResponse20011ActorId
-{-# INLINE inlineResponse20011ActorIdL #-}
-
--- | 'inlineResponse20011ActorAttributes' Lens
-inlineResponse20011ActorAttributesL :: Lens_' InlineResponse20011Actor (Maybe (Map.Map String Text))
-inlineResponse20011ActorAttributesL f InlineResponse20011Actor{..} = (\inlineResponse20011ActorAttributes -> InlineResponse20011Actor { inlineResponse20011ActorAttributes, ..} ) <$> f inlineResponse20011ActorAttributes
-{-# INLINE inlineResponse20011ActorAttributesL #-}
-
-
-
--- * InlineResponse20012
-
--- | 'inlineResponse20012LayersSize' Lens
-inlineResponse20012LayersSizeL :: Lens_' InlineResponse20012 (Maybe Integer)
-inlineResponse20012LayersSizeL f InlineResponse20012{..} = (\inlineResponse20012LayersSize -> InlineResponse20012 { inlineResponse20012LayersSize, ..} ) <$> f inlineResponse20012LayersSize
-{-# INLINE inlineResponse20012LayersSizeL #-}
-
--- | 'inlineResponse20012Images' Lens
-inlineResponse20012ImagesL :: Lens_' InlineResponse20012 (Maybe [ImageSummary])
-inlineResponse20012ImagesL f InlineResponse20012{..} = (\inlineResponse20012Images -> InlineResponse20012 { inlineResponse20012Images, ..} ) <$> f inlineResponse20012Images
-{-# INLINE inlineResponse20012ImagesL #-}
-
--- | 'inlineResponse20012Containers' Lens
-inlineResponse20012ContainersL :: Lens_' InlineResponse20012 (Maybe [ContainerSummary])
-inlineResponse20012ContainersL f InlineResponse20012{..} = (\inlineResponse20012Containers -> InlineResponse20012 { inlineResponse20012Containers, ..} ) <$> f inlineResponse20012Containers
-{-# INLINE inlineResponse20012ContainersL #-}
-
--- | 'inlineResponse20012Volumes' Lens
-inlineResponse20012VolumesL :: Lens_' InlineResponse20012 (Maybe [Volume])
-inlineResponse20012VolumesL f InlineResponse20012{..} = (\inlineResponse20012Volumes -> InlineResponse20012 { inlineResponse20012Volumes, ..} ) <$> f inlineResponse20012Volumes
-{-# INLINE inlineResponse20012VolumesL #-}
-
-
-
--- * InlineResponse20013
-
--- | 'inlineResponse20013Id' Lens
-inlineResponse20013IdL :: Lens_' InlineResponse20013 (Maybe Text)
-inlineResponse20013IdL f InlineResponse20013{..} = (\inlineResponse20013Id -> InlineResponse20013 { inlineResponse20013Id, ..} ) <$> f inlineResponse20013Id
-{-# INLINE inlineResponse20013IdL #-}
-
--- | 'inlineResponse20013Running' Lens
-inlineResponse20013RunningL :: Lens_' InlineResponse20013 (Maybe Bool)
-inlineResponse20013RunningL f InlineResponse20013{..} = (\inlineResponse20013Running -> InlineResponse20013 { inlineResponse20013Running, ..} ) <$> f inlineResponse20013Running
-{-# INLINE inlineResponse20013RunningL #-}
-
--- | 'inlineResponse20013ExitCode' Lens
-inlineResponse20013ExitCodeL :: Lens_' InlineResponse20013 (Maybe Int)
-inlineResponse20013ExitCodeL f InlineResponse20013{..} = (\inlineResponse20013ExitCode -> InlineResponse20013 { inlineResponse20013ExitCode, ..} ) <$> f inlineResponse20013ExitCode
-{-# INLINE inlineResponse20013ExitCodeL #-}
-
--- | 'inlineResponse20013ProcessConfig' Lens
-inlineResponse20013ProcessConfigL :: Lens_' InlineResponse20013 (Maybe ProcessConfig)
-inlineResponse20013ProcessConfigL f InlineResponse20013{..} = (\inlineResponse20013ProcessConfig -> InlineResponse20013 { inlineResponse20013ProcessConfig, ..} ) <$> f inlineResponse20013ProcessConfig
-{-# INLINE inlineResponse20013ProcessConfigL #-}
-
--- | 'inlineResponse20013OpenStdin' Lens
-inlineResponse20013OpenStdinL :: Lens_' InlineResponse20013 (Maybe Bool)
-inlineResponse20013OpenStdinL f InlineResponse20013{..} = (\inlineResponse20013OpenStdin -> InlineResponse20013 { inlineResponse20013OpenStdin, ..} ) <$> f inlineResponse20013OpenStdin
-{-# INLINE inlineResponse20013OpenStdinL #-}
-
--- | 'inlineResponse20013OpenStderr' Lens
-inlineResponse20013OpenStderrL :: Lens_' InlineResponse20013 (Maybe Bool)
-inlineResponse20013OpenStderrL f InlineResponse20013{..} = (\inlineResponse20013OpenStderr -> InlineResponse20013 { inlineResponse20013OpenStderr, ..} ) <$> f inlineResponse20013OpenStderr
-{-# INLINE inlineResponse20013OpenStderrL #-}
-
--- | 'inlineResponse20013OpenStdout' Lens
-inlineResponse20013OpenStdoutL :: Lens_' InlineResponse20013 (Maybe Bool)
-inlineResponse20013OpenStdoutL f InlineResponse20013{..} = (\inlineResponse20013OpenStdout -> InlineResponse20013 { inlineResponse20013OpenStdout, ..} ) <$> f inlineResponse20013OpenStdout
-{-# INLINE inlineResponse20013OpenStdoutL #-}
-
--- | 'inlineResponse20013ContainerId' Lens
-inlineResponse20013ContainerIdL :: Lens_' InlineResponse20013 (Maybe Text)
-inlineResponse20013ContainerIdL f InlineResponse20013{..} = (\inlineResponse20013ContainerId -> InlineResponse20013 { inlineResponse20013ContainerId, ..} ) <$> f inlineResponse20013ContainerId
-{-# INLINE inlineResponse20013ContainerIdL #-}
-
--- | 'inlineResponse20013Pid' Lens
-inlineResponse20013PidL :: Lens_' InlineResponse20013 (Maybe Int)
-inlineResponse20013PidL f InlineResponse20013{..} = (\inlineResponse20013Pid -> InlineResponse20013 { inlineResponse20013Pid, ..} ) <$> f inlineResponse20013Pid
-{-# INLINE inlineResponse20013PidL #-}
-
-
-
--- * InlineResponse20014
-
--- | 'inlineResponse20014Volumes' Lens
-inlineResponse20014VolumesL :: Lens_' InlineResponse20014 ([Volume])
-inlineResponse20014VolumesL f InlineResponse20014{..} = (\inlineResponse20014Volumes -> InlineResponse20014 { inlineResponse20014Volumes, ..} ) <$> f inlineResponse20014Volumes
-{-# INLINE inlineResponse20014VolumesL #-}
-
--- | 'inlineResponse20014Warnings' Lens
-inlineResponse20014WarningsL :: Lens_' InlineResponse20014 ([Text])
-inlineResponse20014WarningsL f InlineResponse20014{..} = (\inlineResponse20014Warnings -> InlineResponse20014 { inlineResponse20014Warnings, ..} ) <$> f inlineResponse20014Warnings
-{-# INLINE inlineResponse20014WarningsL #-}
-
-
-
--- * InlineResponse20015
-
--- | 'inlineResponse20015VolumesDeleted' Lens
-inlineResponse20015VolumesDeletedL :: Lens_' InlineResponse20015 (Maybe [Text])
-inlineResponse20015VolumesDeletedL f InlineResponse20015{..} = (\inlineResponse20015VolumesDeleted -> InlineResponse20015 { inlineResponse20015VolumesDeleted, ..} ) <$> f inlineResponse20015VolumesDeleted
-{-# INLINE inlineResponse20015VolumesDeletedL #-}
-
--- | 'inlineResponse20015SpaceReclaimed' Lens
-inlineResponse20015SpaceReclaimedL :: Lens_' InlineResponse20015 (Maybe Integer)
-inlineResponse20015SpaceReclaimedL f InlineResponse20015{..} = (\inlineResponse20015SpaceReclaimed -> InlineResponse20015 { inlineResponse20015SpaceReclaimed, ..} ) <$> f inlineResponse20015SpaceReclaimed
-{-# INLINE inlineResponse20015SpaceReclaimedL #-}
-
-
-
--- * InlineResponse20016
-
--- | 'inlineResponse20016NetworksDeleted' Lens
-inlineResponse20016NetworksDeletedL :: Lens_' InlineResponse20016 (Maybe [Text])
-inlineResponse20016NetworksDeletedL f InlineResponse20016{..} = (\inlineResponse20016NetworksDeleted -> InlineResponse20016 { inlineResponse20016NetworksDeleted, ..} ) <$> f inlineResponse20016NetworksDeleted
-{-# INLINE inlineResponse20016NetworksDeletedL #-}
-
-
-
--- * InlineResponse20017
-
--- | 'inlineResponse20017Name' Lens
-inlineResponse20017NameL :: Lens_' InlineResponse20017 (Maybe Text)
-inlineResponse20017NameL f InlineResponse20017{..} = (\inlineResponse20017Name -> InlineResponse20017 { inlineResponse20017Name, ..} ) <$> f inlineResponse20017Name
-{-# INLINE inlineResponse20017NameL #-}
-
--- | 'inlineResponse20017Description' Lens
-inlineResponse20017DescriptionL :: Lens_' InlineResponse20017 (Maybe Text)
-inlineResponse20017DescriptionL f InlineResponse20017{..} = (\inlineResponse20017Description -> InlineResponse20017 { inlineResponse20017Description, ..} ) <$> f inlineResponse20017Description
-{-# INLINE inlineResponse20017DescriptionL #-}
-
--- | 'inlineResponse20017Value' Lens
-inlineResponse20017ValueL :: Lens_' InlineResponse20017 (Maybe [Text])
-inlineResponse20017ValueL f InlineResponse20017{..} = (\inlineResponse20017Value -> InlineResponse20017 { inlineResponse20017Value, ..} ) <$> f inlineResponse20017Value
-{-# INLINE inlineResponse20017ValueL #-}
-
-
-
--- * InlineResponse20018
-
--- | 'inlineResponse20018ClusterInfo' Lens
-inlineResponse20018ClusterInfoL :: Lens_' InlineResponse20018 (Maybe ClusterInfo)
-inlineResponse20018ClusterInfoL f InlineResponse20018{..} = (\inlineResponse20018ClusterInfo -> InlineResponse20018 { inlineResponse20018ClusterInfo, ..} ) <$> f inlineResponse20018ClusterInfo
-{-# INLINE inlineResponse20018ClusterInfoL #-}
-
--- | 'inlineResponse20018JoinTokens' Lens
-inlineResponse20018JoinTokensL :: Lens_' InlineResponse20018 (Maybe InlineResponse20018JoinTokens)
-inlineResponse20018JoinTokensL f InlineResponse20018{..} = (\inlineResponse20018JoinTokens -> InlineResponse20018 { inlineResponse20018JoinTokens, ..} ) <$> f inlineResponse20018JoinTokens
-{-# INLINE inlineResponse20018JoinTokensL #-}
-
-
-
--- * InlineResponse20018JoinTokens
-
--- | 'inlineResponse20018JoinTokensWorker' Lens
-inlineResponse20018JoinTokensWorkerL :: Lens_' InlineResponse20018JoinTokens (Maybe Text)
-inlineResponse20018JoinTokensWorkerL f InlineResponse20018JoinTokens{..} = (\inlineResponse20018JoinTokensWorker -> InlineResponse20018JoinTokens { inlineResponse20018JoinTokensWorker, ..} ) <$> f inlineResponse20018JoinTokensWorker
-{-# INLINE inlineResponse20018JoinTokensWorkerL #-}
-
--- | 'inlineResponse20018JoinTokensManager' Lens
-inlineResponse20018JoinTokensManagerL :: Lens_' InlineResponse20018JoinTokens (Maybe Text)
-inlineResponse20018JoinTokensManagerL f InlineResponse20018JoinTokens{..} = (\inlineResponse20018JoinTokensManager -> InlineResponse20018JoinTokens { inlineResponse20018JoinTokensManager, ..} ) <$> f inlineResponse20018JoinTokensManager
-{-# INLINE inlineResponse20018JoinTokensManagerL #-}
-
-
-
--- * InlineResponse20019
-
--- | 'inlineResponse20019UnlockKey' Lens
-inlineResponse20019UnlockKeyL :: Lens_' InlineResponse20019 (Maybe Text)
-inlineResponse20019UnlockKeyL f InlineResponse20019{..} = (\inlineResponse20019UnlockKey -> InlineResponse20019 { inlineResponse20019UnlockKey, ..} ) <$> f inlineResponse20019UnlockKey
-{-# INLINE inlineResponse20019UnlockKeyL #-}
-
-
-
--- * InlineResponse2002
-
--- | 'inlineResponse2002Warnings' Lens
-inlineResponse2002WarningsL :: Lens_' InlineResponse2002 (Maybe [Text])
-inlineResponse2002WarningsL f InlineResponse2002{..} = (\inlineResponse2002Warnings -> InlineResponse2002 { inlineResponse2002Warnings, ..} ) <$> f inlineResponse2002Warnings
-{-# INLINE inlineResponse2002WarningsL #-}
-
-
-
--- * InlineResponse20020
-
--- | 'inlineResponse20020Descriptor' Lens
-inlineResponse20020DescriptorL :: Lens_' InlineResponse20020 (InlineResponse20020Descriptor)
-inlineResponse20020DescriptorL f InlineResponse20020{..} = (\inlineResponse20020Descriptor -> InlineResponse20020 { inlineResponse20020Descriptor, ..} ) <$> f inlineResponse20020Descriptor
-{-# INLINE inlineResponse20020DescriptorL #-}
-
--- | 'inlineResponse20020Platforms' Lens
-inlineResponse20020PlatformsL :: Lens_' InlineResponse20020 ([InlineResponse20020Platforms])
-inlineResponse20020PlatformsL f InlineResponse20020{..} = (\inlineResponse20020Platforms -> InlineResponse20020 { inlineResponse20020Platforms, ..} ) <$> f inlineResponse20020Platforms
-{-# INLINE inlineResponse20020PlatformsL #-}
-
-
-
--- * InlineResponse20020Descriptor
-
--- | 'inlineResponse20020DescriptorMediaType' Lens
-inlineResponse20020DescriptorMediaTypeL :: Lens_' InlineResponse20020Descriptor (Maybe Text)
-inlineResponse20020DescriptorMediaTypeL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorMediaType -> InlineResponse20020Descriptor { inlineResponse20020DescriptorMediaType, ..} ) <$> f inlineResponse20020DescriptorMediaType
-{-# INLINE inlineResponse20020DescriptorMediaTypeL #-}
-
--- | 'inlineResponse20020DescriptorSize' Lens
-inlineResponse20020DescriptorSizeL :: Lens_' InlineResponse20020Descriptor (Maybe Integer)
-inlineResponse20020DescriptorSizeL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorSize -> InlineResponse20020Descriptor { inlineResponse20020DescriptorSize, ..} ) <$> f inlineResponse20020DescriptorSize
-{-# INLINE inlineResponse20020DescriptorSizeL #-}
-
--- | 'inlineResponse20020DescriptorDigest' Lens
-inlineResponse20020DescriptorDigestL :: Lens_' InlineResponse20020Descriptor (Maybe Text)
-inlineResponse20020DescriptorDigestL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorDigest -> InlineResponse20020Descriptor { inlineResponse20020DescriptorDigest, ..} ) <$> f inlineResponse20020DescriptorDigest
-{-# INLINE inlineResponse20020DescriptorDigestL #-}
-
--- | 'inlineResponse20020DescriptorUrLs' Lens
-inlineResponse20020DescriptorUrLsL :: Lens_' InlineResponse20020Descriptor (Maybe [Text])
-inlineResponse20020DescriptorUrLsL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorUrLs -> InlineResponse20020Descriptor { inlineResponse20020DescriptorUrLs, ..} ) <$> f inlineResponse20020DescriptorUrLs
-{-# INLINE inlineResponse20020DescriptorUrLsL #-}
-
-
-
--- * InlineResponse20020Platforms
-
--- | 'inlineResponse20020PlatformsArchitecture' Lens
-inlineResponse20020PlatformsArchitectureL :: Lens_' InlineResponse20020Platforms (Maybe Text)
-inlineResponse20020PlatformsArchitectureL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsArchitecture -> InlineResponse20020Platforms { inlineResponse20020PlatformsArchitecture, ..} ) <$> f inlineResponse20020PlatformsArchitecture
-{-# INLINE inlineResponse20020PlatformsArchitectureL #-}
-
--- | 'inlineResponse20020PlatformsOs' Lens
-inlineResponse20020PlatformsOsL :: Lens_' InlineResponse20020Platforms (Maybe Text)
-inlineResponse20020PlatformsOsL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOs -> InlineResponse20020Platforms { inlineResponse20020PlatformsOs, ..} ) <$> f inlineResponse20020PlatformsOs
-{-# INLINE inlineResponse20020PlatformsOsL #-}
-
--- | 'inlineResponse20020PlatformsOsVersion' Lens
-inlineResponse20020PlatformsOsVersionL :: Lens_' InlineResponse20020Platforms (Maybe Text)
-inlineResponse20020PlatformsOsVersionL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOsVersion -> InlineResponse20020Platforms { inlineResponse20020PlatformsOsVersion, ..} ) <$> f inlineResponse20020PlatformsOsVersion
-{-# INLINE inlineResponse20020PlatformsOsVersionL #-}
-
--- | 'inlineResponse20020PlatformsOsFeatures' Lens
-inlineResponse20020PlatformsOsFeaturesL :: Lens_' InlineResponse20020Platforms (Maybe [Text])
-inlineResponse20020PlatformsOsFeaturesL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOsFeatures -> InlineResponse20020Platforms { inlineResponse20020PlatformsOsFeatures, ..} ) <$> f inlineResponse20020PlatformsOsFeatures
-{-# INLINE inlineResponse20020PlatformsOsFeaturesL #-}
-
--- | 'inlineResponse20020PlatformsVariant' Lens
-inlineResponse20020PlatformsVariantL :: Lens_' InlineResponse20020Platforms (Maybe Text)
-inlineResponse20020PlatformsVariantL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsVariant -> InlineResponse20020Platforms { inlineResponse20020PlatformsVariant, ..} ) <$> f inlineResponse20020PlatformsVariant
-{-# INLINE inlineResponse20020PlatformsVariantL #-}
-
--- | 'inlineResponse20020PlatformsFeatures' Lens
-inlineResponse20020PlatformsFeaturesL :: Lens_' InlineResponse20020Platforms (Maybe [Text])
-inlineResponse20020PlatformsFeaturesL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsFeatures -> InlineResponse20020Platforms { inlineResponse20020PlatformsFeatures, ..} ) <$> f inlineResponse20020PlatformsFeatures
-{-# INLINE inlineResponse20020PlatformsFeaturesL #-}
-
-
-
--- * InlineResponse2003
-
--- | 'inlineResponse2003StatusCode' Lens
-inlineResponse2003StatusCodeL :: Lens_' InlineResponse2003 (Int)
-inlineResponse2003StatusCodeL f InlineResponse2003{..} = (\inlineResponse2003StatusCode -> InlineResponse2003 { inlineResponse2003StatusCode, ..} ) <$> f inlineResponse2003StatusCode
-{-# INLINE inlineResponse2003StatusCodeL #-}
-
-
-
--- * InlineResponse2004
-
--- | 'inlineResponse2004ContainersDeleted' Lens
-inlineResponse2004ContainersDeletedL :: Lens_' InlineResponse2004 (Maybe [Text])
-inlineResponse2004ContainersDeletedL f InlineResponse2004{..} = (\inlineResponse2004ContainersDeleted -> InlineResponse2004 { inlineResponse2004ContainersDeleted, ..} ) <$> f inlineResponse2004ContainersDeleted
-{-# INLINE inlineResponse2004ContainersDeletedL #-}
-
--- | 'inlineResponse2004SpaceReclaimed' Lens
-inlineResponse2004SpaceReclaimedL :: Lens_' InlineResponse2004 (Maybe Integer)
-inlineResponse2004SpaceReclaimedL f InlineResponse2004{..} = (\inlineResponse2004SpaceReclaimed -> InlineResponse2004 { inlineResponse2004SpaceReclaimed, ..} ) <$> f inlineResponse2004SpaceReclaimed
-{-# INLINE inlineResponse2004SpaceReclaimedL #-}
-
-
-
--- * InlineResponse2005
-
--- | 'inlineResponse2005Id' Lens
-inlineResponse2005IdL :: Lens_' InlineResponse2005 (Text)
-inlineResponse2005IdL f InlineResponse2005{..} = (\inlineResponse2005Id -> InlineResponse2005 { inlineResponse2005Id, ..} ) <$> f inlineResponse2005Id
-{-# INLINE inlineResponse2005IdL #-}
-
--- | 'inlineResponse2005Created' Lens
-inlineResponse2005CreatedL :: Lens_' InlineResponse2005 (Integer)
-inlineResponse2005CreatedL f InlineResponse2005{..} = (\inlineResponse2005Created -> InlineResponse2005 { inlineResponse2005Created, ..} ) <$> f inlineResponse2005Created
-{-# INLINE inlineResponse2005CreatedL #-}
-
--- | 'inlineResponse2005CreatedBy' Lens
-inlineResponse2005CreatedByL :: Lens_' InlineResponse2005 (Text)
-inlineResponse2005CreatedByL f InlineResponse2005{..} = (\inlineResponse2005CreatedBy -> InlineResponse2005 { inlineResponse2005CreatedBy, ..} ) <$> f inlineResponse2005CreatedBy
-{-# INLINE inlineResponse2005CreatedByL #-}
-
--- | 'inlineResponse2005Tags' Lens
-inlineResponse2005TagsL :: Lens_' InlineResponse2005 ([Text])
-inlineResponse2005TagsL f InlineResponse2005{..} = (\inlineResponse2005Tags -> InlineResponse2005 { inlineResponse2005Tags, ..} ) <$> f inlineResponse2005Tags
-{-# INLINE inlineResponse2005TagsL #-}
-
--- | 'inlineResponse2005Size' Lens
-inlineResponse2005SizeL :: Lens_' InlineResponse2005 (Integer)
-inlineResponse2005SizeL f InlineResponse2005{..} = (\inlineResponse2005Size -> InlineResponse2005 { inlineResponse2005Size, ..} ) <$> f inlineResponse2005Size
-{-# INLINE inlineResponse2005SizeL #-}
-
--- | 'inlineResponse2005Comment' Lens
-inlineResponse2005CommentL :: Lens_' InlineResponse2005 (Text)
-inlineResponse2005CommentL f InlineResponse2005{..} = (\inlineResponse2005Comment -> InlineResponse2005 { inlineResponse2005Comment, ..} ) <$> f inlineResponse2005Comment
-{-# INLINE inlineResponse2005CommentL #-}
-
-
-
--- * InlineResponse2006
-
--- | 'inlineResponse2006Description' Lens
-inlineResponse2006DescriptionL :: Lens_' InlineResponse2006 (Maybe Text)
-inlineResponse2006DescriptionL f InlineResponse2006{..} = (\inlineResponse2006Description -> InlineResponse2006 { inlineResponse2006Description, ..} ) <$> f inlineResponse2006Description
-{-# INLINE inlineResponse2006DescriptionL #-}
-
--- | 'inlineResponse2006IsOfficial' Lens
-inlineResponse2006IsOfficialL :: Lens_' InlineResponse2006 (Maybe Bool)
-inlineResponse2006IsOfficialL f InlineResponse2006{..} = (\inlineResponse2006IsOfficial -> InlineResponse2006 { inlineResponse2006IsOfficial, ..} ) <$> f inlineResponse2006IsOfficial
-{-# INLINE inlineResponse2006IsOfficialL #-}
-
--- | 'inlineResponse2006IsAutomated' Lens
-inlineResponse2006IsAutomatedL :: Lens_' InlineResponse2006 (Maybe Bool)
-inlineResponse2006IsAutomatedL f InlineResponse2006{..} = (\inlineResponse2006IsAutomated -> InlineResponse2006 { inlineResponse2006IsAutomated, ..} ) <$> f inlineResponse2006IsAutomated
-{-# INLINE inlineResponse2006IsAutomatedL #-}
-
--- | 'inlineResponse2006Name' Lens
-inlineResponse2006NameL :: Lens_' InlineResponse2006 (Maybe Text)
-inlineResponse2006NameL f InlineResponse2006{..} = (\inlineResponse2006Name -> InlineResponse2006 { inlineResponse2006Name, ..} ) <$> f inlineResponse2006Name
-{-# INLINE inlineResponse2006NameL #-}
-
--- | 'inlineResponse2006StarCount' Lens
-inlineResponse2006StarCountL :: Lens_' InlineResponse2006 (Maybe Int)
-inlineResponse2006StarCountL f InlineResponse2006{..} = (\inlineResponse2006StarCount -> InlineResponse2006 { inlineResponse2006StarCount, ..} ) <$> f inlineResponse2006StarCount
-{-# INLINE inlineResponse2006StarCountL #-}
-
-
-
--- * InlineResponse2007
-
--- | 'inlineResponse2007ImagesDeleted' Lens
-inlineResponse2007ImagesDeletedL :: Lens_' InlineResponse2007 (Maybe [ImageDeleteResponseItem])
-inlineResponse2007ImagesDeletedL f InlineResponse2007{..} = (\inlineResponse2007ImagesDeleted -> InlineResponse2007 { inlineResponse2007ImagesDeleted, ..} ) <$> f inlineResponse2007ImagesDeleted
-{-# INLINE inlineResponse2007ImagesDeletedL #-}
-
--- | 'inlineResponse2007SpaceReclaimed' Lens
-inlineResponse2007SpaceReclaimedL :: Lens_' InlineResponse2007 (Maybe Integer)
-inlineResponse2007SpaceReclaimedL f InlineResponse2007{..} = (\inlineResponse2007SpaceReclaimed -> InlineResponse2007 { inlineResponse2007SpaceReclaimed, ..} ) <$> f inlineResponse2007SpaceReclaimed
-{-# INLINE inlineResponse2007SpaceReclaimedL #-}
-
-
-
--- * InlineResponse2008
-
--- | 'inlineResponse2008Status' Lens
-inlineResponse2008StatusL :: Lens_' InlineResponse2008 (Text)
-inlineResponse2008StatusL f InlineResponse2008{..} = (\inlineResponse2008Status -> InlineResponse2008 { inlineResponse2008Status, ..} ) <$> f inlineResponse2008Status
-{-# INLINE inlineResponse2008StatusL #-}
-
--- | 'inlineResponse2008IdentityToken' Lens
-inlineResponse2008IdentityTokenL :: Lens_' InlineResponse2008 (Maybe Text)
-inlineResponse2008IdentityTokenL f InlineResponse2008{..} = (\inlineResponse2008IdentityToken -> InlineResponse2008 { inlineResponse2008IdentityToken, ..} ) <$> f inlineResponse2008IdentityToken
-{-# INLINE inlineResponse2008IdentityTokenL #-}
-
-
-
--- * InlineResponse2009
-
--- | 'inlineResponse2009Architecture' Lens
-inlineResponse2009ArchitectureL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009ArchitectureL f InlineResponse2009{..} = (\inlineResponse2009Architecture -> InlineResponse2009 { inlineResponse2009Architecture, ..} ) <$> f inlineResponse2009Architecture
-{-# INLINE inlineResponse2009ArchitectureL #-}
-
--- | 'inlineResponse2009Containers' Lens
-inlineResponse2009ContainersL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009ContainersL f InlineResponse2009{..} = (\inlineResponse2009Containers -> InlineResponse2009 { inlineResponse2009Containers, ..} ) <$> f inlineResponse2009Containers
-{-# INLINE inlineResponse2009ContainersL #-}
-
--- | 'inlineResponse2009ContainersRunning' Lens
-inlineResponse2009ContainersRunningL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009ContainersRunningL f InlineResponse2009{..} = (\inlineResponse2009ContainersRunning -> InlineResponse2009 { inlineResponse2009ContainersRunning, ..} ) <$> f inlineResponse2009ContainersRunning
-{-# INLINE inlineResponse2009ContainersRunningL #-}
-
--- | 'inlineResponse2009ContainersStopped' Lens
-inlineResponse2009ContainersStoppedL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009ContainersStoppedL f InlineResponse2009{..} = (\inlineResponse2009ContainersStopped -> InlineResponse2009 { inlineResponse2009ContainersStopped, ..} ) <$> f inlineResponse2009ContainersStopped
-{-# INLINE inlineResponse2009ContainersStoppedL #-}
-
--- | 'inlineResponse2009ContainersPaused' Lens
-inlineResponse2009ContainersPausedL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009ContainersPausedL f InlineResponse2009{..} = (\inlineResponse2009ContainersPaused -> InlineResponse2009 { inlineResponse2009ContainersPaused, ..} ) <$> f inlineResponse2009ContainersPaused
-{-# INLINE inlineResponse2009ContainersPausedL #-}
-
--- | 'inlineResponse2009CpuCfsPeriod' Lens
-inlineResponse2009CpuCfsPeriodL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009CpuCfsPeriodL f InlineResponse2009{..} = (\inlineResponse2009CpuCfsPeriod -> InlineResponse2009 { inlineResponse2009CpuCfsPeriod, ..} ) <$> f inlineResponse2009CpuCfsPeriod
-{-# INLINE inlineResponse2009CpuCfsPeriodL #-}
-
--- | 'inlineResponse2009CpuCfsQuota' Lens
-inlineResponse2009CpuCfsQuotaL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009CpuCfsQuotaL f InlineResponse2009{..} = (\inlineResponse2009CpuCfsQuota -> InlineResponse2009 { inlineResponse2009CpuCfsQuota, ..} ) <$> f inlineResponse2009CpuCfsQuota
-{-# INLINE inlineResponse2009CpuCfsQuotaL #-}
-
--- | 'inlineResponse2009Debug' Lens
-inlineResponse2009DebugL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009DebugL f InlineResponse2009{..} = (\inlineResponse2009Debug -> InlineResponse2009 { inlineResponse2009Debug, ..} ) <$> f inlineResponse2009Debug
-{-# INLINE inlineResponse2009DebugL #-}
-
--- | 'inlineResponse2009DiscoveryBackend' Lens
-inlineResponse2009DiscoveryBackendL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009DiscoveryBackendL f InlineResponse2009{..} = (\inlineResponse2009DiscoveryBackend -> InlineResponse2009 { inlineResponse2009DiscoveryBackend, ..} ) <$> f inlineResponse2009DiscoveryBackend
-{-# INLINE inlineResponse2009DiscoveryBackendL #-}
-
--- | 'inlineResponse2009DockerRootDir' Lens
-inlineResponse2009DockerRootDirL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009DockerRootDirL f InlineResponse2009{..} = (\inlineResponse2009DockerRootDir -> InlineResponse2009 { inlineResponse2009DockerRootDir, ..} ) <$> f inlineResponse2009DockerRootDir
-{-# INLINE inlineResponse2009DockerRootDirL #-}
-
--- | 'inlineResponse2009Driver' Lens
-inlineResponse2009DriverL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009DriverL f InlineResponse2009{..} = (\inlineResponse2009Driver -> InlineResponse2009 { inlineResponse2009Driver, ..} ) <$> f inlineResponse2009Driver
-{-# INLINE inlineResponse2009DriverL #-}
-
--- | 'inlineResponse2009DriverStatus' Lens
-inlineResponse2009DriverStatusL :: Lens_' InlineResponse2009 (Maybe [[Text]])
-inlineResponse2009DriverStatusL f InlineResponse2009{..} = (\inlineResponse2009DriverStatus -> InlineResponse2009 { inlineResponse2009DriverStatus, ..} ) <$> f inlineResponse2009DriverStatus
-{-# INLINE inlineResponse2009DriverStatusL #-}
-
--- | 'inlineResponse2009SystemStatus' Lens
-inlineResponse2009SystemStatusL :: Lens_' InlineResponse2009 (Maybe [[Text]])
-inlineResponse2009SystemStatusL f InlineResponse2009{..} = (\inlineResponse2009SystemStatus -> InlineResponse2009 { inlineResponse2009SystemStatus, ..} ) <$> f inlineResponse2009SystemStatus
-{-# INLINE inlineResponse2009SystemStatusL #-}
-
--- | 'inlineResponse2009Plugins' Lens
-inlineResponse2009PluginsL :: Lens_' InlineResponse2009 (Maybe InlineResponse2009Plugins)
-inlineResponse2009PluginsL f InlineResponse2009{..} = (\inlineResponse2009Plugins -> InlineResponse2009 { inlineResponse2009Plugins, ..} ) <$> f inlineResponse2009Plugins
-{-# INLINE inlineResponse2009PluginsL #-}
-
--- | 'inlineResponse2009ExperimentalBuild' Lens
-inlineResponse2009ExperimentalBuildL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009ExperimentalBuildL f InlineResponse2009{..} = (\inlineResponse2009ExperimentalBuild -> InlineResponse2009 { inlineResponse2009ExperimentalBuild, ..} ) <$> f inlineResponse2009ExperimentalBuild
-{-# INLINE inlineResponse2009ExperimentalBuildL #-}
-
--- | 'inlineResponse2009HttpProxy' Lens
-inlineResponse2009HttpProxyL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009HttpProxyL f InlineResponse2009{..} = (\inlineResponse2009HttpProxy -> InlineResponse2009 { inlineResponse2009HttpProxy, ..} ) <$> f inlineResponse2009HttpProxy
-{-# INLINE inlineResponse2009HttpProxyL #-}
-
--- | 'inlineResponse2009HttpsProxy' Lens
-inlineResponse2009HttpsProxyL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009HttpsProxyL f InlineResponse2009{..} = (\inlineResponse2009HttpsProxy -> InlineResponse2009 { inlineResponse2009HttpsProxy, ..} ) <$> f inlineResponse2009HttpsProxy
-{-# INLINE inlineResponse2009HttpsProxyL #-}
-
--- | 'inlineResponse2009Id' Lens
-inlineResponse2009IdL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009IdL f InlineResponse2009{..} = (\inlineResponse2009Id -> InlineResponse2009 { inlineResponse2009Id, ..} ) <$> f inlineResponse2009Id
-{-# INLINE inlineResponse2009IdL #-}
-
--- | 'inlineResponse2009IPv4Forwarding' Lens
-inlineResponse2009IPv4ForwardingL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009IPv4ForwardingL f InlineResponse2009{..} = (\inlineResponse2009IPv4Forwarding -> InlineResponse2009 { inlineResponse2009IPv4Forwarding, ..} ) <$> f inlineResponse2009IPv4Forwarding
-{-# INLINE inlineResponse2009IPv4ForwardingL #-}
-
--- | 'inlineResponse2009Images' Lens
-inlineResponse2009ImagesL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009ImagesL f InlineResponse2009{..} = (\inlineResponse2009Images -> InlineResponse2009 { inlineResponse2009Images, ..} ) <$> f inlineResponse2009Images
-{-# INLINE inlineResponse2009ImagesL #-}
-
--- | 'inlineResponse2009IndexServerAddress' Lens
-inlineResponse2009IndexServerAddressL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009IndexServerAddressL f InlineResponse2009{..} = (\inlineResponse2009IndexServerAddress -> InlineResponse2009 { inlineResponse2009IndexServerAddress, ..} ) <$> f inlineResponse2009IndexServerAddress
-{-# INLINE inlineResponse2009IndexServerAddressL #-}
-
--- | 'inlineResponse2009InitPath' Lens
-inlineResponse2009InitPathL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009InitPathL f InlineResponse2009{..} = (\inlineResponse2009InitPath -> InlineResponse2009 { inlineResponse2009InitPath, ..} ) <$> f inlineResponse2009InitPath
-{-# INLINE inlineResponse2009InitPathL #-}
-
--- | 'inlineResponse2009InitSha1' Lens
-inlineResponse2009InitSha1L :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009InitSha1L f InlineResponse2009{..} = (\inlineResponse2009InitSha1 -> InlineResponse2009 { inlineResponse2009InitSha1, ..} ) <$> f inlineResponse2009InitSha1
-{-# INLINE inlineResponse2009InitSha1L #-}
-
--- | 'inlineResponse2009KernelVersion' Lens
-inlineResponse2009KernelVersionL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009KernelVersionL f InlineResponse2009{..} = (\inlineResponse2009KernelVersion -> InlineResponse2009 { inlineResponse2009KernelVersion, ..} ) <$> f inlineResponse2009KernelVersion
-{-# INLINE inlineResponse2009KernelVersionL #-}
-
--- | 'inlineResponse2009Labels' Lens
-inlineResponse2009LabelsL :: Lens_' InlineResponse2009 (Maybe [Text])
-inlineResponse2009LabelsL f InlineResponse2009{..} = (\inlineResponse2009Labels -> InlineResponse2009 { inlineResponse2009Labels, ..} ) <$> f inlineResponse2009Labels
-{-# INLINE inlineResponse2009LabelsL #-}
-
--- | 'inlineResponse2009MemTotal' Lens
-inlineResponse2009MemTotalL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009MemTotalL f InlineResponse2009{..} = (\inlineResponse2009MemTotal -> InlineResponse2009 { inlineResponse2009MemTotal, ..} ) <$> f inlineResponse2009MemTotal
-{-# INLINE inlineResponse2009MemTotalL #-}
-
--- | 'inlineResponse2009MemoryLimit' Lens
-inlineResponse2009MemoryLimitL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009MemoryLimitL f InlineResponse2009{..} = (\inlineResponse2009MemoryLimit -> InlineResponse2009 { inlineResponse2009MemoryLimit, ..} ) <$> f inlineResponse2009MemoryLimit
-{-# INLINE inlineResponse2009MemoryLimitL #-}
-
--- | 'inlineResponse2009Ncpu' Lens
-inlineResponse2009NcpuL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009NcpuL f InlineResponse2009{..} = (\inlineResponse2009Ncpu -> InlineResponse2009 { inlineResponse2009Ncpu, ..} ) <$> f inlineResponse2009Ncpu
-{-# INLINE inlineResponse2009NcpuL #-}
-
--- | 'inlineResponse2009NEventsListener' Lens
-inlineResponse2009NEventsListenerL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009NEventsListenerL f InlineResponse2009{..} = (\inlineResponse2009NEventsListener -> InlineResponse2009 { inlineResponse2009NEventsListener, ..} ) <$> f inlineResponse2009NEventsListener
-{-# INLINE inlineResponse2009NEventsListenerL #-}
-
--- | 'inlineResponse2009NFd' Lens
-inlineResponse2009NFdL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009NFdL f InlineResponse2009{..} = (\inlineResponse2009NFd -> InlineResponse2009 { inlineResponse2009NFd, ..} ) <$> f inlineResponse2009NFd
-{-# INLINE inlineResponse2009NFdL #-}
-
--- | 'inlineResponse2009NGoroutines' Lens
-inlineResponse2009NGoroutinesL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009NGoroutinesL f InlineResponse2009{..} = (\inlineResponse2009NGoroutines -> InlineResponse2009 { inlineResponse2009NGoroutines, ..} ) <$> f inlineResponse2009NGoroutines
-{-# INLINE inlineResponse2009NGoroutinesL #-}
-
--- | 'inlineResponse2009Name' Lens
-inlineResponse2009NameL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009NameL f InlineResponse2009{..} = (\inlineResponse2009Name -> InlineResponse2009 { inlineResponse2009Name, ..} ) <$> f inlineResponse2009Name
-{-# INLINE inlineResponse2009NameL #-}
-
--- | 'inlineResponse2009NoProxy' Lens
-inlineResponse2009NoProxyL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009NoProxyL f InlineResponse2009{..} = (\inlineResponse2009NoProxy -> InlineResponse2009 { inlineResponse2009NoProxy, ..} ) <$> f inlineResponse2009NoProxy
-{-# INLINE inlineResponse2009NoProxyL #-}
-
--- | 'inlineResponse2009OomKillDisable' Lens
-inlineResponse2009OomKillDisableL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009OomKillDisableL f InlineResponse2009{..} = (\inlineResponse2009OomKillDisable -> InlineResponse2009 { inlineResponse2009OomKillDisable, ..} ) <$> f inlineResponse2009OomKillDisable
-{-# INLINE inlineResponse2009OomKillDisableL #-}
-
--- | 'inlineResponse2009OsType' Lens
-inlineResponse2009OsTypeL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009OsTypeL f InlineResponse2009{..} = (\inlineResponse2009OsType -> InlineResponse2009 { inlineResponse2009OsType, ..} ) <$> f inlineResponse2009OsType
-{-# INLINE inlineResponse2009OsTypeL #-}
-
--- | 'inlineResponse2009OomScoreAdj' Lens
-inlineResponse2009OomScoreAdjL :: Lens_' InlineResponse2009 (Maybe Int)
-inlineResponse2009OomScoreAdjL f InlineResponse2009{..} = (\inlineResponse2009OomScoreAdj -> InlineResponse2009 { inlineResponse2009OomScoreAdj, ..} ) <$> f inlineResponse2009OomScoreAdj
-{-# INLINE inlineResponse2009OomScoreAdjL #-}
-
--- | 'inlineResponse2009OperatingSystem' Lens
-inlineResponse2009OperatingSystemL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009OperatingSystemL f InlineResponse2009{..} = (\inlineResponse2009OperatingSystem -> InlineResponse2009 { inlineResponse2009OperatingSystem, ..} ) <$> f inlineResponse2009OperatingSystem
-{-# INLINE inlineResponse2009OperatingSystemL #-}
-
--- | 'inlineResponse2009RegistryConfig' Lens
-inlineResponse2009RegistryConfigL :: Lens_' InlineResponse2009 (Maybe InlineResponse2009RegistryConfig)
-inlineResponse2009RegistryConfigL f InlineResponse2009{..} = (\inlineResponse2009RegistryConfig -> InlineResponse2009 { inlineResponse2009RegistryConfig, ..} ) <$> f inlineResponse2009RegistryConfig
-{-# INLINE inlineResponse2009RegistryConfigL #-}
-
--- | 'inlineResponse2009SwapLimit' Lens
-inlineResponse2009SwapLimitL :: Lens_' InlineResponse2009 (Maybe Bool)
-inlineResponse2009SwapLimitL f InlineResponse2009{..} = (\inlineResponse2009SwapLimit -> InlineResponse2009 { inlineResponse2009SwapLimit, ..} ) <$> f inlineResponse2009SwapLimit
-{-# INLINE inlineResponse2009SwapLimitL #-}
-
--- | 'inlineResponse2009SystemTime' Lens
-inlineResponse2009SystemTimeL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009SystemTimeL f InlineResponse2009{..} = (\inlineResponse2009SystemTime -> InlineResponse2009 { inlineResponse2009SystemTime, ..} ) <$> f inlineResponse2009SystemTime
-{-# INLINE inlineResponse2009SystemTimeL #-}
-
--- | 'inlineResponse2009ServerVersion' Lens
-inlineResponse2009ServerVersionL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009ServerVersionL f InlineResponse2009{..} = (\inlineResponse2009ServerVersion -> InlineResponse2009 { inlineResponse2009ServerVersion, ..} ) <$> f inlineResponse2009ServerVersion
-{-# INLINE inlineResponse2009ServerVersionL #-}
-
-
-
--- * InlineResponse2009Plugins
-
--- | 'inlineResponse2009PluginsVolume' Lens
-inlineResponse2009PluginsVolumeL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
-inlineResponse2009PluginsVolumeL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsVolume -> InlineResponse2009Plugins { inlineResponse2009PluginsVolume, ..} ) <$> f inlineResponse2009PluginsVolume
-{-# INLINE inlineResponse2009PluginsVolumeL #-}
-
--- | 'inlineResponse2009PluginsNetwork' Lens
-inlineResponse2009PluginsNetworkL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
-inlineResponse2009PluginsNetworkL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsNetwork -> InlineResponse2009Plugins { inlineResponse2009PluginsNetwork, ..} ) <$> f inlineResponse2009PluginsNetwork
-{-# INLINE inlineResponse2009PluginsNetworkL #-}
-
--- | 'inlineResponse2009PluginsLog' Lens
-inlineResponse2009PluginsLogL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
-inlineResponse2009PluginsLogL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsLog -> InlineResponse2009Plugins { inlineResponse2009PluginsLog, ..} ) <$> f inlineResponse2009PluginsLog
-{-# INLINE inlineResponse2009PluginsLogL #-}
-
-
-
--- * InlineResponse2009RegistryConfig
-
--- | 'inlineResponse2009RegistryConfigIndexConfigs' Lens
-inlineResponse2009RegistryConfigIndexConfigsL :: Lens_' InlineResponse2009RegistryConfig (Maybe (Map.Map String InlineResponse2009RegistryConfigIndexConfigs))
-inlineResponse2009RegistryConfigIndexConfigsL f InlineResponse2009RegistryConfig{..} = (\inlineResponse2009RegistryConfigIndexConfigs -> InlineResponse2009RegistryConfig { inlineResponse2009RegistryConfigIndexConfigs, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigs
-{-# INLINE inlineResponse2009RegistryConfigIndexConfigsL #-}
-
--- | 'inlineResponse2009RegistryConfigInsecureRegistryCidRs' Lens
-inlineResponse2009RegistryConfigInsecureRegistryCidRsL :: Lens_' InlineResponse2009RegistryConfig (Maybe [Text])
-inlineResponse2009RegistryConfigInsecureRegistryCidRsL f InlineResponse2009RegistryConfig{..} = (\inlineResponse2009RegistryConfigInsecureRegistryCidRs -> InlineResponse2009RegistryConfig { inlineResponse2009RegistryConfigInsecureRegistryCidRs, ..} ) <$> f inlineResponse2009RegistryConfigInsecureRegistryCidRs
-{-# INLINE inlineResponse2009RegistryConfigInsecureRegistryCidRsL #-}
-
-
-
--- * InlineResponse2009RegistryConfigIndexConfigs
-
--- | 'inlineResponse2009RegistryConfigIndexConfigsMirrors' Lens
-inlineResponse2009RegistryConfigIndexConfigsMirrorsL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe [Text])
-inlineResponse2009RegistryConfigIndexConfigsMirrorsL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsMirrors -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsMirrors, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsMirrors
-{-# INLINE inlineResponse2009RegistryConfigIndexConfigsMirrorsL #-}
-
--- | 'inlineResponse2009RegistryConfigIndexConfigsName' Lens
-inlineResponse2009RegistryConfigIndexConfigsNameL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Text)
-inlineResponse2009RegistryConfigIndexConfigsNameL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsName -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsName, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsName
-{-# INLINE inlineResponse2009RegistryConfigIndexConfigsNameL #-}
-
--- | 'inlineResponse2009RegistryConfigIndexConfigsOfficial' Lens
-inlineResponse2009RegistryConfigIndexConfigsOfficialL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Bool)
-inlineResponse2009RegistryConfigIndexConfigsOfficialL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsOfficial -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsOfficial, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsOfficial
-{-# INLINE inlineResponse2009RegistryConfigIndexConfigsOfficialL #-}
-
--- | 'inlineResponse2009RegistryConfigIndexConfigsSecure' Lens
-inlineResponse2009RegistryConfigIndexConfigsSecureL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Bool)
-inlineResponse2009RegistryConfigIndexConfigsSecureL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsSecure -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsSecure, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsSecure
-{-# INLINE inlineResponse2009RegistryConfigIndexConfigsSecureL #-}
-
-
-
--- * InlineResponse201
-
--- | 'inlineResponse201Id' Lens
-inlineResponse201IdL :: Lens_' InlineResponse201 (Text)
-inlineResponse201IdL f InlineResponse201{..} = (\inlineResponse201Id -> InlineResponse201 { inlineResponse201Id, ..} ) <$> f inlineResponse201Id
-{-# INLINE inlineResponse201IdL #-}
-
--- | 'inlineResponse201Warnings' Lens
-inlineResponse201WarningsL :: Lens_' InlineResponse201 ([Text])
-inlineResponse201WarningsL f InlineResponse201{..} = (\inlineResponse201Warnings -> InlineResponse201 { inlineResponse201Warnings, ..} ) <$> f inlineResponse201Warnings
-{-# INLINE inlineResponse201WarningsL #-}
-
-
-
--- * InlineResponse2011
-
--- | 'inlineResponse2011Id' Lens
-inlineResponse2011IdL :: Lens_' InlineResponse2011 (Maybe Text)
-inlineResponse2011IdL f InlineResponse2011{..} = (\inlineResponse2011Id -> InlineResponse2011 { inlineResponse2011Id, ..} ) <$> f inlineResponse2011Id
-{-# INLINE inlineResponse2011IdL #-}
-
--- | 'inlineResponse2011Warning' Lens
-inlineResponse2011WarningL :: Lens_' InlineResponse2011 (Maybe Text)
-inlineResponse2011WarningL f InlineResponse2011{..} = (\inlineResponse2011Warning -> InlineResponse2011 { inlineResponse2011Warning, ..} ) <$> f inlineResponse2011Warning
-{-# INLINE inlineResponse2011WarningL #-}
-
-
-
--- * InlineResponse2012
-
--- | 'inlineResponse2012Id' Lens
-inlineResponse2012IdL :: Lens_' InlineResponse2012 (Maybe Text)
-inlineResponse2012IdL f InlineResponse2012{..} = (\inlineResponse2012Id -> InlineResponse2012 { inlineResponse2012Id, ..} ) <$> f inlineResponse2012Id
-{-# INLINE inlineResponse2012IdL #-}
-
--- | 'inlineResponse2012Warning' Lens
-inlineResponse2012WarningL :: Lens_' InlineResponse2012 (Maybe Text)
-inlineResponse2012WarningL f InlineResponse2012{..} = (\inlineResponse2012Warning -> InlineResponse2012 { inlineResponse2012Warning, ..} ) <$> f inlineResponse2012Warning
-{-# INLINE inlineResponse2012WarningL #-}
-
-
-
--- * InlineResponse2013
-
--- | 'inlineResponse2013Id' Lens
-inlineResponse2013IdL :: Lens_' InlineResponse2013 (Maybe Text)
-inlineResponse2013IdL f InlineResponse2013{..} = (\inlineResponse2013Id -> InlineResponse2013 { inlineResponse2013Id, ..} ) <$> f inlineResponse2013Id
-{-# INLINE inlineResponse2013IdL #-}
-
-
-
--- * InlineResponse2014
-
--- | 'inlineResponse2014Id' Lens
-inlineResponse2014IdL :: Lens_' InlineResponse2014 (Maybe Text)
-inlineResponse2014IdL f InlineResponse2014{..} = (\inlineResponse2014Id -> InlineResponse2014 { inlineResponse2014Id, ..} ) <$> f inlineResponse2014Id
-{-# INLINE inlineResponse2014IdL #-}
-
-
-
 -- * InlineResponse400
 
 -- | 'inlineResponse400ErrorResponse' Lens
@@ -2418,191 +2140,40 @@ inlineResponse400MessageL f InlineResponse400{..} = (\inlineResponse400Message -
 
 
 
--- * InspectResponse
+-- * JoinTokens
 
--- | 'inspectResponseId' Lens
-inspectResponseIdL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseIdL f InspectResponse{..} = (\inspectResponseId -> InspectResponse { inspectResponseId, ..} ) <$> f inspectResponseId
-{-# INLINE inspectResponseIdL #-}
+-- | 'joinTokensWorker' Lens
+joinTokensWorkerL :: Lens_' JoinTokens (Maybe Text)
+joinTokensWorkerL f JoinTokens{..} = (\joinTokensWorker -> JoinTokens { joinTokensWorker, ..} ) <$> f joinTokensWorker
+{-# INLINE joinTokensWorkerL #-}
 
--- | 'inspectResponseCreated' Lens
-inspectResponseCreatedL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseCreatedL f InspectResponse{..} = (\inspectResponseCreated -> InspectResponse { inspectResponseCreated, ..} ) <$> f inspectResponseCreated
-{-# INLINE inspectResponseCreatedL #-}
-
--- | 'inspectResponsePath' Lens
-inspectResponsePathL :: Lens_' InspectResponse (Maybe Text)
-inspectResponsePathL f InspectResponse{..} = (\inspectResponsePath -> InspectResponse { inspectResponsePath, ..} ) <$> f inspectResponsePath
-{-# INLINE inspectResponsePathL #-}
-
--- | 'inspectResponseArgs' Lens
-inspectResponseArgsL :: Lens_' InspectResponse (Maybe [Text])
-inspectResponseArgsL f InspectResponse{..} = (\inspectResponseArgs -> InspectResponse { inspectResponseArgs, ..} ) <$> f inspectResponseArgs
-{-# INLINE inspectResponseArgsL #-}
-
--- | 'inspectResponseState' Lens
-inspectResponseStateL :: Lens_' InspectResponse (Maybe InspectResponseState)
-inspectResponseStateL f InspectResponse{..} = (\inspectResponseState -> InspectResponse { inspectResponseState, ..} ) <$> f inspectResponseState
-{-# INLINE inspectResponseStateL #-}
-
--- | 'inspectResponseImage' Lens
-inspectResponseImageL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseImageL f InspectResponse{..} = (\inspectResponseImage -> InspectResponse { inspectResponseImage, ..} ) <$> f inspectResponseImage
-{-# INLINE inspectResponseImageL #-}
-
--- | 'inspectResponseResolvConfPath' Lens
-inspectResponseResolvConfPathL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseResolvConfPathL f InspectResponse{..} = (\inspectResponseResolvConfPath -> InspectResponse { inspectResponseResolvConfPath, ..} ) <$> f inspectResponseResolvConfPath
-{-# INLINE inspectResponseResolvConfPathL #-}
-
--- | 'inspectResponseHostnamePath' Lens
-inspectResponseHostnamePathL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseHostnamePathL f InspectResponse{..} = (\inspectResponseHostnamePath -> InspectResponse { inspectResponseHostnamePath, ..} ) <$> f inspectResponseHostnamePath
-{-# INLINE inspectResponseHostnamePathL #-}
-
--- | 'inspectResponseHostsPath' Lens
-inspectResponseHostsPathL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseHostsPathL f InspectResponse{..} = (\inspectResponseHostsPath -> InspectResponse { inspectResponseHostsPath, ..} ) <$> f inspectResponseHostsPath
-{-# INLINE inspectResponseHostsPathL #-}
-
--- | 'inspectResponseLogPath' Lens
-inspectResponseLogPathL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseLogPathL f InspectResponse{..} = (\inspectResponseLogPath -> InspectResponse { inspectResponseLogPath, ..} ) <$> f inspectResponseLogPath
-{-# INLINE inspectResponseLogPathL #-}
-
--- | 'inspectResponseNode' Lens
-inspectResponseNodeL :: Lens_' InspectResponse (Maybe A.Value)
-inspectResponseNodeL f InspectResponse{..} = (\inspectResponseNode -> InspectResponse { inspectResponseNode, ..} ) <$> f inspectResponseNode
-{-# INLINE inspectResponseNodeL #-}
-
--- | 'inspectResponseName' Lens
-inspectResponseNameL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseNameL f InspectResponse{..} = (\inspectResponseName -> InspectResponse { inspectResponseName, ..} ) <$> f inspectResponseName
-{-# INLINE inspectResponseNameL #-}
-
--- | 'inspectResponseRestartCount' Lens
-inspectResponseRestartCountL :: Lens_' InspectResponse (Maybe Int)
-inspectResponseRestartCountL f InspectResponse{..} = (\inspectResponseRestartCount -> InspectResponse { inspectResponseRestartCount, ..} ) <$> f inspectResponseRestartCount
-{-# INLINE inspectResponseRestartCountL #-}
-
--- | 'inspectResponseDriver' Lens
-inspectResponseDriverL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseDriverL f InspectResponse{..} = (\inspectResponseDriver -> InspectResponse { inspectResponseDriver, ..} ) <$> f inspectResponseDriver
-{-# INLINE inspectResponseDriverL #-}
-
--- | 'inspectResponseMountLabel' Lens
-inspectResponseMountLabelL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseMountLabelL f InspectResponse{..} = (\inspectResponseMountLabel -> InspectResponse { inspectResponseMountLabel, ..} ) <$> f inspectResponseMountLabel
-{-# INLINE inspectResponseMountLabelL #-}
-
--- | 'inspectResponseProcessLabel' Lens
-inspectResponseProcessLabelL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseProcessLabelL f InspectResponse{..} = (\inspectResponseProcessLabel -> InspectResponse { inspectResponseProcessLabel, ..} ) <$> f inspectResponseProcessLabel
-{-# INLINE inspectResponseProcessLabelL #-}
-
--- | 'inspectResponseAppArmorProfile' Lens
-inspectResponseAppArmorProfileL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseAppArmorProfileL f InspectResponse{..} = (\inspectResponseAppArmorProfile -> InspectResponse { inspectResponseAppArmorProfile, ..} ) <$> f inspectResponseAppArmorProfile
-{-# INLINE inspectResponseAppArmorProfileL #-}
-
--- | 'inspectResponseExecIDs' Lens
-inspectResponseExecIDsL :: Lens_' InspectResponse (Maybe Text)
-inspectResponseExecIDsL f InspectResponse{..} = (\inspectResponseExecIDs -> InspectResponse { inspectResponseExecIDs, ..} ) <$> f inspectResponseExecIDs
-{-# INLINE inspectResponseExecIDsL #-}
-
--- | 'inspectResponseHostConfig' Lens
-inspectResponseHostConfigL :: Lens_' InspectResponse (Maybe HostConfig)
-inspectResponseHostConfigL f InspectResponse{..} = (\inspectResponseHostConfig -> InspectResponse { inspectResponseHostConfig, ..} ) <$> f inspectResponseHostConfig
-{-# INLINE inspectResponseHostConfigL #-}
-
--- | 'inspectResponseGraphDriver' Lens
-inspectResponseGraphDriverL :: Lens_' InspectResponse (Maybe GraphDriverData)
-inspectResponseGraphDriverL f InspectResponse{..} = (\inspectResponseGraphDriver -> InspectResponse { inspectResponseGraphDriver, ..} ) <$> f inspectResponseGraphDriver
-{-# INLINE inspectResponseGraphDriverL #-}
-
--- | 'inspectResponseSizeRw' Lens
-inspectResponseSizeRwL :: Lens_' InspectResponse (Maybe Integer)
-inspectResponseSizeRwL f InspectResponse{..} = (\inspectResponseSizeRw -> InspectResponse { inspectResponseSizeRw, ..} ) <$> f inspectResponseSizeRw
-{-# INLINE inspectResponseSizeRwL #-}
-
--- | 'inspectResponseSizeRootFs' Lens
-inspectResponseSizeRootFsL :: Lens_' InspectResponse (Maybe Integer)
-inspectResponseSizeRootFsL f InspectResponse{..} = (\inspectResponseSizeRootFs -> InspectResponse { inspectResponseSizeRootFs, ..} ) <$> f inspectResponseSizeRootFs
-{-# INLINE inspectResponseSizeRootFsL #-}
-
--- | 'inspectResponseMounts' Lens
-inspectResponseMountsL :: Lens_' InspectResponse (Maybe [MountPoint])
-inspectResponseMountsL f InspectResponse{..} = (\inspectResponseMounts -> InspectResponse { inspectResponseMounts, ..} ) <$> f inspectResponseMounts
-{-# INLINE inspectResponseMountsL #-}
-
--- | 'inspectResponseConfig' Lens
-inspectResponseConfigL :: Lens_' InspectResponse (Maybe ContainerConfig)
-inspectResponseConfigL f InspectResponse{..} = (\inspectResponseConfig -> InspectResponse { inspectResponseConfig, ..} ) <$> f inspectResponseConfig
-{-# INLINE inspectResponseConfigL #-}
-
--- | 'inspectResponseNetworkSettings' Lens
-inspectResponseNetworkSettingsL :: Lens_' InspectResponse (Maybe NetworkConfig)
-inspectResponseNetworkSettingsL f InspectResponse{..} = (\inspectResponseNetworkSettings -> InspectResponse { inspectResponseNetworkSettings, ..} ) <$> f inspectResponseNetworkSettings
-{-# INLINE inspectResponseNetworkSettingsL #-}
+-- | 'joinTokensManager' Lens
+joinTokensManagerL :: Lens_' JoinTokens (Maybe Text)
+joinTokensManagerL f JoinTokens{..} = (\joinTokensManager -> JoinTokens { joinTokensManager, ..} ) <$> f joinTokensManager
+{-# INLINE joinTokensManagerL #-}
 
 
 
--- * InspectResponseState
+-- * LocalNodeState
 
--- | 'inspectResponseStateStatus' Lens
-inspectResponseStateStatusL :: Lens_' InspectResponseState (Maybe E'Status)
-inspectResponseStateStatusL f InspectResponseState{..} = (\inspectResponseStateStatus -> InspectResponseState { inspectResponseStateStatus, ..} ) <$> f inspectResponseStateStatus
-{-# INLINE inspectResponseStateStatusL #-}
 
--- | 'inspectResponseStateRunning' Lens
-inspectResponseStateRunningL :: Lens_' InspectResponseState (Maybe Bool)
-inspectResponseStateRunningL f InspectResponseState{..} = (\inspectResponseStateRunning -> InspectResponseState { inspectResponseStateRunning, ..} ) <$> f inspectResponseStateRunning
-{-# INLINE inspectResponseStateRunningL #-}
 
--- | 'inspectResponseStatePaused' Lens
-inspectResponseStatePausedL :: Lens_' InspectResponseState (Maybe Bool)
-inspectResponseStatePausedL f InspectResponseState{..} = (\inspectResponseStatePaused -> InspectResponseState { inspectResponseStatePaused, ..} ) <$> f inspectResponseStatePaused
-{-# INLINE inspectResponseStatePausedL #-}
+-- * ManagerStatus
 
--- | 'inspectResponseStateRestarting' Lens
-inspectResponseStateRestartingL :: Lens_' InspectResponseState (Maybe Bool)
-inspectResponseStateRestartingL f InspectResponseState{..} = (\inspectResponseStateRestarting -> InspectResponseState { inspectResponseStateRestarting, ..} ) <$> f inspectResponseStateRestarting
-{-# INLINE inspectResponseStateRestartingL #-}
+-- | 'managerStatusLeader' Lens
+managerStatusLeaderL :: Lens_' ManagerStatus (Maybe Bool)
+managerStatusLeaderL f ManagerStatus{..} = (\managerStatusLeader -> ManagerStatus { managerStatusLeader, ..} ) <$> f managerStatusLeader
+{-# INLINE managerStatusLeaderL #-}
 
--- | 'inspectResponseStateOomKilled' Lens
-inspectResponseStateOomKilledL :: Lens_' InspectResponseState (Maybe Bool)
-inspectResponseStateOomKilledL f InspectResponseState{..} = (\inspectResponseStateOomKilled -> InspectResponseState { inspectResponseStateOomKilled, ..} ) <$> f inspectResponseStateOomKilled
-{-# INLINE inspectResponseStateOomKilledL #-}
+-- | 'managerStatusReachability' Lens
+managerStatusReachabilityL :: Lens_' ManagerStatus (Maybe Reachability)
+managerStatusReachabilityL f ManagerStatus{..} = (\managerStatusReachability -> ManagerStatus { managerStatusReachability, ..} ) <$> f managerStatusReachability
+{-# INLINE managerStatusReachabilityL #-}
 
--- | 'inspectResponseStateDead' Lens
-inspectResponseStateDeadL :: Lens_' InspectResponseState (Maybe Bool)
-inspectResponseStateDeadL f InspectResponseState{..} = (\inspectResponseStateDead -> InspectResponseState { inspectResponseStateDead, ..} ) <$> f inspectResponseStateDead
-{-# INLINE inspectResponseStateDeadL #-}
-
--- | 'inspectResponseStatePid' Lens
-inspectResponseStatePidL :: Lens_' InspectResponseState (Maybe Int)
-inspectResponseStatePidL f InspectResponseState{..} = (\inspectResponseStatePid -> InspectResponseState { inspectResponseStatePid, ..} ) <$> f inspectResponseStatePid
-{-# INLINE inspectResponseStatePidL #-}
-
--- | 'inspectResponseStateExitCode' Lens
-inspectResponseStateExitCodeL :: Lens_' InspectResponseState (Maybe Int)
-inspectResponseStateExitCodeL f InspectResponseState{..} = (\inspectResponseStateExitCode -> InspectResponseState { inspectResponseStateExitCode, ..} ) <$> f inspectResponseStateExitCode
-{-# INLINE inspectResponseStateExitCodeL #-}
-
--- | 'inspectResponseStateError' Lens
-inspectResponseStateErrorL :: Lens_' InspectResponseState (Maybe Text)
-inspectResponseStateErrorL f InspectResponseState{..} = (\inspectResponseStateError -> InspectResponseState { inspectResponseStateError, ..} ) <$> f inspectResponseStateError
-{-# INLINE inspectResponseStateErrorL #-}
-
--- | 'inspectResponseStateStartedAt' Lens
-inspectResponseStateStartedAtL :: Lens_' InspectResponseState (Maybe Text)
-inspectResponseStateStartedAtL f InspectResponseState{..} = (\inspectResponseStateStartedAt -> InspectResponseState { inspectResponseStateStartedAt, ..} ) <$> f inspectResponseStateStartedAt
-{-# INLINE inspectResponseStateStartedAtL #-}
-
--- | 'inspectResponseStateFinishedAt' Lens
-inspectResponseStateFinishedAtL :: Lens_' InspectResponseState (Maybe Text)
-inspectResponseStateFinishedAtL f InspectResponseState{..} = (\inspectResponseStateFinishedAt -> InspectResponseState { inspectResponseStateFinishedAt, ..} ) <$> f inspectResponseStateFinishedAt
-{-# INLINE inspectResponseStateFinishedAtL #-}
+-- | 'managerStatusAddr' Lens
+managerStatusAddrL :: Lens_' ManagerStatus (Maybe Text)
+managerStatusAddrL f ManagerStatus{..} = (\managerStatusAddr -> ManagerStatus { managerStatusAddr, ..} ) <$> f managerStatusAddr
+{-# INLINE managerStatusAddrL #-}
 
 
 
@@ -2653,7 +2224,7 @@ mountTmpfsOptionsL f Mount{..} = (\mountTmpfsOptions -> Mount { mountTmpfsOption
 -- * MountBindOptions
 
 -- | 'mountBindOptionsPropagation' Lens
-mountBindOptionsPropagationL :: Lens_' MountBindOptions (Maybe A.Value)
+mountBindOptionsPropagationL :: Lens_' MountBindOptions (Maybe E'Propagation)
 mountBindOptionsPropagationL f MountBindOptions{..} = (\mountBindOptionsPropagation -> MountBindOptions { mountBindOptionsPropagation, ..} ) <$> f mountBindOptionsPropagation
 {-# INLINE mountBindOptionsPropagationL #-}
 
@@ -2819,45 +2390,6 @@ networkLabelsL f Network{..} = (\networkLabels -> Network { networkLabels, ..} )
 
 
 
--- * NetworkConfig
-
--- | 'networkConfigBridge' Lens
-networkConfigBridgeL :: Lens_' NetworkConfig (Maybe Text)
-networkConfigBridgeL f NetworkConfig{..} = (\networkConfigBridge -> NetworkConfig { networkConfigBridge, ..} ) <$> f networkConfigBridge
-{-# INLINE networkConfigBridgeL #-}
-
--- | 'networkConfigGateway' Lens
-networkConfigGatewayL :: Lens_' NetworkConfig (Maybe Text)
-networkConfigGatewayL f NetworkConfig{..} = (\networkConfigGateway -> NetworkConfig { networkConfigGateway, ..} ) <$> f networkConfigGateway
-{-# INLINE networkConfigGatewayL #-}
-
--- | 'networkConfigAddress' Lens
-networkConfigAddressL :: Lens_' NetworkConfig (Maybe Text)
-networkConfigAddressL f NetworkConfig{..} = (\networkConfigAddress -> NetworkConfig { networkConfigAddress, ..} ) <$> f networkConfigAddress
-{-# INLINE networkConfigAddressL #-}
-
--- | 'networkConfigIpPrefixLen' Lens
-networkConfigIpPrefixLenL :: Lens_' NetworkConfig (Maybe Int)
-networkConfigIpPrefixLenL f NetworkConfig{..} = (\networkConfigIpPrefixLen -> NetworkConfig { networkConfigIpPrefixLen, ..} ) <$> f networkConfigIpPrefixLen
-{-# INLINE networkConfigIpPrefixLenL #-}
-
--- | 'networkConfigMacAddress' Lens
-networkConfigMacAddressL :: Lens_' NetworkConfig (Maybe Text)
-networkConfigMacAddressL f NetworkConfig{..} = (\networkConfigMacAddress -> NetworkConfig { networkConfigMacAddress, ..} ) <$> f networkConfigMacAddress
-{-# INLINE networkConfigMacAddressL #-}
-
--- | 'networkConfigPortMapping' Lens
-networkConfigPortMappingL :: Lens_' NetworkConfig (Maybe Text)
-networkConfigPortMappingL f NetworkConfig{..} = (\networkConfigPortMapping -> NetworkConfig { networkConfigPortMapping, ..} ) <$> f networkConfigPortMapping
-{-# INLINE networkConfigPortMappingL #-}
-
--- | 'networkConfigPorts' Lens
-networkConfigPortsL :: Lens_' NetworkConfig (Maybe [Port])
-networkConfigPortsL f NetworkConfig{..} = (\networkConfigPorts -> NetworkConfig { networkConfigPorts, ..} ) <$> f networkConfigPorts
-{-# INLINE networkConfigPortsL #-}
-
-
-
 -- * NetworkContainer
 
 -- | 'networkContainerName' Lens
@@ -2884,6 +2416,123 @@ networkContainerIPv4AddressL f NetworkContainer{..} = (\networkContainerIPv4Addr
 networkContainerIPv6AddressL :: Lens_' NetworkContainer (Maybe Text)
 networkContainerIPv6AddressL f NetworkContainer{..} = (\networkContainerIPv6Address -> NetworkContainer { networkContainerIPv6Address, ..} ) <$> f networkContainerIPv6Address
 {-# INLINE networkContainerIPv6AddressL #-}
+
+
+
+-- * NetworkCreateResponse
+
+-- | 'networkCreateResponseId' Lens
+networkCreateResponseIdL :: Lens_' NetworkCreateResponse (Maybe Text)
+networkCreateResponseIdL f NetworkCreateResponse{..} = (\networkCreateResponseId -> NetworkCreateResponse { networkCreateResponseId, ..} ) <$> f networkCreateResponseId
+{-# INLINE networkCreateResponseIdL #-}
+
+-- | 'networkCreateResponseWarning' Lens
+networkCreateResponseWarningL :: Lens_' NetworkCreateResponse (Maybe Text)
+networkCreateResponseWarningL f NetworkCreateResponse{..} = (\networkCreateResponseWarning -> NetworkCreateResponse { networkCreateResponseWarning, ..} ) <$> f networkCreateResponseWarning
+{-# INLINE networkCreateResponseWarningL #-}
+
+
+
+-- * NetworkPruneResponse
+
+-- | 'networkPruneResponseNetworksDeleted' Lens
+networkPruneResponseNetworksDeletedL :: Lens_' NetworkPruneResponse (Maybe [Text])
+networkPruneResponseNetworksDeletedL f NetworkPruneResponse{..} = (\networkPruneResponseNetworksDeleted -> NetworkPruneResponse { networkPruneResponseNetworksDeleted, ..} ) <$> f networkPruneResponseNetworksDeleted
+{-# INLINE networkPruneResponseNetworksDeletedL #-}
+
+
+
+-- * NetworkSettings
+
+-- | 'networkSettingsBridge' Lens
+networkSettingsBridgeL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsBridgeL f NetworkSettings{..} = (\networkSettingsBridge -> NetworkSettings { networkSettingsBridge, ..} ) <$> f networkSettingsBridge
+{-# INLINE networkSettingsBridgeL #-}
+
+-- | 'networkSettingsSandboxId' Lens
+networkSettingsSandboxIdL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsSandboxIdL f NetworkSettings{..} = (\networkSettingsSandboxId -> NetworkSettings { networkSettingsSandboxId, ..} ) <$> f networkSettingsSandboxId
+{-# INLINE networkSettingsSandboxIdL #-}
+
+-- | 'networkSettingsHairpinMode' Lens
+networkSettingsHairpinModeL :: Lens_' NetworkSettings (Maybe Bool)
+networkSettingsHairpinModeL f NetworkSettings{..} = (\networkSettingsHairpinMode -> NetworkSettings { networkSettingsHairpinMode, ..} ) <$> f networkSettingsHairpinMode
+{-# INLINE networkSettingsHairpinModeL #-}
+
+-- | 'networkSettingsLinkLocalIPv6Address' Lens
+networkSettingsLinkLocalIPv6AddressL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsLinkLocalIPv6AddressL f NetworkSettings{..} = (\networkSettingsLinkLocalIPv6Address -> NetworkSettings { networkSettingsLinkLocalIPv6Address, ..} ) <$> f networkSettingsLinkLocalIPv6Address
+{-# INLINE networkSettingsLinkLocalIPv6AddressL #-}
+
+-- | 'networkSettingsLinkLocalIPv6PrefixLen' Lens
+networkSettingsLinkLocalIPv6PrefixLenL :: Lens_' NetworkSettings (Maybe Int)
+networkSettingsLinkLocalIPv6PrefixLenL f NetworkSettings{..} = (\networkSettingsLinkLocalIPv6PrefixLen -> NetworkSettings { networkSettingsLinkLocalIPv6PrefixLen, ..} ) <$> f networkSettingsLinkLocalIPv6PrefixLen
+{-# INLINE networkSettingsLinkLocalIPv6PrefixLenL #-}
+
+-- | 'networkSettingsPorts' Lens
+networkSettingsPortsL :: Lens_' NetworkSettings (Maybe (Map.Map String [PortBinding]))
+networkSettingsPortsL f NetworkSettings{..} = (\networkSettingsPorts -> NetworkSettings { networkSettingsPorts, ..} ) <$> f networkSettingsPorts
+{-# INLINE networkSettingsPortsL #-}
+
+-- | 'networkSettingsSandboxKey' Lens
+networkSettingsSandboxKeyL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsSandboxKeyL f NetworkSettings{..} = (\networkSettingsSandboxKey -> NetworkSettings { networkSettingsSandboxKey, ..} ) <$> f networkSettingsSandboxKey
+{-# INLINE networkSettingsSandboxKeyL #-}
+
+-- | 'networkSettingsSecondaryIpAddresses' Lens
+networkSettingsSecondaryIpAddressesL :: Lens_' NetworkSettings (Maybe [Address])
+networkSettingsSecondaryIpAddressesL f NetworkSettings{..} = (\networkSettingsSecondaryIpAddresses -> NetworkSettings { networkSettingsSecondaryIpAddresses, ..} ) <$> f networkSettingsSecondaryIpAddresses
+{-# INLINE networkSettingsSecondaryIpAddressesL #-}
+
+-- | 'networkSettingsSecondaryIPv6Addresses' Lens
+networkSettingsSecondaryIPv6AddressesL :: Lens_' NetworkSettings (Maybe [Address])
+networkSettingsSecondaryIPv6AddressesL f NetworkSettings{..} = (\networkSettingsSecondaryIPv6Addresses -> NetworkSettings { networkSettingsSecondaryIPv6Addresses, ..} ) <$> f networkSettingsSecondaryIPv6Addresses
+{-# INLINE networkSettingsSecondaryIPv6AddressesL #-}
+
+-- | 'networkSettingsEndpointId' Lens
+networkSettingsEndpointIdL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsEndpointIdL f NetworkSettings{..} = (\networkSettingsEndpointId -> NetworkSettings { networkSettingsEndpointId, ..} ) <$> f networkSettingsEndpointId
+{-# INLINE networkSettingsEndpointIdL #-}
+
+-- | 'networkSettingsGateway' Lens
+networkSettingsGatewayL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsGatewayL f NetworkSettings{..} = (\networkSettingsGateway -> NetworkSettings { networkSettingsGateway, ..} ) <$> f networkSettingsGateway
+{-# INLINE networkSettingsGatewayL #-}
+
+-- | 'networkSettingsGlobalIPv6Address' Lens
+networkSettingsGlobalIPv6AddressL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsGlobalIPv6AddressL f NetworkSettings{..} = (\networkSettingsGlobalIPv6Address -> NetworkSettings { networkSettingsGlobalIPv6Address, ..} ) <$> f networkSettingsGlobalIPv6Address
+{-# INLINE networkSettingsGlobalIPv6AddressL #-}
+
+-- | 'networkSettingsGlobalIPv6PrefixLen' Lens
+networkSettingsGlobalIPv6PrefixLenL :: Lens_' NetworkSettings (Maybe Int)
+networkSettingsGlobalIPv6PrefixLenL f NetworkSettings{..} = (\networkSettingsGlobalIPv6PrefixLen -> NetworkSettings { networkSettingsGlobalIPv6PrefixLen, ..} ) <$> f networkSettingsGlobalIPv6PrefixLen
+{-# INLINE networkSettingsGlobalIPv6PrefixLenL #-}
+
+-- | 'networkSettingsIpAddress' Lens
+networkSettingsIpAddressL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsIpAddressL f NetworkSettings{..} = (\networkSettingsIpAddress -> NetworkSettings { networkSettingsIpAddress, ..} ) <$> f networkSettingsIpAddress
+{-# INLINE networkSettingsIpAddressL #-}
+
+-- | 'networkSettingsIpPrefixLen' Lens
+networkSettingsIpPrefixLenL :: Lens_' NetworkSettings (Maybe Int)
+networkSettingsIpPrefixLenL f NetworkSettings{..} = (\networkSettingsIpPrefixLen -> NetworkSettings { networkSettingsIpPrefixLen, ..} ) <$> f networkSettingsIpPrefixLen
+{-# INLINE networkSettingsIpPrefixLenL #-}
+
+-- | 'networkSettingsIPv6Gateway' Lens
+networkSettingsIPv6GatewayL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsIPv6GatewayL f NetworkSettings{..} = (\networkSettingsIPv6Gateway -> NetworkSettings { networkSettingsIPv6Gateway, ..} ) <$> f networkSettingsIPv6Gateway
+{-# INLINE networkSettingsIPv6GatewayL #-}
+
+-- | 'networkSettingsMacAddress' Lens
+networkSettingsMacAddressL :: Lens_' NetworkSettings (Maybe Text)
+networkSettingsMacAddressL f NetworkSettings{..} = (\networkSettingsMacAddress -> NetworkSettings { networkSettingsMacAddress, ..} ) <$> f networkSettingsMacAddress
+{-# INLINE networkSettingsMacAddressL #-}
+
+-- | 'networkSettingsNetworks' Lens
+networkSettingsNetworksL :: Lens_' NetworkSettings (Maybe (Map.Map String EndpointSettings))
+networkSettingsNetworksL f NetworkSettings{..} = (\networkSettingsNetworks -> NetworkSettings { networkSettingsNetworks, ..} ) <$> f networkSettingsNetworks
+{-# INLINE networkSettingsNetworksL #-}
 
 
 
@@ -2919,6 +2568,16 @@ nodeDescriptionL :: Lens_' Node (Maybe NodeDescription)
 nodeDescriptionL f Node{..} = (\nodeDescription -> Node { nodeDescription, ..} ) <$> f nodeDescription
 {-# INLINE nodeDescriptionL #-}
 
+-- | 'nodeStatus' Lens
+nodeStatusL :: Lens_' Node (Maybe NodeStatus)
+nodeStatusL f Node{..} = (\nodeStatus -> Node { nodeStatus, ..} ) <$> f nodeStatus
+{-# INLINE nodeStatusL #-}
+
+-- | 'nodeManagerStatus' Lens
+nodeManagerStatusL :: Lens_' Node (Maybe ManagerStatus)
+nodeManagerStatusL f Node{..} = (\nodeManagerStatus -> Node { nodeManagerStatus, ..} ) <$> f nodeManagerStatus
+{-# INLINE nodeManagerStatusL #-}
+
 
 
 -- * NodeDescription
@@ -2929,85 +2588,24 @@ nodeDescriptionHostnameL f NodeDescription{..} = (\nodeDescriptionHostname -> No
 {-# INLINE nodeDescriptionHostnameL #-}
 
 -- | 'nodeDescriptionPlatform' Lens
-nodeDescriptionPlatformL :: Lens_' NodeDescription (Maybe NodeDescriptionPlatform)
+nodeDescriptionPlatformL :: Lens_' NodeDescription (Maybe Platform)
 nodeDescriptionPlatformL f NodeDescription{..} = (\nodeDescriptionPlatform -> NodeDescription { nodeDescriptionPlatform, ..} ) <$> f nodeDescriptionPlatform
 {-# INLINE nodeDescriptionPlatformL #-}
 
 -- | 'nodeDescriptionResources' Lens
-nodeDescriptionResourcesL :: Lens_' NodeDescription (Maybe NodeDescriptionResources)
+nodeDescriptionResourcesL :: Lens_' NodeDescription (Maybe ResourceObject)
 nodeDescriptionResourcesL f NodeDescription{..} = (\nodeDescriptionResources -> NodeDescription { nodeDescriptionResources, ..} ) <$> f nodeDescriptionResources
 {-# INLINE nodeDescriptionResourcesL #-}
 
 -- | 'nodeDescriptionEngine' Lens
-nodeDescriptionEngineL :: Lens_' NodeDescription (Maybe NodeDescriptionEngine)
+nodeDescriptionEngineL :: Lens_' NodeDescription (Maybe EngineDescription)
 nodeDescriptionEngineL f NodeDescription{..} = (\nodeDescriptionEngine -> NodeDescription { nodeDescriptionEngine, ..} ) <$> f nodeDescriptionEngine
 {-# INLINE nodeDescriptionEngineL #-}
 
 -- | 'nodeDescriptionTlsInfo' Lens
-nodeDescriptionTlsInfoL :: Lens_' NodeDescription (Maybe SwarmSpec)
+nodeDescriptionTlsInfoL :: Lens_' NodeDescription (Maybe TLSInfo)
 nodeDescriptionTlsInfoL f NodeDescription{..} = (\nodeDescriptionTlsInfo -> NodeDescription { nodeDescriptionTlsInfo, ..} ) <$> f nodeDescriptionTlsInfo
 {-# INLINE nodeDescriptionTlsInfoL #-}
-
-
-
--- * NodeDescriptionEngine
-
--- | 'nodeDescriptionEngineEngineVersion' Lens
-nodeDescriptionEngineEngineVersionL :: Lens_' NodeDescriptionEngine (Maybe Text)
-nodeDescriptionEngineEngineVersionL f NodeDescriptionEngine{..} = (\nodeDescriptionEngineEngineVersion -> NodeDescriptionEngine { nodeDescriptionEngineEngineVersion, ..} ) <$> f nodeDescriptionEngineEngineVersion
-{-# INLINE nodeDescriptionEngineEngineVersionL #-}
-
--- | 'nodeDescriptionEngineLabels' Lens
-nodeDescriptionEngineLabelsL :: Lens_' NodeDescriptionEngine (Maybe (Map.Map String Text))
-nodeDescriptionEngineLabelsL f NodeDescriptionEngine{..} = (\nodeDescriptionEngineLabels -> NodeDescriptionEngine { nodeDescriptionEngineLabels, ..} ) <$> f nodeDescriptionEngineLabels
-{-# INLINE nodeDescriptionEngineLabelsL #-}
-
--- | 'nodeDescriptionEnginePlugins' Lens
-nodeDescriptionEnginePluginsL :: Lens_' NodeDescriptionEngine (Maybe [NodeDescriptionEnginePlugins])
-nodeDescriptionEnginePluginsL f NodeDescriptionEngine{..} = (\nodeDescriptionEnginePlugins -> NodeDescriptionEngine { nodeDescriptionEnginePlugins, ..} ) <$> f nodeDescriptionEnginePlugins
-{-# INLINE nodeDescriptionEnginePluginsL #-}
-
-
-
--- * NodeDescriptionEnginePlugins
-
--- | 'nodeDescriptionEnginePluginsType' Lens
-nodeDescriptionEnginePluginsTypeL :: Lens_' NodeDescriptionEnginePlugins (Maybe Text)
-nodeDescriptionEnginePluginsTypeL f NodeDescriptionEnginePlugins{..} = (\nodeDescriptionEnginePluginsType -> NodeDescriptionEnginePlugins { nodeDescriptionEnginePluginsType, ..} ) <$> f nodeDescriptionEnginePluginsType
-{-# INLINE nodeDescriptionEnginePluginsTypeL #-}
-
--- | 'nodeDescriptionEnginePluginsName' Lens
-nodeDescriptionEnginePluginsNameL :: Lens_' NodeDescriptionEnginePlugins (Maybe Text)
-nodeDescriptionEnginePluginsNameL f NodeDescriptionEnginePlugins{..} = (\nodeDescriptionEnginePluginsName -> NodeDescriptionEnginePlugins { nodeDescriptionEnginePluginsName, ..} ) <$> f nodeDescriptionEnginePluginsName
-{-# INLINE nodeDescriptionEnginePluginsNameL #-}
-
-
-
--- * NodeDescriptionPlatform
-
--- | 'nodeDescriptionPlatformArchitecture' Lens
-nodeDescriptionPlatformArchitectureL :: Lens_' NodeDescriptionPlatform (Maybe Text)
-nodeDescriptionPlatformArchitectureL f NodeDescriptionPlatform{..} = (\nodeDescriptionPlatformArchitecture -> NodeDescriptionPlatform { nodeDescriptionPlatformArchitecture, ..} ) <$> f nodeDescriptionPlatformArchitecture
-{-# INLINE nodeDescriptionPlatformArchitectureL #-}
-
--- | 'nodeDescriptionPlatformOs' Lens
-nodeDescriptionPlatformOsL :: Lens_' NodeDescriptionPlatform (Maybe Text)
-nodeDescriptionPlatformOsL f NodeDescriptionPlatform{..} = (\nodeDescriptionPlatformOs -> NodeDescriptionPlatform { nodeDescriptionPlatformOs, ..} ) <$> f nodeDescriptionPlatformOs
-{-# INLINE nodeDescriptionPlatformOsL #-}
-
-
-
--- * NodeDescriptionResources
-
--- | 'nodeDescriptionResourcesNanoCpUs' Lens
-nodeDescriptionResourcesNanoCpUsL :: Lens_' NodeDescriptionResources (Maybe Integer)
-nodeDescriptionResourcesNanoCpUsL f NodeDescriptionResources{..} = (\nodeDescriptionResourcesNanoCpUs -> NodeDescriptionResources { nodeDescriptionResourcesNanoCpUs, ..} ) <$> f nodeDescriptionResourcesNanoCpUs
-{-# INLINE nodeDescriptionResourcesNanoCpUsL #-}
-
--- | 'nodeDescriptionResourcesMemoryBytes' Lens
-nodeDescriptionResourcesMemoryBytesL :: Lens_' NodeDescriptionResources (Maybe Integer)
-nodeDescriptionResourcesMemoryBytesL f NodeDescriptionResources{..} = (\nodeDescriptionResourcesMemoryBytes -> NodeDescriptionResources { nodeDescriptionResourcesMemoryBytes, ..} ) <$> f nodeDescriptionResourcesMemoryBytes
-{-# INLINE nodeDescriptionResourcesMemoryBytesL #-}
 
 
 
@@ -3035,12 +2633,63 @@ nodeSpecAvailabilityL f NodeSpec{..} = (\nodeSpecAvailability -> NodeSpec { node
 
 
 
+-- * NodeState
+
+
+
+-- * NodeStatus
+
+-- | 'nodeStatusState' Lens
+nodeStatusStateL :: Lens_' NodeStatus (Maybe NodeState)
+nodeStatusStateL f NodeStatus{..} = (\nodeStatusState -> NodeStatus { nodeStatusState, ..} ) <$> f nodeStatusState
+{-# INLINE nodeStatusStateL #-}
+
+-- | 'nodeStatusMessage' Lens
+nodeStatusMessageL :: Lens_' NodeStatus (Maybe Text)
+nodeStatusMessageL f NodeStatus{..} = (\nodeStatusMessage -> NodeStatus { nodeStatusMessage, ..} ) <$> f nodeStatusMessage
+{-# INLINE nodeStatusMessageL #-}
+
+-- | 'nodeStatusAddr' Lens
+nodeStatusAddrL :: Lens_' NodeStatus (Maybe Text)
+nodeStatusAddrL f NodeStatus{..} = (\nodeStatusAddr -> NodeStatus { nodeStatusAddr, ..} ) <$> f nodeStatusAddr
+{-# INLINE nodeStatusAddrL #-}
+
+
+
 -- * ObjectVersion
 
 -- | 'objectVersionIndex' Lens
-objectVersionIndexL :: Lens_' ObjectVersion (Maybe Integer)
+objectVersionIndexL :: Lens_' ObjectVersion (Maybe Int)
 objectVersionIndexL f ObjectVersion{..} = (\objectVersionIndex -> ObjectVersion { objectVersionIndex, ..} ) <$> f objectVersionIndex
 {-# INLINE objectVersionIndexL #-}
+
+
+
+-- * PeerNode
+
+-- | 'peerNodeNodeId' Lens
+peerNodeNodeIdL :: Lens_' PeerNode (Maybe Text)
+peerNodeNodeIdL f PeerNode{..} = (\peerNodeNodeId -> PeerNode { peerNodeNodeId, ..} ) <$> f peerNodeNodeId
+{-# INLINE peerNodeNodeIdL #-}
+
+-- | 'peerNodeAddr' Lens
+peerNodeAddrL :: Lens_' PeerNode (Maybe Text)
+peerNodeAddrL f PeerNode{..} = (\peerNodeAddr -> PeerNode { peerNodeAddr, ..} ) <$> f peerNodeAddr
+{-# INLINE peerNodeAddrL #-}
+
+
+
+-- * Platform
+
+-- | 'platformArchitecture' Lens
+platformArchitectureL :: Lens_' Platform (Maybe Text)
+platformArchitectureL f Platform{..} = (\platformArchitecture -> Platform { platformArchitecture, ..} ) <$> f platformArchitecture
+{-# INLINE platformArchitectureL #-}
+
+-- | 'platformOs' Lens
+platformOsL :: Lens_' Platform (Maybe Text)
+platformOsL f Platform{..} = (\platformOs -> Platform { platformOs, ..} ) <$> f platformOs
+{-# INLINE platformOsL #-}
 
 
 
@@ -3362,6 +3011,25 @@ pluginMountOptionsL f PluginMount{..} = (\pluginMountOptions -> PluginMount { pl
 
 
 
+-- * PluginPrivilegeItem
+
+-- | 'pluginPrivilegeItemName' Lens
+pluginPrivilegeItemNameL :: Lens_' PluginPrivilegeItem (Maybe Text)
+pluginPrivilegeItemNameL f PluginPrivilegeItem{..} = (\pluginPrivilegeItemName -> PluginPrivilegeItem { pluginPrivilegeItemName, ..} ) <$> f pluginPrivilegeItemName
+{-# INLINE pluginPrivilegeItemNameL #-}
+
+-- | 'pluginPrivilegeItemDescription' Lens
+pluginPrivilegeItemDescriptionL :: Lens_' PluginPrivilegeItem (Maybe Text)
+pluginPrivilegeItemDescriptionL f PluginPrivilegeItem{..} = (\pluginPrivilegeItemDescription -> PluginPrivilegeItem { pluginPrivilegeItemDescription, ..} ) <$> f pluginPrivilegeItemDescription
+{-# INLINE pluginPrivilegeItemDescriptionL #-}
+
+-- | 'pluginPrivilegeItemValue' Lens
+pluginPrivilegeItemValueL :: Lens_' PluginPrivilegeItem (Maybe [Text])
+pluginPrivilegeItemValueL f PluginPrivilegeItem{..} = (\pluginPrivilegeItemValue -> PluginPrivilegeItem { pluginPrivilegeItemValue, ..} ) <$> f pluginPrivilegeItemValue
+{-# INLINE pluginPrivilegeItemValueL #-}
+
+
+
 -- * PluginSettings
 
 -- | 'pluginSettingsMounts' Lens
@@ -3386,6 +3054,30 @@ pluginSettingsDevicesL f PluginSettings{..} = (\pluginSettingsDevices -> PluginS
 
 
 
+-- * PluginsInfo
+
+-- | 'pluginsInfoVolume' Lens
+pluginsInfoVolumeL :: Lens_' PluginsInfo (Maybe [Text])
+pluginsInfoVolumeL f PluginsInfo{..} = (\pluginsInfoVolume -> PluginsInfo { pluginsInfoVolume, ..} ) <$> f pluginsInfoVolume
+{-# INLINE pluginsInfoVolumeL #-}
+
+-- | 'pluginsInfoNetwork' Lens
+pluginsInfoNetworkL :: Lens_' PluginsInfo (Maybe [Text])
+pluginsInfoNetworkL f PluginsInfo{..} = (\pluginsInfoNetwork -> PluginsInfo { pluginsInfoNetwork, ..} ) <$> f pluginsInfoNetwork
+{-# INLINE pluginsInfoNetworkL #-}
+
+-- | 'pluginsInfoAuthorization' Lens
+pluginsInfoAuthorizationL :: Lens_' PluginsInfo (Maybe [Text])
+pluginsInfoAuthorizationL f PluginsInfo{..} = (\pluginsInfoAuthorization -> PluginsInfo { pluginsInfoAuthorization, ..} ) <$> f pluginsInfoAuthorization
+{-# INLINE pluginsInfoAuthorizationL #-}
+
+-- | 'pluginsInfoLog' Lens
+pluginsInfoLogL :: Lens_' PluginsInfo (Maybe [Text])
+pluginsInfoLogL f PluginsInfo{..} = (\pluginsInfoLog -> PluginsInfo { pluginsInfoLog, ..} ) <$> f pluginsInfoLog
+{-# INLINE pluginsInfoLogL #-}
+
+
+
 -- * Port
 
 -- | 'portIp' Lens
@@ -3407,6 +3099,20 @@ portPublicPortL f Port{..} = (\portPublicPort -> Port { portPublicPort, ..} ) <$
 portTypeL :: Lens_' Port (E'Type)
 portTypeL f Port{..} = (\portType -> Port { portType, ..} ) <$> f portType
 {-# INLINE portTypeL #-}
+
+
+
+-- * PortBinding
+
+-- | 'portBindingHostIp' Lens
+portBindingHostIpL :: Lens_' PortBinding (Maybe Text)
+portBindingHostIpL f PortBinding{..} = (\portBindingHostIp -> PortBinding { portBindingHostIp, ..} ) <$> f portBindingHostIp
+{-# INLINE portBindingHostIpL #-}
+
+-- | 'portBindingHostPort' Lens
+portBindingHostPortL :: Lens_' PortBinding (Maybe Text)
+portBindingHostPortL f PortBinding{..} = (\portBindingHostPort -> PortBinding { portBindingHostPort, ..} ) <$> f portBindingHostPort
+{-# INLINE portBindingHostPortL #-}
 
 
 
@@ -3441,15 +3147,15 @@ processConfigArgumentsL f ProcessConfig{..} = (\processConfigArguments -> Proces
 
 -- * ProgressDetail
 
--- | 'progressDetailCode' Lens
-progressDetailCodeL :: Lens_' ProgressDetail (Maybe Int)
-progressDetailCodeL f ProgressDetail{..} = (\progressDetailCode -> ProgressDetail { progressDetailCode, ..} ) <$> f progressDetailCode
-{-# INLINE progressDetailCodeL #-}
+-- | 'progressDetailCurrent' Lens
+progressDetailCurrentL :: Lens_' ProgressDetail (Maybe Int)
+progressDetailCurrentL f ProgressDetail{..} = (\progressDetailCurrent -> ProgressDetail { progressDetailCurrent, ..} ) <$> f progressDetailCurrent
+{-# INLINE progressDetailCurrentL #-}
 
--- | 'progressDetailMessage' Lens
-progressDetailMessageL :: Lens_' ProgressDetail (Maybe Int)
-progressDetailMessageL f ProgressDetail{..} = (\progressDetailMessage -> ProgressDetail { progressDetailMessage, ..} ) <$> f progressDetailMessage
-{-# INLINE progressDetailMessageL #-}
+-- | 'progressDetailTotal' Lens
+progressDetailTotalL :: Lens_' ProgressDetail (Maybe Int)
+progressDetailTotalL f ProgressDetail{..} = (\progressDetailTotal -> ProgressDetail { progressDetailTotal, ..} ) <$> f progressDetailTotal
+{-# INLINE progressDetailTotalL #-}
 
 
 
@@ -3477,6 +3183,58 @@ pushImageInfoProgressDetailL f PushImageInfo{..} = (\pushImageInfoProgressDetail
 
 
 
+-- * Reachability
+
+
+
+-- * RegistryServiceConfig
+
+-- | 'registryServiceConfigAllowNondistributableArtifactsCidRs' Lens
+registryServiceConfigAllowNondistributableArtifactsCidRsL :: Lens_' RegistryServiceConfig (Maybe [Text])
+registryServiceConfigAllowNondistributableArtifactsCidRsL f RegistryServiceConfig{..} = (\registryServiceConfigAllowNondistributableArtifactsCidRs -> RegistryServiceConfig { registryServiceConfigAllowNondistributableArtifactsCidRs, ..} ) <$> f registryServiceConfigAllowNondistributableArtifactsCidRs
+{-# INLINE registryServiceConfigAllowNondistributableArtifactsCidRsL #-}
+
+-- | 'registryServiceConfigAllowNondistributableArtifactsHostnames' Lens
+registryServiceConfigAllowNondistributableArtifactsHostnamesL :: Lens_' RegistryServiceConfig (Maybe [Text])
+registryServiceConfigAllowNondistributableArtifactsHostnamesL f RegistryServiceConfig{..} = (\registryServiceConfigAllowNondistributableArtifactsHostnames -> RegistryServiceConfig { registryServiceConfigAllowNondistributableArtifactsHostnames, ..} ) <$> f registryServiceConfigAllowNondistributableArtifactsHostnames
+{-# INLINE registryServiceConfigAllowNondistributableArtifactsHostnamesL #-}
+
+-- | 'registryServiceConfigInsecureRegistryCidRs' Lens
+registryServiceConfigInsecureRegistryCidRsL :: Lens_' RegistryServiceConfig (Maybe [Text])
+registryServiceConfigInsecureRegistryCidRsL f RegistryServiceConfig{..} = (\registryServiceConfigInsecureRegistryCidRs -> RegistryServiceConfig { registryServiceConfigInsecureRegistryCidRs, ..} ) <$> f registryServiceConfigInsecureRegistryCidRs
+{-# INLINE registryServiceConfigInsecureRegistryCidRsL #-}
+
+-- | 'registryServiceConfigIndexConfigs' Lens
+registryServiceConfigIndexConfigsL :: Lens_' RegistryServiceConfig (Maybe (Map.Map String IndexInfo))
+registryServiceConfigIndexConfigsL f RegistryServiceConfig{..} = (\registryServiceConfigIndexConfigs -> RegistryServiceConfig { registryServiceConfigIndexConfigs, ..} ) <$> f registryServiceConfigIndexConfigs
+{-# INLINE registryServiceConfigIndexConfigsL #-}
+
+-- | 'registryServiceConfigMirrors' Lens
+registryServiceConfigMirrorsL :: Lens_' RegistryServiceConfig (Maybe [Text])
+registryServiceConfigMirrorsL f RegistryServiceConfig{..} = (\registryServiceConfigMirrors -> RegistryServiceConfig { registryServiceConfigMirrors, ..} ) <$> f registryServiceConfigMirrors
+{-# INLINE registryServiceConfigMirrorsL #-}
+
+
+
+-- * ResourceObject
+
+-- | 'resourceObjectNanoCpUs' Lens
+resourceObjectNanoCpUsL :: Lens_' ResourceObject (Maybe Integer)
+resourceObjectNanoCpUsL f ResourceObject{..} = (\resourceObjectNanoCpUs -> ResourceObject { resourceObjectNanoCpUs, ..} ) <$> f resourceObjectNanoCpUs
+{-# INLINE resourceObjectNanoCpUsL #-}
+
+-- | 'resourceObjectMemoryBytes' Lens
+resourceObjectMemoryBytesL :: Lens_' ResourceObject (Maybe Integer)
+resourceObjectMemoryBytesL f ResourceObject{..} = (\resourceObjectMemoryBytes -> ResourceObject { resourceObjectMemoryBytes, ..} ) <$> f resourceObjectMemoryBytes
+{-# INLINE resourceObjectMemoryBytesL #-}
+
+-- | 'resourceObjectGenericResources' Lens
+resourceObjectGenericResourcesL :: Lens_' ResourceObject (Maybe [A.Value])
+resourceObjectGenericResourcesL f ResourceObject{..} = (\resourceObjectGenericResources -> ResourceObject { resourceObjectGenericResources, ..} ) <$> f resourceObjectGenericResources
+{-# INLINE resourceObjectGenericResourcesL #-}
+
+
+
 -- * Resources
 
 -- | 'resourcesCpuShares' Lens
@@ -3485,7 +3243,7 @@ resourcesCpuSharesL f Resources{..} = (\resourcesCpuShares -> Resources { resour
 {-# INLINE resourcesCpuSharesL #-}
 
 -- | 'resourcesMemory' Lens
-resourcesMemoryL :: Lens_' Resources (Maybe Int)
+resourcesMemoryL :: Lens_' Resources (Maybe Integer)
 resourcesMemoryL f Resources{..} = (\resourcesMemory -> Resources { resourcesMemory, ..} ) <$> f resourcesMemory
 {-# INLINE resourcesMemoryL #-}
 
@@ -3678,6 +3436,20 @@ restartPolicyMaximumRetryCountL f RestartPolicy{..} = (\restartPolicyMaximumRetr
 
 
 
+-- * Runtime
+
+-- | 'runtimePath' Lens
+runtimePathL :: Lens_' Runtime (Maybe Text)
+runtimePathL f Runtime{..} = (\runtimePath -> Runtime { runtimePath, ..} ) <$> f runtimePath
+{-# INLINE runtimePathL #-}
+
+-- | 'runtimeRuntimeArgs' Lens
+runtimeRuntimeArgsL :: Lens_' Runtime (Maybe [Text])
+runtimeRuntimeArgsL f Runtime{..} = (\runtimeRuntimeArgs -> Runtime { runtimeRuntimeArgs, ..} ) <$> f runtimeRuntimeArgs
+{-# INLINE runtimeRuntimeArgsL #-}
+
+
+
 -- * Secret
 
 -- | 'secretId' Lens
@@ -3720,9 +3492,14 @@ secretSpecLabelsL f SecretSpec{..} = (\secretSpecLabels -> SecretSpec { secretSp
 {-# INLINE secretSpecLabelsL #-}
 
 -- | 'secretSpecData' Lens
-secretSpecDataL :: Lens_' SecretSpec (Maybe [Text])
+secretSpecDataL :: Lens_' SecretSpec (Maybe Text)
 secretSpecDataL f SecretSpec{..} = (\secretSpecData -> SecretSpec { secretSpecData, ..} ) <$> f secretSpecData
 {-# INLINE secretSpecDataL #-}
+
+-- | 'secretSpecDriver' Lens
+secretSpecDriverL :: Lens_' SecretSpec (Maybe Driver)
+secretSpecDriverL f SecretSpec{..} = (\secretSpecDriver -> SecretSpec { secretSpecDriver, ..} ) <$> f secretSpecDriver
+{-# INLINE secretSpecDriverL #-}
 
 
 
@@ -3762,6 +3539,20 @@ serviceEndpointL f Service{..} = (\serviceEndpoint -> Service { serviceEndpoint,
 serviceUpdateStatusL :: Lens_' Service (Maybe ServiceUpdateStatus)
 serviceUpdateStatusL f Service{..} = (\serviceUpdateStatus -> Service { serviceUpdateStatus, ..} ) <$> f serviceUpdateStatus
 {-# INLINE serviceUpdateStatusL #-}
+
+
+
+-- * ServiceCreateResponse
+
+-- | 'serviceCreateResponseId' Lens
+serviceCreateResponseIdL :: Lens_' ServiceCreateResponse (Maybe Text)
+serviceCreateResponseIdL f ServiceCreateResponse{..} = (\serviceCreateResponseId -> ServiceCreateResponse { serviceCreateResponseId, ..} ) <$> f serviceCreateResponseId
+{-# INLINE serviceCreateResponseIdL #-}
+
+-- | 'serviceCreateResponseWarning' Lens
+serviceCreateResponseWarningL :: Lens_' ServiceCreateResponse (Maybe Text)
+serviceCreateResponseWarningL f ServiceCreateResponse{..} = (\serviceCreateResponseWarning -> ServiceCreateResponse { serviceCreateResponseWarning, ..} ) <$> f serviceCreateResponseWarning
+{-# INLINE serviceCreateResponseWarningL #-}
 
 
 
@@ -3966,6 +3757,108 @@ serviceUpdateStatusMessageL f ServiceUpdateStatus{..} = (\serviceUpdateStatusMes
 
 
 
+-- * Swarm
+
+-- | 'swarmId' Lens
+swarmIdL :: Lens_' Swarm (Maybe Text)
+swarmIdL f Swarm{..} = (\swarmId -> Swarm { swarmId, ..} ) <$> f swarmId
+{-# INLINE swarmIdL #-}
+
+-- | 'swarmVersion' Lens
+swarmVersionL :: Lens_' Swarm (Maybe ObjectVersion)
+swarmVersionL f Swarm{..} = (\swarmVersion -> Swarm { swarmVersion, ..} ) <$> f swarmVersion
+{-# INLINE swarmVersionL #-}
+
+-- | 'swarmCreatedAt' Lens
+swarmCreatedAtL :: Lens_' Swarm (Maybe Text)
+swarmCreatedAtL f Swarm{..} = (\swarmCreatedAt -> Swarm { swarmCreatedAt, ..} ) <$> f swarmCreatedAt
+{-# INLINE swarmCreatedAtL #-}
+
+-- | 'swarmUpdatedAt' Lens
+swarmUpdatedAtL :: Lens_' Swarm (Maybe Text)
+swarmUpdatedAtL f Swarm{..} = (\swarmUpdatedAt -> Swarm { swarmUpdatedAt, ..} ) <$> f swarmUpdatedAt
+{-# INLINE swarmUpdatedAtL #-}
+
+-- | 'swarmSpec' Lens
+swarmSpecL :: Lens_' Swarm (Maybe SwarmSpec)
+swarmSpecL f Swarm{..} = (\swarmSpec -> Swarm { swarmSpec, ..} ) <$> f swarmSpec
+{-# INLINE swarmSpecL #-}
+
+-- | 'swarmTlsInfo' Lens
+swarmTlsInfoL :: Lens_' Swarm (Maybe TLSInfo)
+swarmTlsInfoL f Swarm{..} = (\swarmTlsInfo -> Swarm { swarmTlsInfo, ..} ) <$> f swarmTlsInfo
+{-# INLINE swarmTlsInfoL #-}
+
+-- | 'swarmRootRotationInProgress' Lens
+swarmRootRotationInProgressL :: Lens_' Swarm (Maybe Bool)
+swarmRootRotationInProgressL f Swarm{..} = (\swarmRootRotationInProgress -> Swarm { swarmRootRotationInProgress, ..} ) <$> f swarmRootRotationInProgress
+{-# INLINE swarmRootRotationInProgressL #-}
+
+-- | 'swarmJoinTokens' Lens
+swarmJoinTokensL :: Lens_' Swarm (Maybe JoinTokens)
+swarmJoinTokensL f Swarm{..} = (\swarmJoinTokens -> Swarm { swarmJoinTokens, ..} ) <$> f swarmJoinTokens
+{-# INLINE swarmJoinTokensL #-}
+
+
+
+-- * SwarmAllOf
+
+-- | 'swarmAllOfJoinTokens' Lens
+swarmAllOfJoinTokensL :: Lens_' SwarmAllOf (Maybe JoinTokens)
+swarmAllOfJoinTokensL f SwarmAllOf{..} = (\swarmAllOfJoinTokens -> SwarmAllOf { swarmAllOfJoinTokens, ..} ) <$> f swarmAllOfJoinTokens
+{-# INLINE swarmAllOfJoinTokensL #-}
+
+
+
+-- * SwarmInfo
+
+-- | 'swarmInfoNodeId' Lens
+swarmInfoNodeIdL :: Lens_' SwarmInfo (Maybe Text)
+swarmInfoNodeIdL f SwarmInfo{..} = (\swarmInfoNodeId -> SwarmInfo { swarmInfoNodeId, ..} ) <$> f swarmInfoNodeId
+{-# INLINE swarmInfoNodeIdL #-}
+
+-- | 'swarmInfoNodeAddr' Lens
+swarmInfoNodeAddrL :: Lens_' SwarmInfo (Maybe Text)
+swarmInfoNodeAddrL f SwarmInfo{..} = (\swarmInfoNodeAddr -> SwarmInfo { swarmInfoNodeAddr, ..} ) <$> f swarmInfoNodeAddr
+{-# INLINE swarmInfoNodeAddrL #-}
+
+-- | 'swarmInfoLocalNodeState' Lens
+swarmInfoLocalNodeStateL :: Lens_' SwarmInfo (Maybe LocalNodeState)
+swarmInfoLocalNodeStateL f SwarmInfo{..} = (\swarmInfoLocalNodeState -> SwarmInfo { swarmInfoLocalNodeState, ..} ) <$> f swarmInfoLocalNodeState
+{-# INLINE swarmInfoLocalNodeStateL #-}
+
+-- | 'swarmInfoControlAvailable' Lens
+swarmInfoControlAvailableL :: Lens_' SwarmInfo (Maybe Bool)
+swarmInfoControlAvailableL f SwarmInfo{..} = (\swarmInfoControlAvailable -> SwarmInfo { swarmInfoControlAvailable, ..} ) <$> f swarmInfoControlAvailable
+{-# INLINE swarmInfoControlAvailableL #-}
+
+-- | 'swarmInfoError' Lens
+swarmInfoErrorL :: Lens_' SwarmInfo (Maybe Text)
+swarmInfoErrorL f SwarmInfo{..} = (\swarmInfoError -> SwarmInfo { swarmInfoError, ..} ) <$> f swarmInfoError
+{-# INLINE swarmInfoErrorL #-}
+
+-- | 'swarmInfoRemoteManagers' Lens
+swarmInfoRemoteManagersL :: Lens_' SwarmInfo (Maybe [PeerNode])
+swarmInfoRemoteManagersL f SwarmInfo{..} = (\swarmInfoRemoteManagers -> SwarmInfo { swarmInfoRemoteManagers, ..} ) <$> f swarmInfoRemoteManagers
+{-# INLINE swarmInfoRemoteManagersL #-}
+
+-- | 'swarmInfoNodes' Lens
+swarmInfoNodesL :: Lens_' SwarmInfo (Maybe Int)
+swarmInfoNodesL f SwarmInfo{..} = (\swarmInfoNodes -> SwarmInfo { swarmInfoNodes, ..} ) <$> f swarmInfoNodes
+{-# INLINE swarmInfoNodesL #-}
+
+-- | 'swarmInfoManagers' Lens
+swarmInfoManagersL :: Lens_' SwarmInfo (Maybe Int)
+swarmInfoManagersL f SwarmInfo{..} = (\swarmInfoManagers -> SwarmInfo { swarmInfoManagers, ..} ) <$> f swarmInfoManagers
+{-# INLINE swarmInfoManagersL #-}
+
+-- | 'swarmInfoCluster' Lens
+swarmInfoClusterL :: Lens_' SwarmInfo (Maybe ClusterInfo)
+swarmInfoClusterL f SwarmInfo{..} = (\swarmInfoCluster -> SwarmInfo { swarmInfoCluster, ..} ) <$> f swarmInfoCluster
+{-# INLINE swarmInfoClusterL #-}
+
+
+
 -- * SwarmSpec
 
 -- | 'swarmSpecName' Lens
@@ -4033,7 +3926,7 @@ swarmSpecCAConfigSigningCaKeyL f SwarmSpecCAConfig{..} = (\swarmSpecCAConfigSign
 {-# INLINE swarmSpecCAConfigSigningCaKeyL #-}
 
 -- | 'swarmSpecCAConfigForceRotate' Lens
-swarmSpecCAConfigForceRotateL :: Lens_' SwarmSpecCAConfig (Maybe A.Value)
+swarmSpecCAConfigForceRotateL :: Lens_' SwarmSpecCAConfig (Maybe Int)
 swarmSpecCAConfigForceRotateL f SwarmSpecCAConfig{..} = (\swarmSpecCAConfigForceRotate -> SwarmSpecCAConfig { swarmSpecCAConfigForceRotate, ..} ) <$> f swarmSpecCAConfigForceRotate
 {-# INLINE swarmSpecCAConfigForceRotateL #-}
 
@@ -4093,17 +3986,17 @@ swarmSpecOrchestrationTaskHistoryRetentionLimitL f SwarmSpecOrchestration{..} = 
 -- * SwarmSpecRaft
 
 -- | 'swarmSpecRaftSnapshotInterval' Lens
-swarmSpecRaftSnapshotIntervalL :: Lens_' SwarmSpecRaft (Maybe Integer)
+swarmSpecRaftSnapshotIntervalL :: Lens_' SwarmSpecRaft (Maybe Int)
 swarmSpecRaftSnapshotIntervalL f SwarmSpecRaft{..} = (\swarmSpecRaftSnapshotInterval -> SwarmSpecRaft { swarmSpecRaftSnapshotInterval, ..} ) <$> f swarmSpecRaftSnapshotInterval
 {-# INLINE swarmSpecRaftSnapshotIntervalL #-}
 
 -- | 'swarmSpecRaftKeepOldSnapshots' Lens
-swarmSpecRaftKeepOldSnapshotsL :: Lens_' SwarmSpecRaft (Maybe Integer)
+swarmSpecRaftKeepOldSnapshotsL :: Lens_' SwarmSpecRaft (Maybe Int)
 swarmSpecRaftKeepOldSnapshotsL f SwarmSpecRaft{..} = (\swarmSpecRaftKeepOldSnapshots -> SwarmSpecRaft { swarmSpecRaftKeepOldSnapshots, ..} ) <$> f swarmSpecRaftKeepOldSnapshots
 {-# INLINE swarmSpecRaftKeepOldSnapshotsL #-}
 
 -- | 'swarmSpecRaftLogEntriesForSlowFollowers' Lens
-swarmSpecRaftLogEntriesForSlowFollowersL :: Lens_' SwarmSpecRaft (Maybe Integer)
+swarmSpecRaftLogEntriesForSlowFollowersL :: Lens_' SwarmSpecRaft (Maybe Int)
 swarmSpecRaftLogEntriesForSlowFollowersL f SwarmSpecRaft{..} = (\swarmSpecRaftLogEntriesForSlowFollowers -> SwarmSpecRaft { swarmSpecRaftLogEntriesForSlowFollowers, ..} ) <$> f swarmSpecRaftLogEntriesForSlowFollowers
 {-# INLINE swarmSpecRaftLogEntriesForSlowFollowersL #-}
 
@@ -4139,6 +4032,468 @@ swarmSpecTaskDefaultsLogDriverNameL f SwarmSpecTaskDefaultsLogDriver{..} = (\swa
 swarmSpecTaskDefaultsLogDriverOptionsL :: Lens_' SwarmSpecTaskDefaultsLogDriver (Maybe (Map.Map String Text))
 swarmSpecTaskDefaultsLogDriverOptionsL f SwarmSpecTaskDefaultsLogDriver{..} = (\swarmSpecTaskDefaultsLogDriverOptions -> SwarmSpecTaskDefaultsLogDriver { swarmSpecTaskDefaultsLogDriverOptions, ..} ) <$> f swarmSpecTaskDefaultsLogDriverOptions
 {-# INLINE swarmSpecTaskDefaultsLogDriverOptionsL #-}
+
+
+
+-- * SystemAuthResponse
+
+-- | 'systemAuthResponseStatus' Lens
+systemAuthResponseStatusL :: Lens_' SystemAuthResponse (Text)
+systemAuthResponseStatusL f SystemAuthResponse{..} = (\systemAuthResponseStatus -> SystemAuthResponse { systemAuthResponseStatus, ..} ) <$> f systemAuthResponseStatus
+{-# INLINE systemAuthResponseStatusL #-}
+
+-- | 'systemAuthResponseIdentityToken' Lens
+systemAuthResponseIdentityTokenL :: Lens_' SystemAuthResponse (Maybe Text)
+systemAuthResponseIdentityTokenL f SystemAuthResponse{..} = (\systemAuthResponseIdentityToken -> SystemAuthResponse { systemAuthResponseIdentityToken, ..} ) <$> f systemAuthResponseIdentityToken
+{-# INLINE systemAuthResponseIdentityTokenL #-}
+
+
+
+-- * SystemDataUsageResponse
+
+-- | 'systemDataUsageResponseLayersSize' Lens
+systemDataUsageResponseLayersSizeL :: Lens_' SystemDataUsageResponse (Maybe Integer)
+systemDataUsageResponseLayersSizeL f SystemDataUsageResponse{..} = (\systemDataUsageResponseLayersSize -> SystemDataUsageResponse { systemDataUsageResponseLayersSize, ..} ) <$> f systemDataUsageResponseLayersSize
+{-# INLINE systemDataUsageResponseLayersSizeL #-}
+
+-- | 'systemDataUsageResponseImages' Lens
+systemDataUsageResponseImagesL :: Lens_' SystemDataUsageResponse (Maybe [ImageSummary])
+systemDataUsageResponseImagesL f SystemDataUsageResponse{..} = (\systemDataUsageResponseImages -> SystemDataUsageResponse { systemDataUsageResponseImages, ..} ) <$> f systemDataUsageResponseImages
+{-# INLINE systemDataUsageResponseImagesL #-}
+
+-- | 'systemDataUsageResponseContainers' Lens
+systemDataUsageResponseContainersL :: Lens_' SystemDataUsageResponse (Maybe [A.Array])
+systemDataUsageResponseContainersL f SystemDataUsageResponse{..} = (\systemDataUsageResponseContainers -> SystemDataUsageResponse { systemDataUsageResponseContainers, ..} ) <$> f systemDataUsageResponseContainers
+{-# INLINE systemDataUsageResponseContainersL #-}
+
+-- | 'systemDataUsageResponseVolumes' Lens
+systemDataUsageResponseVolumesL :: Lens_' SystemDataUsageResponse (Maybe [Volume])
+systemDataUsageResponseVolumesL f SystemDataUsageResponse{..} = (\systemDataUsageResponseVolumes -> SystemDataUsageResponse { systemDataUsageResponseVolumes, ..} ) <$> f systemDataUsageResponseVolumes
+{-# INLINE systemDataUsageResponseVolumesL #-}
+
+
+
+-- * SystemEventsResponse
+
+-- | 'systemEventsResponseType' Lens
+systemEventsResponseTypeL :: Lens_' SystemEventsResponse (Maybe Text)
+systemEventsResponseTypeL f SystemEventsResponse{..} = (\systemEventsResponseType -> SystemEventsResponse { systemEventsResponseType, ..} ) <$> f systemEventsResponseType
+{-# INLINE systemEventsResponseTypeL #-}
+
+-- | 'systemEventsResponseAction' Lens
+systemEventsResponseActionL :: Lens_' SystemEventsResponse (Maybe Text)
+systemEventsResponseActionL f SystemEventsResponse{..} = (\systemEventsResponseAction -> SystemEventsResponse { systemEventsResponseAction, ..} ) <$> f systemEventsResponseAction
+{-# INLINE systemEventsResponseActionL #-}
+
+-- | 'systemEventsResponseActor' Lens
+systemEventsResponseActorL :: Lens_' SystemEventsResponse (Maybe SystemEventsResponseActor)
+systemEventsResponseActorL f SystemEventsResponse{..} = (\systemEventsResponseActor -> SystemEventsResponse { systemEventsResponseActor, ..} ) <$> f systemEventsResponseActor
+{-# INLINE systemEventsResponseActorL #-}
+
+-- | 'systemEventsResponseTime' Lens
+systemEventsResponseTimeL :: Lens_' SystemEventsResponse (Maybe Int)
+systemEventsResponseTimeL f SystemEventsResponse{..} = (\systemEventsResponseTime -> SystemEventsResponse { systemEventsResponseTime, ..} ) <$> f systemEventsResponseTime
+{-# INLINE systemEventsResponseTimeL #-}
+
+-- | 'systemEventsResponseTimeNano' Lens
+systemEventsResponseTimeNanoL :: Lens_' SystemEventsResponse (Maybe Integer)
+systemEventsResponseTimeNanoL f SystemEventsResponse{..} = (\systemEventsResponseTimeNano -> SystemEventsResponse { systemEventsResponseTimeNano, ..} ) <$> f systemEventsResponseTimeNano
+{-# INLINE systemEventsResponseTimeNanoL #-}
+
+
+
+-- * SystemEventsResponseActor
+
+-- | 'systemEventsResponseActorId' Lens
+systemEventsResponseActorIdL :: Lens_' SystemEventsResponseActor (Maybe Text)
+systemEventsResponseActorIdL f SystemEventsResponseActor{..} = (\systemEventsResponseActorId -> SystemEventsResponseActor { systemEventsResponseActorId, ..} ) <$> f systemEventsResponseActorId
+{-# INLINE systemEventsResponseActorIdL #-}
+
+-- | 'systemEventsResponseActorAttributes' Lens
+systemEventsResponseActorAttributesL :: Lens_' SystemEventsResponseActor (Maybe (Map.Map String Text))
+systemEventsResponseActorAttributesL f SystemEventsResponseActor{..} = (\systemEventsResponseActorAttributes -> SystemEventsResponseActor { systemEventsResponseActorAttributes, ..} ) <$> f systemEventsResponseActorAttributes
+{-# INLINE systemEventsResponseActorAttributesL #-}
+
+
+
+-- * SystemInfo
+
+-- | 'systemInfoId' Lens
+systemInfoIdL :: Lens_' SystemInfo (Maybe Text)
+systemInfoIdL f SystemInfo{..} = (\systemInfoId -> SystemInfo { systemInfoId, ..} ) <$> f systemInfoId
+{-# INLINE systemInfoIdL #-}
+
+-- | 'systemInfoContainers' Lens
+systemInfoContainersL :: Lens_' SystemInfo (Maybe Int)
+systemInfoContainersL f SystemInfo{..} = (\systemInfoContainers -> SystemInfo { systemInfoContainers, ..} ) <$> f systemInfoContainers
+{-# INLINE systemInfoContainersL #-}
+
+-- | 'systemInfoContainersRunning' Lens
+systemInfoContainersRunningL :: Lens_' SystemInfo (Maybe Int)
+systemInfoContainersRunningL f SystemInfo{..} = (\systemInfoContainersRunning -> SystemInfo { systemInfoContainersRunning, ..} ) <$> f systemInfoContainersRunning
+{-# INLINE systemInfoContainersRunningL #-}
+
+-- | 'systemInfoContainersPaused' Lens
+systemInfoContainersPausedL :: Lens_' SystemInfo (Maybe Int)
+systemInfoContainersPausedL f SystemInfo{..} = (\systemInfoContainersPaused -> SystemInfo { systemInfoContainersPaused, ..} ) <$> f systemInfoContainersPaused
+{-# INLINE systemInfoContainersPausedL #-}
+
+-- | 'systemInfoContainersStopped' Lens
+systemInfoContainersStoppedL :: Lens_' SystemInfo (Maybe Int)
+systemInfoContainersStoppedL f SystemInfo{..} = (\systemInfoContainersStopped -> SystemInfo { systemInfoContainersStopped, ..} ) <$> f systemInfoContainersStopped
+{-# INLINE systemInfoContainersStoppedL #-}
+
+-- | 'systemInfoImages' Lens
+systemInfoImagesL :: Lens_' SystemInfo (Maybe Int)
+systemInfoImagesL f SystemInfo{..} = (\systemInfoImages -> SystemInfo { systemInfoImages, ..} ) <$> f systemInfoImages
+{-# INLINE systemInfoImagesL #-}
+
+-- | 'systemInfoDriver' Lens
+systemInfoDriverL :: Lens_' SystemInfo (Maybe Text)
+systemInfoDriverL f SystemInfo{..} = (\systemInfoDriver -> SystemInfo { systemInfoDriver, ..} ) <$> f systemInfoDriver
+{-# INLINE systemInfoDriverL #-}
+
+-- | 'systemInfoDriverStatus' Lens
+systemInfoDriverStatusL :: Lens_' SystemInfo (Maybe [[Text]])
+systemInfoDriverStatusL f SystemInfo{..} = (\systemInfoDriverStatus -> SystemInfo { systemInfoDriverStatus, ..} ) <$> f systemInfoDriverStatus
+{-# INLINE systemInfoDriverStatusL #-}
+
+-- | 'systemInfoDockerRootDir' Lens
+systemInfoDockerRootDirL :: Lens_' SystemInfo (Maybe Text)
+systemInfoDockerRootDirL f SystemInfo{..} = (\systemInfoDockerRootDir -> SystemInfo { systemInfoDockerRootDir, ..} ) <$> f systemInfoDockerRootDir
+{-# INLINE systemInfoDockerRootDirL #-}
+
+-- | 'systemInfoSystemStatus' Lens
+systemInfoSystemStatusL :: Lens_' SystemInfo (Maybe [[Text]])
+systemInfoSystemStatusL f SystemInfo{..} = (\systemInfoSystemStatus -> SystemInfo { systemInfoSystemStatus, ..} ) <$> f systemInfoSystemStatus
+{-# INLINE systemInfoSystemStatusL #-}
+
+-- | 'systemInfoPlugins' Lens
+systemInfoPluginsL :: Lens_' SystemInfo (Maybe PluginsInfo)
+systemInfoPluginsL f SystemInfo{..} = (\systemInfoPlugins -> SystemInfo { systemInfoPlugins, ..} ) <$> f systemInfoPlugins
+{-# INLINE systemInfoPluginsL #-}
+
+-- | 'systemInfoMemoryLimit' Lens
+systemInfoMemoryLimitL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoMemoryLimitL f SystemInfo{..} = (\systemInfoMemoryLimit -> SystemInfo { systemInfoMemoryLimit, ..} ) <$> f systemInfoMemoryLimit
+{-# INLINE systemInfoMemoryLimitL #-}
+
+-- | 'systemInfoSwapLimit' Lens
+systemInfoSwapLimitL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoSwapLimitL f SystemInfo{..} = (\systemInfoSwapLimit -> SystemInfo { systemInfoSwapLimit, ..} ) <$> f systemInfoSwapLimit
+{-# INLINE systemInfoSwapLimitL #-}
+
+-- | 'systemInfoKernelMemory' Lens
+systemInfoKernelMemoryL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoKernelMemoryL f SystemInfo{..} = (\systemInfoKernelMemory -> SystemInfo { systemInfoKernelMemory, ..} ) <$> f systemInfoKernelMemory
+{-# INLINE systemInfoKernelMemoryL #-}
+
+-- | 'systemInfoCpuCfsPeriod' Lens
+systemInfoCpuCfsPeriodL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoCpuCfsPeriodL f SystemInfo{..} = (\systemInfoCpuCfsPeriod -> SystemInfo { systemInfoCpuCfsPeriod, ..} ) <$> f systemInfoCpuCfsPeriod
+{-# INLINE systemInfoCpuCfsPeriodL #-}
+
+-- | 'systemInfoCpuCfsQuota' Lens
+systemInfoCpuCfsQuotaL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoCpuCfsQuotaL f SystemInfo{..} = (\systemInfoCpuCfsQuota -> SystemInfo { systemInfoCpuCfsQuota, ..} ) <$> f systemInfoCpuCfsQuota
+{-# INLINE systemInfoCpuCfsQuotaL #-}
+
+-- | 'systemInfoCpuShares' Lens
+systemInfoCpuSharesL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoCpuSharesL f SystemInfo{..} = (\systemInfoCpuShares -> SystemInfo { systemInfoCpuShares, ..} ) <$> f systemInfoCpuShares
+{-# INLINE systemInfoCpuSharesL #-}
+
+-- | 'systemInfoCpuSet' Lens
+systemInfoCpuSetL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoCpuSetL f SystemInfo{..} = (\systemInfoCpuSet -> SystemInfo { systemInfoCpuSet, ..} ) <$> f systemInfoCpuSet
+{-# INLINE systemInfoCpuSetL #-}
+
+-- | 'systemInfoOomKillDisable' Lens
+systemInfoOomKillDisableL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoOomKillDisableL f SystemInfo{..} = (\systemInfoOomKillDisable -> SystemInfo { systemInfoOomKillDisable, ..} ) <$> f systemInfoOomKillDisable
+{-# INLINE systemInfoOomKillDisableL #-}
+
+-- | 'systemInfoIPv4Forwarding' Lens
+systemInfoIPv4ForwardingL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoIPv4ForwardingL f SystemInfo{..} = (\systemInfoIPv4Forwarding -> SystemInfo { systemInfoIPv4Forwarding, ..} ) <$> f systemInfoIPv4Forwarding
+{-# INLINE systemInfoIPv4ForwardingL #-}
+
+-- | 'systemInfoBridgeNfIptables' Lens
+systemInfoBridgeNfIptablesL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoBridgeNfIptablesL f SystemInfo{..} = (\systemInfoBridgeNfIptables -> SystemInfo { systemInfoBridgeNfIptables, ..} ) <$> f systemInfoBridgeNfIptables
+{-# INLINE systemInfoBridgeNfIptablesL #-}
+
+-- | 'systemInfoBridgeNfIp6tables' Lens
+systemInfoBridgeNfIp6tablesL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoBridgeNfIp6tablesL f SystemInfo{..} = (\systemInfoBridgeNfIp6tables -> SystemInfo { systemInfoBridgeNfIp6tables, ..} ) <$> f systemInfoBridgeNfIp6tables
+{-# INLINE systemInfoBridgeNfIp6tablesL #-}
+
+-- | 'systemInfoDebug' Lens
+systemInfoDebugL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoDebugL f SystemInfo{..} = (\systemInfoDebug -> SystemInfo { systemInfoDebug, ..} ) <$> f systemInfoDebug
+{-# INLINE systemInfoDebugL #-}
+
+-- | 'systemInfoNFd' Lens
+systemInfoNFdL :: Lens_' SystemInfo (Maybe Int)
+systemInfoNFdL f SystemInfo{..} = (\systemInfoNFd -> SystemInfo { systemInfoNFd, ..} ) <$> f systemInfoNFd
+{-# INLINE systemInfoNFdL #-}
+
+-- | 'systemInfoNGoroutines' Lens
+systemInfoNGoroutinesL :: Lens_' SystemInfo (Maybe Int)
+systemInfoNGoroutinesL f SystemInfo{..} = (\systemInfoNGoroutines -> SystemInfo { systemInfoNGoroutines, ..} ) <$> f systemInfoNGoroutines
+{-# INLINE systemInfoNGoroutinesL #-}
+
+-- | 'systemInfoSystemTime' Lens
+systemInfoSystemTimeL :: Lens_' SystemInfo (Maybe Text)
+systemInfoSystemTimeL f SystemInfo{..} = (\systemInfoSystemTime -> SystemInfo { systemInfoSystemTime, ..} ) <$> f systemInfoSystemTime
+{-# INLINE systemInfoSystemTimeL #-}
+
+-- | 'systemInfoLoggingDriver' Lens
+systemInfoLoggingDriverL :: Lens_' SystemInfo (Maybe Text)
+systemInfoLoggingDriverL f SystemInfo{..} = (\systemInfoLoggingDriver -> SystemInfo { systemInfoLoggingDriver, ..} ) <$> f systemInfoLoggingDriver
+{-# INLINE systemInfoLoggingDriverL #-}
+
+-- | 'systemInfoCgroupDriver' Lens
+systemInfoCgroupDriverL :: Lens_' SystemInfo (Maybe E'CgroupDriver)
+systemInfoCgroupDriverL f SystemInfo{..} = (\systemInfoCgroupDriver -> SystemInfo { systemInfoCgroupDriver, ..} ) <$> f systemInfoCgroupDriver
+{-# INLINE systemInfoCgroupDriverL #-}
+
+-- | 'systemInfoNEventsListener' Lens
+systemInfoNEventsListenerL :: Lens_' SystemInfo (Maybe Int)
+systemInfoNEventsListenerL f SystemInfo{..} = (\systemInfoNEventsListener -> SystemInfo { systemInfoNEventsListener, ..} ) <$> f systemInfoNEventsListener
+{-# INLINE systemInfoNEventsListenerL #-}
+
+-- | 'systemInfoKernelVersion' Lens
+systemInfoKernelVersionL :: Lens_' SystemInfo (Maybe Text)
+systemInfoKernelVersionL f SystemInfo{..} = (\systemInfoKernelVersion -> SystemInfo { systemInfoKernelVersion, ..} ) <$> f systemInfoKernelVersion
+{-# INLINE systemInfoKernelVersionL #-}
+
+-- | 'systemInfoOperatingSystem' Lens
+systemInfoOperatingSystemL :: Lens_' SystemInfo (Maybe Text)
+systemInfoOperatingSystemL f SystemInfo{..} = (\systemInfoOperatingSystem -> SystemInfo { systemInfoOperatingSystem, ..} ) <$> f systemInfoOperatingSystem
+{-# INLINE systemInfoOperatingSystemL #-}
+
+-- | 'systemInfoOsType' Lens
+systemInfoOsTypeL :: Lens_' SystemInfo (Maybe Text)
+systemInfoOsTypeL f SystemInfo{..} = (\systemInfoOsType -> SystemInfo { systemInfoOsType, ..} ) <$> f systemInfoOsType
+{-# INLINE systemInfoOsTypeL #-}
+
+-- | 'systemInfoArchitecture' Lens
+systemInfoArchitectureL :: Lens_' SystemInfo (Maybe Text)
+systemInfoArchitectureL f SystemInfo{..} = (\systemInfoArchitecture -> SystemInfo { systemInfoArchitecture, ..} ) <$> f systemInfoArchitecture
+{-# INLINE systemInfoArchitectureL #-}
+
+-- | 'systemInfoNcpu' Lens
+systemInfoNcpuL :: Lens_' SystemInfo (Maybe Int)
+systemInfoNcpuL f SystemInfo{..} = (\systemInfoNcpu -> SystemInfo { systemInfoNcpu, ..} ) <$> f systemInfoNcpu
+{-# INLINE systemInfoNcpuL #-}
+
+-- | 'systemInfoMemTotal' Lens
+systemInfoMemTotalL :: Lens_' SystemInfo (Maybe Integer)
+systemInfoMemTotalL f SystemInfo{..} = (\systemInfoMemTotal -> SystemInfo { systemInfoMemTotal, ..} ) <$> f systemInfoMemTotal
+{-# INLINE systemInfoMemTotalL #-}
+
+-- | 'systemInfoIndexServerAddress' Lens
+systemInfoIndexServerAddressL :: Lens_' SystemInfo (Maybe Text)
+systemInfoIndexServerAddressL f SystemInfo{..} = (\systemInfoIndexServerAddress -> SystemInfo { systemInfoIndexServerAddress, ..} ) <$> f systemInfoIndexServerAddress
+{-# INLINE systemInfoIndexServerAddressL #-}
+
+-- | 'systemInfoRegistryConfig' Lens
+systemInfoRegistryConfigL :: Lens_' SystemInfo (Maybe RegistryServiceConfig)
+systemInfoRegistryConfigL f SystemInfo{..} = (\systemInfoRegistryConfig -> SystemInfo { systemInfoRegistryConfig, ..} ) <$> f systemInfoRegistryConfig
+{-# INLINE systemInfoRegistryConfigL #-}
+
+-- | 'systemInfoGenericResources' Lens
+systemInfoGenericResourcesL :: Lens_' SystemInfo (Maybe [A.Value])
+systemInfoGenericResourcesL f SystemInfo{..} = (\systemInfoGenericResources -> SystemInfo { systemInfoGenericResources, ..} ) <$> f systemInfoGenericResources
+{-# INLINE systemInfoGenericResourcesL #-}
+
+-- | 'systemInfoHttpProxy' Lens
+systemInfoHttpProxyL :: Lens_' SystemInfo (Maybe Text)
+systemInfoHttpProxyL f SystemInfo{..} = (\systemInfoHttpProxy -> SystemInfo { systemInfoHttpProxy, ..} ) <$> f systemInfoHttpProxy
+{-# INLINE systemInfoHttpProxyL #-}
+
+-- | 'systemInfoHttpsProxy' Lens
+systemInfoHttpsProxyL :: Lens_' SystemInfo (Maybe Text)
+systemInfoHttpsProxyL f SystemInfo{..} = (\systemInfoHttpsProxy -> SystemInfo { systemInfoHttpsProxy, ..} ) <$> f systemInfoHttpsProxy
+{-# INLINE systemInfoHttpsProxyL #-}
+
+-- | 'systemInfoNoProxy' Lens
+systemInfoNoProxyL :: Lens_' SystemInfo (Maybe Text)
+systemInfoNoProxyL f SystemInfo{..} = (\systemInfoNoProxy -> SystemInfo { systemInfoNoProxy, ..} ) <$> f systemInfoNoProxy
+{-# INLINE systemInfoNoProxyL #-}
+
+-- | 'systemInfoName' Lens
+systemInfoNameL :: Lens_' SystemInfo (Maybe Text)
+systemInfoNameL f SystemInfo{..} = (\systemInfoName -> SystemInfo { systemInfoName, ..} ) <$> f systemInfoName
+{-# INLINE systemInfoNameL #-}
+
+-- | 'systemInfoLabels' Lens
+systemInfoLabelsL :: Lens_' SystemInfo (Maybe [Text])
+systemInfoLabelsL f SystemInfo{..} = (\systemInfoLabels -> SystemInfo { systemInfoLabels, ..} ) <$> f systemInfoLabels
+{-# INLINE systemInfoLabelsL #-}
+
+-- | 'systemInfoExperimentalBuild' Lens
+systemInfoExperimentalBuildL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoExperimentalBuildL f SystemInfo{..} = (\systemInfoExperimentalBuild -> SystemInfo { systemInfoExperimentalBuild, ..} ) <$> f systemInfoExperimentalBuild
+{-# INLINE systemInfoExperimentalBuildL #-}
+
+-- | 'systemInfoServerVersion' Lens
+systemInfoServerVersionL :: Lens_' SystemInfo (Maybe Text)
+systemInfoServerVersionL f SystemInfo{..} = (\systemInfoServerVersion -> SystemInfo { systemInfoServerVersion, ..} ) <$> f systemInfoServerVersion
+{-# INLINE systemInfoServerVersionL #-}
+
+-- | 'systemInfoClusterStore' Lens
+systemInfoClusterStoreL :: Lens_' SystemInfo (Maybe Text)
+systemInfoClusterStoreL f SystemInfo{..} = (\systemInfoClusterStore -> SystemInfo { systemInfoClusterStore, ..} ) <$> f systemInfoClusterStore
+{-# INLINE systemInfoClusterStoreL #-}
+
+-- | 'systemInfoClusterAdvertise' Lens
+systemInfoClusterAdvertiseL :: Lens_' SystemInfo (Maybe Text)
+systemInfoClusterAdvertiseL f SystemInfo{..} = (\systemInfoClusterAdvertise -> SystemInfo { systemInfoClusterAdvertise, ..} ) <$> f systemInfoClusterAdvertise
+{-# INLINE systemInfoClusterAdvertiseL #-}
+
+-- | 'systemInfoRuntimes' Lens
+systemInfoRuntimesL :: Lens_' SystemInfo (Maybe (Map.Map String Runtime))
+systemInfoRuntimesL f SystemInfo{..} = (\systemInfoRuntimes -> SystemInfo { systemInfoRuntimes, ..} ) <$> f systemInfoRuntimes
+{-# INLINE systemInfoRuntimesL #-}
+
+-- | 'systemInfoDefaultRuntime' Lens
+systemInfoDefaultRuntimeL :: Lens_' SystemInfo (Maybe Text)
+systemInfoDefaultRuntimeL f SystemInfo{..} = (\systemInfoDefaultRuntime -> SystemInfo { systemInfoDefaultRuntime, ..} ) <$> f systemInfoDefaultRuntime
+{-# INLINE systemInfoDefaultRuntimeL #-}
+
+-- | 'systemInfoSwarm' Lens
+systemInfoSwarmL :: Lens_' SystemInfo (Maybe SwarmInfo)
+systemInfoSwarmL f SystemInfo{..} = (\systemInfoSwarm -> SystemInfo { systemInfoSwarm, ..} ) <$> f systemInfoSwarm
+{-# INLINE systemInfoSwarmL #-}
+
+-- | 'systemInfoLiveRestoreEnabled' Lens
+systemInfoLiveRestoreEnabledL :: Lens_' SystemInfo (Maybe Bool)
+systemInfoLiveRestoreEnabledL f SystemInfo{..} = (\systemInfoLiveRestoreEnabled -> SystemInfo { systemInfoLiveRestoreEnabled, ..} ) <$> f systemInfoLiveRestoreEnabled
+{-# INLINE systemInfoLiveRestoreEnabledL #-}
+
+-- | 'systemInfoIsolation' Lens
+systemInfoIsolationL :: Lens_' SystemInfo (Maybe E'Isolation2)
+systemInfoIsolationL f SystemInfo{..} = (\systemInfoIsolation -> SystemInfo { systemInfoIsolation, ..} ) <$> f systemInfoIsolation
+{-# INLINE systemInfoIsolationL #-}
+
+-- | 'systemInfoInitBinary' Lens
+systemInfoInitBinaryL :: Lens_' SystemInfo (Maybe Text)
+systemInfoInitBinaryL f SystemInfo{..} = (\systemInfoInitBinary -> SystemInfo { systemInfoInitBinary, ..} ) <$> f systemInfoInitBinary
+{-# INLINE systemInfoInitBinaryL #-}
+
+-- | 'systemInfoContainerdCommit' Lens
+systemInfoContainerdCommitL :: Lens_' SystemInfo (Maybe Commit)
+systemInfoContainerdCommitL f SystemInfo{..} = (\systemInfoContainerdCommit -> SystemInfo { systemInfoContainerdCommit, ..} ) <$> f systemInfoContainerdCommit
+{-# INLINE systemInfoContainerdCommitL #-}
+
+-- | 'systemInfoRuncCommit' Lens
+systemInfoRuncCommitL :: Lens_' SystemInfo (Maybe Commit)
+systemInfoRuncCommitL f SystemInfo{..} = (\systemInfoRuncCommit -> SystemInfo { systemInfoRuncCommit, ..} ) <$> f systemInfoRuncCommit
+{-# INLINE systemInfoRuncCommitL #-}
+
+-- | 'systemInfoInitCommit' Lens
+systemInfoInitCommitL :: Lens_' SystemInfo (Maybe Commit)
+systemInfoInitCommitL f SystemInfo{..} = (\systemInfoInitCommit -> SystemInfo { systemInfoInitCommit, ..} ) <$> f systemInfoInitCommit
+{-# INLINE systemInfoInitCommitL #-}
+
+-- | 'systemInfoSecurityOptions' Lens
+systemInfoSecurityOptionsL :: Lens_' SystemInfo (Maybe [Text])
+systemInfoSecurityOptionsL f SystemInfo{..} = (\systemInfoSecurityOptions -> SystemInfo { systemInfoSecurityOptions, ..} ) <$> f systemInfoSecurityOptions
+{-# INLINE systemInfoSecurityOptionsL #-}
+
+
+
+-- * SystemVersionResponse
+
+-- | 'systemVersionResponsePlatform' Lens
+systemVersionResponsePlatformL :: Lens_' SystemVersionResponse (Maybe SystemVersionResponsePlatform)
+systemVersionResponsePlatformL f SystemVersionResponse{..} = (\systemVersionResponsePlatform -> SystemVersionResponse { systemVersionResponsePlatform, ..} ) <$> f systemVersionResponsePlatform
+{-# INLINE systemVersionResponsePlatformL #-}
+
+-- | 'systemVersionResponseComponents' Lens
+systemVersionResponseComponentsL :: Lens_' SystemVersionResponse (Maybe [SystemVersionResponseComponents])
+systemVersionResponseComponentsL f SystemVersionResponse{..} = (\systemVersionResponseComponents -> SystemVersionResponse { systemVersionResponseComponents, ..} ) <$> f systemVersionResponseComponents
+{-# INLINE systemVersionResponseComponentsL #-}
+
+-- | 'systemVersionResponseVersion' Lens
+systemVersionResponseVersionL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseVersionL f SystemVersionResponse{..} = (\systemVersionResponseVersion -> SystemVersionResponse { systemVersionResponseVersion, ..} ) <$> f systemVersionResponseVersion
+{-# INLINE systemVersionResponseVersionL #-}
+
+-- | 'systemVersionResponseApiVersion' Lens
+systemVersionResponseApiVersionL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseApiVersionL f SystemVersionResponse{..} = (\systemVersionResponseApiVersion -> SystemVersionResponse { systemVersionResponseApiVersion, ..} ) <$> f systemVersionResponseApiVersion
+{-# INLINE systemVersionResponseApiVersionL #-}
+
+-- | 'systemVersionResponseMinApiVersion' Lens
+systemVersionResponseMinApiVersionL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseMinApiVersionL f SystemVersionResponse{..} = (\systemVersionResponseMinApiVersion -> SystemVersionResponse { systemVersionResponseMinApiVersion, ..} ) <$> f systemVersionResponseMinApiVersion
+{-# INLINE systemVersionResponseMinApiVersionL #-}
+
+-- | 'systemVersionResponseGitCommit' Lens
+systemVersionResponseGitCommitL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseGitCommitL f SystemVersionResponse{..} = (\systemVersionResponseGitCommit -> SystemVersionResponse { systemVersionResponseGitCommit, ..} ) <$> f systemVersionResponseGitCommit
+{-# INLINE systemVersionResponseGitCommitL #-}
+
+-- | 'systemVersionResponseGoVersion' Lens
+systemVersionResponseGoVersionL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseGoVersionL f SystemVersionResponse{..} = (\systemVersionResponseGoVersion -> SystemVersionResponse { systemVersionResponseGoVersion, ..} ) <$> f systemVersionResponseGoVersion
+{-# INLINE systemVersionResponseGoVersionL #-}
+
+-- | 'systemVersionResponseOs' Lens
+systemVersionResponseOsL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseOsL f SystemVersionResponse{..} = (\systemVersionResponseOs -> SystemVersionResponse { systemVersionResponseOs, ..} ) <$> f systemVersionResponseOs
+{-# INLINE systemVersionResponseOsL #-}
+
+-- | 'systemVersionResponseArch' Lens
+systemVersionResponseArchL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseArchL f SystemVersionResponse{..} = (\systemVersionResponseArch -> SystemVersionResponse { systemVersionResponseArch, ..} ) <$> f systemVersionResponseArch
+{-# INLINE systemVersionResponseArchL #-}
+
+-- | 'systemVersionResponseKernelVersion' Lens
+systemVersionResponseKernelVersionL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseKernelVersionL f SystemVersionResponse{..} = (\systemVersionResponseKernelVersion -> SystemVersionResponse { systemVersionResponseKernelVersion, ..} ) <$> f systemVersionResponseKernelVersion
+{-# INLINE systemVersionResponseKernelVersionL #-}
+
+-- | 'systemVersionResponseExperimental' Lens
+systemVersionResponseExperimentalL :: Lens_' SystemVersionResponse (Maybe Bool)
+systemVersionResponseExperimentalL f SystemVersionResponse{..} = (\systemVersionResponseExperimental -> SystemVersionResponse { systemVersionResponseExperimental, ..} ) <$> f systemVersionResponseExperimental
+{-# INLINE systemVersionResponseExperimentalL #-}
+
+-- | 'systemVersionResponseBuildTime' Lens
+systemVersionResponseBuildTimeL :: Lens_' SystemVersionResponse (Maybe Text)
+systemVersionResponseBuildTimeL f SystemVersionResponse{..} = (\systemVersionResponseBuildTime -> SystemVersionResponse { systemVersionResponseBuildTime, ..} ) <$> f systemVersionResponseBuildTime
+{-# INLINE systemVersionResponseBuildTimeL #-}
+
+
+
+-- * SystemVersionResponseComponents
+
+-- | 'systemVersionResponseComponentsName' Lens
+systemVersionResponseComponentsNameL :: Lens_' SystemVersionResponseComponents (Text)
+systemVersionResponseComponentsNameL f SystemVersionResponseComponents{..} = (\systemVersionResponseComponentsName -> SystemVersionResponseComponents { systemVersionResponseComponentsName, ..} ) <$> f systemVersionResponseComponentsName
+{-# INLINE systemVersionResponseComponentsNameL #-}
+
+-- | 'systemVersionResponseComponentsVersion' Lens
+systemVersionResponseComponentsVersionL :: Lens_' SystemVersionResponseComponents (Text)
+systemVersionResponseComponentsVersionL f SystemVersionResponseComponents{..} = (\systemVersionResponseComponentsVersion -> SystemVersionResponseComponents { systemVersionResponseComponentsVersion, ..} ) <$> f systemVersionResponseComponentsVersion
+{-# INLINE systemVersionResponseComponentsVersionL #-}
+
+-- | 'systemVersionResponseComponentsDetails' Lens
+systemVersionResponseComponentsDetailsL :: Lens_' SystemVersionResponseComponents (Maybe A.Value)
+systemVersionResponseComponentsDetailsL f SystemVersionResponseComponents{..} = (\systemVersionResponseComponentsDetails -> SystemVersionResponseComponents { systemVersionResponseComponentsDetails, ..} ) <$> f systemVersionResponseComponentsDetails
+{-# INLINE systemVersionResponseComponentsDetailsL #-}
+
+
+
+-- * SystemVersionResponsePlatform
+
+-- | 'systemVersionResponsePlatformName' Lens
+systemVersionResponsePlatformNameL :: Lens_' SystemVersionResponsePlatform (Text)
+systemVersionResponsePlatformNameL f SystemVersionResponsePlatform{..} = (\systemVersionResponsePlatformName -> SystemVersionResponsePlatform { systemVersionResponsePlatformName, ..} ) <$> f systemVersionResponsePlatformName
+{-# INLINE systemVersionResponsePlatformNameL #-}
 
 
 
@@ -4213,6 +4568,11 @@ taskNodeIdL :: Lens_' Task (Maybe Text)
 taskNodeIdL f Task{..} = (\taskNodeId -> Task { taskNodeId, ..} ) <$> f taskNodeId
 {-# INLINE taskNodeIdL #-}
 
+-- | 'taskAssignedGenericResources' Lens
+taskAssignedGenericResourcesL :: Lens_' Task (Maybe [A.Value])
+taskAssignedGenericResourcesL f Task{..} = (\taskAssignedGenericResources -> Task { taskAssignedGenericResources, ..} ) <$> f taskAssignedGenericResources
+{-# INLINE taskAssignedGenericResourcesL #-}
+
 -- | 'taskStatus' Lens
 taskStatusL :: Lens_' Task (Maybe TaskStatus)
 taskStatusL f Task{..} = (\taskStatus -> Task { taskStatus, ..} ) <$> f taskStatus
@@ -4226,6 +4586,11 @@ taskDesiredStateL f Task{..} = (\taskDesiredState -> Task { taskDesiredState, ..
 
 
 -- * TaskSpec
+
+-- | 'taskSpecPluginSpec' Lens
+taskSpecPluginSpecL :: Lens_' TaskSpec (Maybe TaskSpecPluginSpec)
+taskSpecPluginSpecL f TaskSpec{..} = (\taskSpecPluginSpec -> TaskSpec { taskSpecPluginSpec, ..} ) <$> f taskSpecPluginSpec
+{-# INLINE taskSpecPluginSpecL #-}
 
 -- | 'taskSpecContainerSpec' Lens
 taskSpecContainerSpecL :: Lens_' TaskSpec (Maybe TaskSpecContainerSpec)
@@ -4375,6 +4740,11 @@ taskSpecContainerSpecSecretsL f TaskSpecContainerSpec{..} = (\taskSpecContainerS
 taskSpecContainerSpecConfigsL :: Lens_' TaskSpecContainerSpec (Maybe [TaskSpecContainerSpecConfigs])
 taskSpecContainerSpecConfigsL f TaskSpecContainerSpec{..} = (\taskSpecContainerSpecConfigs -> TaskSpecContainerSpec { taskSpecContainerSpecConfigs, ..} ) <$> f taskSpecContainerSpecConfigs
 {-# INLINE taskSpecContainerSpecConfigsL #-}
+
+-- | 'taskSpecContainerSpecIsolation' Lens
+taskSpecContainerSpecIsolationL :: Lens_' TaskSpecContainerSpec (Maybe E'Isolation)
+taskSpecContainerSpecIsolationL f TaskSpecContainerSpec{..} = (\taskSpecContainerSpecIsolation -> TaskSpecContainerSpec { taskSpecContainerSpecIsolation, ..} ) <$> f taskSpecContainerSpecIsolation
+{-# INLINE taskSpecContainerSpecIsolationL #-}
 
 
 
@@ -4557,7 +4927,7 @@ taskSpecPlacementPreferencesL f TaskSpecPlacement{..} = (\taskSpecPlacementPrefe
 {-# INLINE taskSpecPlacementPreferencesL #-}
 
 -- | 'taskSpecPlacementPlatforms' Lens
-taskSpecPlacementPlatformsL :: Lens_' TaskSpecPlacement (Maybe [NodeDescriptionPlatform])
+taskSpecPlacementPlatformsL :: Lens_' TaskSpecPlacement (Maybe [Platform])
 taskSpecPlacementPlatformsL f TaskSpecPlacement{..} = (\taskSpecPlacementPlatforms -> TaskSpecPlacement { taskSpecPlacementPlatforms, ..} ) <$> f taskSpecPlacementPlatforms
 {-# INLINE taskSpecPlacementPlatformsL #-}
 
@@ -4581,45 +4951,41 @@ taskSpecPlacementSpreadSpreadDescriptorL f TaskSpecPlacementSpread{..} = (\taskS
 
 
 
+-- * TaskSpecPluginSpec
+
+-- | 'taskSpecPluginSpecName' Lens
+taskSpecPluginSpecNameL :: Lens_' TaskSpecPluginSpec (Maybe Text)
+taskSpecPluginSpecNameL f TaskSpecPluginSpec{..} = (\taskSpecPluginSpecName -> TaskSpecPluginSpec { taskSpecPluginSpecName, ..} ) <$> f taskSpecPluginSpecName
+{-# INLINE taskSpecPluginSpecNameL #-}
+
+-- | 'taskSpecPluginSpecRemote' Lens
+taskSpecPluginSpecRemoteL :: Lens_' TaskSpecPluginSpec (Maybe Text)
+taskSpecPluginSpecRemoteL f TaskSpecPluginSpec{..} = (\taskSpecPluginSpecRemote -> TaskSpecPluginSpec { taskSpecPluginSpecRemote, ..} ) <$> f taskSpecPluginSpecRemote
+{-# INLINE taskSpecPluginSpecRemoteL #-}
+
+-- | 'taskSpecPluginSpecDisabled' Lens
+taskSpecPluginSpecDisabledL :: Lens_' TaskSpecPluginSpec (Maybe Bool)
+taskSpecPluginSpecDisabledL f TaskSpecPluginSpec{..} = (\taskSpecPluginSpecDisabled -> TaskSpecPluginSpec { taskSpecPluginSpecDisabled, ..} ) <$> f taskSpecPluginSpecDisabled
+{-# INLINE taskSpecPluginSpecDisabledL #-}
+
+-- | 'taskSpecPluginSpecPluginPrivilege' Lens
+taskSpecPluginSpecPluginPrivilegeL :: Lens_' TaskSpecPluginSpec (Maybe [InlineObject])
+taskSpecPluginSpecPluginPrivilegeL f TaskSpecPluginSpec{..} = (\taskSpecPluginSpecPluginPrivilege -> TaskSpecPluginSpec { taskSpecPluginSpecPluginPrivilege, ..} ) <$> f taskSpecPluginSpecPluginPrivilege
+{-# INLINE taskSpecPluginSpecPluginPrivilegeL #-}
+
+
+
 -- * TaskSpecResources
 
 -- | 'taskSpecResourcesLimits' Lens
-taskSpecResourcesLimitsL :: Lens_' TaskSpecResources (Maybe TaskSpecResourcesLimits)
+taskSpecResourcesLimitsL :: Lens_' TaskSpecResources (Maybe ResourceObject)
 taskSpecResourcesLimitsL f TaskSpecResources{..} = (\taskSpecResourcesLimits -> TaskSpecResources { taskSpecResourcesLimits, ..} ) <$> f taskSpecResourcesLimits
 {-# INLINE taskSpecResourcesLimitsL #-}
 
 -- | 'taskSpecResourcesReservation' Lens
-taskSpecResourcesReservationL :: Lens_' TaskSpecResources (Maybe TaskSpecResourcesReservation)
+taskSpecResourcesReservationL :: Lens_' TaskSpecResources (Maybe ResourceObject)
 taskSpecResourcesReservationL f TaskSpecResources{..} = (\taskSpecResourcesReservation -> TaskSpecResources { taskSpecResourcesReservation, ..} ) <$> f taskSpecResourcesReservation
 {-# INLINE taskSpecResourcesReservationL #-}
-
-
-
--- * TaskSpecResourcesLimits
-
--- | 'taskSpecResourcesLimitsNanoCpUs' Lens
-taskSpecResourcesLimitsNanoCpUsL :: Lens_' TaskSpecResourcesLimits (Maybe Integer)
-taskSpecResourcesLimitsNanoCpUsL f TaskSpecResourcesLimits{..} = (\taskSpecResourcesLimitsNanoCpUs -> TaskSpecResourcesLimits { taskSpecResourcesLimitsNanoCpUs, ..} ) <$> f taskSpecResourcesLimitsNanoCpUs
-{-# INLINE taskSpecResourcesLimitsNanoCpUsL #-}
-
--- | 'taskSpecResourcesLimitsMemoryBytes' Lens
-taskSpecResourcesLimitsMemoryBytesL :: Lens_' TaskSpecResourcesLimits (Maybe Integer)
-taskSpecResourcesLimitsMemoryBytesL f TaskSpecResourcesLimits{..} = (\taskSpecResourcesLimitsMemoryBytes -> TaskSpecResourcesLimits { taskSpecResourcesLimitsMemoryBytes, ..} ) <$> f taskSpecResourcesLimitsMemoryBytes
-{-# INLINE taskSpecResourcesLimitsMemoryBytesL #-}
-
-
-
--- * TaskSpecResourcesReservation
-
--- | 'taskSpecResourcesReservationNanoCpUs' Lens
-taskSpecResourcesReservationNanoCpUsL :: Lens_' TaskSpecResourcesReservation (Maybe Integer)
-taskSpecResourcesReservationNanoCpUsL f TaskSpecResourcesReservation{..} = (\taskSpecResourcesReservationNanoCpUs -> TaskSpecResourcesReservation { taskSpecResourcesReservationNanoCpUs, ..} ) <$> f taskSpecResourcesReservationNanoCpUs
-{-# INLINE taskSpecResourcesReservationNanoCpUsL #-}
-
--- | 'taskSpecResourcesReservationMemoryBytes' Lens
-taskSpecResourcesReservationMemoryBytesL :: Lens_' TaskSpecResourcesReservation (Maybe Integer)
-taskSpecResourcesReservationMemoryBytesL f TaskSpecResourcesReservation{..} = (\taskSpecResourcesReservationMemoryBytes -> TaskSpecResourcesReservation { taskSpecResourcesReservationMemoryBytes, ..} ) <$> f taskSpecResourcesReservationMemoryBytes
-{-# INLINE taskSpecResourcesReservationMemoryBytesL #-}
 
 
 
@@ -4713,6 +5079,15 @@ throttleDeviceRateL f ThrottleDevice{..} = (\throttleDeviceRate -> ThrottleDevic
 
 
 
+-- * UnlockKeyResponse
+
+-- | 'unlockKeyResponseUnlockKey' Lens
+unlockKeyResponseUnlockKeyL :: Lens_' UnlockKeyResponse (Maybe Text)
+unlockKeyResponseUnlockKeyL f UnlockKeyResponse{..} = (\unlockKeyResponseUnlockKey -> UnlockKeyResponse { unlockKeyResponseUnlockKey, ..} ) <$> f unlockKeyResponseUnlockKey
+{-# INLINE unlockKeyResponseUnlockKeyL #-}
+
+
+
 -- * Volume
 
 -- | 'volumeName' Lens
@@ -4729,6 +5104,11 @@ volumeDriverL f Volume{..} = (\volumeDriver -> Volume { volumeDriver, ..} ) <$> 
 volumeMountpointL :: Lens_' Volume (Text)
 volumeMountpointL f Volume{..} = (\volumeMountpoint -> Volume { volumeMountpoint, ..} ) <$> f volumeMountpoint
 {-# INLINE volumeMountpointL #-}
+
+-- | 'volumeCreatedAt' Lens
+volumeCreatedAtL :: Lens_' Volume (Maybe Text)
+volumeCreatedAtL f Volume{..} = (\volumeCreatedAt -> Volume { volumeCreatedAt, ..} ) <$> f volumeCreatedAt
+{-# INLINE volumeCreatedAtL #-}
 
 -- | 'volumeStatus' Lens
 volumeStatusL :: Lens_' Volume (Maybe (Map.Map String A.Value))
@@ -4757,6 +5137,34 @@ volumeUsageDataL f Volume{..} = (\volumeUsageData -> Volume { volumeUsageData, .
 
 
 
+-- * VolumeListResponse
+
+-- | 'volumeListResponseVolumes' Lens
+volumeListResponseVolumesL :: Lens_' VolumeListResponse ([Volume])
+volumeListResponseVolumesL f VolumeListResponse{..} = (\volumeListResponseVolumes -> VolumeListResponse { volumeListResponseVolumes, ..} ) <$> f volumeListResponseVolumes
+{-# INLINE volumeListResponseVolumesL #-}
+
+-- | 'volumeListResponseWarnings' Lens
+volumeListResponseWarningsL :: Lens_' VolumeListResponse ([Text])
+volumeListResponseWarningsL f VolumeListResponse{..} = (\volumeListResponseWarnings -> VolumeListResponse { volumeListResponseWarnings, ..} ) <$> f volumeListResponseWarnings
+{-# INLINE volumeListResponseWarningsL #-}
+
+
+
+-- * VolumePruneResponse
+
+-- | 'volumePruneResponseVolumesDeleted' Lens
+volumePruneResponseVolumesDeletedL :: Lens_' VolumePruneResponse (Maybe [Text])
+volumePruneResponseVolumesDeletedL f VolumePruneResponse{..} = (\volumePruneResponseVolumesDeleted -> VolumePruneResponse { volumePruneResponseVolumesDeleted, ..} ) <$> f volumePruneResponseVolumesDeleted
+{-# INLINE volumePruneResponseVolumesDeletedL #-}
+
+-- | 'volumePruneResponseSpaceReclaimed' Lens
+volumePruneResponseSpaceReclaimedL :: Lens_' VolumePruneResponse (Maybe Integer)
+volumePruneResponseSpaceReclaimedL f VolumePruneResponse{..} = (\volumePruneResponseSpaceReclaimed -> VolumePruneResponse { volumePruneResponseSpaceReclaimed, ..} ) <$> f volumePruneResponseSpaceReclaimed
+{-# INLINE volumePruneResponseSpaceReclaimedL #-}
+
+
+
 -- * VolumeUsageData
 
 -- | 'volumeUsageDataSize' Lens
@@ -4768,5 +5176,3 @@ volumeUsageDataSizeL f VolumeUsageData{..} = (\volumeUsageDataSize -> VolumeUsag
 volumeUsageDataRefCountL :: Lens_' VolumeUsageData (Int)
 volumeUsageDataRefCountL f VolumeUsageData{..} = (\volumeUsageDataRefCount -> VolumeUsageData { volumeUsageDataRefCount, ..} ) <$> f volumeUsageDataRefCount
 {-# INLINE volumeUsageDataRefCountL #-}
-
-

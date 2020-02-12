@@ -1,10 +1,10 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release of Docker, so API calls are versioned to ensure that clients don't break.  For Docker Engine 17.06, the API version is 1.30. To lock to this version, you prefix the URL with `/v1.30`. For example, calling `/info` is the same as calling `/v1.30/info`.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  In previous versions of Docker, it was possible to access the API without providing a version. This behaviour is now deprecated will be removed in a future version of Docker.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer Docker daemons.  This documentation is for version 1.30 of the API, which was introduced with Docker 17.06. Use this table to find documentation for previous versions of the API:  Docker version  | API version | Changes ----------------|-------------|--------- 17.05.x | [1.29](https://docs.docker.com/engine/api/v1.29/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-29-api-changes) 17.04.x | [1.28](https://docs.docker.com/engine/api/v1.28/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-28-api-changes) 17.03.1 | [1.27](https://docs.docker.com/engine/api/v1.27/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-27-api-changes) 1.13.1 & 17.03.0 | [1.26](https://docs.docker.com/engine/api/v1.26/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-26-api-changes) 1.13.0 | [1.25](https://docs.docker.com/engine/api/v1.25/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-25-api-changes) 1.12.x | [1.24](https://docs.docker.com/engine/api/v1.24/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-24-api-changes) 1.11.x | [1.23](https://docs.docker.com/engine/api/v1.23/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-23-api-changes) 1.10.x | [1.22](https://docs.docker.com/engine/api/v1.22/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-22-api-changes) 1.9.x | [1.21](https://docs.docker.com/engine/api/v1.21/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-21-api-changes) 1.8.x | [1.20](https://docs.docker.com/engine/api/v1.20/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-20-api-changes) 1.7.x | [1.19](https://docs.docker.com/engine/api/v1.19/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-19-api-changes) 1.6.x | [1.18](https://docs.docker.com/engine/api/v1.18/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-18-api-changes)  # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
 
    OpenAPI Version: 3.0.1
-   Docker Engine API API version: 1.30
+   Docker Engine API API version: 1.36
    Generated by OpenAPI Generator (https://openapi-generator.tech)
 -}
 
@@ -60,18 +60,18 @@ import qualified Prelude as P
 -- *** serviceCreate
 
 -- | @POST \/services\/create@
--- 
+--
 -- Create a service
--- 
-serviceCreate 
+--
+serviceCreate
   :: (Consumes ServiceCreate MimeJSON, MimeRender MimeJSON ServiceSpec)
   => ServiceSpec -- ^ "body"
-  -> DockerEngineRequest ServiceCreate MimeJSON InlineResponse2012 MimeJSON
+  -> DockerEngineRequest ServiceCreate MimeJSON ServiceCreateResponse MimeJSON
 serviceCreate body =
   _mkRequest "POST" ["/services/create"]
     `setBodyParam` body
 
-data ServiceCreate 
+data ServiceCreate
 instance HasBodyParam ServiceCreate ServiceSpec
 
 -- | /Optional Param/ "X-Registry-Auth" - A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)
@@ -89,19 +89,19 @@ instance Produces ServiceCreate MimeJSON
 -- *** serviceDelete
 
 -- | @DELETE \/services\/{id}@
--- 
+--
 -- Delete a service
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-serviceDelete 
+--
+serviceDelete
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of service.
   -> DockerEngineRequest ServiceDelete MimeNoContent res accept
 serviceDelete  _ (Id id) =
   _mkRequest "DELETE" ["/services/",toPath id]
 
-data ServiceDelete  
+data ServiceDelete
 -- | @application/json@
 instance Produces ServiceDelete MimeJSON
 -- | @text/plain@
@@ -111,17 +111,17 @@ instance Produces ServiceDelete MimePlainText
 -- *** serviceInspect
 
 -- | @GET \/services\/{id}@
--- 
+--
 -- Inspect a service
--- 
-serviceInspect 
+--
+serviceInspect
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of service.
   -> DockerEngineRequest ServiceInspect MimeNoContent Service accept
 serviceInspect  _ (Id id) =
   _mkRequest "GET" ["/services/",toPath id]
 
-data ServiceInspect  
+data ServiceInspect
 
 -- | /Optional Param/ "insertDefaults" - Fill empty fields with default values.
 instance HasOptionalParam ServiceInspect InsertDefaults where
@@ -136,18 +136,18 @@ instance Produces ServiceInspect MimePlainText
 -- *** serviceList
 
 -- | @GET \/services@
--- 
+--
 -- List services
--- 
-serviceList 
+--
+serviceList
   :: Accept accept -- ^ request accept ('MimeType')
   -> DockerEngineRequest ServiceList MimeNoContent [Service] accept
 serviceList  _ =
   _mkRequest "GET" ["/services"]
 
-data ServiceList  
+data ServiceList
 
--- | /Optional Param/ "filters" - A JSON encoded value of the filters (a `map[string][]string`) to process on the services list. Available filters:  - `id=<service id>` - `label=<service label>` - `mode=[\"replicated\"|\"global\"]` - `name=<service name>` 
+-- | /Optional Param/ "filters" - A JSON encoded value of the filters (a `map[string][]string`) to process on the services list. Available filters:  - `id=<service id>` - `label=<service label>` - `mode=[\"replicated\"|\"global\"]` - `name=<service name>`
 instance HasOptionalParam ServiceList Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
@@ -160,26 +160,26 @@ instance Produces ServiceList MimePlainText
 -- *** serviceLogs
 
 -- | @GET \/services\/{id}\/logs@
--- 
+--
 -- Get service logs
--- 
--- Get `stdout` and `stderr` logs from a service.  **Note**: This endpoint works only for services with the `json-file` or `journald` logging drivers. 
--- 
-serviceLogs 
+--
+-- Get `stdout` and `stderr` logs from a service.  **Note**: This endpoint works only for services with the `json-file` or `journald` logging drivers.
+--
+serviceLogs
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the service
   -> DockerEngineRequest ServiceLogs MimeNoContent Text accept
 serviceLogs  _ (Id id) =
   _mkRequest "GET" ["/services/",toPath id,"/logs"]
 
-data ServiceLogs  
+data ServiceLogs
 
 -- | /Optional Param/ "details" - Show service context and extra details provided to logs.
 instance HasOptionalParam ServiceLogs Details where
   applyOptionalParam req (Details xs) =
     req `setQuery` toQuery ("details", Just xs)
 
--- | /Optional Param/ "follow" - Return the logs as a stream.  This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach). 
+-- | /Optional Param/ "follow" - Return the logs as a stream.  This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach).
 instance HasOptionalParam ServiceLogs Follow where
   applyOptionalParam req (Follow xs) =
     req `setQuery` toQuery ("follow", Just xs)
@@ -217,10 +217,10 @@ instance Produces ServiceLogs MimeVndDockerRawStream
 -- *** serviceUpdate
 
 -- | @POST \/services\/{id}\/update@
--- 
+--
 -- Update a service
--- 
-serviceUpdate 
+--
+serviceUpdate
   :: (Consumes ServiceUpdate MimeJSON, MimeRender MimeJSON ServiceSpec)
   => ServiceSpec -- ^ "body"
   -> Id -- ^ "id" -  ID or name of service.
@@ -231,7 +231,7 @@ serviceUpdate body (Id id) (VersionInt version) =
     `setBodyParam` body
     `setQuery` toQuery ("version", Just version)
 
-data ServiceUpdate 
+data ServiceUpdate
 instance HasBodyParam ServiceUpdate ServiceSpec
 
 -- | /Optional Param/ "registryAuthFrom" - If the X-Registry-Auth header is not specified, this parameter indicates where to find registry authorization credentials. The valid values are `spec` and `previous-spec`.
@@ -254,4 +254,3 @@ instance Consumes ServiceUpdate MimeJSON
 
 -- | @application/json@
 instance Produces ServiceUpdate MimeJSON
-

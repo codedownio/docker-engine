@@ -1,10 +1,10 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release of Docker, so API calls are versioned to ensure that clients don't break.  For Docker Engine 17.06, the API version is 1.30. To lock to this version, you prefix the URL with `/v1.30`. For example, calling `/info` is the same as calling `/v1.30/info`.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  In previous versions of Docker, it was possible to access the API without providing a version. This behaviour is now deprecated will be removed in a future version of Docker.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer Docker daemons.  This documentation is for version 1.30 of the API, which was introduced with Docker 17.06. Use this table to find documentation for previous versions of the API:  Docker version  | API version | Changes ----------------|-------------|--------- 17.05.x | [1.29](https://docs.docker.com/engine/api/v1.29/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-29-api-changes) 17.04.x | [1.28](https://docs.docker.com/engine/api/v1.28/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-28-api-changes) 17.03.1 | [1.27](https://docs.docker.com/engine/api/v1.27/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-27-api-changes) 1.13.1 & 17.03.0 | [1.26](https://docs.docker.com/engine/api/v1.26/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-26-api-changes) 1.13.0 | [1.25](https://docs.docker.com/engine/api/v1.25/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-25-api-changes) 1.12.x | [1.24](https://docs.docker.com/engine/api/v1.24/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-24-api-changes) 1.11.x | [1.23](https://docs.docker.com/engine/api/v1.23/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-23-api-changes) 1.10.x | [1.22](https://docs.docker.com/engine/api/v1.22/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-22-api-changes) 1.9.x | [1.21](https://docs.docker.com/engine/api/v1.21/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-21-api-changes) 1.8.x | [1.20](https://docs.docker.com/engine/api/v1.20/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-20-api-changes) 1.7.x | [1.19](https://docs.docker.com/engine/api/v1.19/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-19-api-changes) 1.6.x | [1.18](https://docs.docker.com/engine/api/v1.18/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-18-api-changes)  # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
 
    OpenAPI Version: 3.0.1
-   Docker Engine API API version: 1.30
+   Docker Engine API API version: 1.36
    Generated by OpenAPI Generator (https://openapi-generator.tech)
 -}
 
@@ -207,6 +207,9 @@ newtype Path = Path { unPath :: Text } deriving (P.Eq, P.Show)
 -- ** Pause
 newtype Pause = Pause { unPause :: Bool } deriving (P.Eq, P.Show)
 
+-- ** Platform2
+newtype Platform2 = Platform2 { unPlatform2 :: Text } deriving (P.Eq, P.Show)
+
 -- ** PsArgs
 newtype PsArgs = PsArgs { unPsArgs :: Text } deriving (P.Eq, P.Show)
 
@@ -242,6 +245,9 @@ newtype RotateManagerUnlockKey = RotateManagerUnlockKey { unRotateManagerUnlockK
 
 -- ** RotateWorkerToken
 newtype RotateWorkerToken = RotateWorkerToken { unRotateWorkerToken :: Bool } deriving (P.Eq, P.Show)
+
+-- ** Scope
+newtype Scope = Scope { unScope :: Text } deriving (P.Eq, P.Show)
 
 -- ** Shmsize
 newtype Shmsize = Shmsize { unShmsize :: Int } deriving (P.Eq, P.Show)
@@ -298,7 +304,10 @@ newtype Timeout = Timeout { unTimeout :: Int } deriving (P.Eq, P.Show)
 newtype Timestamps = Timestamps { unTimestamps :: Bool } deriving (P.Eq, P.Show)
 
 -- ** Until
-newtype Until = Until { unUntil :: Text } deriving (P.Eq, P.Show)
+newtype Until = Until { unUntil :: Int } deriving (P.Eq, P.Show)
+
+-- ** UntilText
+newtype UntilText = UntilText { unUntilText :: Text } deriving (P.Eq, P.Show)
 
 -- ** V
 newtype V = V { unV :: Bool } deriving (P.Eq, P.Show)
@@ -323,6 +332,39 @@ newtype XRegistryConfig = XRegistryConfig { unXRegistryConfig :: Text } deriving
 
 -- * Models
 
+
+-- ** Address
+-- | Address
+-- Address represents an IPv4 or IPv6 IP address.
+data Address = Address
+  { addressAddr :: !(Maybe Text) -- ^ "Addr" - IP address.
+  , addressPrefixLen :: !(Maybe Int) -- ^ "PrefixLen" - Mask length of the IP address.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Address
+instance A.FromJSON Address where
+  parseJSON = A.withObject "Address" $ \o ->
+    Address
+      <$> (o .:? "Addr")
+      <*> (o .:? "PrefixLen")
+
+-- | ToJSON Address
+instance A.ToJSON Address where
+  toJSON Address {..} =
+   _omitNulls
+      [ "Addr" .= addressAddr
+      , "PrefixLen" .= addressPrefixLen
+      ]
+
+
+-- | Construct a value of type 'Address' (by applying it's required fields, if any)
+mkAddress
+  :: Address
+mkAddress =
+  Address
+  { addressAddr = Nothing
+  , addressPrefixLen = Nothing
+  }
 
 -- ** AuthConfig
 -- | AuthConfig
@@ -374,6 +416,7 @@ data BuildInfo = BuildInfo
   , buildInfoStatus :: !(Maybe Text) -- ^ "status"
   , buildInfoProgress :: !(Maybe Text) -- ^ "progress"
   , buildInfoProgressDetail :: !(Maybe ProgressDetail) -- ^ "progressDetail"
+  , buildInfoAux :: !(Maybe ImageID) -- ^ "aux"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON BuildInfo
@@ -387,6 +430,7 @@ instance A.FromJSON BuildInfo where
       <*> (o .:? "status")
       <*> (o .:? "progress")
       <*> (o .:? "progressDetail")
+      <*> (o .:? "aux")
 
 -- | ToJSON BuildInfo
 instance A.ToJSON BuildInfo where
@@ -399,6 +443,7 @@ instance A.ToJSON BuildInfo where
       , "status" .= buildInfoStatus
       , "progress" .= buildInfoProgress
       , "progressDetail" .= buildInfoProgressDetail
+      , "aux" .= buildInfoAux
       ]
 
 
@@ -414,15 +459,45 @@ mkBuildInfo =
   , buildInfoStatus = Nothing
   , buildInfoProgress = Nothing
   , buildInfoProgressDetail = Nothing
+  , buildInfoAux = Nothing
+  }
+
+-- ** BuildPruneResponse
+-- | BuildPruneResponse
+data BuildPruneResponse = BuildPruneResponse
+  { buildPruneResponseSpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON BuildPruneResponse
+instance A.FromJSON BuildPruneResponse where
+  parseJSON = A.withObject "BuildPruneResponse" $ \o ->
+    BuildPruneResponse
+      <$> (o .:? "SpaceReclaimed")
+
+-- | ToJSON BuildPruneResponse
+instance A.ToJSON BuildPruneResponse where
+  toJSON BuildPruneResponse {..} =
+   _omitNulls
+      [ "SpaceReclaimed" .= buildPruneResponseSpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'BuildPruneResponse' (by applying it's required fields, if any)
+mkBuildPruneResponse
+  :: BuildPruneResponse
+mkBuildPruneResponse =
+  BuildPruneResponse
+  { buildPruneResponseSpaceReclaimed = Nothing
   }
 
 -- ** ClusterInfo
 -- | ClusterInfo
+-- ClusterInfo represents information about the swarm as is returned by the \"/info\" endpoint. Join-tokens are not included.
 data ClusterInfo = ClusterInfo
   { clusterInfoId :: !(Maybe Text) -- ^ "ID" - The ID of the swarm.
   , clusterInfoVersion :: !(Maybe ObjectVersion) -- ^ "Version"
-  , clusterInfoCreatedAt :: !(Maybe Text) -- ^ "CreatedAt"
-  , clusterInfoUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt"
+  , clusterInfoCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , clusterInfoUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
   , clusterInfoSpec :: !(Maybe SwarmSpec) -- ^ "Spec"
   , clusterInfoTlsInfo :: !(Maybe TLSInfo) -- ^ "TLSInfo"
   , clusterInfoRootRotationInProgress :: !(Maybe Bool) -- ^ "RootRotationInProgress" - Whether there is currently a root CA rotation in progress for the swarm
@@ -466,6 +541,39 @@ mkClusterInfo =
   , clusterInfoSpec = Nothing
   , clusterInfoTlsInfo = Nothing
   , clusterInfoRootRotationInProgress = Nothing
+  }
+
+-- ** Commit
+-- | Commit
+-- Commit holds the Git-commit (SHA1) that a binary was built from, as reported in the version-string of external tools, such as `containerd`, or `runC`.
+data Commit = Commit
+  { commitId :: !(Maybe Text) -- ^ "ID" - Actual commit ID of external tool.
+  , commitExpected :: !(Maybe Text) -- ^ "Expected" - Commit ID of external tool expected by dockerd as set at build time.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Commit
+instance A.FromJSON Commit where
+  parseJSON = A.withObject "Commit" $ \o ->
+    Commit
+      <$> (o .:? "ID")
+      <*> (o .:? "Expected")
+
+-- | ToJSON Commit
+instance A.ToJSON Commit where
+  toJSON Commit {..} =
+   _omitNulls
+      [ "ID" .= commitId
+      , "Expected" .= commitExpected
+      ]
+
+
+-- | Construct a value of type 'Commit' (by applying it's required fields, if any)
+mkCommit
+  :: Commit
+mkCommit =
+  Commit
+  { commitId = Nothing
+  , commitExpected = Nothing
   }
 
 -- ** Config
@@ -517,7 +625,7 @@ mkConfig =
 data ConfigSpec = ConfigSpec
   { configSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configSpecData :: !(Maybe [Text]) -- ^ "Data" - Base64-url-safe-encoded config data
+  , configSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) config data.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ConfigSpec
@@ -548,6 +656,41 @@ mkConfigSpec =
   , configSpecData = Nothing
   }
 
+-- ** ContainerChangeResponseItem
+-- | ContainerChangeResponseItem
+-- change item in response to ContainerChanges operation
+data ContainerChangeResponseItem = ContainerChangeResponseItem
+  { containerChangeResponseItemPath :: !(Text) -- ^ /Required/ "Path" - Path to file that has changed
+  , containerChangeResponseItemKind :: !(Int) -- ^ /Required/ "Kind" - Kind of change
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerChangeResponseItem
+instance A.FromJSON ContainerChangeResponseItem where
+  parseJSON = A.withObject "ContainerChangeResponseItem" $ \o ->
+    ContainerChangeResponseItem
+      <$> (o .:  "Path")
+      <*> (o .:  "Kind")
+
+-- | ToJSON ContainerChangeResponseItem
+instance A.ToJSON ContainerChangeResponseItem where
+  toJSON ContainerChangeResponseItem {..} =
+   _omitNulls
+      [ "Path" .= containerChangeResponseItemPath
+      , "Kind" .= containerChangeResponseItemKind
+      ]
+
+
+-- | Construct a value of type 'ContainerChangeResponseItem' (by applying it's required fields, if any)
+mkContainerChangeResponseItem
+  :: Text -- ^ 'containerChangeResponseItemPath': Path to file that has changed
+  -> Int -- ^ 'containerChangeResponseItemKind': Kind of change
+  -> ContainerChangeResponseItem
+mkContainerChangeResponseItem containerChangeResponseItemPath containerChangeResponseItemKind =
+  ContainerChangeResponseItem
+  { containerChangeResponseItemPath
+  , containerChangeResponseItemKind
+  }
+
 -- ** ContainerConfig
 -- | ContainerConfig
 -- Configuration for a container that is portable between hosts
@@ -558,16 +701,18 @@ data ContainerConfig = ContainerConfig
   , containerConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.
   , containerConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.
   , containerConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.
-  , containerConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp&gt;\&quot;: {}}&#x60; 
+  , containerConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp&gt;\&quot;: {}}&#x60;
   , containerConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.
   , containerConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;
   , containerConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects
-  , containerConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value. 
+  , containerConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value.
+  , containerConfigCmd :: !(Maybe [Text]) -- ^ "Cmd" - Command to run specified as a string or an array of strings.
   , containerConfigHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
   , containerConfigArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
   , containerConfigImage :: !(Maybe Text) -- ^ "Image" - The name of the image to use when creating the container
   , containerConfigVolumes :: !(Maybe ContainerConfigVolumes) -- ^ "Volumes"
   , containerConfigWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
+  , containerConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;).
   , containerConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.
   , containerConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.
   , containerConfigOnBuild :: !(Maybe [Text]) -- ^ "OnBuild" - &#x60;ONBUILD&#x60; metadata that were defined in the image&#39;s &#x60;Dockerfile&#x60;.
@@ -592,11 +737,13 @@ instance A.FromJSON ContainerConfig where
       <*> (o .:? "OpenStdin")
       <*> (o .:? "StdinOnce")
       <*> (o .:? "Env")
+      <*> (o .:? "Cmd")
       <*> (o .:? "Healthcheck")
       <*> (o .:? "ArgsEscaped")
       <*> (o .:? "Image")
       <*> (o .:? "Volumes")
       <*> (o .:? "WorkingDir")
+      <*> (o .:? "Entrypoint")
       <*> (o .:? "NetworkDisabled")
       <*> (o .:? "MacAddress")
       <*> (o .:? "OnBuild")
@@ -620,11 +767,13 @@ instance A.ToJSON ContainerConfig where
       , "OpenStdin" .= containerConfigOpenStdin
       , "StdinOnce" .= containerConfigStdinOnce
       , "Env" .= containerConfigEnv
+      , "Cmd" .= containerConfigCmd
       , "Healthcheck" .= containerConfigHealthcheck
       , "ArgsEscaped" .= containerConfigArgsEscaped
       , "Image" .= containerConfigImage
       , "Volumes" .= containerConfigVolumes
       , "WorkingDir" .= containerConfigWorkingDir
+      , "Entrypoint" .= containerConfigEntrypoint
       , "NetworkDisabled" .= containerConfigNetworkDisabled
       , "MacAddress" .= containerConfigMacAddress
       , "OnBuild" .= containerConfigOnBuild
@@ -651,11 +800,13 @@ mkContainerConfig =
   , containerConfigOpenStdin = Nothing
   , containerConfigStdinOnce = Nothing
   , containerConfigEnv = Nothing
+  , containerConfigCmd = Nothing
   , containerConfigHealthcheck = Nothing
   , containerConfigArgsEscaped = Nothing
   , containerConfigImage = Nothing
   , containerConfigVolumes = Nothing
   , containerConfigWorkingDir = Nothing
+  , containerConfigEntrypoint = Nothing
   , containerConfigNetworkDisabled = Nothing
   , containerConfigMacAddress = Nothing
   , containerConfigOnBuild = Nothing
@@ -694,151 +845,396 @@ mkContainerConfigVolumes =
   { containerConfigVolumesAdditionalProperties = Nothing
   }
 
--- ** ContainerSummary
--- | ContainerSummary
-data ContainerSummary = ContainerSummary
-  { containerSummaryId :: !(Maybe Text) -- ^ "Id" - The ID of this container
-  , containerSummaryNames :: !(Maybe [Text]) -- ^ "Names" - The names that this container has been given
-  , containerSummaryImage :: !(Maybe Text) -- ^ "Image" - The name of the image used when creating this container
-  , containerSummaryImageId :: !(Maybe Text) -- ^ "ImageID" - The ID of the image that this container was created from
-  , containerSummaryCommand :: !(Maybe Text) -- ^ "Command" - Command to run when starting the container
-  , containerSummaryCreated :: !(Maybe Integer) -- ^ "Created" - When the container was created
-  , containerSummaryPorts :: !(Maybe [Port]) -- ^ "Ports" - The ports exposed by this container
-  , containerSummarySizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container
-  , containerSummarySizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container
-  , containerSummaryLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , containerSummaryState :: !(Maybe Text) -- ^ "State" - The state of this container (e.g. &#x60;Exited&#x60;)
-  , containerSummaryStatus :: !(Maybe Text) -- ^ "Status" - Additional human-readable status of this container (e.g. &#x60;Exit 0&#x60;)
-  , containerSummaryHostConfig :: !(Maybe ContainerSummaryHostConfig) -- ^ "HostConfig"
-  , containerSummaryNetworkSettings :: !(Maybe ContainerSummaryNetworkSettings) -- ^ "NetworkSettings"
-  , containerSummaryMounts :: !(Maybe [Mount]) -- ^ "Mounts"
+-- ** ContainerCreateResponse
+-- | ContainerCreateResponse
+-- OK response to ContainerCreate operation
+data ContainerCreateResponse = ContainerCreateResponse
+  { containerCreateResponseId :: !(Text) -- ^ /Required/ "Id" - The ID of the created container
+  , containerCreateResponseWarnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings encountered when creating the container
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummary
-instance A.FromJSON ContainerSummary where
-  parseJSON = A.withObject "ContainerSummary" $ \o ->
-    ContainerSummary
+-- | FromJSON ContainerCreateResponse
+instance A.FromJSON ContainerCreateResponse where
+  parseJSON = A.withObject "ContainerCreateResponse" $ \o ->
+    ContainerCreateResponse
+      <$> (o .:  "Id")
+      <*> (o .:  "Warnings")
+
+-- | ToJSON ContainerCreateResponse
+instance A.ToJSON ContainerCreateResponse where
+  toJSON ContainerCreateResponse {..} =
+   _omitNulls
+      [ "Id" .= containerCreateResponseId
+      , "Warnings" .= containerCreateResponseWarnings
+      ]
+
+
+-- | Construct a value of type 'ContainerCreateResponse' (by applying it's required fields, if any)
+mkContainerCreateResponse
+  :: Text -- ^ 'containerCreateResponseId': The ID of the created container
+  -> [Text] -- ^ 'containerCreateResponseWarnings': Warnings encountered when creating the container
+  -> ContainerCreateResponse
+mkContainerCreateResponse containerCreateResponseId containerCreateResponseWarnings =
+  ContainerCreateResponse
+  { containerCreateResponseId
+  , containerCreateResponseWarnings
+  }
+
+-- ** ContainerInspectResponse
+-- | ContainerInspectResponse
+data ContainerInspectResponse = ContainerInspectResponse
+  { containerInspectResponseId :: !(Maybe Text) -- ^ "Id" - The ID of the container
+  , containerInspectResponseCreated :: !(Maybe Text) -- ^ "Created" - The time the container was created
+  , containerInspectResponsePath :: !(Maybe Text) -- ^ "Path" - The path to the command being run
+  , containerInspectResponseArgs :: !(Maybe [Text]) -- ^ "Args" - The arguments to the command being run
+  , containerInspectResponseState :: !(Maybe ContainerInspectResponseState) -- ^ "State"
+  , containerInspectResponseImage :: !(Maybe Text) -- ^ "Image" - The container&#39;s image
+  , containerInspectResponseResolvConfPath :: !(Maybe Text) -- ^ "ResolvConfPath"
+  , containerInspectResponseHostnamePath :: !(Maybe Text) -- ^ "HostnamePath"
+  , containerInspectResponseHostsPath :: !(Maybe Text) -- ^ "HostsPath"
+  , containerInspectResponseLogPath :: !(Maybe Text) -- ^ "LogPath"
+  , containerInspectResponseNode :: !(Maybe A.Value) -- ^ "Node" - TODO
+  , containerInspectResponseName :: !(Maybe Text) -- ^ "Name"
+  , containerInspectResponseRestartCount :: !(Maybe Int) -- ^ "RestartCount"
+  , containerInspectResponseDriver :: !(Maybe Text) -- ^ "Driver"
+  , containerInspectResponseMountLabel :: !(Maybe Text) -- ^ "MountLabel"
+  , containerInspectResponseProcessLabel :: !(Maybe Text) -- ^ "ProcessLabel"
+  , containerInspectResponseAppArmorProfile :: !(Maybe Text) -- ^ "AppArmorProfile"
+  , containerInspectResponseExecIDs :: !(Maybe Text) -- ^ "ExecIDs"
+  , containerInspectResponseHostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
+  , containerInspectResponseGraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
+  , containerInspectResponseSizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container.
+  , containerInspectResponseSizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container.
+  , containerInspectResponseMounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
+  , containerInspectResponseConfig :: !(Maybe ContainerConfig) -- ^ "Config"
+  , containerInspectResponseNetworkSettings :: !(Maybe NetworkSettings) -- ^ "NetworkSettings"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerInspectResponse
+instance A.FromJSON ContainerInspectResponse where
+  parseJSON = A.withObject "ContainerInspectResponse" $ \o ->
+    ContainerInspectResponse
       <$> (o .:? "Id")
-      <*> (o .:? "Names")
-      <*> (o .:? "Image")
-      <*> (o .:? "ImageID")
-      <*> (o .:? "Command")
       <*> (o .:? "Created")
-      <*> (o .:? "Ports")
+      <*> (o .:? "Path")
+      <*> (o .:? "Args")
+      <*> (o .:? "State")
+      <*> (o .:? "Image")
+      <*> (o .:? "ResolvConfPath")
+      <*> (o .:? "HostnamePath")
+      <*> (o .:? "HostsPath")
+      <*> (o .:? "LogPath")
+      <*> (o .:? "Node")
+      <*> (o .:? "Name")
+      <*> (o .:? "RestartCount")
+      <*> (o .:? "Driver")
+      <*> (o .:? "MountLabel")
+      <*> (o .:? "ProcessLabel")
+      <*> (o .:? "AppArmorProfile")
+      <*> (o .:? "ExecIDs")
+      <*> (o .:? "HostConfig")
+      <*> (o .:? "GraphDriver")
       <*> (o .:? "SizeRw")
       <*> (o .:? "SizeRootFs")
-      <*> (o .:? "Labels")
-      <*> (o .:? "State")
-      <*> (o .:? "Status")
-      <*> (o .:? "HostConfig")
-      <*> (o .:? "NetworkSettings")
       <*> (o .:? "Mounts")
+      <*> (o .:? "Config")
+      <*> (o .:? "NetworkSettings")
 
--- | ToJSON ContainerSummary
-instance A.ToJSON ContainerSummary where
-  toJSON ContainerSummary {..} =
+-- | ToJSON ContainerInspectResponse
+instance A.ToJSON ContainerInspectResponse where
+  toJSON ContainerInspectResponse {..} =
    _omitNulls
-      [ "Id" .= containerSummaryId
-      , "Names" .= containerSummaryNames
-      , "Image" .= containerSummaryImage
-      , "ImageID" .= containerSummaryImageId
-      , "Command" .= containerSummaryCommand
-      , "Created" .= containerSummaryCreated
-      , "Ports" .= containerSummaryPorts
-      , "SizeRw" .= containerSummarySizeRw
-      , "SizeRootFs" .= containerSummarySizeRootFs
-      , "Labels" .= containerSummaryLabels
-      , "State" .= containerSummaryState
-      , "Status" .= containerSummaryStatus
-      , "HostConfig" .= containerSummaryHostConfig
-      , "NetworkSettings" .= containerSummaryNetworkSettings
-      , "Mounts" .= containerSummaryMounts
+      [ "Id" .= containerInspectResponseId
+      , "Created" .= containerInspectResponseCreated
+      , "Path" .= containerInspectResponsePath
+      , "Args" .= containerInspectResponseArgs
+      , "State" .= containerInspectResponseState
+      , "Image" .= containerInspectResponseImage
+      , "ResolvConfPath" .= containerInspectResponseResolvConfPath
+      , "HostnamePath" .= containerInspectResponseHostnamePath
+      , "HostsPath" .= containerInspectResponseHostsPath
+      , "LogPath" .= containerInspectResponseLogPath
+      , "Node" .= containerInspectResponseNode
+      , "Name" .= containerInspectResponseName
+      , "RestartCount" .= containerInspectResponseRestartCount
+      , "Driver" .= containerInspectResponseDriver
+      , "MountLabel" .= containerInspectResponseMountLabel
+      , "ProcessLabel" .= containerInspectResponseProcessLabel
+      , "AppArmorProfile" .= containerInspectResponseAppArmorProfile
+      , "ExecIDs" .= containerInspectResponseExecIDs
+      , "HostConfig" .= containerInspectResponseHostConfig
+      , "GraphDriver" .= containerInspectResponseGraphDriver
+      , "SizeRw" .= containerInspectResponseSizeRw
+      , "SizeRootFs" .= containerInspectResponseSizeRootFs
+      , "Mounts" .= containerInspectResponseMounts
+      , "Config" .= containerInspectResponseConfig
+      , "NetworkSettings" .= containerInspectResponseNetworkSettings
       ]
 
 
--- | Construct a value of type 'ContainerSummary' (by applying it's required fields, if any)
-mkContainerSummary
-  :: ContainerSummary
-mkContainerSummary =
-  ContainerSummary
-  { containerSummaryId = Nothing
-  , containerSummaryNames = Nothing
-  , containerSummaryImage = Nothing
-  , containerSummaryImageId = Nothing
-  , containerSummaryCommand = Nothing
-  , containerSummaryCreated = Nothing
-  , containerSummaryPorts = Nothing
-  , containerSummarySizeRw = Nothing
-  , containerSummarySizeRootFs = Nothing
-  , containerSummaryLabels = Nothing
-  , containerSummaryState = Nothing
-  , containerSummaryStatus = Nothing
-  , containerSummaryHostConfig = Nothing
-  , containerSummaryNetworkSettings = Nothing
-  , containerSummaryMounts = Nothing
+-- | Construct a value of type 'ContainerInspectResponse' (by applying it's required fields, if any)
+mkContainerInspectResponse
+  :: ContainerInspectResponse
+mkContainerInspectResponse =
+  ContainerInspectResponse
+  { containerInspectResponseId = Nothing
+  , containerInspectResponseCreated = Nothing
+  , containerInspectResponsePath = Nothing
+  , containerInspectResponseArgs = Nothing
+  , containerInspectResponseState = Nothing
+  , containerInspectResponseImage = Nothing
+  , containerInspectResponseResolvConfPath = Nothing
+  , containerInspectResponseHostnamePath = Nothing
+  , containerInspectResponseHostsPath = Nothing
+  , containerInspectResponseLogPath = Nothing
+  , containerInspectResponseNode = Nothing
+  , containerInspectResponseName = Nothing
+  , containerInspectResponseRestartCount = Nothing
+  , containerInspectResponseDriver = Nothing
+  , containerInspectResponseMountLabel = Nothing
+  , containerInspectResponseProcessLabel = Nothing
+  , containerInspectResponseAppArmorProfile = Nothing
+  , containerInspectResponseExecIDs = Nothing
+  , containerInspectResponseHostConfig = Nothing
+  , containerInspectResponseGraphDriver = Nothing
+  , containerInspectResponseSizeRw = Nothing
+  , containerInspectResponseSizeRootFs = Nothing
+  , containerInspectResponseMounts = Nothing
+  , containerInspectResponseConfig = Nothing
+  , containerInspectResponseNetworkSettings = Nothing
   }
 
--- ** ContainerSummaryHostConfig
--- | ContainerSummaryHostConfig
-data ContainerSummaryHostConfig = ContainerSummaryHostConfig
-  { containerSummaryHostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode"
+-- ** ContainerInspectResponseState
+-- | ContainerInspectResponseState
+-- The state of the container.
+data ContainerInspectResponseState = ContainerInspectResponseState
+  { containerInspectResponseStateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;.
+  , containerInspectResponseStateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;.
+  , containerInspectResponseStatePaused :: !(Maybe Bool) -- ^ "Paused" - Whether this container is paused.
+  , containerInspectResponseStateRestarting :: !(Maybe Bool) -- ^ "Restarting" - Whether this container is restarting.
+  , containerInspectResponseStateOomKilled :: !(Maybe Bool) -- ^ "OOMKilled" - Whether this container has been killed because it ran out of memory.
+  , containerInspectResponseStateDead :: !(Maybe Bool) -- ^ "Dead"
+  , containerInspectResponseStatePid :: !(Maybe Int) -- ^ "Pid" - The process ID of this container
+  , containerInspectResponseStateExitCode :: !(Maybe Int) -- ^ "ExitCode" - The last exit code of this container
+  , containerInspectResponseStateError :: !(Maybe Text) -- ^ "Error"
+  , containerInspectResponseStateStartedAt :: !(Maybe Text) -- ^ "StartedAt" - The time when this container was last started.
+  , containerInspectResponseStateFinishedAt :: !(Maybe Text) -- ^ "FinishedAt" - The time when this container last exited.
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummaryHostConfig
-instance A.FromJSON ContainerSummaryHostConfig where
-  parseJSON = A.withObject "ContainerSummaryHostConfig" $ \o ->
-    ContainerSummaryHostConfig
-      <$> (o .:? "NetworkMode")
+-- | FromJSON ContainerInspectResponseState
+instance A.FromJSON ContainerInspectResponseState where
+  parseJSON = A.withObject "ContainerInspectResponseState" $ \o ->
+    ContainerInspectResponseState
+      <$> (o .:? "Status")
+      <*> (o .:? "Running")
+      <*> (o .:? "Paused")
+      <*> (o .:? "Restarting")
+      <*> (o .:? "OOMKilled")
+      <*> (o .:? "Dead")
+      <*> (o .:? "Pid")
+      <*> (o .:? "ExitCode")
+      <*> (o .:? "Error")
+      <*> (o .:? "StartedAt")
+      <*> (o .:? "FinishedAt")
 
--- | ToJSON ContainerSummaryHostConfig
-instance A.ToJSON ContainerSummaryHostConfig where
-  toJSON ContainerSummaryHostConfig {..} =
+-- | ToJSON ContainerInspectResponseState
+instance A.ToJSON ContainerInspectResponseState where
+  toJSON ContainerInspectResponseState {..} =
    _omitNulls
-      [ "NetworkMode" .= containerSummaryHostConfigNetworkMode
+      [ "Status" .= containerInspectResponseStateStatus
+      , "Running" .= containerInspectResponseStateRunning
+      , "Paused" .= containerInspectResponseStatePaused
+      , "Restarting" .= containerInspectResponseStateRestarting
+      , "OOMKilled" .= containerInspectResponseStateOomKilled
+      , "Dead" .= containerInspectResponseStateDead
+      , "Pid" .= containerInspectResponseStatePid
+      , "ExitCode" .= containerInspectResponseStateExitCode
+      , "Error" .= containerInspectResponseStateError
+      , "StartedAt" .= containerInspectResponseStateStartedAt
+      , "FinishedAt" .= containerInspectResponseStateFinishedAt
       ]
 
 
--- | Construct a value of type 'ContainerSummaryHostConfig' (by applying it's required fields, if any)
-mkContainerSummaryHostConfig
-  :: ContainerSummaryHostConfig
-mkContainerSummaryHostConfig =
-  ContainerSummaryHostConfig
-  { containerSummaryHostConfigNetworkMode = Nothing
+-- | Construct a value of type 'ContainerInspectResponseState' (by applying it's required fields, if any)
+mkContainerInspectResponseState
+  :: ContainerInspectResponseState
+mkContainerInspectResponseState =
+  ContainerInspectResponseState
+  { containerInspectResponseStateStatus = Nothing
+  , containerInspectResponseStateRunning = Nothing
+  , containerInspectResponseStatePaused = Nothing
+  , containerInspectResponseStateRestarting = Nothing
+  , containerInspectResponseStateOomKilled = Nothing
+  , containerInspectResponseStateDead = Nothing
+  , containerInspectResponseStatePid = Nothing
+  , containerInspectResponseStateExitCode = Nothing
+  , containerInspectResponseStateError = Nothing
+  , containerInspectResponseStateStartedAt = Nothing
+  , containerInspectResponseStateFinishedAt = Nothing
   }
 
--- ** ContainerSummaryNetworkSettings
--- | ContainerSummaryNetworkSettings
--- A summary of the container's network settings
-data ContainerSummaryNetworkSettings = ContainerSummaryNetworkSettings
-  { containerSummaryNetworkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks"
+-- ** ContainerPruneResponse
+-- | ContainerPruneResponse
+data ContainerPruneResponse = ContainerPruneResponse
+  { containerPruneResponseContainersDeleted :: !(Maybe [Text]) -- ^ "ContainersDeleted" - Container IDs that were deleted
+  , containerPruneResponseSpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummaryNetworkSettings
-instance A.FromJSON ContainerSummaryNetworkSettings where
-  parseJSON = A.withObject "ContainerSummaryNetworkSettings" $ \o ->
-    ContainerSummaryNetworkSettings
-      <$> (o .:? "Networks")
+-- | FromJSON ContainerPruneResponse
+instance A.FromJSON ContainerPruneResponse where
+  parseJSON = A.withObject "ContainerPruneResponse" $ \o ->
+    ContainerPruneResponse
+      <$> (o .:? "ContainersDeleted")
+      <*> (o .:? "SpaceReclaimed")
 
--- | ToJSON ContainerSummaryNetworkSettings
-instance A.ToJSON ContainerSummaryNetworkSettings where
-  toJSON ContainerSummaryNetworkSettings {..} =
+-- | ToJSON ContainerPruneResponse
+instance A.ToJSON ContainerPruneResponse where
+  toJSON ContainerPruneResponse {..} =
    _omitNulls
-      [ "Networks" .= containerSummaryNetworkSettingsNetworks
+      [ "ContainersDeleted" .= containerPruneResponseContainersDeleted
+      , "SpaceReclaimed" .= containerPruneResponseSpaceReclaimed
       ]
 
 
--- | Construct a value of type 'ContainerSummaryNetworkSettings' (by applying it's required fields, if any)
-mkContainerSummaryNetworkSettings
-  :: ContainerSummaryNetworkSettings
-mkContainerSummaryNetworkSettings =
-  ContainerSummaryNetworkSettings
-  { containerSummaryNetworkSettingsNetworks = Nothing
+-- | Construct a value of type 'ContainerPruneResponse' (by applying it's required fields, if any)
+mkContainerPruneResponse
+  :: ContainerPruneResponse
+mkContainerPruneResponse =
+  ContainerPruneResponse
+  { containerPruneResponseContainersDeleted = Nothing
+  , containerPruneResponseSpaceReclaimed = Nothing
+  }
+
+-- ** ContainerTopResponse
+-- | ContainerTopResponse
+-- OK response to ContainerTop operation
+data ContainerTopResponse = ContainerTopResponse
+  { containerTopResponseTitles :: !(Maybe [Text]) -- ^ "Titles" - The ps column titles
+  , containerTopResponseProcesses :: !(Maybe [[Text]]) -- ^ "Processes" - Each process running in the container, where each is process is an array of values corresponding to the titles
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerTopResponse
+instance A.FromJSON ContainerTopResponse where
+  parseJSON = A.withObject "ContainerTopResponse" $ \o ->
+    ContainerTopResponse
+      <$> (o .:? "Titles")
+      <*> (o .:? "Processes")
+
+-- | ToJSON ContainerTopResponse
+instance A.ToJSON ContainerTopResponse where
+  toJSON ContainerTopResponse {..} =
+   _omitNulls
+      [ "Titles" .= containerTopResponseTitles
+      , "Processes" .= containerTopResponseProcesses
+      ]
+
+
+-- | Construct a value of type 'ContainerTopResponse' (by applying it's required fields, if any)
+mkContainerTopResponse
+  :: ContainerTopResponse
+mkContainerTopResponse =
+  ContainerTopResponse
+  { containerTopResponseTitles = Nothing
+  , containerTopResponseProcesses = Nothing
+  }
+
+-- ** ContainerUpdateResponse
+-- | ContainerUpdateResponse
+-- OK response to ContainerUpdate operation
+data ContainerUpdateResponse = ContainerUpdateResponse
+  { containerUpdateResponseWarnings :: !(Maybe [Text]) -- ^ "Warnings"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerUpdateResponse
+instance A.FromJSON ContainerUpdateResponse where
+  parseJSON = A.withObject "ContainerUpdateResponse" $ \o ->
+    ContainerUpdateResponse
+      <$> (o .:? "Warnings")
+
+-- | ToJSON ContainerUpdateResponse
+instance A.ToJSON ContainerUpdateResponse where
+  toJSON ContainerUpdateResponse {..} =
+   _omitNulls
+      [ "Warnings" .= containerUpdateResponseWarnings
+      ]
+
+
+-- | Construct a value of type 'ContainerUpdateResponse' (by applying it's required fields, if any)
+mkContainerUpdateResponse
+  :: ContainerUpdateResponse
+mkContainerUpdateResponse =
+  ContainerUpdateResponse
+  { containerUpdateResponseWarnings = Nothing
+  }
+
+-- ** ContainerWaitResponse
+-- | ContainerWaitResponse
+-- OK response to ContainerWait operation
+data ContainerWaitResponse = ContainerWaitResponse
+  { containerWaitResponseStatusCode :: !(Int) -- ^ /Required/ "StatusCode" - Exit code of the container
+  , containerWaitResponseError :: !(Maybe ContainerWaitResponseError) -- ^ "Error"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerWaitResponse
+instance A.FromJSON ContainerWaitResponse where
+  parseJSON = A.withObject "ContainerWaitResponse" $ \o ->
+    ContainerWaitResponse
+      <$> (o .:  "StatusCode")
+      <*> (o .:? "Error")
+
+-- | ToJSON ContainerWaitResponse
+instance A.ToJSON ContainerWaitResponse where
+  toJSON ContainerWaitResponse {..} =
+   _omitNulls
+      [ "StatusCode" .= containerWaitResponseStatusCode
+      , "Error" .= containerWaitResponseError
+      ]
+
+
+-- | Construct a value of type 'ContainerWaitResponse' (by applying it's required fields, if any)
+mkContainerWaitResponse
+  :: Int -- ^ 'containerWaitResponseStatusCode': Exit code of the container
+  -> ContainerWaitResponse
+mkContainerWaitResponse containerWaitResponseStatusCode =
+  ContainerWaitResponse
+  { containerWaitResponseStatusCode
+  , containerWaitResponseError = Nothing
+  }
+
+-- ** ContainerWaitResponseError
+-- | ContainerWaitResponseError
+-- container waiting error, if any
+data ContainerWaitResponseError = ContainerWaitResponseError
+  { containerWaitResponseErrorMessage :: !(Maybe Text) -- ^ "Message" - Details of an error
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerWaitResponseError
+instance A.FromJSON ContainerWaitResponseError where
+  parseJSON = A.withObject "ContainerWaitResponseError" $ \o ->
+    ContainerWaitResponseError
+      <$> (o .:? "Message")
+
+-- | ToJSON ContainerWaitResponseError
+instance A.ToJSON ContainerWaitResponseError where
+  toJSON ContainerWaitResponseError {..} =
+   _omitNulls
+      [ "Message" .= containerWaitResponseErrorMessage
+      ]
+
+
+-- | Construct a value of type 'ContainerWaitResponseError' (by applying it's required fields, if any)
+mkContainerWaitResponseError
+  :: ContainerWaitResponseError
+mkContainerWaitResponseError =
+  ContainerWaitResponseError
+  { containerWaitResponseErrorMessage = Nothing
   }
 
 -- ** CreateImageInfo
 -- | CreateImageInfo
 data CreateImageInfo = CreateImageInfo
-  { createImageInfoError :: !(Maybe Text) -- ^ "error"
+  { createImageInfoId :: !(Maybe Text) -- ^ "id"
+  , createImageInfoError :: !(Maybe Text) -- ^ "error"
   , createImageInfoStatus :: !(Maybe Text) -- ^ "status"
   , createImageInfoProgress :: !(Maybe Text) -- ^ "progress"
   , createImageInfoProgressDetail :: !(Maybe ProgressDetail) -- ^ "progressDetail"
@@ -848,7 +1244,8 @@ data CreateImageInfo = CreateImageInfo
 instance A.FromJSON CreateImageInfo where
   parseJSON = A.withObject "CreateImageInfo" $ \o ->
     CreateImageInfo
-      <$> (o .:? "error")
+      <$> (o .:? "id")
+      <*> (o .:? "error")
       <*> (o .:? "status")
       <*> (o .:? "progress")
       <*> (o .:? "progressDetail")
@@ -857,7 +1254,8 @@ instance A.FromJSON CreateImageInfo where
 instance A.ToJSON CreateImageInfo where
   toJSON CreateImageInfo {..} =
    _omitNulls
-      [ "error" .= createImageInfoError
+      [ "id" .= createImageInfoId
+      , "error" .= createImageInfoError
       , "status" .= createImageInfoStatus
       , "progress" .= createImageInfoProgress
       , "progressDetail" .= createImageInfoProgressDetail
@@ -869,7 +1267,8 @@ mkCreateImageInfo
   :: CreateImageInfo
 mkCreateImageInfo =
   CreateImageInfo
-  { createImageInfoError = Nothing
+  { createImageInfoId = Nothing
+  , createImageInfoError = Nothing
   , createImageInfoStatus = Nothing
   , createImageInfoProgress = Nothing
   , createImageInfoProgressDetail = Nothing
@@ -912,6 +1311,200 @@ mkDeviceMapping =
   , deviceMappingCgroupPermissions = Nothing
   }
 
+-- ** DistributionInspectResponse
+-- | DistributionInspectResponse
+data DistributionInspectResponse = DistributionInspectResponse
+  { distributionInspectResponseDescriptor :: !(DistributionInspectResponseDescriptor) -- ^ /Required/ "Descriptor"
+  , distributionInspectResponsePlatforms :: !([DistributionInspectResponsePlatforms]) -- ^ /Required/ "Platforms" - An array containing all platforms supported by the image
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON DistributionInspectResponse
+instance A.FromJSON DistributionInspectResponse where
+  parseJSON = A.withObject "DistributionInspectResponse" $ \o ->
+    DistributionInspectResponse
+      <$> (o .:  "Descriptor")
+      <*> (o .:  "Platforms")
+
+-- | ToJSON DistributionInspectResponse
+instance A.ToJSON DistributionInspectResponse where
+  toJSON DistributionInspectResponse {..} =
+   _omitNulls
+      [ "Descriptor" .= distributionInspectResponseDescriptor
+      , "Platforms" .= distributionInspectResponsePlatforms
+      ]
+
+
+-- | Construct a value of type 'DistributionInspectResponse' (by applying it's required fields, if any)
+mkDistributionInspectResponse
+  :: DistributionInspectResponseDescriptor -- ^ 'distributionInspectResponseDescriptor'
+  -> [DistributionInspectResponsePlatforms] -- ^ 'distributionInspectResponsePlatforms': An array containing all platforms supported by the image
+  -> DistributionInspectResponse
+mkDistributionInspectResponse distributionInspectResponseDescriptor distributionInspectResponsePlatforms =
+  DistributionInspectResponse
+  { distributionInspectResponseDescriptor
+  , distributionInspectResponsePlatforms
+  }
+
+-- ** DistributionInspectResponseDescriptor
+-- | DistributionInspectResponseDescriptor
+-- A descriptor struct containing digest, media type, and size
+data DistributionInspectResponseDescriptor = DistributionInspectResponseDescriptor
+  { distributionInspectResponseDescriptorMediaType :: !(Maybe Text) -- ^ "MediaType"
+  , distributionInspectResponseDescriptorSize :: !(Maybe Integer) -- ^ "Size"
+  , distributionInspectResponseDescriptorDigest :: !(Maybe Text) -- ^ "Digest"
+  , distributionInspectResponseDescriptorUrLs :: !(Maybe [Text]) -- ^ "URLs"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON DistributionInspectResponseDescriptor
+instance A.FromJSON DistributionInspectResponseDescriptor where
+  parseJSON = A.withObject "DistributionInspectResponseDescriptor" $ \o ->
+    DistributionInspectResponseDescriptor
+      <$> (o .:? "MediaType")
+      <*> (o .:? "Size")
+      <*> (o .:? "Digest")
+      <*> (o .:? "URLs")
+
+-- | ToJSON DistributionInspectResponseDescriptor
+instance A.ToJSON DistributionInspectResponseDescriptor where
+  toJSON DistributionInspectResponseDescriptor {..} =
+   _omitNulls
+      [ "MediaType" .= distributionInspectResponseDescriptorMediaType
+      , "Size" .= distributionInspectResponseDescriptorSize
+      , "Digest" .= distributionInspectResponseDescriptorDigest
+      , "URLs" .= distributionInspectResponseDescriptorUrLs
+      ]
+
+
+-- | Construct a value of type 'DistributionInspectResponseDescriptor' (by applying it's required fields, if any)
+mkDistributionInspectResponseDescriptor
+  :: DistributionInspectResponseDescriptor
+mkDistributionInspectResponseDescriptor =
+  DistributionInspectResponseDescriptor
+  { distributionInspectResponseDescriptorMediaType = Nothing
+  , distributionInspectResponseDescriptorSize = Nothing
+  , distributionInspectResponseDescriptorDigest = Nothing
+  , distributionInspectResponseDescriptorUrLs = Nothing
+  }
+
+-- ** DistributionInspectResponsePlatforms
+-- | DistributionInspectResponsePlatforms
+data DistributionInspectResponsePlatforms = DistributionInspectResponsePlatforms
+  { distributionInspectResponsePlatformsArchitecture :: !(Maybe Text) -- ^ "Architecture"
+  , distributionInspectResponsePlatformsOs :: !(Maybe Text) -- ^ "OS"
+  , distributionInspectResponsePlatformsOsVersion :: !(Maybe Text) -- ^ "OSVersion"
+  , distributionInspectResponsePlatformsOsFeatures :: !(Maybe [Text]) -- ^ "OSFeatures"
+  , distributionInspectResponsePlatformsVariant :: !(Maybe Text) -- ^ "Variant"
+  , distributionInspectResponsePlatformsFeatures :: !(Maybe [Text]) -- ^ "Features"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON DistributionInspectResponsePlatforms
+instance A.FromJSON DistributionInspectResponsePlatforms where
+  parseJSON = A.withObject "DistributionInspectResponsePlatforms" $ \o ->
+    DistributionInspectResponsePlatforms
+      <$> (o .:? "Architecture")
+      <*> (o .:? "OS")
+      <*> (o .:? "OSVersion")
+      <*> (o .:? "OSFeatures")
+      <*> (o .:? "Variant")
+      <*> (o .:? "Features")
+
+-- | ToJSON DistributionInspectResponsePlatforms
+instance A.ToJSON DistributionInspectResponsePlatforms where
+  toJSON DistributionInspectResponsePlatforms {..} =
+   _omitNulls
+      [ "Architecture" .= distributionInspectResponsePlatformsArchitecture
+      , "OS" .= distributionInspectResponsePlatformsOs
+      , "OSVersion" .= distributionInspectResponsePlatformsOsVersion
+      , "OSFeatures" .= distributionInspectResponsePlatformsOsFeatures
+      , "Variant" .= distributionInspectResponsePlatformsVariant
+      , "Features" .= distributionInspectResponsePlatformsFeatures
+      ]
+
+
+-- | Construct a value of type 'DistributionInspectResponsePlatforms' (by applying it's required fields, if any)
+mkDistributionInspectResponsePlatforms
+  :: DistributionInspectResponsePlatforms
+mkDistributionInspectResponsePlatforms =
+  DistributionInspectResponsePlatforms
+  { distributionInspectResponsePlatformsArchitecture = Nothing
+  , distributionInspectResponsePlatformsOs = Nothing
+  , distributionInspectResponsePlatformsOsVersion = Nothing
+  , distributionInspectResponsePlatformsOsFeatures = Nothing
+  , distributionInspectResponsePlatformsVariant = Nothing
+  , distributionInspectResponsePlatformsFeatures = Nothing
+  }
+
+-- ** Driver
+-- | Driver
+-- Driver represents a driver (network, logging, secrets).
+data Driver = Driver
+  { driverName :: !(Text) -- ^ /Required/ "Name" - Name of the driver.
+  , driverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Key/value map of driver-specific options.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Driver
+instance A.FromJSON Driver where
+  parseJSON = A.withObject "Driver" $ \o ->
+    Driver
+      <$> (o .:  "Name")
+      <*> (o .:? "Options")
+
+-- | ToJSON Driver
+instance A.ToJSON Driver where
+  toJSON Driver {..} =
+   _omitNulls
+      [ "Name" .= driverName
+      , "Options" .= driverOptions
+      ]
+
+
+-- | Construct a value of type 'Driver' (by applying it's required fields, if any)
+mkDriver
+  :: Text -- ^ 'driverName': Name of the driver.
+  -> Driver
+mkDriver driverName =
+  Driver
+  { driverName
+  , driverOptions = Nothing
+  }
+
+-- ** EndpointIPAMConfig
+-- | EndpointIPAMConfig
+-- EndpointIPAMConfig represents an endpoint's IPAM configuration.
+data EndpointIPAMConfig = EndpointIPAMConfig
+  { endpointIPAMConfigIPv4Address :: !(Maybe Text) -- ^ "IPv4Address"
+  , endpointIPAMConfigIPv6Address :: !(Maybe Text) -- ^ "IPv6Address"
+  , endpointIPAMConfigLinkLocalIPs :: !(Maybe [Text]) -- ^ "LinkLocalIPs"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON EndpointIPAMConfig
+instance A.FromJSON EndpointIPAMConfig where
+  parseJSON = A.withObject "EndpointIPAMConfig" $ \o ->
+    EndpointIPAMConfig
+      <$> (o .:? "IPv4Address")
+      <*> (o .:? "IPv6Address")
+      <*> (o .:? "LinkLocalIPs")
+
+-- | ToJSON EndpointIPAMConfig
+instance A.ToJSON EndpointIPAMConfig where
+  toJSON EndpointIPAMConfig {..} =
+   _omitNulls
+      [ "IPv4Address" .= endpointIPAMConfigIPv4Address
+      , "IPv6Address" .= endpointIPAMConfigIPv6Address
+      , "LinkLocalIPs" .= endpointIPAMConfigLinkLocalIPs
+      ]
+
+
+-- | Construct a value of type 'EndpointIPAMConfig' (by applying it's required fields, if any)
+mkEndpointIPAMConfig
+  :: EndpointIPAMConfig
+mkEndpointIPAMConfig =
+  EndpointIPAMConfig
+  { endpointIPAMConfigIPv4Address = Nothing
+  , endpointIPAMConfigIPv6Address = Nothing
+  , endpointIPAMConfigLinkLocalIPs = Nothing
+  }
+
 -- ** EndpointPortConfig
 -- | EndpointPortConfig
 data EndpointPortConfig = EndpointPortConfig
@@ -919,6 +1512,7 @@ data EndpointPortConfig = EndpointPortConfig
   , endpointPortConfigProtocol :: !(Maybe E'Type) -- ^ "Protocol"
   , endpointPortConfigTargetPort :: !(Maybe Int) -- ^ "TargetPort" - The port inside the container.
   , endpointPortConfigPublishedPort :: !(Maybe Int) -- ^ "PublishedPort" - The port on the swarm hosts.
+  , endpointPortConfigPublishMode :: !(Maybe E'PublishMode) -- ^ "PublishMode" - The mode in which port is published.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  - \&quot;ingress\&quot; makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \&quot;host\&quot; bypasses the routing mesh and publish the port directly on   the swarm node where that service is running.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON EndpointPortConfig
@@ -929,6 +1523,7 @@ instance A.FromJSON EndpointPortConfig where
       <*> (o .:? "Protocol")
       <*> (o .:? "TargetPort")
       <*> (o .:? "PublishedPort")
+      <*> (o .:? "PublishMode")
 
 -- | ToJSON EndpointPortConfig
 instance A.ToJSON EndpointPortConfig where
@@ -938,6 +1533,7 @@ instance A.ToJSON EndpointPortConfig where
       , "Protocol" .= endpointPortConfigProtocol
       , "TargetPort" .= endpointPortConfigTargetPort
       , "PublishedPort" .= endpointPortConfigPublishedPort
+      , "PublishMode" .= endpointPortConfigPublishMode
       ]
 
 
@@ -950,24 +1546,26 @@ mkEndpointPortConfig =
   , endpointPortConfigProtocol = Nothing
   , endpointPortConfigTargetPort = Nothing
   , endpointPortConfigPublishedPort = Nothing
+  , endpointPortConfigPublishMode = Nothing
   }
 
 -- ** EndpointSettings
 -- | EndpointSettings
 -- Configuration for a network endpoint.
 data EndpointSettings = EndpointSettings
-  { endpointSettingsIpamConfig :: !(Maybe EndpointSettingsIPAMConfig) -- ^ "IPAMConfig"
+  { endpointSettingsIpamConfig :: !(Maybe EndpointIPAMConfig) -- ^ "IPAMConfig"
   , endpointSettingsLinks :: !(Maybe [Text]) -- ^ "Links"
   , endpointSettingsAliases :: !(Maybe [Text]) -- ^ "Aliases"
-  , endpointSettingsNetworkId :: !(Maybe Text) -- ^ "NetworkID"
-  , endpointSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID"
-  , endpointSettingsGateway :: !(Maybe Text) -- ^ "Gateway"
-  , endpointSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress"
-  , endpointSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen"
-  , endpointSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway"
-  , endpointSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address"
-  , endpointSettingsGlobalIPv6PrefixLen :: !(Maybe Integer) -- ^ "GlobalIPv6PrefixLen"
-  , endpointSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress"
+  , endpointSettingsNetworkId :: !(Maybe Text) -- ^ "NetworkID" - Unique ID of the network.
+  , endpointSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - Unique ID for the service endpoint in a Sandbox.
+  , endpointSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for this network.
+  , endpointSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address.
+  , endpointSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address.
+  , endpointSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address.
+  , endpointSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address.
+  , endpointSettingsGlobalIPv6PrefixLen :: !(Maybe Integer) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address.
+  , endpointSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the endpoint on this network.
+  , endpointSettingsDriverOpts :: !(Maybe (Map.Map String Text)) -- ^ "DriverOpts" - DriverOpts is a mapping of driver options and values. These options are passed directly to the driver and are driver specific.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON EndpointSettings
@@ -986,6 +1584,7 @@ instance A.FromJSON EndpointSettings where
       <*> (o .:? "GlobalIPv6Address")
       <*> (o .:? "GlobalIPv6PrefixLen")
       <*> (o .:? "MacAddress")
+      <*> (o .:? "DriverOpts")
 
 -- | ToJSON EndpointSettings
 instance A.ToJSON EndpointSettings where
@@ -1003,6 +1602,7 @@ instance A.ToJSON EndpointSettings where
       , "GlobalIPv6Address" .= endpointSettingsGlobalIPv6Address
       , "GlobalIPv6PrefixLen" .= endpointSettingsGlobalIPv6PrefixLen
       , "MacAddress" .= endpointSettingsMacAddress
+      , "DriverOpts" .= endpointSettingsDriverOpts
       ]
 
 
@@ -1023,43 +1623,7 @@ mkEndpointSettings =
   , endpointSettingsGlobalIPv6Address = Nothing
   , endpointSettingsGlobalIPv6PrefixLen = Nothing
   , endpointSettingsMacAddress = Nothing
-  }
-
--- ** EndpointSettingsIPAMConfig
--- | EndpointSettingsIPAMConfig
--- IPAM configurations for the endpoint
-data EndpointSettingsIPAMConfig = EndpointSettingsIPAMConfig
-  { endpointSettingsIPAMConfigIPv4Address :: !(Maybe Text) -- ^ "IPv4Address"
-  , endpointSettingsIPAMConfigIPv6Address :: !(Maybe Text) -- ^ "IPv6Address"
-  , endpointSettingsIPAMConfigLinkLocalIPs :: !(Maybe [Text]) -- ^ "LinkLocalIPs"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON EndpointSettingsIPAMConfig
-instance A.FromJSON EndpointSettingsIPAMConfig where
-  parseJSON = A.withObject "EndpointSettingsIPAMConfig" $ \o ->
-    EndpointSettingsIPAMConfig
-      <$> (o .:? "IPv4Address")
-      <*> (o .:? "IPv6Address")
-      <*> (o .:? "LinkLocalIPs")
-
--- | ToJSON EndpointSettingsIPAMConfig
-instance A.ToJSON EndpointSettingsIPAMConfig where
-  toJSON EndpointSettingsIPAMConfig {..} =
-   _omitNulls
-      [ "IPv4Address" .= endpointSettingsIPAMConfigIPv4Address
-      , "IPv6Address" .= endpointSettingsIPAMConfigIPv6Address
-      , "LinkLocalIPs" .= endpointSettingsIPAMConfigLinkLocalIPs
-      ]
-
-
--- | Construct a value of type 'EndpointSettingsIPAMConfig' (by applying it's required fields, if any)
-mkEndpointSettingsIPAMConfig
-  :: EndpointSettingsIPAMConfig
-mkEndpointSettingsIPAMConfig =
-  EndpointSettingsIPAMConfig
-  { endpointSettingsIPAMConfigIPv4Address = Nothing
-  , endpointSettingsIPAMConfigIPv6Address = Nothing
-  , endpointSettingsIPAMConfigLinkLocalIPs = Nothing
+  , endpointSettingsDriverOpts = Nothing
   }
 
 -- ** EndpointSpec
@@ -1093,6 +1657,75 @@ mkEndpointSpec =
   EndpointSpec
   { endpointSpecMode = Nothing
   , endpointSpecPorts = Nothing
+  }
+
+-- ** EngineDescription
+-- | EngineDescription
+-- EngineDescription provides information about an engine.
+data EngineDescription = EngineDescription
+  { engineDescriptionEngineVersion :: !(Maybe Text) -- ^ "EngineVersion"
+  , engineDescriptionLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels"
+  , engineDescriptionPlugins :: !(Maybe [EngineDescriptionPlugins]) -- ^ "Plugins"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON EngineDescription
+instance A.FromJSON EngineDescription where
+  parseJSON = A.withObject "EngineDescription" $ \o ->
+    EngineDescription
+      <$> (o .:? "EngineVersion")
+      <*> (o .:? "Labels")
+      <*> (o .:? "Plugins")
+
+-- | ToJSON EngineDescription
+instance A.ToJSON EngineDescription where
+  toJSON EngineDescription {..} =
+   _omitNulls
+      [ "EngineVersion" .= engineDescriptionEngineVersion
+      , "Labels" .= engineDescriptionLabels
+      , "Plugins" .= engineDescriptionPlugins
+      ]
+
+
+-- | Construct a value of type 'EngineDescription' (by applying it's required fields, if any)
+mkEngineDescription
+  :: EngineDescription
+mkEngineDescription =
+  EngineDescription
+  { engineDescriptionEngineVersion = Nothing
+  , engineDescriptionLabels = Nothing
+  , engineDescriptionPlugins = Nothing
+  }
+
+-- ** EngineDescriptionPlugins
+-- | EngineDescriptionPlugins
+data EngineDescriptionPlugins = EngineDescriptionPlugins
+  { engineDescriptionPluginsType :: !(Maybe Text) -- ^ "Type"
+  , engineDescriptionPluginsName :: !(Maybe Text) -- ^ "Name"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON EngineDescriptionPlugins
+instance A.FromJSON EngineDescriptionPlugins where
+  parseJSON = A.withObject "EngineDescriptionPlugins" $ \o ->
+    EngineDescriptionPlugins
+      <$> (o .:? "Type")
+      <*> (o .:? "Name")
+
+-- | ToJSON EngineDescriptionPlugins
+instance A.ToJSON EngineDescriptionPlugins where
+  toJSON EngineDescriptionPlugins {..} =
+   _omitNulls
+      [ "Type" .= engineDescriptionPluginsType
+      , "Name" .= engineDescriptionPluginsName
+      ]
+
+
+-- | Construct a value of type 'EngineDescriptionPlugins' (by applying it's required fields, if any)
+mkEngineDescriptionPlugins
+  :: EngineDescriptionPlugins
+mkEngineDescriptionPlugins =
+  EngineDescriptionPlugins
+  { engineDescriptionPluginsType = Nothing
+  , engineDescriptionPluginsName = Nothing
   }
 
 -- ** ErrorDetail
@@ -1157,6 +1790,74 @@ mkErrorResponse errorResponseMessage =
   { errorResponseMessage
   }
 
+-- ** ExecInspectResponse
+-- | ExecInspectResponse
+data ExecInspectResponse = ExecInspectResponse
+  { execInspectResponseCanRemove :: !(Maybe Bool) -- ^ "CanRemove"
+  , execInspectResponseDetachKeys :: !(Maybe Text) -- ^ "DetachKeys"
+  , execInspectResponseId :: !(Maybe Text) -- ^ "ID"
+  , execInspectResponseRunning :: !(Maybe Bool) -- ^ "Running"
+  , execInspectResponseExitCode :: !(Maybe Int) -- ^ "ExitCode"
+  , execInspectResponseProcessConfig :: !(Maybe ProcessConfig) -- ^ "ProcessConfig"
+  , execInspectResponseOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin"
+  , execInspectResponseOpenStderr :: !(Maybe Bool) -- ^ "OpenStderr"
+  , execInspectResponseOpenStdout :: !(Maybe Bool) -- ^ "OpenStdout"
+  , execInspectResponseContainerId :: !(Maybe Text) -- ^ "ContainerID"
+  , execInspectResponsePid :: !(Maybe Int) -- ^ "Pid" - The system process ID for the exec process.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ExecInspectResponse
+instance A.FromJSON ExecInspectResponse where
+  parseJSON = A.withObject "ExecInspectResponse" $ \o ->
+    ExecInspectResponse
+      <$> (o .:? "CanRemove")
+      <*> (o .:? "DetachKeys")
+      <*> (o .:? "ID")
+      <*> (o .:? "Running")
+      <*> (o .:? "ExitCode")
+      <*> (o .:? "ProcessConfig")
+      <*> (o .:? "OpenStdin")
+      <*> (o .:? "OpenStderr")
+      <*> (o .:? "OpenStdout")
+      <*> (o .:? "ContainerID")
+      <*> (o .:? "Pid")
+
+-- | ToJSON ExecInspectResponse
+instance A.ToJSON ExecInspectResponse where
+  toJSON ExecInspectResponse {..} =
+   _omitNulls
+      [ "CanRemove" .= execInspectResponseCanRemove
+      , "DetachKeys" .= execInspectResponseDetachKeys
+      , "ID" .= execInspectResponseId
+      , "Running" .= execInspectResponseRunning
+      , "ExitCode" .= execInspectResponseExitCode
+      , "ProcessConfig" .= execInspectResponseProcessConfig
+      , "OpenStdin" .= execInspectResponseOpenStdin
+      , "OpenStderr" .= execInspectResponseOpenStderr
+      , "OpenStdout" .= execInspectResponseOpenStdout
+      , "ContainerID" .= execInspectResponseContainerId
+      , "Pid" .= execInspectResponsePid
+      ]
+
+
+-- | Construct a value of type 'ExecInspectResponse' (by applying it's required fields, if any)
+mkExecInspectResponse
+  :: ExecInspectResponse
+mkExecInspectResponse =
+  ExecInspectResponse
+  { execInspectResponseCanRemove = Nothing
+  , execInspectResponseDetachKeys = Nothing
+  , execInspectResponseId = Nothing
+  , execInspectResponseRunning = Nothing
+  , execInspectResponseExitCode = Nothing
+  , execInspectResponseProcessConfig = Nothing
+  , execInspectResponseOpenStdin = Nothing
+  , execInspectResponseOpenStderr = Nothing
+  , execInspectResponseOpenStdout = Nothing
+  , execInspectResponseContainerId = Nothing
+  , execInspectResponsePid = Nothing
+  }
+
 -- ** GraphDriverData
 -- | GraphDriverData
 -- Information about a container's graph driver.
@@ -1183,8 +1884,8 @@ instance A.ToJSON GraphDriverData where
 
 -- | Construct a value of type 'GraphDriverData' (by applying it's required fields, if any)
 mkGraphDriverData
-  :: Text -- ^ 'graphDriverDataName' 
-  -> (Map.Map String Text) -- ^ 'graphDriverDataData' 
+  :: Text -- ^ 'graphDriverDataName'
+  -> (Map.Map String Text) -- ^ 'graphDriverDataData'
   -> GraphDriverData
 mkGraphDriverData graphDriverDataName graphDriverDataData =
   GraphDriverData
@@ -1196,7 +1897,7 @@ mkGraphDriverData graphDriverDataName graphDriverDataData =
 -- | HealthConfig
 -- A test to perform to check that the container is healthy.
 data HealthConfig = HealthConfig
-  { healthConfigTest :: !(Maybe [Text]) -- ^ "Test" - The test to perform. Possible values are:  - &#x60;[]&#x60; inherit healthcheck from image or parent image - &#x60;[\&quot;NONE\&quot;]&#x60; disable healthcheck - &#x60;[\&quot;CMD\&quot;, args...]&#x60; exec arguments directly - &#x60;[\&quot;CMD-SHELL\&quot;, command]&#x60; run command with system&#39;s default shell 
+  { healthConfigTest :: !(Maybe [Text]) -- ^ "Test" - The test to perform. Possible values are:  - &#x60;[]&#x60; inherit healthcheck from image or parent image - &#x60;[\&quot;NONE\&quot;]&#x60; disable healthcheck - &#x60;[\&quot;CMD\&quot;, args...]&#x60; exec arguments directly - &#x60;[\&quot;CMD-SHELL\&quot;, command]&#x60; run command with system&#39;s default shell
   , healthConfigInterval :: !(Maybe Int) -- ^ "Interval" - The time to wait between checks in nanoseconds. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
   , healthConfigTimeout :: !(Maybe Int) -- ^ "Timeout" - The time to wait before considering the check to have hung. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
   , healthConfigRetries :: !(Maybe Int) -- ^ "Retries" - The number of consecutive failures needed to consider a container as unhealthy. 0 means inherit.
@@ -1237,19 +1938,74 @@ mkHealthConfig =
   , healthConfigStartPeriod = Nothing
   }
 
+-- ** HistoryResponseItem
+-- | HistoryResponseItem
+-- individual image layer information in response to ImageHistory operation
+data HistoryResponseItem = HistoryResponseItem
+  { historyResponseItemId :: !(Text) -- ^ /Required/ "Id"
+  , historyResponseItemCreated :: !(Integer) -- ^ /Required/ "Created"
+  , historyResponseItemCreatedBy :: !(Text) -- ^ /Required/ "CreatedBy"
+  , historyResponseItemTags :: !([Text]) -- ^ /Required/ "Tags"
+  , historyResponseItemSize :: !(Integer) -- ^ /Required/ "Size"
+  , historyResponseItemComment :: !(Text) -- ^ /Required/ "Comment"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON HistoryResponseItem
+instance A.FromJSON HistoryResponseItem where
+  parseJSON = A.withObject "HistoryResponseItem" $ \o ->
+    HistoryResponseItem
+      <$> (o .:  "Id")
+      <*> (o .:  "Created")
+      <*> (o .:  "CreatedBy")
+      <*> (o .:  "Tags")
+      <*> (o .:  "Size")
+      <*> (o .:  "Comment")
+
+-- | ToJSON HistoryResponseItem
+instance A.ToJSON HistoryResponseItem where
+  toJSON HistoryResponseItem {..} =
+   _omitNulls
+      [ "Id" .= historyResponseItemId
+      , "Created" .= historyResponseItemCreated
+      , "CreatedBy" .= historyResponseItemCreatedBy
+      , "Tags" .= historyResponseItemTags
+      , "Size" .= historyResponseItemSize
+      , "Comment" .= historyResponseItemComment
+      ]
+
+
+-- | Construct a value of type 'HistoryResponseItem' (by applying it's required fields, if any)
+mkHistoryResponseItem
+  :: Text -- ^ 'historyResponseItemId'
+  -> Integer -- ^ 'historyResponseItemCreated'
+  -> Text -- ^ 'historyResponseItemCreatedBy'
+  -> [Text] -- ^ 'historyResponseItemTags'
+  -> Integer -- ^ 'historyResponseItemSize'
+  -> Text -- ^ 'historyResponseItemComment'
+  -> HistoryResponseItem
+mkHistoryResponseItem historyResponseItemId historyResponseItemCreated historyResponseItemCreatedBy historyResponseItemTags historyResponseItemSize historyResponseItemComment =
+  HistoryResponseItem
+  { historyResponseItemId
+  , historyResponseItemCreated
+  , historyResponseItemCreatedBy
+  , historyResponseItemTags
+  , historyResponseItemSize
+  , historyResponseItemComment
+  }
+
 -- ** HostConfig
 -- | HostConfig
 -- Container configuration that depends on the host we are running on
 data HostConfig = HostConfig
   { hostConfigCpuShares :: !(Maybe Int) -- ^ "CpuShares" - An integer value representing this container&#39;s relative CPU weight versus other containers.
-  , hostConfigMemory :: !(Maybe Int) -- ^ "Memory" - Memory limit in bytes.
+  , hostConfigMemory :: !(Maybe Integer) -- ^ "Memory" - Memory limit in bytes.
   , hostConfigCgroupParent :: !(Maybe Text) -- ^ "CgroupParent" - Path to &#x60;cgroups&#x60; under which the container&#39;s &#x60;cgroup&#x60; is created. If the path is not absolute, the path is considered to be relative to the &#x60;cgroups&#x60; path of the init process. Cgroups are created if they do not already exist.
   , hostConfigBlkioWeight :: !(Maybe Int) -- ^ "BlkioWeight" - Block IO weight (relative weight).
-  , hostConfigBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;. 
-  , hostConfigBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , hostConfigBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , hostConfigBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , hostConfigBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , hostConfigBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;.
+  , hostConfigBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , hostConfigBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , hostConfigBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , hostConfigBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
   , hostConfigCpuPeriod :: !(Maybe Integer) -- ^ "CpuPeriod" - The length of a CPU period in microseconds.
   , hostConfigCpuQuota :: !(Maybe Integer) -- ^ "CpuQuota" - Microseconds of CPU time that the container can get in a CPU period.
   , hostConfigCpuRealtimePeriod :: !(Maybe Integer) -- ^ "CpuRealtimePeriod" - The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
@@ -1266,16 +2022,16 @@ data HostConfig = HostConfig
   , hostConfigNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU quota in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPUs.
   , hostConfigOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Disable OOM Killer for the container.
   , hostConfigPidsLimit :: !(Maybe Integer) -- ^ "PidsLimit" - Tune a container&#39;s pids limit. Set -1 for unlimited.
-  , hostConfigUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot; 
-  , hostConfigCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
-  , hostConfigCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
+  , hostConfigUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot;
+  , hostConfigCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
+  , hostConfigCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
   , hostConfigIoMaximumIOps :: !(Maybe Integer) -- ^ "IOMaximumIOps" - Maximum IOps for the container system drive (Windows only)
   , hostConfigIoMaximumBandwidth :: !(Maybe Integer) -- ^ "IOMaximumBandwidth" - Maximum IO in bytes per second for the container system drive (Windows only)
-  , hostConfigBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind-mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path. 
+  , hostConfigBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path.
   , hostConfigContainerIdFile :: !(Maybe Text) -- ^ "ContainerIDFile" - Path to a file where the container ID is written
   , hostConfigLogConfig :: !(Maybe HostConfigAllOfLogConfig) -- ^ "LogConfig"
   , hostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode" - Network mode to use for this container. Supported standard values are: &#x60;bridge&#x60;, &#x60;host&#x60;, &#x60;none&#x60;, and &#x60;container:&lt;name|id&gt;&#x60;. Any other value is taken as a custom network&#39;s name to which this container should connect to.
-  , hostConfigPortBindings :: !(Maybe (Map.Map String HostConfigAllOfPortBindings)) -- ^ "PortBindings" - A map of exposed container ports and the host port they should map to.
+  , hostConfigPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
   , hostConfigRestartPolicy :: !(Maybe RestartPolicy) -- ^ "RestartPolicy"
   , hostConfigAutoRemove :: !(Maybe Bool) -- ^ "AutoRemove" - Automatically remove the container when the container&#39;s process exits. This has no effect if &#x60;RestartPolicy&#x60; is set.
   , hostConfigVolumeDriver :: !(Maybe Text) -- ^ "VolumeDriver" - Driver that this container uses to mount volumes.
@@ -1286,23 +2042,23 @@ data HostConfig = HostConfig
   , hostConfigDns :: !(Maybe [Text]) -- ^ "Dns" - A list of DNS servers for the container to use.
   , hostConfigDnsOptions :: !(Maybe [Text]) -- ^ "DnsOptions" - A list of DNS options.
   , hostConfigDnsSearch :: !(Maybe [Text]) -- ^ "DnsSearch" - A list of DNS search domains.
-  , hostConfigExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;. 
+  , hostConfigExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;.
   , hostConfigGroupAdd :: !(Maybe [Text]) -- ^ "GroupAdd" - A list of additional groups that the container process will run as.
-  , hostConfigIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC namespace to use for the container.
+  , hostConfigIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration.
   , hostConfigCgroup :: !(Maybe Text) -- ^ "Cgroup" - Cgroup to use for the container.
   , hostConfigLinks :: !(Maybe [Text]) -- ^ "Links" - A list of links for the container in the form &#x60;container_name:alias&#x60;.
   , hostConfigOomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj" - An integer value containing the score given to the container in order to tune OOM killer preferences.
-  , hostConfigPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container 
+  , hostConfigPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container
   , hostConfigPrivileged :: !(Maybe Bool) -- ^ "Privileged" - Gives the container full access to the host.
-  , hostConfigPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates a random host port for all of a container&#39;s exposed ports.
+  , hostConfigPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;.
   , hostConfigReadonlyRootfs :: !(Maybe Bool) -- ^ "ReadonlyRootfs" - Mount the container&#39;s root filesystem as read only.
   , hostConfigSecurityOpt :: !(Maybe [Text]) -- ^ "SecurityOpt" - A list of string values to customize labels for MLS systems, such as SELinux.
-  , hostConfigStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;. 
-  , hostConfigTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;. 
+  , hostConfigStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;.
+  , hostConfigTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;.
   , hostConfigUtsMode :: !(Maybe Text) -- ^ "UTSMode" - UTS namespace to use for the container.
   , hostConfigUsernsMode :: !(Maybe Text) -- ^ "UsernsMode" - Sets the usernamespace mode for the container when usernamespace remapping option is enabled.
   , hostConfigShmSize :: !(Maybe Int) -- ^ "ShmSize" - Size of &#x60;/dev/shm&#x60; in bytes. If omitted, the system uses 64MB.
-  , hostConfigSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60; 
+  , hostConfigSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60;
   , hostConfigRuntime :: !(Maybe Text) -- ^ "Runtime" - Runtime to use with this container.
   , hostConfigConsoleSize :: !(Maybe [Int]) -- ^ "ConsoleSize" - Initial console size, as an &#x60;[height, width]&#x60; array. (Windows only)
   , hostConfigIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the container. (Windows only)
@@ -1525,11 +2281,11 @@ mkHostConfig =
 -- ** HostConfigAllOf
 -- | HostConfigAllOf
 data HostConfigAllOf = HostConfigAllOf
-  { hostConfigAllOfBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind-mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path. 
+  { hostConfigAllOfBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path.
   , hostConfigAllOfContainerIdFile :: !(Maybe Text) -- ^ "ContainerIDFile" - Path to a file where the container ID is written
   , hostConfigAllOfLogConfig :: !(Maybe HostConfigAllOfLogConfig) -- ^ "LogConfig"
   , hostConfigAllOfNetworkMode :: !(Maybe Text) -- ^ "NetworkMode" - Network mode to use for this container. Supported standard values are: &#x60;bridge&#x60;, &#x60;host&#x60;, &#x60;none&#x60;, and &#x60;container:&lt;name|id&gt;&#x60;. Any other value is taken as a custom network&#39;s name to which this container should connect to.
-  , hostConfigAllOfPortBindings :: !(Maybe (Map.Map String HostConfigAllOfPortBindings)) -- ^ "PortBindings" - A map of exposed container ports and the host port they should map to.
+  , hostConfigAllOfPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
   , hostConfigAllOfRestartPolicy :: !(Maybe RestartPolicy) -- ^ "RestartPolicy"
   , hostConfigAllOfAutoRemove :: !(Maybe Bool) -- ^ "AutoRemove" - Automatically remove the container when the container&#39;s process exits. This has no effect if &#x60;RestartPolicy&#x60; is set.
   , hostConfigAllOfVolumeDriver :: !(Maybe Text) -- ^ "VolumeDriver" - Driver that this container uses to mount volumes.
@@ -1540,23 +2296,23 @@ data HostConfigAllOf = HostConfigAllOf
   , hostConfigAllOfDns :: !(Maybe [Text]) -- ^ "Dns" - A list of DNS servers for the container to use.
   , hostConfigAllOfDnsOptions :: !(Maybe [Text]) -- ^ "DnsOptions" - A list of DNS options.
   , hostConfigAllOfDnsSearch :: !(Maybe [Text]) -- ^ "DnsSearch" - A list of DNS search domains.
-  , hostConfigAllOfExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;. 
+  , hostConfigAllOfExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;.
   , hostConfigAllOfGroupAdd :: !(Maybe [Text]) -- ^ "GroupAdd" - A list of additional groups that the container process will run as.
-  , hostConfigAllOfIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC namespace to use for the container.
+  , hostConfigAllOfIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration.
   , hostConfigAllOfCgroup :: !(Maybe Text) -- ^ "Cgroup" - Cgroup to use for the container.
   , hostConfigAllOfLinks :: !(Maybe [Text]) -- ^ "Links" - A list of links for the container in the form &#x60;container_name:alias&#x60;.
   , hostConfigAllOfOomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj" - An integer value containing the score given to the container in order to tune OOM killer preferences.
-  , hostConfigAllOfPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container 
+  , hostConfigAllOfPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container
   , hostConfigAllOfPrivileged :: !(Maybe Bool) -- ^ "Privileged" - Gives the container full access to the host.
-  , hostConfigAllOfPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates a random host port for all of a container&#39;s exposed ports.
+  , hostConfigAllOfPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;.
   , hostConfigAllOfReadonlyRootfs :: !(Maybe Bool) -- ^ "ReadonlyRootfs" - Mount the container&#39;s root filesystem as read only.
   , hostConfigAllOfSecurityOpt :: !(Maybe [Text]) -- ^ "SecurityOpt" - A list of string values to customize labels for MLS systems, such as SELinux.
-  , hostConfigAllOfStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;. 
-  , hostConfigAllOfTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;. 
+  , hostConfigAllOfStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;.
+  , hostConfigAllOfTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;.
   , hostConfigAllOfUtsMode :: !(Maybe Text) -- ^ "UTSMode" - UTS namespace to use for the container.
   , hostConfigAllOfUsernsMode :: !(Maybe Text) -- ^ "UsernsMode" - Sets the usernamespace mode for the container when usernamespace remapping option is enabled.
   , hostConfigAllOfShmSize :: !(Maybe Int) -- ^ "ShmSize" - Size of &#x60;/dev/shm&#x60; in bytes. If omitted, the system uses 64MB.
-  , hostConfigAllOfSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60; 
+  , hostConfigAllOfSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60;
   , hostConfigAllOfRuntime :: !(Maybe Text) -- ^ "Runtime" - Runtime to use with this container.
   , hostConfigAllOfConsoleSize :: !(Maybe [Int]) -- ^ "ConsoleSize" - Initial console size, as an &#x60;[height, width]&#x60; array. (Windows only)
   , hostConfigAllOfIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the container. (Windows only)
@@ -1719,38 +2475,6 @@ mkHostConfigAllOfLogConfig =
   , hostConfigAllOfLogConfigConfig = Nothing
   }
 
--- ** HostConfigAllOfPortBindings
--- | HostConfigAllOfPortBindings
-data HostConfigAllOfPortBindings = HostConfigAllOfPortBindings
-  { hostConfigAllOfPortBindingsHostIp :: !(Maybe Text) -- ^ "HostIp" - The host IP address
-  , hostConfigAllOfPortBindingsHostPort :: !(Maybe Text) -- ^ "HostPort" - The host port number, as a string
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON HostConfigAllOfPortBindings
-instance A.FromJSON HostConfigAllOfPortBindings where
-  parseJSON = A.withObject "HostConfigAllOfPortBindings" $ \o ->
-    HostConfigAllOfPortBindings
-      <$> (o .:? "HostIp")
-      <*> (o .:? "HostPort")
-
--- | ToJSON HostConfigAllOfPortBindings
-instance A.ToJSON HostConfigAllOfPortBindings where
-  toJSON HostConfigAllOfPortBindings {..} =
-   _omitNulls
-      [ "HostIp" .= hostConfigAllOfPortBindingsHostIp
-      , "HostPort" .= hostConfigAllOfPortBindingsHostPort
-      ]
-
-
--- | Construct a value of type 'HostConfigAllOfPortBindings' (by applying it's required fields, if any)
-mkHostConfigAllOfPortBindings
-  :: HostConfigAllOfPortBindings
-mkHostConfigAllOfPortBindings =
-  HostConfigAllOfPortBindings
-  { hostConfigAllOfPortBindingsHostIp = Nothing
-  , hostConfigAllOfPortBindingsHostPort = Nothing
-  }
-
 -- ** IPAM
 -- | IPAM
 data IPAM = IPAM
@@ -1838,6 +2562,7 @@ data Image = Image
   , imageVirtualSize :: !(Integer) -- ^ /Required/ "VirtualSize"
   , imageGraphDriver :: !(GraphDriverData) -- ^ /Required/ "GraphDriver"
   , imageRootFs :: !(ImageRootFS) -- ^ /Required/ "RootFS"
+  , imageMetadata :: !(Maybe ImageMetadata) -- ^ "Metadata"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Image
@@ -1862,6 +2587,7 @@ instance A.FromJSON Image where
       <*> (o .:  "VirtualSize")
       <*> (o .:  "GraphDriver")
       <*> (o .:  "RootFS")
+      <*> (o .:? "Metadata")
 
 -- | ToJSON Image
 instance A.ToJSON Image where
@@ -1885,24 +2611,25 @@ instance A.ToJSON Image where
       , "VirtualSize" .= imageVirtualSize
       , "GraphDriver" .= imageGraphDriver
       , "RootFS" .= imageRootFs
+      , "Metadata" .= imageMetadata
       ]
 
 
 -- | Construct a value of type 'Image' (by applying it's required fields, if any)
 mkImage
-  :: Text -- ^ 'imageId' 
-  -> Text -- ^ 'imageParent' 
-  -> Text -- ^ 'imageComment' 
-  -> Text -- ^ 'imageCreated' 
-  -> Text -- ^ 'imageContainer' 
-  -> Text -- ^ 'imageDockerVersion' 
-  -> Text -- ^ 'imageAuthor' 
-  -> Text -- ^ 'imageArchitecture' 
-  -> Text -- ^ 'imageOs' 
-  -> Integer -- ^ 'imageSize' 
-  -> Integer -- ^ 'imageVirtualSize' 
-  -> GraphDriverData -- ^ 'imageGraphDriver' 
-  -> ImageRootFS -- ^ 'imageRootFs' 
+  :: Text -- ^ 'imageId'
+  -> Text -- ^ 'imageParent'
+  -> Text -- ^ 'imageComment'
+  -> Text -- ^ 'imageCreated'
+  -> Text -- ^ 'imageContainer'
+  -> Text -- ^ 'imageDockerVersion'
+  -> Text -- ^ 'imageAuthor'
+  -> Text -- ^ 'imageArchitecture'
+  -> Text -- ^ 'imageOs'
+  -> Integer -- ^ 'imageSize'
+  -> Integer -- ^ 'imageVirtualSize'
+  -> GraphDriverData -- ^ 'imageGraphDriver'
+  -> ImageRootFS -- ^ 'imageRootFs'
   -> Image
 mkImage imageId imageParent imageComment imageCreated imageContainer imageDockerVersion imageAuthor imageArchitecture imageOs imageSize imageVirtualSize imageGraphDriver imageRootFs =
   Image
@@ -1924,6 +2651,7 @@ mkImage imageId imageParent imageComment imageCreated imageContainer imageDocker
   , imageVirtualSize
   , imageGraphDriver
   , imageRootFs
+  , imageMetadata = Nothing
   }
 
 -- ** ImageDeleteResponseItem
@@ -1958,6 +2686,95 @@ mkImageDeleteResponseItem =
   , imageDeleteResponseItemDeleted = Nothing
   }
 
+-- ** ImageID
+-- | ImageID
+-- Image ID or Digest
+data ImageID = ImageID
+  { imageIDId :: !(Maybe Text) -- ^ "ID"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ImageID
+instance A.FromJSON ImageID where
+  parseJSON = A.withObject "ImageID" $ \o ->
+    ImageID
+      <$> (o .:? "ID")
+
+-- | ToJSON ImageID
+instance A.ToJSON ImageID where
+  toJSON ImageID {..} =
+   _omitNulls
+      [ "ID" .= imageIDId
+      ]
+
+
+-- | Construct a value of type 'ImageID' (by applying it's required fields, if any)
+mkImageID
+  :: ImageID
+mkImageID =
+  ImageID
+  { imageIDId = Nothing
+  }
+
+-- ** ImageMetadata
+-- | ImageMetadata
+data ImageMetadata = ImageMetadata
+  { imageMetadataLastTagTime :: !(Maybe Text) -- ^ "LastTagTime"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ImageMetadata
+instance A.FromJSON ImageMetadata where
+  parseJSON = A.withObject "ImageMetadata" $ \o ->
+    ImageMetadata
+      <$> (o .:? "LastTagTime")
+
+-- | ToJSON ImageMetadata
+instance A.ToJSON ImageMetadata where
+  toJSON ImageMetadata {..} =
+   _omitNulls
+      [ "LastTagTime" .= imageMetadataLastTagTime
+      ]
+
+
+-- | Construct a value of type 'ImageMetadata' (by applying it's required fields, if any)
+mkImageMetadata
+  :: ImageMetadata
+mkImageMetadata =
+  ImageMetadata
+  { imageMetadataLastTagTime = Nothing
+  }
+
+-- ** ImagePruneResponse
+-- | ImagePruneResponse
+data ImagePruneResponse = ImagePruneResponse
+  { imagePruneResponseImagesDeleted :: !(Maybe [ImageDeleteResponseItem]) -- ^ "ImagesDeleted" - Images that were deleted
+  , imagePruneResponseSpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ImagePruneResponse
+instance A.FromJSON ImagePruneResponse where
+  parseJSON = A.withObject "ImagePruneResponse" $ \o ->
+    ImagePruneResponse
+      <$> (o .:? "ImagesDeleted")
+      <*> (o .:? "SpaceReclaimed")
+
+-- | ToJSON ImagePruneResponse
+instance A.ToJSON ImagePruneResponse where
+  toJSON ImagePruneResponse {..} =
+   _omitNulls
+      [ "ImagesDeleted" .= imagePruneResponseImagesDeleted
+      , "SpaceReclaimed" .= imagePruneResponseSpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'ImagePruneResponse' (by applying it's required fields, if any)
+mkImagePruneResponse
+  :: ImagePruneResponse
+mkImagePruneResponse =
+  ImagePruneResponse
+  { imagePruneResponseImagesDeleted = Nothing
+  , imagePruneResponseSpaceReclaimed = Nothing
+  }
+
 -- ** ImageRootFS
 -- | ImageRootFS
 data ImageRootFS = ImageRootFS
@@ -1986,13 +2803,57 @@ instance A.ToJSON ImageRootFS where
 
 -- | Construct a value of type 'ImageRootFS' (by applying it's required fields, if any)
 mkImageRootFS
-  :: Text -- ^ 'imageRootFSType' 
+  :: Text -- ^ 'imageRootFSType'
   -> ImageRootFS
 mkImageRootFS imageRootFSType =
   ImageRootFS
   { imageRootFSType
   , imageRootFSLayers = Nothing
   , imageRootFSBaseLayer = Nothing
+  }
+
+-- ** ImageSearchResponseItem
+-- | ImageSearchResponseItem
+data ImageSearchResponseItem = ImageSearchResponseItem
+  { imageSearchResponseItemDescription :: !(Maybe Text) -- ^ "description"
+  , imageSearchResponseItemIsOfficial :: !(Maybe Bool) -- ^ "is_official"
+  , imageSearchResponseItemIsAutomated :: !(Maybe Bool) -- ^ "is_automated"
+  , imageSearchResponseItemName :: !(Maybe Text) -- ^ "name"
+  , imageSearchResponseItemStarCount :: !(Maybe Int) -- ^ "star_count"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ImageSearchResponseItem
+instance A.FromJSON ImageSearchResponseItem where
+  parseJSON = A.withObject "ImageSearchResponseItem" $ \o ->
+    ImageSearchResponseItem
+      <$> (o .:? "description")
+      <*> (o .:? "is_official")
+      <*> (o .:? "is_automated")
+      <*> (o .:? "name")
+      <*> (o .:? "star_count")
+
+-- | ToJSON ImageSearchResponseItem
+instance A.ToJSON ImageSearchResponseItem where
+  toJSON ImageSearchResponseItem {..} =
+   _omitNulls
+      [ "description" .= imageSearchResponseItemDescription
+      , "is_official" .= imageSearchResponseItemIsOfficial
+      , "is_automated" .= imageSearchResponseItemIsAutomated
+      , "name" .= imageSearchResponseItemName
+      , "star_count" .= imageSearchResponseItemStarCount
+      ]
+
+
+-- | Construct a value of type 'ImageSearchResponseItem' (by applying it's required fields, if any)
+mkImageSearchResponseItem
+  :: ImageSearchResponseItem
+mkImageSearchResponseItem =
+  ImageSearchResponseItem
+  { imageSearchResponseItemDescription = Nothing
+  , imageSearchResponseItemIsOfficial = Nothing
+  , imageSearchResponseItemIsAutomated = Nothing
+  , imageSearchResponseItemName = Nothing
+  , imageSearchResponseItemStarCount = Nothing
   }
 
 -- ** ImageSummary
@@ -2044,16 +2905,16 @@ instance A.ToJSON ImageSummary where
 
 -- | Construct a value of type 'ImageSummary' (by applying it's required fields, if any)
 mkImageSummary
-  :: Text -- ^ 'imageSummaryId' 
-  -> Text -- ^ 'imageSummaryParentId' 
-  -> [Text] -- ^ 'imageSummaryRepoTags' 
-  -> [Text] -- ^ 'imageSummaryRepoDigests' 
-  -> Int -- ^ 'imageSummaryCreated' 
-  -> Int -- ^ 'imageSummarySize' 
-  -> Int -- ^ 'imageSummarySharedSize' 
-  -> Int -- ^ 'imageSummaryVirtualSize' 
-  -> (Map.Map String Text) -- ^ 'imageSummaryLabels' 
-  -> Int -- ^ 'imageSummaryContainers' 
+  :: Text -- ^ 'imageSummaryId'
+  -> Text -- ^ 'imageSummaryParentId'
+  -> [Text] -- ^ 'imageSummaryRepoTags'
+  -> [Text] -- ^ 'imageSummaryRepoDigests'
+  -> Int -- ^ 'imageSummaryCreated'
+  -> Int -- ^ 'imageSummarySize'
+  -> Int -- ^ 'imageSummarySharedSize'
+  -> Int -- ^ 'imageSummaryVirtualSize'
+  -> (Map.Map String Text) -- ^ 'imageSummaryLabels'
+  -> Int -- ^ 'imageSummaryContainers'
   -> ImageSummary
 mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSummaryRepoDigests imageSummaryCreated imageSummarySize imageSummarySharedSize imageSummaryVirtualSize imageSummaryLabels imageSummaryContainers =
   ImageSummary
@@ -2067,6 +2928,47 @@ mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSum
   , imageSummaryVirtualSize
   , imageSummaryLabels
   , imageSummaryContainers
+  }
+
+-- ** IndexInfo
+-- | IndexInfo
+-- IndexInfo contains information about a registry.
+data IndexInfo = IndexInfo
+  { indexInfoName :: !(Maybe Text) -- ^ "Name" - Name of the registry, such as \&quot;docker.io\&quot;.
+  , indexInfoMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of mirrors, expressed as URIs.
+  , indexInfoSecure :: !(Maybe Bool) -- ^ "Secure" - Indicates if the the registry is part of the list of insecure registries.  If &#x60;false&#x60;, the registry is insecure. Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  &gt; **Warning**: Insecure registries can be useful when running a local &gt; registry. However, because its use creates security vulnerabilities &gt; it should ONLY be enabled for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of &gt; trusted CAs instead of enabling this option.
+  , indexInfoOfficial :: !(Maybe Bool) -- ^ "Official" - Indicates whether this is an official registry (i.e., Docker Hub / docker.io)
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON IndexInfo
+instance A.FromJSON IndexInfo where
+  parseJSON = A.withObject "IndexInfo" $ \o ->
+    IndexInfo
+      <$> (o .:? "Name")
+      <*> (o .:? "Mirrors")
+      <*> (o .:? "Secure")
+      <*> (o .:? "Official")
+
+-- | ToJSON IndexInfo
+instance A.ToJSON IndexInfo where
+  toJSON IndexInfo {..} =
+   _omitNulls
+      [ "Name" .= indexInfoName
+      , "Mirrors" .= indexInfoMirrors
+      , "Secure" .= indexInfoSecure
+      , "Official" .= indexInfoOfficial
+      ]
+
+
+-- | Construct a value of type 'IndexInfo' (by applying it's required fields, if any)
+mkIndexInfo
+  :: IndexInfo
+mkIndexInfo =
+  IndexInfo
+  { indexInfoName = Nothing
+  , indexInfoMirrors = Nothing
+  , indexInfoSecure = Nothing
+  , indexInfoOfficial = Nothing
   }
 
 -- ** InlineObject
@@ -2312,7 +3214,7 @@ mkInlineObject5 =
 data InlineObject6 = InlineObject6
   { inlineObject6ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
   , inlineObject6AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject6DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
+  , inlineObject6DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster.
   , inlineObject6ForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
   , inlineObject6Spec :: !(Maybe SwarmSpec) -- ^ "Spec"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -2356,7 +3258,7 @@ mkInlineObject6 =
 data InlineObject7 = InlineObject7
   { inlineObject7ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
   , inlineObject7AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject7DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
+  , inlineObject7DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster.
   , inlineObject7RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
   , inlineObject7JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -2423,1361 +3325,6 @@ mkInlineObject8 =
   { inlineObject8UnlockKey = Nothing
   }
 
--- ** InlineResponse200
--- | InlineResponse200
-data InlineResponse200 = InlineResponse200
-  { inlineResponse200Titles :: !(Maybe [Text]) -- ^ "Titles" - The ps column titles
-  , inlineResponse200Processes :: !(Maybe [[Text]]) -- ^ "Processes" - Each process running in the container, where each is process is an array of values corresponding to the titles
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse200
-instance A.FromJSON InlineResponse200 where
-  parseJSON = A.withObject "InlineResponse200" $ \o ->
-    InlineResponse200
-      <$> (o .:? "Titles")
-      <*> (o .:? "Processes")
-
--- | ToJSON InlineResponse200
-instance A.ToJSON InlineResponse200 where
-  toJSON InlineResponse200 {..} =
-   _omitNulls
-      [ "Titles" .= inlineResponse200Titles
-      , "Processes" .= inlineResponse200Processes
-      ]
-
-
--- | Construct a value of type 'InlineResponse200' (by applying it's required fields, if any)
-mkInlineResponse200
-  :: InlineResponse200
-mkInlineResponse200 =
-  InlineResponse200
-  { inlineResponse200Titles = Nothing
-  , inlineResponse200Processes = Nothing
-  }
-
--- ** InlineResponse2001
--- | InlineResponse2001
-data InlineResponse2001 = InlineResponse2001
-  { inlineResponse2001Path :: !(Text) -- ^ /Required/ "Path" - Path to file that has changed
-  , inlineResponse2001Kind :: !(Int) -- ^ /Required/ "Kind" - Kind of change
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2001
-instance A.FromJSON InlineResponse2001 where
-  parseJSON = A.withObject "InlineResponse2001" $ \o ->
-    InlineResponse2001
-      <$> (o .:  "Path")
-      <*> (o .:  "Kind")
-
--- | ToJSON InlineResponse2001
-instance A.ToJSON InlineResponse2001 where
-  toJSON InlineResponse2001 {..} =
-   _omitNulls
-      [ "Path" .= inlineResponse2001Path
-      , "Kind" .= inlineResponse2001Kind
-      ]
-
-
--- | Construct a value of type 'InlineResponse2001' (by applying it's required fields, if any)
-mkInlineResponse2001
-  :: Text -- ^ 'inlineResponse2001Path': Path to file that has changed
-  -> Int -- ^ 'inlineResponse2001Kind': Kind of change
-  -> InlineResponse2001
-mkInlineResponse2001 inlineResponse2001Path inlineResponse2001Kind =
-  InlineResponse2001
-  { inlineResponse2001Path
-  , inlineResponse2001Kind
-  }
-
--- ** InlineResponse20010
--- | InlineResponse20010
-data InlineResponse20010 = InlineResponse20010
-  { inlineResponse20010Version :: !(Maybe Text) -- ^ "Version"
-  , inlineResponse20010ApiVersion :: !(Maybe Text) -- ^ "ApiVersion"
-  , inlineResponse20010MinApiVersion :: !(Maybe Text) -- ^ "MinAPIVersion"
-  , inlineResponse20010GitCommit :: !(Maybe Text) -- ^ "GitCommit"
-  , inlineResponse20010GoVersion :: !(Maybe Text) -- ^ "GoVersion"
-  , inlineResponse20010Os :: !(Maybe Text) -- ^ "Os"
-  , inlineResponse20010Arch :: !(Maybe Text) -- ^ "Arch"
-  , inlineResponse20010KernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
-  , inlineResponse20010Experimental :: !(Maybe Bool) -- ^ "Experimental"
-  , inlineResponse20010BuildTime :: !(Maybe Text) -- ^ "BuildTime"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20010
-instance A.FromJSON InlineResponse20010 where
-  parseJSON = A.withObject "InlineResponse20010" $ \o ->
-    InlineResponse20010
-      <$> (o .:? "Version")
-      <*> (o .:? "ApiVersion")
-      <*> (o .:? "MinAPIVersion")
-      <*> (o .:? "GitCommit")
-      <*> (o .:? "GoVersion")
-      <*> (o .:? "Os")
-      <*> (o .:? "Arch")
-      <*> (o .:? "KernelVersion")
-      <*> (o .:? "Experimental")
-      <*> (o .:? "BuildTime")
-
--- | ToJSON InlineResponse20010
-instance A.ToJSON InlineResponse20010 where
-  toJSON InlineResponse20010 {..} =
-   _omitNulls
-      [ "Version" .= inlineResponse20010Version
-      , "ApiVersion" .= inlineResponse20010ApiVersion
-      , "MinAPIVersion" .= inlineResponse20010MinApiVersion
-      , "GitCommit" .= inlineResponse20010GitCommit
-      , "GoVersion" .= inlineResponse20010GoVersion
-      , "Os" .= inlineResponse20010Os
-      , "Arch" .= inlineResponse20010Arch
-      , "KernelVersion" .= inlineResponse20010KernelVersion
-      , "Experimental" .= inlineResponse20010Experimental
-      , "BuildTime" .= inlineResponse20010BuildTime
-      ]
-
-
--- | Construct a value of type 'InlineResponse20010' (by applying it's required fields, if any)
-mkInlineResponse20010
-  :: InlineResponse20010
-mkInlineResponse20010 =
-  InlineResponse20010
-  { inlineResponse20010Version = Nothing
-  , inlineResponse20010ApiVersion = Nothing
-  , inlineResponse20010MinApiVersion = Nothing
-  , inlineResponse20010GitCommit = Nothing
-  , inlineResponse20010GoVersion = Nothing
-  , inlineResponse20010Os = Nothing
-  , inlineResponse20010Arch = Nothing
-  , inlineResponse20010KernelVersion = Nothing
-  , inlineResponse20010Experimental = Nothing
-  , inlineResponse20010BuildTime = Nothing
-  }
-
--- ** InlineResponse20011
--- | InlineResponse20011
-data InlineResponse20011 = InlineResponse20011
-  { inlineResponse20011Type :: !(Maybe Text) -- ^ "Type" - The type of object emitting the event
-  , inlineResponse20011Action :: !(Maybe Text) -- ^ "Action" - The type of event
-  , inlineResponse20011Actor :: !(Maybe InlineResponse20011Actor) -- ^ "Actor"
-  , inlineResponse20011Time :: !(Maybe Int) -- ^ "time" - Timestamp of event
-  , inlineResponse20011TimeNano :: !(Maybe Integer) -- ^ "timeNano" - Timestamp of event, with nanosecond accuracy
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20011
-instance A.FromJSON InlineResponse20011 where
-  parseJSON = A.withObject "InlineResponse20011" $ \o ->
-    InlineResponse20011
-      <$> (o .:? "Type")
-      <*> (o .:? "Action")
-      <*> (o .:? "Actor")
-      <*> (o .:? "time")
-      <*> (o .:? "timeNano")
-
--- | ToJSON InlineResponse20011
-instance A.ToJSON InlineResponse20011 where
-  toJSON InlineResponse20011 {..} =
-   _omitNulls
-      [ "Type" .= inlineResponse20011Type
-      , "Action" .= inlineResponse20011Action
-      , "Actor" .= inlineResponse20011Actor
-      , "time" .= inlineResponse20011Time
-      , "timeNano" .= inlineResponse20011TimeNano
-      ]
-
-
--- | Construct a value of type 'InlineResponse20011' (by applying it's required fields, if any)
-mkInlineResponse20011
-  :: InlineResponse20011
-mkInlineResponse20011 =
-  InlineResponse20011
-  { inlineResponse20011Type = Nothing
-  , inlineResponse20011Action = Nothing
-  , inlineResponse20011Actor = Nothing
-  , inlineResponse20011Time = Nothing
-  , inlineResponse20011TimeNano = Nothing
-  }
-
--- ** InlineResponse20011Actor
--- | InlineResponse20011Actor
-data InlineResponse20011Actor = InlineResponse20011Actor
-  { inlineResponse20011ActorId :: !(Maybe Text) -- ^ "ID" - The ID of the object emitting the event
-  , inlineResponse20011ActorAttributes :: !(Maybe (Map.Map String Text)) -- ^ "Attributes" - Various key/value attributes of the object, depending on its type
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20011Actor
-instance A.FromJSON InlineResponse20011Actor where
-  parseJSON = A.withObject "InlineResponse20011Actor" $ \o ->
-    InlineResponse20011Actor
-      <$> (o .:? "ID")
-      <*> (o .:? "Attributes")
-
--- | ToJSON InlineResponse20011Actor
-instance A.ToJSON InlineResponse20011Actor where
-  toJSON InlineResponse20011Actor {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse20011ActorId
-      , "Attributes" .= inlineResponse20011ActorAttributes
-      ]
-
-
--- | Construct a value of type 'InlineResponse20011Actor' (by applying it's required fields, if any)
-mkInlineResponse20011Actor
-  :: InlineResponse20011Actor
-mkInlineResponse20011Actor =
-  InlineResponse20011Actor
-  { inlineResponse20011ActorId = Nothing
-  , inlineResponse20011ActorAttributes = Nothing
-  }
-
--- ** InlineResponse20012
--- | InlineResponse20012
-data InlineResponse20012 = InlineResponse20012
-  { inlineResponse20012LayersSize :: !(Maybe Integer) -- ^ "LayersSize"
-  , inlineResponse20012Images :: !(Maybe [ImageSummary]) -- ^ "Images"
-  , inlineResponse20012Containers :: !(Maybe [ContainerSummary]) -- ^ "Containers"
-  , inlineResponse20012Volumes :: !(Maybe [Volume]) -- ^ "Volumes"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20012
-instance A.FromJSON InlineResponse20012 where
-  parseJSON = A.withObject "InlineResponse20012" $ \o ->
-    InlineResponse20012
-      <$> (o .:? "LayersSize")
-      <*> (o .:? "Images")
-      <*> (o .:? "Containers")
-      <*> (o .:? "Volumes")
-
--- | ToJSON InlineResponse20012
-instance A.ToJSON InlineResponse20012 where
-  toJSON InlineResponse20012 {..} =
-   _omitNulls
-      [ "LayersSize" .= inlineResponse20012LayersSize
-      , "Images" .= inlineResponse20012Images
-      , "Containers" .= inlineResponse20012Containers
-      , "Volumes" .= inlineResponse20012Volumes
-      ]
-
-
--- | Construct a value of type 'InlineResponse20012' (by applying it's required fields, if any)
-mkInlineResponse20012
-  :: InlineResponse20012
-mkInlineResponse20012 =
-  InlineResponse20012
-  { inlineResponse20012LayersSize = Nothing
-  , inlineResponse20012Images = Nothing
-  , inlineResponse20012Containers = Nothing
-  , inlineResponse20012Volumes = Nothing
-  }
-
--- ** InlineResponse20013
--- | InlineResponse20013
-data InlineResponse20013 = InlineResponse20013
-  { inlineResponse20013Id :: !(Maybe Text) -- ^ "ID"
-  , inlineResponse20013Running :: !(Maybe Bool) -- ^ "Running"
-  , inlineResponse20013ExitCode :: !(Maybe Int) -- ^ "ExitCode"
-  , inlineResponse20013ProcessConfig :: !(Maybe ProcessConfig) -- ^ "ProcessConfig"
-  , inlineResponse20013OpenStdin :: !(Maybe Bool) -- ^ "OpenStdin"
-  , inlineResponse20013OpenStderr :: !(Maybe Bool) -- ^ "OpenStderr"
-  , inlineResponse20013OpenStdout :: !(Maybe Bool) -- ^ "OpenStdout"
-  , inlineResponse20013ContainerId :: !(Maybe Text) -- ^ "ContainerID"
-  , inlineResponse20013Pid :: !(Maybe Int) -- ^ "Pid" - The system process ID for the exec process.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20013
-instance A.FromJSON InlineResponse20013 where
-  parseJSON = A.withObject "InlineResponse20013" $ \o ->
-    InlineResponse20013
-      <$> (o .:? "ID")
-      <*> (o .:? "Running")
-      <*> (o .:? "ExitCode")
-      <*> (o .:? "ProcessConfig")
-      <*> (o .:? "OpenStdin")
-      <*> (o .:? "OpenStderr")
-      <*> (o .:? "OpenStdout")
-      <*> (o .:? "ContainerID")
-      <*> (o .:? "Pid")
-
--- | ToJSON InlineResponse20013
-instance A.ToJSON InlineResponse20013 where
-  toJSON InlineResponse20013 {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse20013Id
-      , "Running" .= inlineResponse20013Running
-      , "ExitCode" .= inlineResponse20013ExitCode
-      , "ProcessConfig" .= inlineResponse20013ProcessConfig
-      , "OpenStdin" .= inlineResponse20013OpenStdin
-      , "OpenStderr" .= inlineResponse20013OpenStderr
-      , "OpenStdout" .= inlineResponse20013OpenStdout
-      , "ContainerID" .= inlineResponse20013ContainerId
-      , "Pid" .= inlineResponse20013Pid
-      ]
-
-
--- | Construct a value of type 'InlineResponse20013' (by applying it's required fields, if any)
-mkInlineResponse20013
-  :: InlineResponse20013
-mkInlineResponse20013 =
-  InlineResponse20013
-  { inlineResponse20013Id = Nothing
-  , inlineResponse20013Running = Nothing
-  , inlineResponse20013ExitCode = Nothing
-  , inlineResponse20013ProcessConfig = Nothing
-  , inlineResponse20013OpenStdin = Nothing
-  , inlineResponse20013OpenStderr = Nothing
-  , inlineResponse20013OpenStdout = Nothing
-  , inlineResponse20013ContainerId = Nothing
-  , inlineResponse20013Pid = Nothing
-  }
-
--- ** InlineResponse20014
--- | InlineResponse20014
-data InlineResponse20014 = InlineResponse20014
-  { inlineResponse20014Volumes :: !([Volume]) -- ^ /Required/ "Volumes" - List of volumes
-  , inlineResponse20014Warnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings that occurred when fetching the list of volumes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20014
-instance A.FromJSON InlineResponse20014 where
-  parseJSON = A.withObject "InlineResponse20014" $ \o ->
-    InlineResponse20014
-      <$> (o .:  "Volumes")
-      <*> (o .:  "Warnings")
-
--- | ToJSON InlineResponse20014
-instance A.ToJSON InlineResponse20014 where
-  toJSON InlineResponse20014 {..} =
-   _omitNulls
-      [ "Volumes" .= inlineResponse20014Volumes
-      , "Warnings" .= inlineResponse20014Warnings
-      ]
-
-
--- | Construct a value of type 'InlineResponse20014' (by applying it's required fields, if any)
-mkInlineResponse20014
-  :: [Volume] -- ^ 'inlineResponse20014Volumes': List of volumes
-  -> [Text] -- ^ 'inlineResponse20014Warnings': Warnings that occurred when fetching the list of volumes
-  -> InlineResponse20014
-mkInlineResponse20014 inlineResponse20014Volumes inlineResponse20014Warnings =
-  InlineResponse20014
-  { inlineResponse20014Volumes
-  , inlineResponse20014Warnings
-  }
-
--- ** InlineResponse20015
--- | InlineResponse20015
-data InlineResponse20015 = InlineResponse20015
-  { inlineResponse20015VolumesDeleted :: !(Maybe [Text]) -- ^ "VolumesDeleted" - Volumes that were deleted
-  , inlineResponse20015SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20015
-instance A.FromJSON InlineResponse20015 where
-  parseJSON = A.withObject "InlineResponse20015" $ \o ->
-    InlineResponse20015
-      <$> (o .:? "VolumesDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse20015
-instance A.ToJSON InlineResponse20015 where
-  toJSON InlineResponse20015 {..} =
-   _omitNulls
-      [ "VolumesDeleted" .= inlineResponse20015VolumesDeleted
-      , "SpaceReclaimed" .= inlineResponse20015SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse20015' (by applying it's required fields, if any)
-mkInlineResponse20015
-  :: InlineResponse20015
-mkInlineResponse20015 =
-  InlineResponse20015
-  { inlineResponse20015VolumesDeleted = Nothing
-  , inlineResponse20015SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse20016
--- | InlineResponse20016
-data InlineResponse20016 = InlineResponse20016
-  { inlineResponse20016NetworksDeleted :: !(Maybe [Text]) -- ^ "NetworksDeleted" - Networks that were deleted
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20016
-instance A.FromJSON InlineResponse20016 where
-  parseJSON = A.withObject "InlineResponse20016" $ \o ->
-    InlineResponse20016
-      <$> (o .:? "NetworksDeleted")
-
--- | ToJSON InlineResponse20016
-instance A.ToJSON InlineResponse20016 where
-  toJSON InlineResponse20016 {..} =
-   _omitNulls
-      [ "NetworksDeleted" .= inlineResponse20016NetworksDeleted
-      ]
-
-
--- | Construct a value of type 'InlineResponse20016' (by applying it's required fields, if any)
-mkInlineResponse20016
-  :: InlineResponse20016
-mkInlineResponse20016 =
-  InlineResponse20016
-  { inlineResponse20016NetworksDeleted = Nothing
-  }
-
--- ** InlineResponse20017
--- | InlineResponse20017
--- Describes a permission the user has to accept upon installing the plugin.
-data InlineResponse20017 = InlineResponse20017
-  { inlineResponse20017Name :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse20017Description :: !(Maybe Text) -- ^ "Description"
-  , inlineResponse20017Value :: !(Maybe [Text]) -- ^ "Value"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20017
-instance A.FromJSON InlineResponse20017 where
-  parseJSON = A.withObject "InlineResponse20017" $ \o ->
-    InlineResponse20017
-      <$> (o .:? "Name")
-      <*> (o .:? "Description")
-      <*> (o .:? "Value")
-
--- | ToJSON InlineResponse20017
-instance A.ToJSON InlineResponse20017 where
-  toJSON InlineResponse20017 {..} =
-   _omitNulls
-      [ "Name" .= inlineResponse20017Name
-      , "Description" .= inlineResponse20017Description
-      , "Value" .= inlineResponse20017Value
-      ]
-
-
--- | Construct a value of type 'InlineResponse20017' (by applying it's required fields, if any)
-mkInlineResponse20017
-  :: InlineResponse20017
-mkInlineResponse20017 =
-  InlineResponse20017
-  { inlineResponse20017Name = Nothing
-  , inlineResponse20017Description = Nothing
-  , inlineResponse20017Value = Nothing
-  }
-
--- ** InlineResponse20018
--- | InlineResponse20018
-data InlineResponse20018 = InlineResponse20018
-  { inlineResponse20018ClusterInfo :: !(Maybe ClusterInfo) -- ^ "ClusterInfo"
-  , inlineResponse20018JoinTokens :: !(Maybe InlineResponse20018JoinTokens) -- ^ "JoinTokens"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20018
-instance A.FromJSON InlineResponse20018 where
-  parseJSON = A.withObject "InlineResponse20018" $ \o ->
-    InlineResponse20018
-      <$> (o .:? "ClusterInfo")
-      <*> (o .:? "JoinTokens")
-
--- | ToJSON InlineResponse20018
-instance A.ToJSON InlineResponse20018 where
-  toJSON InlineResponse20018 {..} =
-   _omitNulls
-      [ "ClusterInfo" .= inlineResponse20018ClusterInfo
-      , "JoinTokens" .= inlineResponse20018JoinTokens
-      ]
-
-
--- | Construct a value of type 'InlineResponse20018' (by applying it's required fields, if any)
-mkInlineResponse20018
-  :: InlineResponse20018
-mkInlineResponse20018 =
-  InlineResponse20018
-  { inlineResponse20018ClusterInfo = Nothing
-  , inlineResponse20018JoinTokens = Nothing
-  }
-
--- ** InlineResponse20018JoinTokens
--- | InlineResponse20018JoinTokens
--- The tokens workers and managers need to join the swarm.
-data InlineResponse20018JoinTokens = InlineResponse20018JoinTokens
-  { inlineResponse20018JoinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm.
-  , inlineResponse20018JoinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20018JoinTokens
-instance A.FromJSON InlineResponse20018JoinTokens where
-  parseJSON = A.withObject "InlineResponse20018JoinTokens" $ \o ->
-    InlineResponse20018JoinTokens
-      <$> (o .:? "Worker")
-      <*> (o .:? "Manager")
-
--- | ToJSON InlineResponse20018JoinTokens
-instance A.ToJSON InlineResponse20018JoinTokens where
-  toJSON InlineResponse20018JoinTokens {..} =
-   _omitNulls
-      [ "Worker" .= inlineResponse20018JoinTokensWorker
-      , "Manager" .= inlineResponse20018JoinTokensManager
-      ]
-
-
--- | Construct a value of type 'InlineResponse20018JoinTokens' (by applying it's required fields, if any)
-mkInlineResponse20018JoinTokens
-  :: InlineResponse20018JoinTokens
-mkInlineResponse20018JoinTokens =
-  InlineResponse20018JoinTokens
-  { inlineResponse20018JoinTokensWorker = Nothing
-  , inlineResponse20018JoinTokensManager = Nothing
-  }
-
--- ** InlineResponse20019
--- | InlineResponse20019
-data InlineResponse20019 = InlineResponse20019
-  { inlineResponse20019UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20019
-instance A.FromJSON InlineResponse20019 where
-  parseJSON = A.withObject "InlineResponse20019" $ \o ->
-    InlineResponse20019
-      <$> (o .:? "UnlockKey")
-
--- | ToJSON InlineResponse20019
-instance A.ToJSON InlineResponse20019 where
-  toJSON InlineResponse20019 {..} =
-   _omitNulls
-      [ "UnlockKey" .= inlineResponse20019UnlockKey
-      ]
-
-
--- | Construct a value of type 'InlineResponse20019' (by applying it's required fields, if any)
-mkInlineResponse20019
-  :: InlineResponse20019
-mkInlineResponse20019 =
-  InlineResponse20019
-  { inlineResponse20019UnlockKey = Nothing
-  }
-
--- ** InlineResponse2002
--- | InlineResponse2002
-data InlineResponse2002 = InlineResponse2002
-  { inlineResponse2002Warnings :: !(Maybe [Text]) -- ^ "Warnings"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2002
-instance A.FromJSON InlineResponse2002 where
-  parseJSON = A.withObject "InlineResponse2002" $ \o ->
-    InlineResponse2002
-      <$> (o .:? "Warnings")
-
--- | ToJSON InlineResponse2002
-instance A.ToJSON InlineResponse2002 where
-  toJSON InlineResponse2002 {..} =
-   _omitNulls
-      [ "Warnings" .= inlineResponse2002Warnings
-      ]
-
-
--- | Construct a value of type 'InlineResponse2002' (by applying it's required fields, if any)
-mkInlineResponse2002
-  :: InlineResponse2002
-mkInlineResponse2002 =
-  InlineResponse2002
-  { inlineResponse2002Warnings = Nothing
-  }
-
--- ** InlineResponse20020
--- | InlineResponse20020
-data InlineResponse20020 = InlineResponse20020
-  { inlineResponse20020Descriptor :: !(InlineResponse20020Descriptor) -- ^ /Required/ "Descriptor"
-  , inlineResponse20020Platforms :: !([InlineResponse20020Platforms]) -- ^ /Required/ "Platforms" - An array containing all platforms supported by the image
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20020
-instance A.FromJSON InlineResponse20020 where
-  parseJSON = A.withObject "InlineResponse20020" $ \o ->
-    InlineResponse20020
-      <$> (o .:  "Descriptor")
-      <*> (o .:  "Platforms")
-
--- | ToJSON InlineResponse20020
-instance A.ToJSON InlineResponse20020 where
-  toJSON InlineResponse20020 {..} =
-   _omitNulls
-      [ "Descriptor" .= inlineResponse20020Descriptor
-      , "Platforms" .= inlineResponse20020Platforms
-      ]
-
-
--- | Construct a value of type 'InlineResponse20020' (by applying it's required fields, if any)
-mkInlineResponse20020
-  :: InlineResponse20020Descriptor -- ^ 'inlineResponse20020Descriptor' 
-  -> [InlineResponse20020Platforms] -- ^ 'inlineResponse20020Platforms': An array containing all platforms supported by the image
-  -> InlineResponse20020
-mkInlineResponse20020 inlineResponse20020Descriptor inlineResponse20020Platforms =
-  InlineResponse20020
-  { inlineResponse20020Descriptor
-  , inlineResponse20020Platforms
-  }
-
--- ** InlineResponse20020Descriptor
--- | InlineResponse20020Descriptor
--- A descriptor struct containing digest, media type, and size
-data InlineResponse20020Descriptor = InlineResponse20020Descriptor
-  { inlineResponse20020DescriptorMediaType :: !(Maybe Text) -- ^ "MediaType"
-  , inlineResponse20020DescriptorSize :: !(Maybe Integer) -- ^ "Size"
-  , inlineResponse20020DescriptorDigest :: !(Maybe Text) -- ^ "Digest"
-  , inlineResponse20020DescriptorUrLs :: !(Maybe [Text]) -- ^ "URLs"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20020Descriptor
-instance A.FromJSON InlineResponse20020Descriptor where
-  parseJSON = A.withObject "InlineResponse20020Descriptor" $ \o ->
-    InlineResponse20020Descriptor
-      <$> (o .:? "MediaType")
-      <*> (o .:? "Size")
-      <*> (o .:? "Digest")
-      <*> (o .:? "URLs")
-
--- | ToJSON InlineResponse20020Descriptor
-instance A.ToJSON InlineResponse20020Descriptor where
-  toJSON InlineResponse20020Descriptor {..} =
-   _omitNulls
-      [ "MediaType" .= inlineResponse20020DescriptorMediaType
-      , "Size" .= inlineResponse20020DescriptorSize
-      , "Digest" .= inlineResponse20020DescriptorDigest
-      , "URLs" .= inlineResponse20020DescriptorUrLs
-      ]
-
-
--- | Construct a value of type 'InlineResponse20020Descriptor' (by applying it's required fields, if any)
-mkInlineResponse20020Descriptor
-  :: InlineResponse20020Descriptor
-mkInlineResponse20020Descriptor =
-  InlineResponse20020Descriptor
-  { inlineResponse20020DescriptorMediaType = Nothing
-  , inlineResponse20020DescriptorSize = Nothing
-  , inlineResponse20020DescriptorDigest = Nothing
-  , inlineResponse20020DescriptorUrLs = Nothing
-  }
-
--- ** InlineResponse20020Platforms
--- | InlineResponse20020Platforms
-data InlineResponse20020Platforms = InlineResponse20020Platforms
-  { inlineResponse20020PlatformsArchitecture :: !(Maybe Text) -- ^ "Architecture"
-  , inlineResponse20020PlatformsOs :: !(Maybe Text) -- ^ "OS"
-  , inlineResponse20020PlatformsOsVersion :: !(Maybe Text) -- ^ "OSVersion"
-  , inlineResponse20020PlatformsOsFeatures :: !(Maybe [Text]) -- ^ "OSFeatures"
-  , inlineResponse20020PlatformsVariant :: !(Maybe Text) -- ^ "Variant"
-  , inlineResponse20020PlatformsFeatures :: !(Maybe [Text]) -- ^ "Features"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20020Platforms
-instance A.FromJSON InlineResponse20020Platforms where
-  parseJSON = A.withObject "InlineResponse20020Platforms" $ \o ->
-    InlineResponse20020Platforms
-      <$> (o .:? "Architecture")
-      <*> (o .:? "OS")
-      <*> (o .:? "OSVersion")
-      <*> (o .:? "OSFeatures")
-      <*> (o .:? "Variant")
-      <*> (o .:? "Features")
-
--- | ToJSON InlineResponse20020Platforms
-instance A.ToJSON InlineResponse20020Platforms where
-  toJSON InlineResponse20020Platforms {..} =
-   _omitNulls
-      [ "Architecture" .= inlineResponse20020PlatformsArchitecture
-      , "OS" .= inlineResponse20020PlatformsOs
-      , "OSVersion" .= inlineResponse20020PlatformsOsVersion
-      , "OSFeatures" .= inlineResponse20020PlatformsOsFeatures
-      , "Variant" .= inlineResponse20020PlatformsVariant
-      , "Features" .= inlineResponse20020PlatformsFeatures
-      ]
-
-
--- | Construct a value of type 'InlineResponse20020Platforms' (by applying it's required fields, if any)
-mkInlineResponse20020Platforms
-  :: InlineResponse20020Platforms
-mkInlineResponse20020Platforms =
-  InlineResponse20020Platforms
-  { inlineResponse20020PlatformsArchitecture = Nothing
-  , inlineResponse20020PlatformsOs = Nothing
-  , inlineResponse20020PlatformsOsVersion = Nothing
-  , inlineResponse20020PlatformsOsFeatures = Nothing
-  , inlineResponse20020PlatformsVariant = Nothing
-  , inlineResponse20020PlatformsFeatures = Nothing
-  }
-
--- ** InlineResponse2003
--- | InlineResponse2003
-data InlineResponse2003 = InlineResponse2003
-  { inlineResponse2003StatusCode :: !(Int) -- ^ /Required/ "StatusCode" - Exit code of the container
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2003
-instance A.FromJSON InlineResponse2003 where
-  parseJSON = A.withObject "InlineResponse2003" $ \o ->
-    InlineResponse2003
-      <$> (o .:  "StatusCode")
-
--- | ToJSON InlineResponse2003
-instance A.ToJSON InlineResponse2003 where
-  toJSON InlineResponse2003 {..} =
-   _omitNulls
-      [ "StatusCode" .= inlineResponse2003StatusCode
-      ]
-
-
--- | Construct a value of type 'InlineResponse2003' (by applying it's required fields, if any)
-mkInlineResponse2003
-  :: Int -- ^ 'inlineResponse2003StatusCode': Exit code of the container
-  -> InlineResponse2003
-mkInlineResponse2003 inlineResponse2003StatusCode =
-  InlineResponse2003
-  { inlineResponse2003StatusCode
-  }
-
--- ** InlineResponse2004
--- | InlineResponse2004
-data InlineResponse2004 = InlineResponse2004
-  { inlineResponse2004ContainersDeleted :: !(Maybe [Text]) -- ^ "ContainersDeleted" - Container IDs that were deleted
-  , inlineResponse2004SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2004
-instance A.FromJSON InlineResponse2004 where
-  parseJSON = A.withObject "InlineResponse2004" $ \o ->
-    InlineResponse2004
-      <$> (o .:? "ContainersDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse2004
-instance A.ToJSON InlineResponse2004 where
-  toJSON InlineResponse2004 {..} =
-   _omitNulls
-      [ "ContainersDeleted" .= inlineResponse2004ContainersDeleted
-      , "SpaceReclaimed" .= inlineResponse2004SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse2004' (by applying it's required fields, if any)
-mkInlineResponse2004
-  :: InlineResponse2004
-mkInlineResponse2004 =
-  InlineResponse2004
-  { inlineResponse2004ContainersDeleted = Nothing
-  , inlineResponse2004SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse2005
--- | InlineResponse2005
-data InlineResponse2005 = InlineResponse2005
-  { inlineResponse2005Id :: !(Text) -- ^ /Required/ "Id"
-  , inlineResponse2005Created :: !(Integer) -- ^ /Required/ "Created"
-  , inlineResponse2005CreatedBy :: !(Text) -- ^ /Required/ "CreatedBy"
-  , inlineResponse2005Tags :: !([Text]) -- ^ /Required/ "Tags"
-  , inlineResponse2005Size :: !(Integer) -- ^ /Required/ "Size"
-  , inlineResponse2005Comment :: !(Text) -- ^ /Required/ "Comment"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2005
-instance A.FromJSON InlineResponse2005 where
-  parseJSON = A.withObject "InlineResponse2005" $ \o ->
-    InlineResponse2005
-      <$> (o .:  "Id")
-      <*> (o .:  "Created")
-      <*> (o .:  "CreatedBy")
-      <*> (o .:  "Tags")
-      <*> (o .:  "Size")
-      <*> (o .:  "Comment")
-
--- | ToJSON InlineResponse2005
-instance A.ToJSON InlineResponse2005 where
-  toJSON InlineResponse2005 {..} =
-   _omitNulls
-      [ "Id" .= inlineResponse2005Id
-      , "Created" .= inlineResponse2005Created
-      , "CreatedBy" .= inlineResponse2005CreatedBy
-      , "Tags" .= inlineResponse2005Tags
-      , "Size" .= inlineResponse2005Size
-      , "Comment" .= inlineResponse2005Comment
-      ]
-
-
--- | Construct a value of type 'InlineResponse2005' (by applying it's required fields, if any)
-mkInlineResponse2005
-  :: Text -- ^ 'inlineResponse2005Id' 
-  -> Integer -- ^ 'inlineResponse2005Created' 
-  -> Text -- ^ 'inlineResponse2005CreatedBy' 
-  -> [Text] -- ^ 'inlineResponse2005Tags' 
-  -> Integer -- ^ 'inlineResponse2005Size' 
-  -> Text -- ^ 'inlineResponse2005Comment' 
-  -> InlineResponse2005
-mkInlineResponse2005 inlineResponse2005Id inlineResponse2005Created inlineResponse2005CreatedBy inlineResponse2005Tags inlineResponse2005Size inlineResponse2005Comment =
-  InlineResponse2005
-  { inlineResponse2005Id
-  , inlineResponse2005Created
-  , inlineResponse2005CreatedBy
-  , inlineResponse2005Tags
-  , inlineResponse2005Size
-  , inlineResponse2005Comment
-  }
-
--- ** InlineResponse2006
--- | InlineResponse2006
-data InlineResponse2006 = InlineResponse2006
-  { inlineResponse2006Description :: !(Maybe Text) -- ^ "description"
-  , inlineResponse2006IsOfficial :: !(Maybe Bool) -- ^ "is_official"
-  , inlineResponse2006IsAutomated :: !(Maybe Bool) -- ^ "is_automated"
-  , inlineResponse2006Name :: !(Maybe Text) -- ^ "name"
-  , inlineResponse2006StarCount :: !(Maybe Int) -- ^ "star_count"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2006
-instance A.FromJSON InlineResponse2006 where
-  parseJSON = A.withObject "InlineResponse2006" $ \o ->
-    InlineResponse2006
-      <$> (o .:? "description")
-      <*> (o .:? "is_official")
-      <*> (o .:? "is_automated")
-      <*> (o .:? "name")
-      <*> (o .:? "star_count")
-
--- | ToJSON InlineResponse2006
-instance A.ToJSON InlineResponse2006 where
-  toJSON InlineResponse2006 {..} =
-   _omitNulls
-      [ "description" .= inlineResponse2006Description
-      , "is_official" .= inlineResponse2006IsOfficial
-      , "is_automated" .= inlineResponse2006IsAutomated
-      , "name" .= inlineResponse2006Name
-      , "star_count" .= inlineResponse2006StarCount
-      ]
-
-
--- | Construct a value of type 'InlineResponse2006' (by applying it's required fields, if any)
-mkInlineResponse2006
-  :: InlineResponse2006
-mkInlineResponse2006 =
-  InlineResponse2006
-  { inlineResponse2006Description = Nothing
-  , inlineResponse2006IsOfficial = Nothing
-  , inlineResponse2006IsAutomated = Nothing
-  , inlineResponse2006Name = Nothing
-  , inlineResponse2006StarCount = Nothing
-  }
-
--- ** InlineResponse2007
--- | InlineResponse2007
-data InlineResponse2007 = InlineResponse2007
-  { inlineResponse2007ImagesDeleted :: !(Maybe [ImageDeleteResponseItem]) -- ^ "ImagesDeleted" - Images that were deleted
-  , inlineResponse2007SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2007
-instance A.FromJSON InlineResponse2007 where
-  parseJSON = A.withObject "InlineResponse2007" $ \o ->
-    InlineResponse2007
-      <$> (o .:? "ImagesDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse2007
-instance A.ToJSON InlineResponse2007 where
-  toJSON InlineResponse2007 {..} =
-   _omitNulls
-      [ "ImagesDeleted" .= inlineResponse2007ImagesDeleted
-      , "SpaceReclaimed" .= inlineResponse2007SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse2007' (by applying it's required fields, if any)
-mkInlineResponse2007
-  :: InlineResponse2007
-mkInlineResponse2007 =
-  InlineResponse2007
-  { inlineResponse2007ImagesDeleted = Nothing
-  , inlineResponse2007SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse2008
--- | InlineResponse2008
-data InlineResponse2008 = InlineResponse2008
-  { inlineResponse2008Status :: !(Text) -- ^ /Required/ "Status" - The status of the authentication
-  , inlineResponse2008IdentityToken :: !(Maybe Text) -- ^ "IdentityToken" - An opaque token used to authenticate a user after a successful login
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2008
-instance A.FromJSON InlineResponse2008 where
-  parseJSON = A.withObject "InlineResponse2008" $ \o ->
-    InlineResponse2008
-      <$> (o .:  "Status")
-      <*> (o .:? "IdentityToken")
-
--- | ToJSON InlineResponse2008
-instance A.ToJSON InlineResponse2008 where
-  toJSON InlineResponse2008 {..} =
-   _omitNulls
-      [ "Status" .= inlineResponse2008Status
-      , "IdentityToken" .= inlineResponse2008IdentityToken
-      ]
-
-
--- | Construct a value of type 'InlineResponse2008' (by applying it's required fields, if any)
-mkInlineResponse2008
-  :: Text -- ^ 'inlineResponse2008Status': The status of the authentication
-  -> InlineResponse2008
-mkInlineResponse2008 inlineResponse2008Status =
-  InlineResponse2008
-  { inlineResponse2008Status
-  , inlineResponse2008IdentityToken = Nothing
-  }
-
--- ** InlineResponse2009
--- | InlineResponse2009
-data InlineResponse2009 = InlineResponse2009
-  { inlineResponse2009Architecture :: !(Maybe Text) -- ^ "Architecture"
-  , inlineResponse2009Containers :: !(Maybe Int) -- ^ "Containers"
-  , inlineResponse2009ContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning"
-  , inlineResponse2009ContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped"
-  , inlineResponse2009ContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused"
-  , inlineResponse2009CpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod"
-  , inlineResponse2009CpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota"
-  , inlineResponse2009Debug :: !(Maybe Bool) -- ^ "Debug"
-  , inlineResponse2009DiscoveryBackend :: !(Maybe Text) -- ^ "DiscoveryBackend"
-  , inlineResponse2009DockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir"
-  , inlineResponse2009Driver :: !(Maybe Text) -- ^ "Driver"
-  , inlineResponse2009DriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus"
-  , inlineResponse2009SystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus"
-  , inlineResponse2009Plugins :: !(Maybe InlineResponse2009Plugins) -- ^ "Plugins"
-  , inlineResponse2009ExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild"
-  , inlineResponse2009HttpProxy :: !(Maybe Text) -- ^ "HttpProxy"
-  , inlineResponse2009HttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy"
-  , inlineResponse2009Id :: !(Maybe Text) -- ^ "ID"
-  , inlineResponse2009IPv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding"
-  , inlineResponse2009Images :: !(Maybe Int) -- ^ "Images"
-  , inlineResponse2009IndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress"
-  , inlineResponse2009InitPath :: !(Maybe Text) -- ^ "InitPath"
-  , inlineResponse2009InitSha1 :: !(Maybe Text) -- ^ "InitSha1"
-  , inlineResponse2009KernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
-  , inlineResponse2009Labels :: !(Maybe [Text]) -- ^ "Labels"
-  , inlineResponse2009MemTotal :: !(Maybe Int) -- ^ "MemTotal"
-  , inlineResponse2009MemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit"
-  , inlineResponse2009Ncpu :: !(Maybe Int) -- ^ "NCPU"
-  , inlineResponse2009NEventsListener :: !(Maybe Int) -- ^ "NEventsListener"
-  , inlineResponse2009NFd :: !(Maybe Int) -- ^ "NFd"
-  , inlineResponse2009NGoroutines :: !(Maybe Int) -- ^ "NGoroutines"
-  , inlineResponse2009Name :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse2009NoProxy :: !(Maybe Text) -- ^ "NoProxy"
-  , inlineResponse2009OomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable"
-  , inlineResponse2009OsType :: !(Maybe Text) -- ^ "OSType"
-  , inlineResponse2009OomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj"
-  , inlineResponse2009OperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem"
-  , inlineResponse2009RegistryConfig :: !(Maybe InlineResponse2009RegistryConfig) -- ^ "RegistryConfig"
-  , inlineResponse2009SwapLimit :: !(Maybe Bool) -- ^ "SwapLimit"
-  , inlineResponse2009SystemTime :: !(Maybe Text) -- ^ "SystemTime"
-  , inlineResponse2009ServerVersion :: !(Maybe Text) -- ^ "ServerVersion"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2009
-instance A.FromJSON InlineResponse2009 where
-  parseJSON = A.withObject "InlineResponse2009" $ \o ->
-    InlineResponse2009
-      <$> (o .:? "Architecture")
-      <*> (o .:? "Containers")
-      <*> (o .:? "ContainersRunning")
-      <*> (o .:? "ContainersStopped")
-      <*> (o .:? "ContainersPaused")
-      <*> (o .:? "CpuCfsPeriod")
-      <*> (o .:? "CpuCfsQuota")
-      <*> (o .:? "Debug")
-      <*> (o .:? "DiscoveryBackend")
-      <*> (o .:? "DockerRootDir")
-      <*> (o .:? "Driver")
-      <*> (o .:? "DriverStatus")
-      <*> (o .:? "SystemStatus")
-      <*> (o .:? "Plugins")
-      <*> (o .:? "ExperimentalBuild")
-      <*> (o .:? "HttpProxy")
-      <*> (o .:? "HttpsProxy")
-      <*> (o .:? "ID")
-      <*> (o .:? "IPv4Forwarding")
-      <*> (o .:? "Images")
-      <*> (o .:? "IndexServerAddress")
-      <*> (o .:? "InitPath")
-      <*> (o .:? "InitSha1")
-      <*> (o .:? "KernelVersion")
-      <*> (o .:? "Labels")
-      <*> (o .:? "MemTotal")
-      <*> (o .:? "MemoryLimit")
-      <*> (o .:? "NCPU")
-      <*> (o .:? "NEventsListener")
-      <*> (o .:? "NFd")
-      <*> (o .:? "NGoroutines")
-      <*> (o .:? "Name")
-      <*> (o .:? "NoProxy")
-      <*> (o .:? "OomKillDisable")
-      <*> (o .:? "OSType")
-      <*> (o .:? "OomScoreAdj")
-      <*> (o .:? "OperatingSystem")
-      <*> (o .:? "RegistryConfig")
-      <*> (o .:? "SwapLimit")
-      <*> (o .:? "SystemTime")
-      <*> (o .:? "ServerVersion")
-
--- | ToJSON InlineResponse2009
-instance A.ToJSON InlineResponse2009 where
-  toJSON InlineResponse2009 {..} =
-   _omitNulls
-      [ "Architecture" .= inlineResponse2009Architecture
-      , "Containers" .= inlineResponse2009Containers
-      , "ContainersRunning" .= inlineResponse2009ContainersRunning
-      , "ContainersStopped" .= inlineResponse2009ContainersStopped
-      , "ContainersPaused" .= inlineResponse2009ContainersPaused
-      , "CpuCfsPeriod" .= inlineResponse2009CpuCfsPeriod
-      , "CpuCfsQuota" .= inlineResponse2009CpuCfsQuota
-      , "Debug" .= inlineResponse2009Debug
-      , "DiscoveryBackend" .= inlineResponse2009DiscoveryBackend
-      , "DockerRootDir" .= inlineResponse2009DockerRootDir
-      , "Driver" .= inlineResponse2009Driver
-      , "DriverStatus" .= inlineResponse2009DriverStatus
-      , "SystemStatus" .= inlineResponse2009SystemStatus
-      , "Plugins" .= inlineResponse2009Plugins
-      , "ExperimentalBuild" .= inlineResponse2009ExperimentalBuild
-      , "HttpProxy" .= inlineResponse2009HttpProxy
-      , "HttpsProxy" .= inlineResponse2009HttpsProxy
-      , "ID" .= inlineResponse2009Id
-      , "IPv4Forwarding" .= inlineResponse2009IPv4Forwarding
-      , "Images" .= inlineResponse2009Images
-      , "IndexServerAddress" .= inlineResponse2009IndexServerAddress
-      , "InitPath" .= inlineResponse2009InitPath
-      , "InitSha1" .= inlineResponse2009InitSha1
-      , "KernelVersion" .= inlineResponse2009KernelVersion
-      , "Labels" .= inlineResponse2009Labels
-      , "MemTotal" .= inlineResponse2009MemTotal
-      , "MemoryLimit" .= inlineResponse2009MemoryLimit
-      , "NCPU" .= inlineResponse2009Ncpu
-      , "NEventsListener" .= inlineResponse2009NEventsListener
-      , "NFd" .= inlineResponse2009NFd
-      , "NGoroutines" .= inlineResponse2009NGoroutines
-      , "Name" .= inlineResponse2009Name
-      , "NoProxy" .= inlineResponse2009NoProxy
-      , "OomKillDisable" .= inlineResponse2009OomKillDisable
-      , "OSType" .= inlineResponse2009OsType
-      , "OomScoreAdj" .= inlineResponse2009OomScoreAdj
-      , "OperatingSystem" .= inlineResponse2009OperatingSystem
-      , "RegistryConfig" .= inlineResponse2009RegistryConfig
-      , "SwapLimit" .= inlineResponse2009SwapLimit
-      , "SystemTime" .= inlineResponse2009SystemTime
-      , "ServerVersion" .= inlineResponse2009ServerVersion
-      ]
-
-
--- | Construct a value of type 'InlineResponse2009' (by applying it's required fields, if any)
-mkInlineResponse2009
-  :: InlineResponse2009
-mkInlineResponse2009 =
-  InlineResponse2009
-  { inlineResponse2009Architecture = Nothing
-  , inlineResponse2009Containers = Nothing
-  , inlineResponse2009ContainersRunning = Nothing
-  , inlineResponse2009ContainersStopped = Nothing
-  , inlineResponse2009ContainersPaused = Nothing
-  , inlineResponse2009CpuCfsPeriod = Nothing
-  , inlineResponse2009CpuCfsQuota = Nothing
-  , inlineResponse2009Debug = Nothing
-  , inlineResponse2009DiscoveryBackend = Nothing
-  , inlineResponse2009DockerRootDir = Nothing
-  , inlineResponse2009Driver = Nothing
-  , inlineResponse2009DriverStatus = Nothing
-  , inlineResponse2009SystemStatus = Nothing
-  , inlineResponse2009Plugins = Nothing
-  , inlineResponse2009ExperimentalBuild = Nothing
-  , inlineResponse2009HttpProxy = Nothing
-  , inlineResponse2009HttpsProxy = Nothing
-  , inlineResponse2009Id = Nothing
-  , inlineResponse2009IPv4Forwarding = Nothing
-  , inlineResponse2009Images = Nothing
-  , inlineResponse2009IndexServerAddress = Nothing
-  , inlineResponse2009InitPath = Nothing
-  , inlineResponse2009InitSha1 = Nothing
-  , inlineResponse2009KernelVersion = Nothing
-  , inlineResponse2009Labels = Nothing
-  , inlineResponse2009MemTotal = Nothing
-  , inlineResponse2009MemoryLimit = Nothing
-  , inlineResponse2009Ncpu = Nothing
-  , inlineResponse2009NEventsListener = Nothing
-  , inlineResponse2009NFd = Nothing
-  , inlineResponse2009NGoroutines = Nothing
-  , inlineResponse2009Name = Nothing
-  , inlineResponse2009NoProxy = Nothing
-  , inlineResponse2009OomKillDisable = Nothing
-  , inlineResponse2009OsType = Nothing
-  , inlineResponse2009OomScoreAdj = Nothing
-  , inlineResponse2009OperatingSystem = Nothing
-  , inlineResponse2009RegistryConfig = Nothing
-  , inlineResponse2009SwapLimit = Nothing
-  , inlineResponse2009SystemTime = Nothing
-  , inlineResponse2009ServerVersion = Nothing
-  }
-
--- ** InlineResponse2009Plugins
--- | InlineResponse2009Plugins
-data InlineResponse2009Plugins = InlineResponse2009Plugins
-  { inlineResponse2009PluginsVolume :: !(Maybe [Text]) -- ^ "Volume"
-  , inlineResponse2009PluginsNetwork :: !(Maybe [Text]) -- ^ "Network"
-  , inlineResponse2009PluginsLog :: !(Maybe [Text]) -- ^ "Log"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2009Plugins
-instance A.FromJSON InlineResponse2009Plugins where
-  parseJSON = A.withObject "InlineResponse2009Plugins" $ \o ->
-    InlineResponse2009Plugins
-      <$> (o .:? "Volume")
-      <*> (o .:? "Network")
-      <*> (o .:? "Log")
-
--- | ToJSON InlineResponse2009Plugins
-instance A.ToJSON InlineResponse2009Plugins where
-  toJSON InlineResponse2009Plugins {..} =
-   _omitNulls
-      [ "Volume" .= inlineResponse2009PluginsVolume
-      , "Network" .= inlineResponse2009PluginsNetwork
-      , "Log" .= inlineResponse2009PluginsLog
-      ]
-
-
--- | Construct a value of type 'InlineResponse2009Plugins' (by applying it's required fields, if any)
-mkInlineResponse2009Plugins
-  :: InlineResponse2009Plugins
-mkInlineResponse2009Plugins =
-  InlineResponse2009Plugins
-  { inlineResponse2009PluginsVolume = Nothing
-  , inlineResponse2009PluginsNetwork = Nothing
-  , inlineResponse2009PluginsLog = Nothing
-  }
-
--- ** InlineResponse2009RegistryConfig
--- | InlineResponse2009RegistryConfig
-data InlineResponse2009RegistryConfig = InlineResponse2009RegistryConfig
-  { inlineResponse2009RegistryConfigIndexConfigs :: !(Maybe (Map.Map String InlineResponse2009RegistryConfigIndexConfigs)) -- ^ "IndexConfigs"
-  , inlineResponse2009RegistryConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2009RegistryConfig
-instance A.FromJSON InlineResponse2009RegistryConfig where
-  parseJSON = A.withObject "InlineResponse2009RegistryConfig" $ \o ->
-    InlineResponse2009RegistryConfig
-      <$> (o .:? "IndexConfigs")
-      <*> (o .:? "InsecureRegistryCIDRs")
-
--- | ToJSON InlineResponse2009RegistryConfig
-instance A.ToJSON InlineResponse2009RegistryConfig where
-  toJSON InlineResponse2009RegistryConfig {..} =
-   _omitNulls
-      [ "IndexConfigs" .= inlineResponse2009RegistryConfigIndexConfigs
-      , "InsecureRegistryCIDRs" .= inlineResponse2009RegistryConfigInsecureRegistryCidRs
-      ]
-
-
--- | Construct a value of type 'InlineResponse2009RegistryConfig' (by applying it's required fields, if any)
-mkInlineResponse2009RegistryConfig
-  :: InlineResponse2009RegistryConfig
-mkInlineResponse2009RegistryConfig =
-  InlineResponse2009RegistryConfig
-  { inlineResponse2009RegistryConfigIndexConfigs = Nothing
-  , inlineResponse2009RegistryConfigInsecureRegistryCidRs = Nothing
-  }
-
--- ** InlineResponse2009RegistryConfigIndexConfigs
--- | InlineResponse2009RegistryConfigIndexConfigs
-data InlineResponse2009RegistryConfigIndexConfigs = InlineResponse2009RegistryConfigIndexConfigs
-  { inlineResponse2009RegistryConfigIndexConfigsMirrors :: !(Maybe [Text]) -- ^ "Mirrors"
-  , inlineResponse2009RegistryConfigIndexConfigsName :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse2009RegistryConfigIndexConfigsOfficial :: !(Maybe Bool) -- ^ "Official"
-  , inlineResponse2009RegistryConfigIndexConfigsSecure :: !(Maybe Bool) -- ^ "Secure"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2009RegistryConfigIndexConfigs
-instance A.FromJSON InlineResponse2009RegistryConfigIndexConfigs where
-  parseJSON = A.withObject "InlineResponse2009RegistryConfigIndexConfigs" $ \o ->
-    InlineResponse2009RegistryConfigIndexConfigs
-      <$> (o .:? "Mirrors")
-      <*> (o .:? "Name")
-      <*> (o .:? "Official")
-      <*> (o .:? "Secure")
-
--- | ToJSON InlineResponse2009RegistryConfigIndexConfigs
-instance A.ToJSON InlineResponse2009RegistryConfigIndexConfigs where
-  toJSON InlineResponse2009RegistryConfigIndexConfigs {..} =
-   _omitNulls
-      [ "Mirrors" .= inlineResponse2009RegistryConfigIndexConfigsMirrors
-      , "Name" .= inlineResponse2009RegistryConfigIndexConfigsName
-      , "Official" .= inlineResponse2009RegistryConfigIndexConfigsOfficial
-      , "Secure" .= inlineResponse2009RegistryConfigIndexConfigsSecure
-      ]
-
-
--- | Construct a value of type 'InlineResponse2009RegistryConfigIndexConfigs' (by applying it's required fields, if any)
-mkInlineResponse2009RegistryConfigIndexConfigs
-  :: InlineResponse2009RegistryConfigIndexConfigs
-mkInlineResponse2009RegistryConfigIndexConfigs =
-  InlineResponse2009RegistryConfigIndexConfigs
-  { inlineResponse2009RegistryConfigIndexConfigsMirrors = Nothing
-  , inlineResponse2009RegistryConfigIndexConfigsName = Nothing
-  , inlineResponse2009RegistryConfigIndexConfigsOfficial = Nothing
-  , inlineResponse2009RegistryConfigIndexConfigsSecure = Nothing
-  }
-
--- ** InlineResponse201
--- | InlineResponse201
-data InlineResponse201 = InlineResponse201
-  { inlineResponse201Id :: !(Text) -- ^ /Required/ "Id" - The ID of the created container
-  , inlineResponse201Warnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings encountered when creating the container
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse201
-instance A.FromJSON InlineResponse201 where
-  parseJSON = A.withObject "InlineResponse201" $ \o ->
-    InlineResponse201
-      <$> (o .:  "Id")
-      <*> (o .:  "Warnings")
-
--- | ToJSON InlineResponse201
-instance A.ToJSON InlineResponse201 where
-  toJSON InlineResponse201 {..} =
-   _omitNulls
-      [ "Id" .= inlineResponse201Id
-      , "Warnings" .= inlineResponse201Warnings
-      ]
-
-
--- | Construct a value of type 'InlineResponse201' (by applying it's required fields, if any)
-mkInlineResponse201
-  :: Text -- ^ 'inlineResponse201Id': The ID of the created container
-  -> [Text] -- ^ 'inlineResponse201Warnings': Warnings encountered when creating the container
-  -> InlineResponse201
-mkInlineResponse201 inlineResponse201Id inlineResponse201Warnings =
-  InlineResponse201
-  { inlineResponse201Id
-  , inlineResponse201Warnings
-  }
-
--- ** InlineResponse2011
--- | InlineResponse2011
-data InlineResponse2011 = InlineResponse2011
-  { inlineResponse2011Id :: !(Maybe Text) -- ^ "Id" - The ID of the created network.
-  , inlineResponse2011Warning :: !(Maybe Text) -- ^ "Warning"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2011
-instance A.FromJSON InlineResponse2011 where
-  parseJSON = A.withObject "InlineResponse2011" $ \o ->
-    InlineResponse2011
-      <$> (o .:? "Id")
-      <*> (o .:? "Warning")
-
--- | ToJSON InlineResponse2011
-instance A.ToJSON InlineResponse2011 where
-  toJSON InlineResponse2011 {..} =
-   _omitNulls
-      [ "Id" .= inlineResponse2011Id
-      , "Warning" .= inlineResponse2011Warning
-      ]
-
-
--- | Construct a value of type 'InlineResponse2011' (by applying it's required fields, if any)
-mkInlineResponse2011
-  :: InlineResponse2011
-mkInlineResponse2011 =
-  InlineResponse2011
-  { inlineResponse2011Id = Nothing
-  , inlineResponse2011Warning = Nothing
-  }
-
--- ** InlineResponse2012
--- | InlineResponse2012
-data InlineResponse2012 = InlineResponse2012
-  { inlineResponse2012Id :: !(Maybe Text) -- ^ "ID" - The ID of the created service.
-  , inlineResponse2012Warning :: !(Maybe Text) -- ^ "Warning" - Optional warning message
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2012
-instance A.FromJSON InlineResponse2012 where
-  parseJSON = A.withObject "InlineResponse2012" $ \o ->
-    InlineResponse2012
-      <$> (o .:? "ID")
-      <*> (o .:? "Warning")
-
--- | ToJSON InlineResponse2012
-instance A.ToJSON InlineResponse2012 where
-  toJSON InlineResponse2012 {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse2012Id
-      , "Warning" .= inlineResponse2012Warning
-      ]
-
-
--- | Construct a value of type 'InlineResponse2012' (by applying it's required fields, if any)
-mkInlineResponse2012
-  :: InlineResponse2012
-mkInlineResponse2012 =
-  InlineResponse2012
-  { inlineResponse2012Id = Nothing
-  , inlineResponse2012Warning = Nothing
-  }
-
--- ** InlineResponse2013
--- | InlineResponse2013
-data InlineResponse2013 = InlineResponse2013
-  { inlineResponse2013Id :: !(Maybe Text) -- ^ "ID" - The ID of the created secret.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2013
-instance A.FromJSON InlineResponse2013 where
-  parseJSON = A.withObject "InlineResponse2013" $ \o ->
-    InlineResponse2013
-      <$> (o .:? "ID")
-
--- | ToJSON InlineResponse2013
-instance A.ToJSON InlineResponse2013 where
-  toJSON InlineResponse2013 {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse2013Id
-      ]
-
-
--- | Construct a value of type 'InlineResponse2013' (by applying it's required fields, if any)
-mkInlineResponse2013
-  :: InlineResponse2013
-mkInlineResponse2013 =
-  InlineResponse2013
-  { inlineResponse2013Id = Nothing
-  }
-
--- ** InlineResponse2014
--- | InlineResponse2014
-data InlineResponse2014 = InlineResponse2014
-  { inlineResponse2014Id :: !(Maybe Text) -- ^ "ID" - The ID of the created config.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2014
-instance A.FromJSON InlineResponse2014 where
-  parseJSON = A.withObject "InlineResponse2014" $ \o ->
-    InlineResponse2014
-      <$> (o .:? "ID")
-
--- | ToJSON InlineResponse2014
-instance A.ToJSON InlineResponse2014 where
-  toJSON InlineResponse2014 {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse2014Id
-      ]
-
-
--- | Construct a value of type 'InlineResponse2014' (by applying it's required fields, if any)
-mkInlineResponse2014
-  :: InlineResponse2014
-mkInlineResponse2014 =
-  InlineResponse2014
-  { inlineResponse2014Id = Nothing
-  }
-
 -- ** InlineResponse400
 -- | InlineResponse400
 data InlineResponse400 = InlineResponse400
@@ -3810,197 +3357,74 @@ mkInlineResponse400 =
   , inlineResponse400Message = Nothing
   }
 
--- ** InspectResponse
--- | InspectResponse
-data InspectResponse = InspectResponse
-  { inspectResponseId :: !(Maybe Text) -- ^ "Id" - The ID of the container
-  , inspectResponseCreated :: !(Maybe Text) -- ^ "Created" - The time the container was created
-  , inspectResponsePath :: !(Maybe Text) -- ^ "Path" - The path to the command being run
-  , inspectResponseArgs :: !(Maybe [Text]) -- ^ "Args" - The arguments to the command being run
-  , inspectResponseState :: !(Maybe InspectResponseState) -- ^ "State"
-  , inspectResponseImage :: !(Maybe Text) -- ^ "Image" - The container&#39;s image
-  , inspectResponseResolvConfPath :: !(Maybe Text) -- ^ "ResolvConfPath"
-  , inspectResponseHostnamePath :: !(Maybe Text) -- ^ "HostnamePath"
-  , inspectResponseHostsPath :: !(Maybe Text) -- ^ "HostsPath"
-  , inspectResponseLogPath :: !(Maybe Text) -- ^ "LogPath"
-  , inspectResponseNode :: !(Maybe A.Value) -- ^ "Node" - TODO
-  , inspectResponseName :: !(Maybe Text) -- ^ "Name"
-  , inspectResponseRestartCount :: !(Maybe Int) -- ^ "RestartCount"
-  , inspectResponseDriver :: !(Maybe Text) -- ^ "Driver"
-  , inspectResponseMountLabel :: !(Maybe Text) -- ^ "MountLabel"
-  , inspectResponseProcessLabel :: !(Maybe Text) -- ^ "ProcessLabel"
-  , inspectResponseAppArmorProfile :: !(Maybe Text) -- ^ "AppArmorProfile"
-  , inspectResponseExecIDs :: !(Maybe Text) -- ^ "ExecIDs"
-  , inspectResponseHostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
-  , inspectResponseGraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
-  , inspectResponseSizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container.
-  , inspectResponseSizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container.
-  , inspectResponseMounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
-  , inspectResponseConfig :: !(Maybe ContainerConfig) -- ^ "Config"
-  , inspectResponseNetworkSettings :: !(Maybe NetworkConfig) -- ^ "NetworkSettings"
+-- ** JoinTokens
+-- | JoinTokens
+-- JoinTokens contains the tokens workers and managers need to join the swarm.
+data JoinTokens = JoinTokens
+  { joinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm.
+  , joinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm.
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON InspectResponse
-instance A.FromJSON InspectResponse where
-  parseJSON = A.withObject "InspectResponse" $ \o ->
-    InspectResponse
-      <$> (o .:? "Id")
-      <*> (o .:? "Created")
-      <*> (o .:? "Path")
-      <*> (o .:? "Args")
-      <*> (o .:? "State")
-      <*> (o .:? "Image")
-      <*> (o .:? "ResolvConfPath")
-      <*> (o .:? "HostnamePath")
-      <*> (o .:? "HostsPath")
-      <*> (o .:? "LogPath")
-      <*> (o .:? "Node")
-      <*> (o .:? "Name")
-      <*> (o .:? "RestartCount")
-      <*> (o .:? "Driver")
-      <*> (o .:? "MountLabel")
-      <*> (o .:? "ProcessLabel")
-      <*> (o .:? "AppArmorProfile")
-      <*> (o .:? "ExecIDs")
-      <*> (o .:? "HostConfig")
-      <*> (o .:? "GraphDriver")
-      <*> (o .:? "SizeRw")
-      <*> (o .:? "SizeRootFs")
-      <*> (o .:? "Mounts")
-      <*> (o .:? "Config")
-      <*> (o .:? "NetworkSettings")
+-- | FromJSON JoinTokens
+instance A.FromJSON JoinTokens where
+  parseJSON = A.withObject "JoinTokens" $ \o ->
+    JoinTokens
+      <$> (o .:? "Worker")
+      <*> (o .:? "Manager")
 
--- | ToJSON InspectResponse
-instance A.ToJSON InspectResponse where
-  toJSON InspectResponse {..} =
+-- | ToJSON JoinTokens
+instance A.ToJSON JoinTokens where
+  toJSON JoinTokens {..} =
    _omitNulls
-      [ "Id" .= inspectResponseId
-      , "Created" .= inspectResponseCreated
-      , "Path" .= inspectResponsePath
-      , "Args" .= inspectResponseArgs
-      , "State" .= inspectResponseState
-      , "Image" .= inspectResponseImage
-      , "ResolvConfPath" .= inspectResponseResolvConfPath
-      , "HostnamePath" .= inspectResponseHostnamePath
-      , "HostsPath" .= inspectResponseHostsPath
-      , "LogPath" .= inspectResponseLogPath
-      , "Node" .= inspectResponseNode
-      , "Name" .= inspectResponseName
-      , "RestartCount" .= inspectResponseRestartCount
-      , "Driver" .= inspectResponseDriver
-      , "MountLabel" .= inspectResponseMountLabel
-      , "ProcessLabel" .= inspectResponseProcessLabel
-      , "AppArmorProfile" .= inspectResponseAppArmorProfile
-      , "ExecIDs" .= inspectResponseExecIDs
-      , "HostConfig" .= inspectResponseHostConfig
-      , "GraphDriver" .= inspectResponseGraphDriver
-      , "SizeRw" .= inspectResponseSizeRw
-      , "SizeRootFs" .= inspectResponseSizeRootFs
-      , "Mounts" .= inspectResponseMounts
-      , "Config" .= inspectResponseConfig
-      , "NetworkSettings" .= inspectResponseNetworkSettings
+      [ "Worker" .= joinTokensWorker
+      , "Manager" .= joinTokensManager
       ]
 
 
--- | Construct a value of type 'InspectResponse' (by applying it's required fields, if any)
-mkInspectResponse
-  :: InspectResponse
-mkInspectResponse =
-  InspectResponse
-  { inspectResponseId = Nothing
-  , inspectResponseCreated = Nothing
-  , inspectResponsePath = Nothing
-  , inspectResponseArgs = Nothing
-  , inspectResponseState = Nothing
-  , inspectResponseImage = Nothing
-  , inspectResponseResolvConfPath = Nothing
-  , inspectResponseHostnamePath = Nothing
-  , inspectResponseHostsPath = Nothing
-  , inspectResponseLogPath = Nothing
-  , inspectResponseNode = Nothing
-  , inspectResponseName = Nothing
-  , inspectResponseRestartCount = Nothing
-  , inspectResponseDriver = Nothing
-  , inspectResponseMountLabel = Nothing
-  , inspectResponseProcessLabel = Nothing
-  , inspectResponseAppArmorProfile = Nothing
-  , inspectResponseExecIDs = Nothing
-  , inspectResponseHostConfig = Nothing
-  , inspectResponseGraphDriver = Nothing
-  , inspectResponseSizeRw = Nothing
-  , inspectResponseSizeRootFs = Nothing
-  , inspectResponseMounts = Nothing
-  , inspectResponseConfig = Nothing
-  , inspectResponseNetworkSettings = Nothing
+-- | Construct a value of type 'JoinTokens' (by applying it's required fields, if any)
+mkJoinTokens
+  :: JoinTokens
+mkJoinTokens =
+  JoinTokens
+  { joinTokensWorker = Nothing
+  , joinTokensManager = Nothing
   }
 
--- ** InspectResponseState
--- | InspectResponseState
--- The state of the container.
-data InspectResponseState = InspectResponseState
-  { inspectResponseStateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;. 
-  , inspectResponseStateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;. 
-  , inspectResponseStatePaused :: !(Maybe Bool) -- ^ "Paused" - Whether this container is paused.
-  , inspectResponseStateRestarting :: !(Maybe Bool) -- ^ "Restarting" - Whether this container is restarting.
-  , inspectResponseStateOomKilled :: !(Maybe Bool) -- ^ "OOMKilled" - Whether this container has been killed because it ran out of memory.
-  , inspectResponseStateDead :: !(Maybe Bool) -- ^ "Dead"
-  , inspectResponseStatePid :: !(Maybe Int) -- ^ "Pid" - The process ID of this container
-  , inspectResponseStateExitCode :: !(Maybe Int) -- ^ "ExitCode" - The last exit code of this container
-  , inspectResponseStateError :: !(Maybe Text) -- ^ "Error"
-  , inspectResponseStateStartedAt :: !(Maybe Text) -- ^ "StartedAt" - The time when this container was last started.
-  , inspectResponseStateFinishedAt :: !(Maybe Text) -- ^ "FinishedAt" - The time when this container last exited.
+-- ** ManagerStatus
+-- | ManagerStatus
+-- ManagerStatus represents the status of a manager.  It provides the current status of a node's manager component, if the node is a manager.
+data ManagerStatus = ManagerStatus
+  { managerStatusLeader :: !(Maybe Bool) -- ^ "Leader"
+  , managerStatusReachability :: !(Maybe Reachability) -- ^ "Reachability"
+  , managerStatusAddr :: !(Maybe Text) -- ^ "Addr" - The IP address and port at which the manager is reachable.
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON InspectResponseState
-instance A.FromJSON InspectResponseState where
-  parseJSON = A.withObject "InspectResponseState" $ \o ->
-    InspectResponseState
-      <$> (o .:? "Status")
-      <*> (o .:? "Running")
-      <*> (o .:? "Paused")
-      <*> (o .:? "Restarting")
-      <*> (o .:? "OOMKilled")
-      <*> (o .:? "Dead")
-      <*> (o .:? "Pid")
-      <*> (o .:? "ExitCode")
-      <*> (o .:? "Error")
-      <*> (o .:? "StartedAt")
-      <*> (o .:? "FinishedAt")
+-- | FromJSON ManagerStatus
+instance A.FromJSON ManagerStatus where
+  parseJSON = A.withObject "ManagerStatus" $ \o ->
+    ManagerStatus
+      <$> (o .:? "Leader")
+      <*> (o .:? "Reachability")
+      <*> (o .:? "Addr")
 
--- | ToJSON InspectResponseState
-instance A.ToJSON InspectResponseState where
-  toJSON InspectResponseState {..} =
+-- | ToJSON ManagerStatus
+instance A.ToJSON ManagerStatus where
+  toJSON ManagerStatus {..} =
    _omitNulls
-      [ "Status" .= inspectResponseStateStatus
-      , "Running" .= inspectResponseStateRunning
-      , "Paused" .= inspectResponseStatePaused
-      , "Restarting" .= inspectResponseStateRestarting
-      , "OOMKilled" .= inspectResponseStateOomKilled
-      , "Dead" .= inspectResponseStateDead
-      , "Pid" .= inspectResponseStatePid
-      , "ExitCode" .= inspectResponseStateExitCode
-      , "Error" .= inspectResponseStateError
-      , "StartedAt" .= inspectResponseStateStartedAt
-      , "FinishedAt" .= inspectResponseStateFinishedAt
+      [ "Leader" .= managerStatusLeader
+      , "Reachability" .= managerStatusReachability
+      , "Addr" .= managerStatusAddr
       ]
 
 
--- | Construct a value of type 'InspectResponseState' (by applying it's required fields, if any)
-mkInspectResponseState
-  :: InspectResponseState
-mkInspectResponseState =
-  InspectResponseState
-  { inspectResponseStateStatus = Nothing
-  , inspectResponseStateRunning = Nothing
-  , inspectResponseStatePaused = Nothing
-  , inspectResponseStateRestarting = Nothing
-  , inspectResponseStateOomKilled = Nothing
-  , inspectResponseStateDead = Nothing
-  , inspectResponseStatePid = Nothing
-  , inspectResponseStateExitCode = Nothing
-  , inspectResponseStateError = Nothing
-  , inspectResponseStateStartedAt = Nothing
-  , inspectResponseStateFinishedAt = Nothing
+-- | Construct a value of type 'ManagerStatus' (by applying it's required fields, if any)
+mkManagerStatus
+  :: ManagerStatus
+mkManagerStatus =
+  ManagerStatus
+  { managerStatusLeader = Nothing
+  , managerStatusReachability = Nothing
+  , managerStatusAddr = Nothing
   }
 
 -- ** Mount
@@ -4008,7 +3432,7 @@ mkInspectResponseState =
 data Mount = Mount
   { mountTarget :: !(Maybe Text) -- ^ "Target" - Container path.
   , mountSource :: !(Maybe Text) -- ^ "Source" - Mount source (e.g. a volume name, a host path).
-  , mountType :: !(Maybe E'Type2) -- ^ "Type" - The mount type. Available types:  - &#x60;bind&#x60; Mounts a file or directory from the host into the container. Must exist prior to creating the container. - &#x60;volume&#x60; Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - &#x60;tmpfs&#x60; Create a tmpfs with the given options. The mount source cannot be specified for tmpfs. 
+  , mountType :: !(Maybe E'Type2) -- ^ "Type" - The mount type. Available types:  - &#x60;bind&#x60; Mounts a file or directory from the host into the container. Must exist prior to creating the container. - &#x60;volume&#x60; Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - &#x60;tmpfs&#x60; Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
   , mountReadOnly :: !(Maybe Bool) -- ^ "ReadOnly" - Whether the mount should be read-only.
   , mountConsistency :: !(Maybe Text) -- ^ "Consistency" - The consistency requirement for the mount: &#x60;default&#x60;, &#x60;consistent&#x60;, &#x60;cached&#x60;, or &#x60;delegated&#x60;.
   , mountBindOptions :: !(Maybe MountBindOptions) -- ^ "BindOptions"
@@ -4063,7 +3487,7 @@ mkMount =
 -- | MountBindOptions
 -- Optional configuration for the `bind` type.
 data MountBindOptions = MountBindOptions
-  { mountBindOptionsPropagation :: !(Maybe A.Value) -- ^ "Propagation" - A propagation mode with the value &#x60;[r]private&#x60;, &#x60;[r]shared&#x60;, or &#x60;[r]slave&#x60;.
+  { mountBindOptionsPropagation :: !(Maybe E'Propagation) -- ^ "Propagation" - A propagation mode with the value &#x60;[r]private&#x60;, &#x60;[r]shared&#x60;, or &#x60;[r]slave&#x60;.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON MountBindOptions
@@ -4324,59 +3748,6 @@ mkNetwork =
   , networkLabels = Nothing
   }
 
--- ** NetworkConfig
--- | NetworkConfig
--- TODO: check is correct
-data NetworkConfig = NetworkConfig
-  { networkConfigBridge :: !(Maybe Text) -- ^ "Bridge"
-  , networkConfigGateway :: !(Maybe Text) -- ^ "Gateway"
-  , networkConfigAddress :: !(Maybe Text) -- ^ "Address"
-  , networkConfigIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen"
-  , networkConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress"
-  , networkConfigPortMapping :: !(Maybe Text) -- ^ "PortMapping"
-  , networkConfigPorts :: !(Maybe [Port]) -- ^ "Ports"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON NetworkConfig
-instance A.FromJSON NetworkConfig where
-  parseJSON = A.withObject "NetworkConfig" $ \o ->
-    NetworkConfig
-      <$> (o .:? "Bridge")
-      <*> (o .:? "Gateway")
-      <*> (o .:? "Address")
-      <*> (o .:? "IPPrefixLen")
-      <*> (o .:? "MacAddress")
-      <*> (o .:? "PortMapping")
-      <*> (o .:? "Ports")
-
--- | ToJSON NetworkConfig
-instance A.ToJSON NetworkConfig where
-  toJSON NetworkConfig {..} =
-   _omitNulls
-      [ "Bridge" .= networkConfigBridge
-      , "Gateway" .= networkConfigGateway
-      , "Address" .= networkConfigAddress
-      , "IPPrefixLen" .= networkConfigIpPrefixLen
-      , "MacAddress" .= networkConfigMacAddress
-      , "PortMapping" .= networkConfigPortMapping
-      , "Ports" .= networkConfigPorts
-      ]
-
-
--- | Construct a value of type 'NetworkConfig' (by applying it's required fields, if any)
-mkNetworkConfig
-  :: NetworkConfig
-mkNetworkConfig =
-  NetworkConfig
-  { networkConfigBridge = Nothing
-  , networkConfigGateway = Nothing
-  , networkConfigAddress = Nothing
-  , networkConfigIpPrefixLen = Nothing
-  , networkConfigMacAddress = Nothing
-  , networkConfigPortMapping = Nothing
-  , networkConfigPorts = Nothing
-  }
-
 -- ** NetworkContainer
 -- | NetworkContainer
 data NetworkContainer = NetworkContainer
@@ -4421,15 +3792,174 @@ mkNetworkContainer =
   , networkContainerIPv6Address = Nothing
   }
 
+-- ** NetworkCreateResponse
+-- | NetworkCreateResponse
+data NetworkCreateResponse = NetworkCreateResponse
+  { networkCreateResponseId :: !(Maybe Text) -- ^ "Id" - The ID of the created network.
+  , networkCreateResponseWarning :: !(Maybe Text) -- ^ "Warning"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NetworkCreateResponse
+instance A.FromJSON NetworkCreateResponse where
+  parseJSON = A.withObject "NetworkCreateResponse" $ \o ->
+    NetworkCreateResponse
+      <$> (o .:? "Id")
+      <*> (o .:? "Warning")
+
+-- | ToJSON NetworkCreateResponse
+instance A.ToJSON NetworkCreateResponse where
+  toJSON NetworkCreateResponse {..} =
+   _omitNulls
+      [ "Id" .= networkCreateResponseId
+      , "Warning" .= networkCreateResponseWarning
+      ]
+
+
+-- | Construct a value of type 'NetworkCreateResponse' (by applying it's required fields, if any)
+mkNetworkCreateResponse
+  :: NetworkCreateResponse
+mkNetworkCreateResponse =
+  NetworkCreateResponse
+  { networkCreateResponseId = Nothing
+  , networkCreateResponseWarning = Nothing
+  }
+
+-- ** NetworkPruneResponse
+-- | NetworkPruneResponse
+data NetworkPruneResponse = NetworkPruneResponse
+  { networkPruneResponseNetworksDeleted :: !(Maybe [Text]) -- ^ "NetworksDeleted" - Networks that were deleted
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NetworkPruneResponse
+instance A.FromJSON NetworkPruneResponse where
+  parseJSON = A.withObject "NetworkPruneResponse" $ \o ->
+    NetworkPruneResponse
+      <$> (o .:? "NetworksDeleted")
+
+-- | ToJSON NetworkPruneResponse
+instance A.ToJSON NetworkPruneResponse where
+  toJSON NetworkPruneResponse {..} =
+   _omitNulls
+      [ "NetworksDeleted" .= networkPruneResponseNetworksDeleted
+      ]
+
+
+-- | Construct a value of type 'NetworkPruneResponse' (by applying it's required fields, if any)
+mkNetworkPruneResponse
+  :: NetworkPruneResponse
+mkNetworkPruneResponse =
+  NetworkPruneResponse
+  { networkPruneResponseNetworksDeleted = Nothing
+  }
+
+-- ** NetworkSettings
+-- | NetworkSettings
+-- NetworkSettings exposes the network settings in the API
+data NetworkSettings = NetworkSettings
+  { networkSettingsBridge :: !(Maybe Text) -- ^ "Bridge" - Name of the network&#39;a bridge (for example, &#x60;docker0&#x60;).
+  , networkSettingsSandboxId :: !(Maybe Text) -- ^ "SandboxID" - SandboxID uniquely represents a container&#39;s network stack.
+  , networkSettingsHairpinMode :: !(Maybe Bool) -- ^ "HairpinMode" - Indicates if hairpin NAT should be enabled on the virtual interface.
+  , networkSettingsLinkLocalIPv6Address :: !(Maybe Text) -- ^ "LinkLocalIPv6Address" - IPv6 unicast address using the link-local prefix.
+  , networkSettingsLinkLocalIPv6PrefixLen :: !(Maybe Int) -- ^ "LinkLocalIPv6PrefixLen" - Prefix length of the IPv6 unicast address.
+  , networkSettingsPorts :: !(Maybe (Map.Map String [PortBinding])) -- ^ "Ports" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
+  , networkSettingsSandboxKey :: !(Maybe Text) -- ^ "SandboxKey" - SandboxKey identifies the sandbox
+  , networkSettingsSecondaryIpAddresses :: !(Maybe [Address]) -- ^ "SecondaryIPAddresses" -
+  , networkSettingsSecondaryIPv6Addresses :: !(Maybe [Address]) -- ^ "SecondaryIPv6Addresses" -
+  , networkSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - EndpointID uniquely represents a service endpoint in a Sandbox.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsGlobalIPv6PrefixLen :: !(Maybe Int) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address for this network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the container on the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
+  , networkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks" - Information about all networks that the container is connected to.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NetworkSettings
+instance A.FromJSON NetworkSettings where
+  parseJSON = A.withObject "NetworkSettings" $ \o ->
+    NetworkSettings
+      <$> (o .:? "Bridge")
+      <*> (o .:? "SandboxID")
+      <*> (o .:? "HairpinMode")
+      <*> (o .:? "LinkLocalIPv6Address")
+      <*> (o .:? "LinkLocalIPv6PrefixLen")
+      <*> (o .:? "Ports")
+      <*> (o .:? "SandboxKey")
+      <*> (o .:? "SecondaryIPAddresses")
+      <*> (o .:? "SecondaryIPv6Addresses")
+      <*> (o .:? "EndpointID")
+      <*> (o .:? "Gateway")
+      <*> (o .:? "GlobalIPv6Address")
+      <*> (o .:? "GlobalIPv6PrefixLen")
+      <*> (o .:? "IPAddress")
+      <*> (o .:? "IPPrefixLen")
+      <*> (o .:? "IPv6Gateway")
+      <*> (o .:? "MacAddress")
+      <*> (o .:? "Networks")
+
+-- | ToJSON NetworkSettings
+instance A.ToJSON NetworkSettings where
+  toJSON NetworkSettings {..} =
+   _omitNulls
+      [ "Bridge" .= networkSettingsBridge
+      , "SandboxID" .= networkSettingsSandboxId
+      , "HairpinMode" .= networkSettingsHairpinMode
+      , "LinkLocalIPv6Address" .= networkSettingsLinkLocalIPv6Address
+      , "LinkLocalIPv6PrefixLen" .= networkSettingsLinkLocalIPv6PrefixLen
+      , "Ports" .= networkSettingsPorts
+      , "SandboxKey" .= networkSettingsSandboxKey
+      , "SecondaryIPAddresses" .= networkSettingsSecondaryIpAddresses
+      , "SecondaryIPv6Addresses" .= networkSettingsSecondaryIPv6Addresses
+      , "EndpointID" .= networkSettingsEndpointId
+      , "Gateway" .= networkSettingsGateway
+      , "GlobalIPv6Address" .= networkSettingsGlobalIPv6Address
+      , "GlobalIPv6PrefixLen" .= networkSettingsGlobalIPv6PrefixLen
+      , "IPAddress" .= networkSettingsIpAddress
+      , "IPPrefixLen" .= networkSettingsIpPrefixLen
+      , "IPv6Gateway" .= networkSettingsIPv6Gateway
+      , "MacAddress" .= networkSettingsMacAddress
+      , "Networks" .= networkSettingsNetworks
+      ]
+
+
+-- | Construct a value of type 'NetworkSettings' (by applying it's required fields, if any)
+mkNetworkSettings
+  :: NetworkSettings
+mkNetworkSettings =
+  NetworkSettings
+  { networkSettingsBridge = Nothing
+  , networkSettingsSandboxId = Nothing
+  , networkSettingsHairpinMode = Nothing
+  , networkSettingsLinkLocalIPv6Address = Nothing
+  , networkSettingsLinkLocalIPv6PrefixLen = Nothing
+  , networkSettingsPorts = Nothing
+  , networkSettingsSandboxKey = Nothing
+  , networkSettingsSecondaryIpAddresses = Nothing
+  , networkSettingsSecondaryIPv6Addresses = Nothing
+  , networkSettingsEndpointId = Nothing
+  , networkSettingsGateway = Nothing
+  , networkSettingsGlobalIPv6Address = Nothing
+  , networkSettingsGlobalIPv6PrefixLen = Nothing
+  , networkSettingsIpAddress = Nothing
+  , networkSettingsIpPrefixLen = Nothing
+  , networkSettingsIPv6Gateway = Nothing
+  , networkSettingsMacAddress = Nothing
+  , networkSettingsNetworks = Nothing
+  }
+
 -- ** Node
 -- | Node
 data Node = Node
   { nodeId :: !(Maybe Text) -- ^ "ID"
   , nodeVersion :: !(Maybe ObjectVersion) -- ^ "Version"
-  , nodeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt"
-  , nodeUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt"
+  , nodeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the node was added to the swarm in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , nodeUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the node was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
   , nodeSpec :: !(Maybe NodeSpec) -- ^ "Spec"
   , nodeDescription :: !(Maybe NodeDescription) -- ^ "Description"
+  , nodeStatus :: !(Maybe NodeStatus) -- ^ "Status"
+  , nodeManagerStatus :: !(Maybe ManagerStatus) -- ^ "ManagerStatus"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Node
@@ -4442,6 +3972,8 @@ instance A.FromJSON Node where
       <*> (o .:? "UpdatedAt")
       <*> (o .:? "Spec")
       <*> (o .:? "Description")
+      <*> (o .:? "Status")
+      <*> (o .:? "ManagerStatus")
 
 -- | ToJSON Node
 instance A.ToJSON Node where
@@ -4453,6 +3985,8 @@ instance A.ToJSON Node where
       , "UpdatedAt" .= nodeUpdatedAt
       , "Spec" .= nodeSpec
       , "Description" .= nodeDescription
+      , "Status" .= nodeStatus
+      , "ManagerStatus" .= nodeManagerStatus
       ]
 
 
@@ -4467,16 +4001,19 @@ mkNode =
   , nodeUpdatedAt = Nothing
   , nodeSpec = Nothing
   , nodeDescription = Nothing
+  , nodeStatus = Nothing
+  , nodeManagerStatus = Nothing
   }
 
 -- ** NodeDescription
 -- | NodeDescription
+-- NodeDescription encapsulates the properties of the Node as reported by the agent.
 data NodeDescription = NodeDescription
   { nodeDescriptionHostname :: !(Maybe Text) -- ^ "Hostname"
-  , nodeDescriptionPlatform :: !(Maybe NodeDescriptionPlatform) -- ^ "Platform"
-  , nodeDescriptionResources :: !(Maybe NodeDescriptionResources) -- ^ "Resources"
-  , nodeDescriptionEngine :: !(Maybe NodeDescriptionEngine) -- ^ "Engine"
-  , nodeDescriptionTlsInfo :: !(Maybe SwarmSpec) -- ^ "TLSInfo"
+  , nodeDescriptionPlatform :: !(Maybe Platform) -- ^ "Platform"
+  , nodeDescriptionResources :: !(Maybe ResourceObject) -- ^ "Resources"
+  , nodeDescriptionEngine :: !(Maybe EngineDescription) -- ^ "Engine"
+  , nodeDescriptionTlsInfo :: !(Maybe TLSInfo) -- ^ "TLSInfo"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON NodeDescription
@@ -4511,138 +4048,6 @@ mkNodeDescription =
   , nodeDescriptionResources = Nothing
   , nodeDescriptionEngine = Nothing
   , nodeDescriptionTlsInfo = Nothing
-  }
-
--- ** NodeDescriptionEngine
--- | NodeDescriptionEngine
-data NodeDescriptionEngine = NodeDescriptionEngine
-  { nodeDescriptionEngineEngineVersion :: !(Maybe Text) -- ^ "EngineVersion"
-  , nodeDescriptionEngineLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels"
-  , nodeDescriptionEnginePlugins :: !(Maybe [NodeDescriptionEnginePlugins]) -- ^ "Plugins"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON NodeDescriptionEngine
-instance A.FromJSON NodeDescriptionEngine where
-  parseJSON = A.withObject "NodeDescriptionEngine" $ \o ->
-    NodeDescriptionEngine
-      <$> (o .:? "EngineVersion")
-      <*> (o .:? "Labels")
-      <*> (o .:? "Plugins")
-
--- | ToJSON NodeDescriptionEngine
-instance A.ToJSON NodeDescriptionEngine where
-  toJSON NodeDescriptionEngine {..} =
-   _omitNulls
-      [ "EngineVersion" .= nodeDescriptionEngineEngineVersion
-      , "Labels" .= nodeDescriptionEngineLabels
-      , "Plugins" .= nodeDescriptionEnginePlugins
-      ]
-
-
--- | Construct a value of type 'NodeDescriptionEngine' (by applying it's required fields, if any)
-mkNodeDescriptionEngine
-  :: NodeDescriptionEngine
-mkNodeDescriptionEngine =
-  NodeDescriptionEngine
-  { nodeDescriptionEngineEngineVersion = Nothing
-  , nodeDescriptionEngineLabels = Nothing
-  , nodeDescriptionEnginePlugins = Nothing
-  }
-
--- ** NodeDescriptionEnginePlugins
--- | NodeDescriptionEnginePlugins
-data NodeDescriptionEnginePlugins = NodeDescriptionEnginePlugins
-  { nodeDescriptionEnginePluginsType :: !(Maybe Text) -- ^ "Type"
-  , nodeDescriptionEnginePluginsName :: !(Maybe Text) -- ^ "Name"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON NodeDescriptionEnginePlugins
-instance A.FromJSON NodeDescriptionEnginePlugins where
-  parseJSON = A.withObject "NodeDescriptionEnginePlugins" $ \o ->
-    NodeDescriptionEnginePlugins
-      <$> (o .:? "Type")
-      <*> (o .:? "Name")
-
--- | ToJSON NodeDescriptionEnginePlugins
-instance A.ToJSON NodeDescriptionEnginePlugins where
-  toJSON NodeDescriptionEnginePlugins {..} =
-   _omitNulls
-      [ "Type" .= nodeDescriptionEnginePluginsType
-      , "Name" .= nodeDescriptionEnginePluginsName
-      ]
-
-
--- | Construct a value of type 'NodeDescriptionEnginePlugins' (by applying it's required fields, if any)
-mkNodeDescriptionEnginePlugins
-  :: NodeDescriptionEnginePlugins
-mkNodeDescriptionEnginePlugins =
-  NodeDescriptionEnginePlugins
-  { nodeDescriptionEnginePluginsType = Nothing
-  , nodeDescriptionEnginePluginsName = Nothing
-  }
-
--- ** NodeDescriptionPlatform
--- | NodeDescriptionPlatform
-data NodeDescriptionPlatform = NodeDescriptionPlatform
-  { nodeDescriptionPlatformArchitecture :: !(Maybe Text) -- ^ "Architecture"
-  , nodeDescriptionPlatformOs :: !(Maybe Text) -- ^ "OS"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON NodeDescriptionPlatform
-instance A.FromJSON NodeDescriptionPlatform where
-  parseJSON = A.withObject "NodeDescriptionPlatform" $ \o ->
-    NodeDescriptionPlatform
-      <$> (o .:? "Architecture")
-      <*> (o .:? "OS")
-
--- | ToJSON NodeDescriptionPlatform
-instance A.ToJSON NodeDescriptionPlatform where
-  toJSON NodeDescriptionPlatform {..} =
-   _omitNulls
-      [ "Architecture" .= nodeDescriptionPlatformArchitecture
-      , "OS" .= nodeDescriptionPlatformOs
-      ]
-
-
--- | Construct a value of type 'NodeDescriptionPlatform' (by applying it's required fields, if any)
-mkNodeDescriptionPlatform
-  :: NodeDescriptionPlatform
-mkNodeDescriptionPlatform =
-  NodeDescriptionPlatform
-  { nodeDescriptionPlatformArchitecture = Nothing
-  , nodeDescriptionPlatformOs = Nothing
-  }
-
--- ** NodeDescriptionResources
--- | NodeDescriptionResources
-data NodeDescriptionResources = NodeDescriptionResources
-  { nodeDescriptionResourcesNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs"
-  , nodeDescriptionResourcesMemoryBytes :: !(Maybe Integer) -- ^ "MemoryBytes"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON NodeDescriptionResources
-instance A.FromJSON NodeDescriptionResources where
-  parseJSON = A.withObject "NodeDescriptionResources" $ \o ->
-    NodeDescriptionResources
-      <$> (o .:? "NanoCPUs")
-      <*> (o .:? "MemoryBytes")
-
--- | ToJSON NodeDescriptionResources
-instance A.ToJSON NodeDescriptionResources where
-  toJSON NodeDescriptionResources {..} =
-   _omitNulls
-      [ "NanoCPUs" .= nodeDescriptionResourcesNanoCpUs
-      , "MemoryBytes" .= nodeDescriptionResourcesMemoryBytes
-      ]
-
-
--- | Construct a value of type 'NodeDescriptionResources' (by applying it's required fields, if any)
-mkNodeDescriptionResources
-  :: NodeDescriptionResources
-mkNodeDescriptionResources =
-  NodeDescriptionResources
-  { nodeDescriptionResourcesNanoCpUs = Nothing
-  , nodeDescriptionResourcesMemoryBytes = Nothing
   }
 
 -- ** NodeSpec
@@ -4685,11 +4090,48 @@ mkNodeSpec =
   , nodeSpecAvailability = Nothing
   }
 
+-- ** NodeStatus
+-- | NodeStatus
+-- NodeStatus represents the status of a node.  It provides the current status of the node, as seen by the manager.
+data NodeStatus = NodeStatus
+  { nodeStatusState :: !(Maybe NodeState) -- ^ "State"
+  , nodeStatusMessage :: !(Maybe Text) -- ^ "Message"
+  , nodeStatusAddr :: !(Maybe Text) -- ^ "Addr" - IP address of the node.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NodeStatus
+instance A.FromJSON NodeStatus where
+  parseJSON = A.withObject "NodeStatus" $ \o ->
+    NodeStatus
+      <$> (o .:? "State")
+      <*> (o .:? "Message")
+      <*> (o .:? "Addr")
+
+-- | ToJSON NodeStatus
+instance A.ToJSON NodeStatus where
+  toJSON NodeStatus {..} =
+   _omitNulls
+      [ "State" .= nodeStatusState
+      , "Message" .= nodeStatusMessage
+      , "Addr" .= nodeStatusAddr
+      ]
+
+
+-- | Construct a value of type 'NodeStatus' (by applying it's required fields, if any)
+mkNodeStatus
+  :: NodeStatus
+mkNodeStatus =
+  NodeStatus
+  { nodeStatusState = Nothing
+  , nodeStatusMessage = Nothing
+  , nodeStatusAddr = Nothing
+  }
+
 -- ** ObjectVersion
 -- | ObjectVersion
--- The version number of the object such as node, service, etc. This is needed to avoid conflicting writes. The client must send the version number along with the modified specification when updating these objects. This approach ensures safe concurrency and determinism in that the change on the object may not be applied if the version number has changed from the last read. In other words, if two update requests specify the same base version, only one of the requests can succeed. As a result, two separate update requests that happen at the same time will not unintentially overwrite each other. 
+-- The version number of the object such as node, service, etc. This is needed to avoid conflicting writes. The client must send the version number along with the modified specification when updating these objects. This approach ensures safe concurrency and determinism in that the change on the object may not be applied if the version number has changed from the last read. In other words, if two update requests specify the same base version, only one of the requests can succeed. As a result, two separate update requests that happen at the same time will not unintentionally overwrite each other.
 data ObjectVersion = ObjectVersion
-  { objectVersionIndex :: !(Maybe Integer) -- ^ "Index"
+  { objectVersionIndex :: !(Maybe Int) -- ^ "Index"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ObjectVersion
@@ -4712,6 +4154,72 @@ mkObjectVersion
 mkObjectVersion =
   ObjectVersion
   { objectVersionIndex = Nothing
+  }
+
+-- ** PeerNode
+-- | PeerNode
+-- Represents a peer-node in the swarm
+data PeerNode = PeerNode
+  { peerNodeNodeId :: !(Maybe Text) -- ^ "NodeID" - Unique identifier of for this node in the swarm.
+  , peerNodeAddr :: !(Maybe Text) -- ^ "Addr" - IP address and ports at which this node can be reached.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON PeerNode
+instance A.FromJSON PeerNode where
+  parseJSON = A.withObject "PeerNode" $ \o ->
+    PeerNode
+      <$> (o .:? "NodeID")
+      <*> (o .:? "Addr")
+
+-- | ToJSON PeerNode
+instance A.ToJSON PeerNode where
+  toJSON PeerNode {..} =
+   _omitNulls
+      [ "NodeID" .= peerNodeNodeId
+      , "Addr" .= peerNodeAddr
+      ]
+
+
+-- | Construct a value of type 'PeerNode' (by applying it's required fields, if any)
+mkPeerNode
+  :: PeerNode
+mkPeerNode =
+  PeerNode
+  { peerNodeNodeId = Nothing
+  , peerNodeAddr = Nothing
+  }
+
+-- ** Platform
+-- | Platform
+-- Platform represents the platform (Arch/OS).
+data Platform = Platform
+  { platformArchitecture :: !(Maybe Text) -- ^ "Architecture" - Architecture represents the hardware architecture (for example, &#x60;x86_64&#x60;).
+  , platformOs :: !(Maybe Text) -- ^ "OS" - OS represents the Operating System (for example, &#x60;linux&#x60; or &#x60;windows&#x60;).
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Platform
+instance A.FromJSON Platform where
+  parseJSON = A.withObject "Platform" $ \o ->
+    Platform
+      <$> (o .:? "Architecture")
+      <*> (o .:? "OS")
+
+-- | ToJSON Platform
+instance A.ToJSON Platform where
+  toJSON Platform {..} =
+   _omitNulls
+      [ "Architecture" .= platformArchitecture
+      , "OS" .= platformOs
+      ]
+
+
+-- | Construct a value of type 'Platform' (by applying it's required fields, if any)
+mkPlatform
+  :: Platform
+mkPlatform =
+  Platform
+  { platformArchitecture = Nothing
+  , platformOs = Nothing
   }
 
 -- ** Plugin
@@ -4752,10 +4260,10 @@ instance A.ToJSON Plugin where
 
 -- | Construct a value of type 'Plugin' (by applying it's required fields, if any)
 mkPlugin
-  :: Text -- ^ 'pluginName' 
+  :: Text -- ^ 'pluginName'
   -> Bool -- ^ 'pluginEnabled': True if the plugin is running. False if the plugin is not running, only installed.
-  -> PluginSettings -- ^ 'pluginSettings' 
-  -> PluginConfig -- ^ 'pluginConfig' 
+  -> PluginSettings -- ^ 'pluginSettings'
+  -> PluginConfig -- ^ 'pluginConfig'
   -> Plugin
 mkPlugin pluginName pluginEnabled pluginSettings pluginConfig =
   Plugin
@@ -4835,19 +4343,19 @@ instance A.ToJSON PluginConfig where
 
 -- | Construct a value of type 'PluginConfig' (by applying it's required fields, if any)
 mkPluginConfig
-  :: Text -- ^ 'pluginConfigDescription' 
-  -> Text -- ^ 'pluginConfigDocumentation' 
-  -> PluginConfigInterface -- ^ 'pluginConfigInterface' 
-  -> [Text] -- ^ 'pluginConfigEntrypoint' 
-  -> Text -- ^ 'pluginConfigWorkDir' 
-  -> PluginConfigNetwork -- ^ 'pluginConfigNetwork' 
-  -> PluginConfigLinux -- ^ 'pluginConfigLinux' 
-  -> Text -- ^ 'pluginConfigPropagatedMount' 
-  -> Bool -- ^ 'pluginConfigIpcHost' 
-  -> Bool -- ^ 'pluginConfigPidHost' 
-  -> [PluginMount] -- ^ 'pluginConfigMounts' 
-  -> [PluginEnv] -- ^ 'pluginConfigEnv' 
-  -> PluginConfigArgs -- ^ 'pluginConfigArgs' 
+  :: Text -- ^ 'pluginConfigDescription'
+  -> Text -- ^ 'pluginConfigDocumentation'
+  -> PluginConfigInterface -- ^ 'pluginConfigInterface'
+  -> [Text] -- ^ 'pluginConfigEntrypoint'
+  -> Text -- ^ 'pluginConfigWorkDir'
+  -> PluginConfigNetwork -- ^ 'pluginConfigNetwork'
+  -> PluginConfigLinux -- ^ 'pluginConfigLinux'
+  -> Text -- ^ 'pluginConfigPropagatedMount'
+  -> Bool -- ^ 'pluginConfigIpcHost'
+  -> Bool -- ^ 'pluginConfigPidHost'
+  -> [PluginMount] -- ^ 'pluginConfigMounts'
+  -> [PluginEnv] -- ^ 'pluginConfigEnv'
+  -> PluginConfigArgs -- ^ 'pluginConfigArgs'
   -> PluginConfig
 mkPluginConfig pluginConfigDescription pluginConfigDocumentation pluginConfigInterface pluginConfigEntrypoint pluginConfigWorkDir pluginConfigNetwork pluginConfigLinux pluginConfigPropagatedMount pluginConfigIpcHost pluginConfigPidHost pluginConfigMounts pluginConfigEnv pluginConfigArgs =
   PluginConfig
@@ -4900,10 +4408,10 @@ instance A.ToJSON PluginConfigArgs where
 
 -- | Construct a value of type 'PluginConfigArgs' (by applying it's required fields, if any)
 mkPluginConfigArgs
-  :: Text -- ^ 'pluginConfigArgsName' 
-  -> Text -- ^ 'pluginConfigArgsDescription' 
-  -> [Text] -- ^ 'pluginConfigArgsSettable' 
-  -> [Text] -- ^ 'pluginConfigArgsValue' 
+  :: Text -- ^ 'pluginConfigArgsName'
+  -> Text -- ^ 'pluginConfigArgsDescription'
+  -> [Text] -- ^ 'pluginConfigArgsSettable'
+  -> [Text] -- ^ 'pluginConfigArgsValue'
   -> PluginConfigArgs
 mkPluginConfigArgs pluginConfigArgsName pluginConfigArgsDescription pluginConfigArgsSettable pluginConfigArgsValue =
   PluginConfigArgs
@@ -4939,8 +4447,8 @@ instance A.ToJSON PluginConfigInterface where
 
 -- | Construct a value of type 'PluginConfigInterface' (by applying it's required fields, if any)
 mkPluginConfigInterface
-  :: [PluginInterfaceType] -- ^ 'pluginConfigInterfaceTypes' 
-  -> Text -- ^ 'pluginConfigInterfaceSocket' 
+  :: [PluginInterfaceType] -- ^ 'pluginConfigInterfaceTypes'
+  -> Text -- ^ 'pluginConfigInterfaceSocket'
   -> PluginConfigInterface
 mkPluginConfigInterface pluginConfigInterfaceTypes pluginConfigInterfaceSocket =
   PluginConfigInterface
@@ -4976,9 +4484,9 @@ instance A.ToJSON PluginConfigLinux where
 
 -- | Construct a value of type 'PluginConfigLinux' (by applying it's required fields, if any)
 mkPluginConfigLinux
-  :: [Text] -- ^ 'pluginConfigLinuxCapabilities' 
-  -> Bool -- ^ 'pluginConfigLinuxAllowAllDevices' 
-  -> [PluginDevice] -- ^ 'pluginConfigLinuxDevices' 
+  :: [Text] -- ^ 'pluginConfigLinuxCapabilities'
+  -> Bool -- ^ 'pluginConfigLinuxAllowAllDevices'
+  -> [PluginDevice] -- ^ 'pluginConfigLinuxDevices'
   -> PluginConfigLinux
 mkPluginConfigLinux pluginConfigLinuxCapabilities pluginConfigLinuxAllowAllDevices pluginConfigLinuxDevices =
   PluginConfigLinux
@@ -5009,7 +4517,7 @@ instance A.ToJSON PluginConfigNetwork where
 
 -- | Construct a value of type 'PluginConfigNetwork' (by applying it's required fields, if any)
 mkPluginConfigNetwork
-  :: Text -- ^ 'pluginConfigNetworkType' 
+  :: Text -- ^ 'pluginConfigNetworkType'
   -> PluginConfigNetwork
 mkPluginConfigNetwork pluginConfigNetworkType =
   PluginConfigNetwork
@@ -5111,10 +4619,10 @@ instance A.ToJSON PluginDevice where
 
 -- | Construct a value of type 'PluginDevice' (by applying it's required fields, if any)
 mkPluginDevice
-  :: Text -- ^ 'pluginDeviceName' 
-  -> Text -- ^ 'pluginDeviceDescription' 
-  -> [Text] -- ^ 'pluginDeviceSettable' 
-  -> Text -- ^ 'pluginDevicePath' 
+  :: Text -- ^ 'pluginDeviceName'
+  -> Text -- ^ 'pluginDeviceDescription'
+  -> [Text] -- ^ 'pluginDeviceSettable'
+  -> Text -- ^ 'pluginDevicePath'
   -> PluginDevice
 mkPluginDevice pluginDeviceName pluginDeviceDescription pluginDeviceSettable pluginDevicePath =
   PluginDevice
@@ -5155,10 +4663,10 @@ instance A.ToJSON PluginEnv where
 
 -- | Construct a value of type 'PluginEnv' (by applying it's required fields, if any)
 mkPluginEnv
-  :: Text -- ^ 'pluginEnvName' 
-  -> Text -- ^ 'pluginEnvDescription' 
-  -> [Text] -- ^ 'pluginEnvSettable' 
-  -> Text -- ^ 'pluginEnvValue' 
+  :: Text -- ^ 'pluginEnvName'
+  -> Text -- ^ 'pluginEnvDescription'
+  -> [Text] -- ^ 'pluginEnvSettable'
+  -> Text -- ^ 'pluginEnvValue'
   -> PluginEnv
 mkPluginEnv pluginEnvName pluginEnvDescription pluginEnvSettable pluginEnvValue =
   PluginEnv
@@ -5196,9 +4704,9 @@ instance A.ToJSON PluginInterfaceType where
 
 -- | Construct a value of type 'PluginInterfaceType' (by applying it's required fields, if any)
 mkPluginInterfaceType
-  :: Text -- ^ 'pluginInterfaceTypePrefix' 
-  -> Text -- ^ 'pluginInterfaceTypeCapability' 
-  -> Text -- ^ 'pluginInterfaceTypeVersion' 
+  :: Text -- ^ 'pluginInterfaceTypePrefix'
+  -> Text -- ^ 'pluginInterfaceTypeCapability'
+  -> Text -- ^ 'pluginInterfaceTypeVersion'
   -> PluginInterfaceType
 mkPluginInterfaceType pluginInterfaceTypePrefix pluginInterfaceTypeCapability pluginInterfaceTypeVersion =
   PluginInterfaceType
@@ -5247,13 +4755,13 @@ instance A.ToJSON PluginMount where
 
 -- | Construct a value of type 'PluginMount' (by applying it's required fields, if any)
 mkPluginMount
-  :: Text -- ^ 'pluginMountName' 
-  -> Text -- ^ 'pluginMountDescription' 
-  -> [Text] -- ^ 'pluginMountSettable' 
-  -> Text -- ^ 'pluginMountSource' 
-  -> Text -- ^ 'pluginMountDestination' 
-  -> Text -- ^ 'pluginMountType' 
-  -> [Text] -- ^ 'pluginMountOptions' 
+  :: Text -- ^ 'pluginMountName'
+  -> Text -- ^ 'pluginMountDescription'
+  -> [Text] -- ^ 'pluginMountSettable'
+  -> Text -- ^ 'pluginMountSource'
+  -> Text -- ^ 'pluginMountDestination'
+  -> Text -- ^ 'pluginMountType'
+  -> [Text] -- ^ 'pluginMountOptions'
   -> PluginMount
 mkPluginMount pluginMountName pluginMountDescription pluginMountSettable pluginMountSource pluginMountDestination pluginMountType pluginMountOptions =
   PluginMount
@@ -5264,6 +4772,43 @@ mkPluginMount pluginMountName pluginMountDescription pluginMountSettable pluginM
   , pluginMountDestination
   , pluginMountType
   , pluginMountOptions
+  }
+
+-- ** PluginPrivilegeItem
+-- | PluginPrivilegeItem
+-- Describes a permission the user has to accept upon installing the plugin.
+data PluginPrivilegeItem = PluginPrivilegeItem
+  { pluginPrivilegeItemName :: !(Maybe Text) -- ^ "Name"
+  , pluginPrivilegeItemDescription :: !(Maybe Text) -- ^ "Description"
+  , pluginPrivilegeItemValue :: !(Maybe [Text]) -- ^ "Value"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON PluginPrivilegeItem
+instance A.FromJSON PluginPrivilegeItem where
+  parseJSON = A.withObject "PluginPrivilegeItem" $ \o ->
+    PluginPrivilegeItem
+      <$> (o .:? "Name")
+      <*> (o .:? "Description")
+      <*> (o .:? "Value")
+
+-- | ToJSON PluginPrivilegeItem
+instance A.ToJSON PluginPrivilegeItem where
+  toJSON PluginPrivilegeItem {..} =
+   _omitNulls
+      [ "Name" .= pluginPrivilegeItemName
+      , "Description" .= pluginPrivilegeItemDescription
+      , "Value" .= pluginPrivilegeItemValue
+      ]
+
+
+-- | Construct a value of type 'PluginPrivilegeItem' (by applying it's required fields, if any)
+mkPluginPrivilegeItem
+  :: PluginPrivilegeItem
+mkPluginPrivilegeItem =
+  PluginPrivilegeItem
+  { pluginPrivilegeItemName = Nothing
+  , pluginPrivilegeItemDescription = Nothing
+  , pluginPrivilegeItemValue = Nothing
   }
 
 -- ** PluginSettings
@@ -5298,10 +4843,10 @@ instance A.ToJSON PluginSettings where
 
 -- | Construct a value of type 'PluginSettings' (by applying it's required fields, if any)
 mkPluginSettings
-  :: [PluginMount] -- ^ 'pluginSettingsMounts' 
-  -> [Text] -- ^ 'pluginSettingsEnv' 
-  -> [Text] -- ^ 'pluginSettingsArgs' 
-  -> [PluginDevice] -- ^ 'pluginSettingsDevices' 
+  :: [PluginMount] -- ^ 'pluginSettingsMounts'
+  -> [Text] -- ^ 'pluginSettingsEnv'
+  -> [Text] -- ^ 'pluginSettingsArgs'
+  -> [PluginDevice] -- ^ 'pluginSettingsDevices'
   -> PluginSettings
 mkPluginSettings pluginSettingsMounts pluginSettingsEnv pluginSettingsArgs pluginSettingsDevices =
   PluginSettings
@@ -5309,6 +4854,47 @@ mkPluginSettings pluginSettingsMounts pluginSettingsEnv pluginSettingsArgs plugi
   , pluginSettingsEnv
   , pluginSettingsArgs
   , pluginSettingsDevices
+  }
+
+-- ** PluginsInfo
+-- | PluginsInfo
+-- Available plugins per type.  <p><br /></p>  > **Note**: Only unmanaged (V1) plugins are included in this list. > V1 plugins are \"lazily\" loaded, and are not returned in this list > if there is no resource using the plugin.
+data PluginsInfo = PluginsInfo
+  { pluginsInfoVolume :: !(Maybe [Text]) -- ^ "Volume" - Names of available volume-drivers, and network-driver plugins.
+  , pluginsInfoNetwork :: !(Maybe [Text]) -- ^ "Network" - Names of available network-drivers, and network-driver plugins.
+  , pluginsInfoAuthorization :: !(Maybe [Text]) -- ^ "Authorization" - Names of available authorization plugins.
+  , pluginsInfoLog :: !(Maybe [Text]) -- ^ "Log" - Names of available logging-drivers, and logging-driver plugins.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON PluginsInfo
+instance A.FromJSON PluginsInfo where
+  parseJSON = A.withObject "PluginsInfo" $ \o ->
+    PluginsInfo
+      <$> (o .:? "Volume")
+      <*> (o .:? "Network")
+      <*> (o .:? "Authorization")
+      <*> (o .:? "Log")
+
+-- | ToJSON PluginsInfo
+instance A.ToJSON PluginsInfo where
+  toJSON PluginsInfo {..} =
+   _omitNulls
+      [ "Volume" .= pluginsInfoVolume
+      , "Network" .= pluginsInfoNetwork
+      , "Authorization" .= pluginsInfoAuthorization
+      , "Log" .= pluginsInfoLog
+      ]
+
+
+-- | Construct a value of type 'PluginsInfo' (by applying it's required fields, if any)
+mkPluginsInfo
+  :: PluginsInfo
+mkPluginsInfo =
+  PluginsInfo
+  { pluginsInfoVolume = Nothing
+  , pluginsInfoNetwork = Nothing
+  , pluginsInfoAuthorization = Nothing
+  , pluginsInfoLog = Nothing
   }
 
 -- ** Port
@@ -5344,7 +4930,7 @@ instance A.ToJSON Port where
 -- | Construct a value of type 'Port' (by applying it's required fields, if any)
 mkPort
   :: Int -- ^ 'portPrivatePort': Port on the container
-  -> E'Type -- ^ 'portType' 
+  -> E'Type -- ^ 'portType'
   -> Port
 mkPort portPrivatePort portType =
   Port
@@ -5352,6 +4938,39 @@ mkPort portPrivatePort portType =
   , portPrivatePort
   , portPublicPort = Nothing
   , portType
+  }
+
+-- ** PortBinding
+-- | PortBinding
+-- PortBinding represents a binding between a host IP address and a host port.
+data PortBinding = PortBinding
+  { portBindingHostIp :: !(Maybe Text) -- ^ "HostIp" - Host IP address that the container&#39;s port is mapped to.
+  , portBindingHostPort :: !(Maybe Text) -- ^ "HostPort" - Host port number that the container&#39;s port is mapped to.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON PortBinding
+instance A.FromJSON PortBinding where
+  parseJSON = A.withObject "PortBinding" $ \o ->
+    PortBinding
+      <$> (o .:? "HostIp")
+      <*> (o .:? "HostPort")
+
+-- | ToJSON PortBinding
+instance A.ToJSON PortBinding where
+  toJSON PortBinding {..} =
+   _omitNulls
+      [ "HostIp" .= portBindingHostIp
+      , "HostPort" .= portBindingHostPort
+      ]
+
+
+-- | Construct a value of type 'PortBinding' (by applying it's required fields, if any)
+mkPortBinding
+  :: PortBinding
+mkPortBinding =
+  PortBinding
+  { portBindingHostIp = Nothing
+  , portBindingHostPort = Nothing
   }
 
 -- ** ProcessConfig
@@ -5401,23 +5020,23 @@ mkProcessConfig =
 -- ** ProgressDetail
 -- | ProgressDetail
 data ProgressDetail = ProgressDetail
-  { progressDetailCode :: !(Maybe Int) -- ^ "code"
-  , progressDetailMessage :: !(Maybe Int) -- ^ "message"
+  { progressDetailCurrent :: !(Maybe Int) -- ^ "current"
+  , progressDetailTotal :: !(Maybe Int) -- ^ "total"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ProgressDetail
 instance A.FromJSON ProgressDetail where
   parseJSON = A.withObject "ProgressDetail" $ \o ->
     ProgressDetail
-      <$> (o .:? "code")
-      <*> (o .:? "message")
+      <$> (o .:? "current")
+      <*> (o .:? "total")
 
 -- | ToJSON ProgressDetail
 instance A.ToJSON ProgressDetail where
   toJSON ProgressDetail {..} =
    _omitNulls
-      [ "code" .= progressDetailCode
-      , "message" .= progressDetailMessage
+      [ "current" .= progressDetailCurrent
+      , "total" .= progressDetailTotal
       ]
 
 
@@ -5426,8 +5045,8 @@ mkProgressDetail
   :: ProgressDetail
 mkProgressDetail =
   ProgressDetail
-  { progressDetailCode = Nothing
-  , progressDetailMessage = Nothing
+  { progressDetailCurrent = Nothing
+  , progressDetailTotal = Nothing
   }
 
 -- ** PushImageInfo
@@ -5470,19 +5089,101 @@ mkPushImageInfo =
   , pushImageInfoProgressDetail = Nothing
   }
 
+-- ** RegistryServiceConfig
+-- | RegistryServiceConfig
+-- RegistryServiceConfig stores daemon registry services configuration.
+data RegistryServiceConfig = RegistryServiceConfig
+  { registryServiceConfigAllowNondistributableArtifactsCidRs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior, and enables the daemon to push nondistributable artifacts to all registries whose resolved IP address is within the subnet described by the CIDR syntax.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts.
+  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior for the specified registries.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts.
+  , registryServiceConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs" - List of IP ranges of insecure registries, using the CIDR syntax ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  By default, local registries (&#x60;127.0.0.0/8&#x60;) are configured as insecure. All other registries are secure. Communicating with an insecure registry is not possible if the daemon assumes that registry is secure.  This configuration override this behavior, insecure communication with registries whose resolved IP address is within the subnet described by the CIDR syntax.  Registries can also be marked insecure by hostname. Those registries are listed under &#x60;IndexConfigs&#x60; and have their &#x60;Secure&#x60; field set to &#x60;false&#x60;.  &gt; **Warning**: Using this option can be useful when running a local &gt; registry, but introduces security vulnerabilities. This option &gt; should therefore ONLY be used for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of trusted &gt; CAs instead of enabling this option.
+  , registryServiceConfigIndexConfigs :: !(Maybe (Map.Map String IndexInfo)) -- ^ "IndexConfigs"
+  , registryServiceConfigMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of registry URLs that act as a mirror for the official (&#x60;docker.io&#x60;) registry.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON RegistryServiceConfig
+instance A.FromJSON RegistryServiceConfig where
+  parseJSON = A.withObject "RegistryServiceConfig" $ \o ->
+    RegistryServiceConfig
+      <$> (o .:? "AllowNondistributableArtifactsCIDRs")
+      <*> (o .:? "AllowNondistributableArtifactsHostnames")
+      <*> (o .:? "InsecureRegistryCIDRs")
+      <*> (o .:? "IndexConfigs")
+      <*> (o .:? "Mirrors")
+
+-- | ToJSON RegistryServiceConfig
+instance A.ToJSON RegistryServiceConfig where
+  toJSON RegistryServiceConfig {..} =
+   _omitNulls
+      [ "AllowNondistributableArtifactsCIDRs" .= registryServiceConfigAllowNondistributableArtifactsCidRs
+      , "AllowNondistributableArtifactsHostnames" .= registryServiceConfigAllowNondistributableArtifactsHostnames
+      , "InsecureRegistryCIDRs" .= registryServiceConfigInsecureRegistryCidRs
+      , "IndexConfigs" .= registryServiceConfigIndexConfigs
+      , "Mirrors" .= registryServiceConfigMirrors
+      ]
+
+
+-- | Construct a value of type 'RegistryServiceConfig' (by applying it's required fields, if any)
+mkRegistryServiceConfig
+  :: RegistryServiceConfig
+mkRegistryServiceConfig =
+  RegistryServiceConfig
+  { registryServiceConfigAllowNondistributableArtifactsCidRs = Nothing
+  , registryServiceConfigAllowNondistributableArtifactsHostnames = Nothing
+  , registryServiceConfigInsecureRegistryCidRs = Nothing
+  , registryServiceConfigIndexConfigs = Nothing
+  , registryServiceConfigMirrors = Nothing
+  }
+
+-- ** ResourceObject
+-- | ResourceObject
+-- An object describing the resources which can be advertised by a node and requested by a task
+data ResourceObject = ResourceObject
+  { resourceObjectNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs"
+  , resourceObjectMemoryBytes :: !(Maybe Integer) -- ^ "MemoryBytes"
+  , resourceObjectGenericResources :: !(Maybe [A.Value]) -- ^ "GenericResources" - User-defined resources can be either Integer resources (e.g, &#x60;SSD&#x3D;3&#x60;) or String resources (e.g, &#x60;GPU&#x3D;UUID1&#x60;)
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ResourceObject
+instance A.FromJSON ResourceObject where
+  parseJSON = A.withObject "ResourceObject" $ \o ->
+    ResourceObject
+      <$> (o .:? "NanoCPUs")
+      <*> (o .:? "MemoryBytes")
+      <*> (o .:? "GenericResources")
+
+-- | ToJSON ResourceObject
+instance A.ToJSON ResourceObject where
+  toJSON ResourceObject {..} =
+   _omitNulls
+      [ "NanoCPUs" .= resourceObjectNanoCpUs
+      , "MemoryBytes" .= resourceObjectMemoryBytes
+      , "GenericResources" .= resourceObjectGenericResources
+      ]
+
+
+-- | Construct a value of type 'ResourceObject' (by applying it's required fields, if any)
+mkResourceObject
+  :: ResourceObject
+mkResourceObject =
+  ResourceObject
+  { resourceObjectNanoCpUs = Nothing
+  , resourceObjectMemoryBytes = Nothing
+  , resourceObjectGenericResources = Nothing
+  }
+
 -- ** Resources
 -- | Resources
 -- A container's resources (cgroups config, ulimits, etc)
 data Resources = Resources
   { resourcesCpuShares :: !(Maybe Int) -- ^ "CpuShares" - An integer value representing this container&#39;s relative CPU weight versus other containers.
-  , resourcesMemory :: !(Maybe Int) -- ^ "Memory" - Memory limit in bytes.
+  , resourcesMemory :: !(Maybe Integer) -- ^ "Memory" - Memory limit in bytes.
   , resourcesCgroupParent :: !(Maybe Text) -- ^ "CgroupParent" - Path to &#x60;cgroups&#x60; under which the container&#39;s &#x60;cgroup&#x60; is created. If the path is not absolute, the path is considered to be relative to the &#x60;cgroups&#x60; path of the init process. Cgroups are created if they do not already exist.
   , resourcesBlkioWeight :: !(Maybe Int) -- ^ "BlkioWeight" - Block IO weight (relative weight).
-  , resourcesBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;. 
-  , resourcesBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , resourcesBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , resourcesBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
-  , resourcesBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , resourcesBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;.
+  , resourcesBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , resourcesBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , resourcesBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , resourcesBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
   , resourcesCpuPeriod :: !(Maybe Integer) -- ^ "CpuPeriod" - The length of a CPU period in microseconds.
   , resourcesCpuQuota :: !(Maybe Integer) -- ^ "CpuQuota" - Microseconds of CPU time that the container can get in a CPU period.
   , resourcesCpuRealtimePeriod :: !(Maybe Integer) -- ^ "CpuRealtimePeriod" - The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
@@ -5499,9 +5200,9 @@ data Resources = Resources
   , resourcesNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU quota in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPUs.
   , resourcesOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Disable OOM Killer for the container.
   , resourcesPidsLimit :: !(Maybe Integer) -- ^ "PidsLimit" - Tune a container&#39;s pids limit. Set -1 for unlimited.
-  , resourcesUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot; 
-  , resourcesCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
-  , resourcesCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
+  , resourcesUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot;
+  , resourcesCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
+  , resourcesCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
   , resourcesIoMaximumIOps :: !(Maybe Integer) -- ^ "IOMaximumIOps" - Maximum IOps for the container system drive (Windows only)
   , resourcesIoMaximumBandwidth :: !(Maybe Integer) -- ^ "IOMaximumBandwidth" - Maximum IO in bytes per second for the container system drive (Windows only)
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -5685,9 +5386,9 @@ mkResourcesUlimits =
 
 -- ** RestartPolicy
 -- | RestartPolicy
--- The behavior to apply when the container exits. The default is not to restart.  An ever increasing delay (double the previous delay, starting at 100ms) is added before each restart to prevent flooding the server. 
+-- The behavior to apply when the container exits. The default is not to restart.  An ever increasing delay (double the previous delay, starting at 100ms) is added before each restart to prevent flooding the server.
 data RestartPolicy = RestartPolicy
-  { restartPolicyName :: !(Maybe E'Name) -- ^ "Name" - - Empty string means not to restart - &#x60;always&#x60; Always restart - &#x60;unless-stopped&#x60; Restart always except when the user has manually stopped the container - &#x60;on-failure&#x60; Restart only when the container exit code is non-zero 
+  { restartPolicyName :: !(Maybe E'Name) -- ^ "Name" - - Empty string means not to restart - &#x60;always&#x60; Always restart - &#x60;unless-stopped&#x60; Restart always except when the user has manually stopped the container - &#x60;on-failure&#x60; Restart only when the container exit code is non-zero
   , restartPolicyMaximumRetryCount :: !(Maybe Int) -- ^ "MaximumRetryCount" - If &#x60;on-failure&#x60; is used, the number of times to retry before giving up
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5714,6 +5415,39 @@ mkRestartPolicy =
   RestartPolicy
   { restartPolicyName = Nothing
   , restartPolicyMaximumRetryCount = Nothing
+  }
+
+-- ** Runtime
+-- | Runtime
+-- Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec) runtime.  The runtime is invoked by the daemon via the `containerd` daemon. OCI runtimes act as an interface to the Linux kernel namespaces, cgroups, and SELinux.
+data Runtime = Runtime
+  { runtimePath :: !(Maybe Text) -- ^ "path" - Name and, optional, path, of the OCI executable binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result.
+  , runtimeRuntimeArgs :: !(Maybe [Text]) -- ^ "runtimeArgs" - List of command-line arguments to pass to the runtime when invoked.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Runtime
+instance A.FromJSON Runtime where
+  parseJSON = A.withObject "Runtime" $ \o ->
+    Runtime
+      <$> (o .:? "path")
+      <*> (o .:? "runtimeArgs")
+
+-- | ToJSON Runtime
+instance A.ToJSON Runtime where
+  toJSON Runtime {..} =
+   _omitNulls
+      [ "path" .= runtimePath
+      , "runtimeArgs" .= runtimeRuntimeArgs
+      ]
+
+
+-- | Construct a value of type 'Runtime' (by applying it's required fields, if any)
+mkRuntime
+  :: Runtime
+mkRuntime =
+  Runtime
+  { runtimePath = Nothing
+  , runtimeRuntimeArgs = Nothing
   }
 
 -- ** Secret
@@ -5765,7 +5499,8 @@ mkSecret =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe [Text]) -- ^ "Data" - Base64-url-safe-encoded secret data
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints.
+  , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SecretSpec
@@ -5775,6 +5510,7 @@ instance A.FromJSON SecretSpec where
       <$> (o .:? "Name")
       <*> (o .:? "Labels")
       <*> (o .:? "Data")
+      <*> (o .:? "Driver")
 
 -- | ToJSON SecretSpec
 instance A.ToJSON SecretSpec where
@@ -5783,6 +5519,7 @@ instance A.ToJSON SecretSpec where
       [ "Name" .= secretSpecName
       , "Labels" .= secretSpecLabels
       , "Data" .= secretSpecData
+      , "Driver" .= secretSpecDriver
       ]
 
 
@@ -5794,6 +5531,7 @@ mkSecretSpec =
   { secretSpecName = Nothing
   , secretSpecLabels = Nothing
   , secretSpecData = Nothing
+  , secretSpecDriver = Nothing
   }
 
 -- ** Service
@@ -5846,6 +5584,38 @@ mkService =
   , serviceSpec = Nothing
   , serviceEndpoint = Nothing
   , serviceUpdateStatus = Nothing
+  }
+
+-- ** ServiceCreateResponse
+-- | ServiceCreateResponse
+data ServiceCreateResponse = ServiceCreateResponse
+  { serviceCreateResponseId :: !(Maybe Text) -- ^ "ID" - The ID of the created service.
+  , serviceCreateResponseWarning :: !(Maybe Text) -- ^ "Warning" - Optional warning message
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ServiceCreateResponse
+instance A.FromJSON ServiceCreateResponse where
+  parseJSON = A.withObject "ServiceCreateResponse" $ \o ->
+    ServiceCreateResponse
+      <$> (o .:? "ID")
+      <*> (o .:? "Warning")
+
+-- | ToJSON ServiceCreateResponse
+instance A.ToJSON ServiceCreateResponse where
+  toJSON ServiceCreateResponse {..} =
+   _omitNulls
+      [ "ID" .= serviceCreateResponseId
+      , "Warning" .= serviceCreateResponseWarning
+      ]
+
+
+-- | Construct a value of type 'ServiceCreateResponse' (by applying it's required fields, if any)
+mkServiceCreateResponse
+  :: ServiceCreateResponse
+mkServiceCreateResponse =
+  ServiceCreateResponse
+  { serviceCreateResponseId = Nothing
+  , serviceCreateResponseWarning = Nothing
   }
 
 -- ** ServiceEndpoint
@@ -6201,6 +5971,151 @@ mkServiceUpdateStatus =
   , serviceUpdateStatusMessage = Nothing
   }
 
+-- ** Swarm
+-- | Swarm
+data Swarm = Swarm
+  { swarmId :: !(Maybe Text) -- ^ "ID" - The ID of the swarm.
+  , swarmVersion :: !(Maybe ObjectVersion) -- ^ "Version"
+  , swarmCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , swarmUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , swarmSpec :: !(Maybe SwarmSpec) -- ^ "Spec"
+  , swarmTlsInfo :: !(Maybe TLSInfo) -- ^ "TLSInfo"
+  , swarmRootRotationInProgress :: !(Maybe Bool) -- ^ "RootRotationInProgress" - Whether there is currently a root CA rotation in progress for the swarm
+  , swarmJoinTokens :: !(Maybe JoinTokens) -- ^ "JoinTokens"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON Swarm
+instance A.FromJSON Swarm where
+  parseJSON = A.withObject "Swarm" $ \o ->
+    Swarm
+      <$> (o .:? "ID")
+      <*> (o .:? "Version")
+      <*> (o .:? "CreatedAt")
+      <*> (o .:? "UpdatedAt")
+      <*> (o .:? "Spec")
+      <*> (o .:? "TLSInfo")
+      <*> (o .:? "RootRotationInProgress")
+      <*> (o .:? "JoinTokens")
+
+-- | ToJSON Swarm
+instance A.ToJSON Swarm where
+  toJSON Swarm {..} =
+   _omitNulls
+      [ "ID" .= swarmId
+      , "Version" .= swarmVersion
+      , "CreatedAt" .= swarmCreatedAt
+      , "UpdatedAt" .= swarmUpdatedAt
+      , "Spec" .= swarmSpec
+      , "TLSInfo" .= swarmTlsInfo
+      , "RootRotationInProgress" .= swarmRootRotationInProgress
+      , "JoinTokens" .= swarmJoinTokens
+      ]
+
+
+-- | Construct a value of type 'Swarm' (by applying it's required fields, if any)
+mkSwarm
+  :: Swarm
+mkSwarm =
+  Swarm
+  { swarmId = Nothing
+  , swarmVersion = Nothing
+  , swarmCreatedAt = Nothing
+  , swarmUpdatedAt = Nothing
+  , swarmSpec = Nothing
+  , swarmTlsInfo = Nothing
+  , swarmRootRotationInProgress = Nothing
+  , swarmJoinTokens = Nothing
+  }
+
+-- ** SwarmAllOf
+-- | SwarmAllOf
+data SwarmAllOf = SwarmAllOf
+  { swarmAllOfJoinTokens :: !(Maybe JoinTokens) -- ^ "JoinTokens"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SwarmAllOf
+instance A.FromJSON SwarmAllOf where
+  parseJSON = A.withObject "SwarmAllOf" $ \o ->
+    SwarmAllOf
+      <$> (o .:? "JoinTokens")
+
+-- | ToJSON SwarmAllOf
+instance A.ToJSON SwarmAllOf where
+  toJSON SwarmAllOf {..} =
+   _omitNulls
+      [ "JoinTokens" .= swarmAllOfJoinTokens
+      ]
+
+
+-- | Construct a value of type 'SwarmAllOf' (by applying it's required fields, if any)
+mkSwarmAllOf
+  :: SwarmAllOf
+mkSwarmAllOf =
+  SwarmAllOf
+  { swarmAllOfJoinTokens = Nothing
+  }
+
+-- ** SwarmInfo
+-- | SwarmInfo
+-- Represents generic information about swarm.
+data SwarmInfo = SwarmInfo
+  { swarmInfoNodeId :: !(Maybe Text) -- ^ "NodeID" - Unique identifier of for this node in the swarm.
+  , swarmInfoNodeAddr :: !(Maybe Text) -- ^ "NodeAddr" - IP address at which this node can be reached by other nodes in the swarm.
+  , swarmInfoLocalNodeState :: !(Maybe LocalNodeState) -- ^ "LocalNodeState"
+  , swarmInfoControlAvailable :: !(Maybe Bool) -- ^ "ControlAvailable"
+  , swarmInfoError :: !(Maybe Text) -- ^ "Error"
+  , swarmInfoRemoteManagers :: !(Maybe [PeerNode]) -- ^ "RemoteManagers" - List of ID&#39;s and addresses of other managers in the swarm.
+  , swarmInfoNodes :: !(Maybe Int) -- ^ "Nodes" - Total number of nodes in the swarm.
+  , swarmInfoManagers :: !(Maybe Int) -- ^ "Managers" - Total number of managers in the swarm.
+  , swarmInfoCluster :: !(Maybe ClusterInfo) -- ^ "Cluster"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SwarmInfo
+instance A.FromJSON SwarmInfo where
+  parseJSON = A.withObject "SwarmInfo" $ \o ->
+    SwarmInfo
+      <$> (o .:? "NodeID")
+      <*> (o .:? "NodeAddr")
+      <*> (o .:? "LocalNodeState")
+      <*> (o .:? "ControlAvailable")
+      <*> (o .:? "Error")
+      <*> (o .:? "RemoteManagers")
+      <*> (o .:? "Nodes")
+      <*> (o .:? "Managers")
+      <*> (o .:? "Cluster")
+
+-- | ToJSON SwarmInfo
+instance A.ToJSON SwarmInfo where
+  toJSON SwarmInfo {..} =
+   _omitNulls
+      [ "NodeID" .= swarmInfoNodeId
+      , "NodeAddr" .= swarmInfoNodeAddr
+      , "LocalNodeState" .= swarmInfoLocalNodeState
+      , "ControlAvailable" .= swarmInfoControlAvailable
+      , "Error" .= swarmInfoError
+      , "RemoteManagers" .= swarmInfoRemoteManagers
+      , "Nodes" .= swarmInfoNodes
+      , "Managers" .= swarmInfoManagers
+      , "Cluster" .= swarmInfoCluster
+      ]
+
+
+-- | Construct a value of type 'SwarmInfo' (by applying it's required fields, if any)
+mkSwarmInfo
+  :: SwarmInfo
+mkSwarmInfo =
+  SwarmInfo
+  { swarmInfoNodeId = Nothing
+  , swarmInfoNodeAddr = Nothing
+  , swarmInfoLocalNodeState = Nothing
+  , swarmInfoControlAvailable = Nothing
+  , swarmInfoError = Nothing
+  , swarmInfoRemoteManagers = Nothing
+  , swarmInfoNodes = Nothing
+  , swarmInfoManagers = Nothing
+  , swarmInfoCluster = Nothing
+  }
+
 -- ** SwarmSpec
 -- | SwarmSpec
 -- User modifiable swarm configuration.
@@ -6266,7 +6181,7 @@ data SwarmSpecCAConfig = SwarmSpecCAConfig
   , swarmSpecCAConfigExternalCAs :: !(Maybe [SwarmSpecCAConfigExternalCAs]) -- ^ "ExternalCAs" - Configuration for forwarding signing requests to an external certificate authority.
   , swarmSpecCAConfigSigningCaCert :: !(Maybe Text) -- ^ "SigningCACert" - The desired signing CA certificate for all swarm node TLS leaf certificates, in PEM format.
   , swarmSpecCAConfigSigningCaKey :: !(Maybe Text) -- ^ "SigningCAKey" - The desired signing CA key for all swarm node TLS leaf certificates, in PEM format.
-  , swarmSpecCAConfigForceRotate :: !(Maybe A.Value) -- ^ "ForceRotate" - An integer whose purpose is to force swarm to generate a new signing CA certificate and key, if none have been specified in &#x60;SigningCACert&#x60; and &#x60;SigningCAKey&#x60;
+  , swarmSpecCAConfigForceRotate :: !(Maybe Int) -- ^ "ForceRotate" - An integer whose purpose is to force swarm to generate a new signing CA certificate and key, if none have been specified in &#x60;SigningCACert&#x60; and &#x60;SigningCAKey&#x60;
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecCAConfig
@@ -6434,11 +6349,11 @@ mkSwarmSpecOrchestration =
 -- | SwarmSpecRaft
 -- Raft configuration.
 data SwarmSpecRaft = SwarmSpecRaft
-  { swarmSpecRaftSnapshotInterval :: !(Maybe Integer) -- ^ "SnapshotInterval" - The number of log entries between snapshots.
-  , swarmSpecRaftKeepOldSnapshots :: !(Maybe Integer) -- ^ "KeepOldSnapshots" - The number of snapshots to keep beyond the current snapshot.
-  , swarmSpecRaftLogEntriesForSlowFollowers :: !(Maybe Integer) -- ^ "LogEntriesForSlowFollowers" - The number of log entries to keep around to sync up slow followers after a snapshot is created.
-  , swarmSpecRaftElectionTick :: !(Maybe Int) -- ^ "ElectionTick" - The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. &#x60;ElectionTick&#x60; must be greater than &#x60;HeartbeatTick&#x60;.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed. 
-  , swarmSpecRaftHeartbeatTick :: !(Maybe Int) -- ^ "HeartbeatTick" - The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed. 
+  { swarmSpecRaftSnapshotInterval :: !(Maybe Int) -- ^ "SnapshotInterval" - The number of log entries between snapshots.
+  , swarmSpecRaftKeepOldSnapshots :: !(Maybe Int) -- ^ "KeepOldSnapshots" - The number of snapshots to keep beyond the current snapshot.
+  , swarmSpecRaftLogEntriesForSlowFollowers :: !(Maybe Int) -- ^ "LogEntriesForSlowFollowers" - The number of log entries to keep around to sync up slow followers after a snapshot is created.
+  , swarmSpecRaftElectionTick :: !(Maybe Int) -- ^ "ElectionTick" - The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. &#x60;ElectionTick&#x60; must be greater than &#x60;HeartbeatTick&#x60;.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+  , swarmSpecRaftHeartbeatTick :: !(Maybe Int) -- ^ "HeartbeatTick" - The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecRaft
@@ -6506,10 +6421,10 @@ mkSwarmSpecTaskDefaults =
 
 -- ** SwarmSpecTaskDefaultsLogDriver
 -- | SwarmSpecTaskDefaultsLogDriver
--- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value will only have an affect on new tasks. Old tasks will continue use their previously configured log driver until recreated. 
+-- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value only affects new tasks. Existing tasks continue to use their previously configured log driver until recreated.
 data SwarmSpecTaskDefaultsLogDriver = SwarmSpecTaskDefaultsLogDriver
-  { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name"
-  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options"
+  { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name" - The log driver to use as a default for new tasks.
+  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selectd log driver, specified as key/value pairs.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecTaskDefaultsLogDriver
@@ -6535,6 +6450,546 @@ mkSwarmSpecTaskDefaultsLogDriver =
   SwarmSpecTaskDefaultsLogDriver
   { swarmSpecTaskDefaultsLogDriverName = Nothing
   , swarmSpecTaskDefaultsLogDriverOptions = Nothing
+  }
+
+-- ** SystemAuthResponse
+-- | SystemAuthResponse
+data SystemAuthResponse = SystemAuthResponse
+  { systemAuthResponseStatus :: !(Text) -- ^ /Required/ "Status" - The status of the authentication
+  , systemAuthResponseIdentityToken :: !(Maybe Text) -- ^ "IdentityToken" - An opaque token used to authenticate a user after a successful login
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemAuthResponse
+instance A.FromJSON SystemAuthResponse where
+  parseJSON = A.withObject "SystemAuthResponse" $ \o ->
+    SystemAuthResponse
+      <$> (o .:  "Status")
+      <*> (o .:? "IdentityToken")
+
+-- | ToJSON SystemAuthResponse
+instance A.ToJSON SystemAuthResponse where
+  toJSON SystemAuthResponse {..} =
+   _omitNulls
+      [ "Status" .= systemAuthResponseStatus
+      , "IdentityToken" .= systemAuthResponseIdentityToken
+      ]
+
+
+-- | Construct a value of type 'SystemAuthResponse' (by applying it's required fields, if any)
+mkSystemAuthResponse
+  :: Text -- ^ 'systemAuthResponseStatus': The status of the authentication
+  -> SystemAuthResponse
+mkSystemAuthResponse systemAuthResponseStatus =
+  SystemAuthResponse
+  { systemAuthResponseStatus
+  , systemAuthResponseIdentityToken = Nothing
+  }
+
+-- ** SystemDataUsageResponse
+-- | SystemDataUsageResponse
+data SystemDataUsageResponse = SystemDataUsageResponse
+  { systemDataUsageResponseLayersSize :: !(Maybe Integer) -- ^ "LayersSize"
+  , systemDataUsageResponseImages :: !(Maybe [ImageSummary]) -- ^ "Images"
+  , systemDataUsageResponseContainers :: !(Maybe [A.Array]) -- ^ "Containers"
+  , systemDataUsageResponseVolumes :: !(Maybe [Volume]) -- ^ "Volumes"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemDataUsageResponse
+instance A.FromJSON SystemDataUsageResponse where
+  parseJSON = A.withObject "SystemDataUsageResponse" $ \o ->
+    SystemDataUsageResponse
+      <$> (o .:? "LayersSize")
+      <*> (o .:? "Images")
+      <*> (o .:? "Containers")
+      <*> (o .:? "Volumes")
+
+-- | ToJSON SystemDataUsageResponse
+instance A.ToJSON SystemDataUsageResponse where
+  toJSON SystemDataUsageResponse {..} =
+   _omitNulls
+      [ "LayersSize" .= systemDataUsageResponseLayersSize
+      , "Images" .= systemDataUsageResponseImages
+      , "Containers" .= systemDataUsageResponseContainers
+      , "Volumes" .= systemDataUsageResponseVolumes
+      ]
+
+
+-- | Construct a value of type 'SystemDataUsageResponse' (by applying it's required fields, if any)
+mkSystemDataUsageResponse
+  :: SystemDataUsageResponse
+mkSystemDataUsageResponse =
+  SystemDataUsageResponse
+  { systemDataUsageResponseLayersSize = Nothing
+  , systemDataUsageResponseImages = Nothing
+  , systemDataUsageResponseContainers = Nothing
+  , systemDataUsageResponseVolumes = Nothing
+  }
+
+-- ** SystemEventsResponse
+-- | SystemEventsResponse
+data SystemEventsResponse = SystemEventsResponse
+  { systemEventsResponseType :: !(Maybe Text) -- ^ "Type" - The type of object emitting the event
+  , systemEventsResponseAction :: !(Maybe Text) -- ^ "Action" - The type of event
+  , systemEventsResponseActor :: !(Maybe SystemEventsResponseActor) -- ^ "Actor"
+  , systemEventsResponseTime :: !(Maybe Int) -- ^ "time" - Timestamp of event
+  , systemEventsResponseTimeNano :: !(Maybe Integer) -- ^ "timeNano" - Timestamp of event, with nanosecond accuracy
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemEventsResponse
+instance A.FromJSON SystemEventsResponse where
+  parseJSON = A.withObject "SystemEventsResponse" $ \o ->
+    SystemEventsResponse
+      <$> (o .:? "Type")
+      <*> (o .:? "Action")
+      <*> (o .:? "Actor")
+      <*> (o .:? "time")
+      <*> (o .:? "timeNano")
+
+-- | ToJSON SystemEventsResponse
+instance A.ToJSON SystemEventsResponse where
+  toJSON SystemEventsResponse {..} =
+   _omitNulls
+      [ "Type" .= systemEventsResponseType
+      , "Action" .= systemEventsResponseAction
+      , "Actor" .= systemEventsResponseActor
+      , "time" .= systemEventsResponseTime
+      , "timeNano" .= systemEventsResponseTimeNano
+      ]
+
+
+-- | Construct a value of type 'SystemEventsResponse' (by applying it's required fields, if any)
+mkSystemEventsResponse
+  :: SystemEventsResponse
+mkSystemEventsResponse =
+  SystemEventsResponse
+  { systemEventsResponseType = Nothing
+  , systemEventsResponseAction = Nothing
+  , systemEventsResponseActor = Nothing
+  , systemEventsResponseTime = Nothing
+  , systemEventsResponseTimeNano = Nothing
+  }
+
+-- ** SystemEventsResponseActor
+-- | SystemEventsResponseActor
+data SystemEventsResponseActor = SystemEventsResponseActor
+  { systemEventsResponseActorId :: !(Maybe Text) -- ^ "ID" - The ID of the object emitting the event
+  , systemEventsResponseActorAttributes :: !(Maybe (Map.Map String Text)) -- ^ "Attributes" - Various key/value attributes of the object, depending on its type
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemEventsResponseActor
+instance A.FromJSON SystemEventsResponseActor where
+  parseJSON = A.withObject "SystemEventsResponseActor" $ \o ->
+    SystemEventsResponseActor
+      <$> (o .:? "ID")
+      <*> (o .:? "Attributes")
+
+-- | ToJSON SystemEventsResponseActor
+instance A.ToJSON SystemEventsResponseActor where
+  toJSON SystemEventsResponseActor {..} =
+   _omitNulls
+      [ "ID" .= systemEventsResponseActorId
+      , "Attributes" .= systemEventsResponseActorAttributes
+      ]
+
+
+-- | Construct a value of type 'SystemEventsResponseActor' (by applying it's required fields, if any)
+mkSystemEventsResponseActor
+  :: SystemEventsResponseActor
+mkSystemEventsResponseActor =
+  SystemEventsResponseActor
+  { systemEventsResponseActorId = Nothing
+  , systemEventsResponseActorAttributes = Nothing
+  }
+
+-- ** SystemInfo
+-- | SystemInfo
+data SystemInfo = SystemInfo
+  { systemInfoId :: !(Maybe Text) -- ^ "ID" - Unique identifier of the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The format of the ID itself is not part of the API, and &gt; should not be considered stable.
+  , systemInfoContainers :: !(Maybe Int) -- ^ "Containers" - Total number of containers on the host.
+  , systemInfoContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning" - Number of containers with status &#x60;\&quot;running\&quot;&#x60;.
+  , systemInfoContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused" - Number of containers with status &#x60;\&quot;paused\&quot;&#x60;.
+  , systemInfoContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped" - Number of containers with status &#x60;\&quot;stopped\&quot;&#x60;.
+  , systemInfoImages :: !(Maybe Int) -- ^ "Images" - Total number of images on the host.  Both _tagged_ and _untagged_ (dangling) images are counted.
+  , systemInfoDriver :: !(Maybe Text) -- ^ "Driver" - Name of the storage driver in use.
+  , systemInfoDriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus" - Information specific to the storage driver, provided as \&quot;label\&quot; / \&quot;value\&quot; pairs.  This information is provided by the storage driver, and formatted in a way consistent with the output of &#x60;docker info&#x60; on the command line.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field, including the &gt; formatting of values and labels, should not be considered stable, &gt; and may change without notice.
+  , systemInfoDockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir" - Root directory of persistent Docker state.  Defaults to &#x60;/var/lib/docker&#x60; on Linux, and &#x60;C:\\ProgramData\\docker&#x60; on Windows.
+  , systemInfoSystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus" - Status information about this node (standalone Swarm API).  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field is only propagated &gt; by the Swarm standalone API, and is empty (&#x60;null&#x60;) when using &gt; built-in swarm mode.
+  , systemInfoPlugins :: !(Maybe PluginsInfo) -- ^ "Plugins"
+  , systemInfoMemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit" - Indicates if the host has memory limit support enabled.
+  , systemInfoSwapLimit :: !(Maybe Bool) -- ^ "SwapLimit" - Indicates if the host has memory swap limit support enabled.
+  , systemInfoKernelMemory :: !(Maybe Bool) -- ^ "KernelMemory" - Indicates if the host has kernel memory limit support enabled.
+  , systemInfoCpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod" - Indicates if CPU CFS(Completely Fair Scheduler) period is supported by the host.
+  , systemInfoCpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota" - Indicates if CPU CFS(Completely Fair Scheduler) quota is supported by the host.
+  , systemInfoCpuShares :: !(Maybe Bool) -- ^ "CPUShares" - Indicates if CPU Shares limiting is supported by the host.
+  , systemInfoCpuSet :: !(Maybe Bool) -- ^ "CPUSet" - Indicates if CPUsets (cpuset.cpus, cpuset.mems) are supported by the host.  See [cpuset(7)](https://www.kernel.org/doc/Documentation/cgroup-v1/cpusets.txt)
+  , systemInfoOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Indicates if OOM killer disable is supported on the host.
+  , systemInfoIPv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding" - Indicates IPv4 forwarding is enabled.
+  , systemInfoBridgeNfIptables :: !(Maybe Bool) -- ^ "BridgeNfIptables" - Indicates if &#x60;bridge-nf-call-iptables&#x60; is available on the host.
+  , systemInfoBridgeNfIp6tables :: !(Maybe Bool) -- ^ "BridgeNfIp6tables" - Indicates if &#x60;bridge-nf-call-ip6tables&#x60; is available on the host.
+  , systemInfoDebug :: !(Maybe Bool) -- ^ "Debug" - Indicates if the daemon is running in debug-mode / with debug-level logging enabled.
+  , systemInfoNFd :: !(Maybe Int) -- ^ "NFd" - The total number of file Descriptors in use by the daemon process.  This information is only returned if debug-mode is enabled.
+  , systemInfoNGoroutines :: !(Maybe Int) -- ^ "NGoroutines" - The  number of goroutines that currently exist.  This information is only returned if debug-mode is enabled.
+  , systemInfoSystemTime :: !(Maybe Text) -- ^ "SystemTime" - Current system-time in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , systemInfoLoggingDriver :: !(Maybe Text) -- ^ "LoggingDriver" - The logging driver to use as a default for new containers.
+  , systemInfoCgroupDriver :: !(Maybe E'CgroupDriver) -- ^ "CgroupDriver" - The driver to use for managing cgroups.
+  , systemInfoNEventsListener :: !(Maybe Int) -- ^ "NEventsListener" - Number of event listeners subscribed.
+  , systemInfoKernelVersion :: !(Maybe Text) -- ^ "KernelVersion" - Kernel version of the host.  On Linux, this information obtained from &#x60;uname&#x60;. On Windows this information is queried from the &lt;kbd&gt;HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\&lt;/kbd&gt; registry value, for example _\&quot;10.0 14393 (14393.1198.amd64fre.rs1_release_sec.170427-1353)\&quot;_.
+  , systemInfoOperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem" - Name of the host&#39;s operating system, for example: \&quot;Ubuntu 16.04.2 LTS\&quot; or \&quot;Windows Server 2016 Datacenter\&quot;
+  , systemInfoOsType :: !(Maybe Text) -- ^ "OSType" - Generic type of the operating system of the host, as returned by the Go runtime (&#x60;GOOS&#x60;).  Currently returned values are \&quot;linux\&quot; and \&quot;windows\&quot;. A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment).
+  , systemInfoArchitecture :: !(Maybe Text) -- ^ "Architecture" - Hardware architecture of the host, as returned by the Go runtime (&#x60;GOARCH&#x60;).  A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment).
+  , systemInfoNcpu :: !(Maybe Int) -- ^ "NCPU" - The number of logical CPUs usable by the daemon.  The number of available CPUs is checked by querying the operating system when the daemon starts. Changes to operating system CPU allocation after the daemon is started are not reflected.
+  , systemInfoMemTotal :: !(Maybe Integer) -- ^ "MemTotal" - Total amount of physical memory available on the host, in kilobytes (kB).
+  , systemInfoIndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress" - Address / URL of the index server that is used for image search, and as a default for user authentication for Docker Hub and Docker Cloud.
+  , systemInfoRegistryConfig :: !(Maybe RegistryServiceConfig) -- ^ "RegistryConfig"
+  , systemInfoGenericResources :: !(Maybe [A.Value]) -- ^ "GenericResources" - User-defined resources can be either Integer resources (e.g, &#x60;SSD&#x3D;3&#x60;) or String resources (e.g, &#x60;GPU&#x3D;UUID1&#x60;)
+  , systemInfoHttpProxy :: !(Maybe Text) -- ^ "HttpProxy" - HTTP-proxy configured for the daemon. This value is obtained from the [&#x60;HTTP_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
+  , systemInfoHttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy" - HTTPS-proxy configured for the daemon. This value is obtained from the [&#x60;HTTPS_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
+  , systemInfoNoProxy :: !(Maybe Text) -- ^ "NoProxy" - Comma-separated list of domain extensions for which no proxy should be used. This value is obtained from the [&#x60;NO_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
+  , systemInfoName :: !(Maybe Text) -- ^ "Name" - Hostname of the host.
+  , systemInfoLabels :: !(Maybe [Text]) -- ^ "Labels" - User-defined labels (key/value metadata) as set on the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: When part of a Swarm, nodes can both have _daemon_ labels, &gt; set through the daemon configuration, and _node_ labels, set from a &gt; manager node in the Swarm. Node labels are not included in this &gt; field. Node labels can be retrieved using the &#x60;/nodes/(id)&#x60; endpoint &gt; on a manager node in the Swarm.
+  , systemInfoExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild" - Indicates if experimental features are enabled on the daemon.
+  , systemInfoServerVersion :: !(Maybe Text) -- ^ "ServerVersion" - Version string of the daemon.  &gt; **Note**: the [standalone Swarm API](https://docs.docker.com/swarm/swarm-api/) &gt; returns the Swarm version instead of the daemon  version, for example &gt; &#x60;swarm/1.2.8&#x60;.
+  , systemInfoClusterStore :: !(Maybe Text) -- ^ "ClusterStore" - URL of the distributed storage backend.   The storage backend is used for multihost networking (to store network and endpoint information) and by the node discovery mechanism.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty.
+  , systemInfoClusterAdvertise :: !(Maybe Text) -- ^ "ClusterAdvertise" - The network endpoint that the Engine advertises for the purpose of node discovery. ClusterAdvertise is a &#x60;host:port&#x60; combination on which the daemon is reachable by other hosts.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty.
+  , systemInfoRuntimes :: !(Maybe (Map.Map String Runtime)) -- ^ "Runtimes" - List of [OCI compliant](https://github.com/opencontainers/runtime-spec) runtimes configured on the daemon. Keys hold the \&quot;name\&quot; used to reference the runtime.  The Docker daemon relies on an OCI compliant runtime (invoked via the &#x60;containerd&#x60; daemon) as its interface to the Linux kernel namespaces, cgroups, and SELinux.  The default runtime is &#x60;runc&#x60;, and automatically configured. Additional runtimes can be configured by the user and will be listed here.
+  , systemInfoDefaultRuntime :: !(Maybe Text) -- ^ "DefaultRuntime" - Name of the default OCI runtime that is used when starting containers.  The default can be overridden per-container at create time.
+  , systemInfoSwarm :: !(Maybe SwarmInfo) -- ^ "Swarm"
+  , systemInfoLiveRestoreEnabled :: !(Maybe Bool) -- ^ "LiveRestoreEnabled" - Indicates if live restore is enabled.  If enabled, containers are kept running when the daemon is shutdown or upon daemon start if running containers are detected.
+  , systemInfoIsolation :: !(Maybe E'Isolation2) -- ^ "Isolation" - Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is &#x60;hyperv&#x60;, and on Windows server, the default is &#x60;process&#x60;.  This option is currently not used on other platforms.
+  , systemInfoInitBinary :: !(Maybe Text) -- ^ "InitBinary" - Name and, optional, path of the the &#x60;docker-init&#x60; binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result.
+  , systemInfoContainerdCommit :: !(Maybe Commit) -- ^ "ContainerdCommit"
+  , systemInfoRuncCommit :: !(Maybe Commit) -- ^ "RuncCommit"
+  , systemInfoInitCommit :: !(Maybe Commit) -- ^ "InitCommit"
+  , systemInfoSecurityOptions :: !(Maybe [Text]) -- ^ "SecurityOptions" - List of security features that are enabled on the daemon, such as apparmor, seccomp, SELinux, and user-namespaces (userns).  Additional configuration options for each security feature may be present, and are included as a comma-separated list of key/value pairs.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemInfo
+instance A.FromJSON SystemInfo where
+  parseJSON = A.withObject "SystemInfo" $ \o ->
+    SystemInfo
+      <$> (o .:? "ID")
+      <*> (o .:? "Containers")
+      <*> (o .:? "ContainersRunning")
+      <*> (o .:? "ContainersPaused")
+      <*> (o .:? "ContainersStopped")
+      <*> (o .:? "Images")
+      <*> (o .:? "Driver")
+      <*> (o .:? "DriverStatus")
+      <*> (o .:? "DockerRootDir")
+      <*> (o .:? "SystemStatus")
+      <*> (o .:? "Plugins")
+      <*> (o .:? "MemoryLimit")
+      <*> (o .:? "SwapLimit")
+      <*> (o .:? "KernelMemory")
+      <*> (o .:? "CpuCfsPeriod")
+      <*> (o .:? "CpuCfsQuota")
+      <*> (o .:? "CPUShares")
+      <*> (o .:? "CPUSet")
+      <*> (o .:? "OomKillDisable")
+      <*> (o .:? "IPv4Forwarding")
+      <*> (o .:? "BridgeNfIptables")
+      <*> (o .:? "BridgeNfIp6tables")
+      <*> (o .:? "Debug")
+      <*> (o .:? "NFd")
+      <*> (o .:? "NGoroutines")
+      <*> (o .:? "SystemTime")
+      <*> (o .:? "LoggingDriver")
+      <*> (o .:? "CgroupDriver")
+      <*> (o .:? "NEventsListener")
+      <*> (o .:? "KernelVersion")
+      <*> (o .:? "OperatingSystem")
+      <*> (o .:? "OSType")
+      <*> (o .:? "Architecture")
+      <*> (o .:? "NCPU")
+      <*> (o .:? "MemTotal")
+      <*> (o .:? "IndexServerAddress")
+      <*> (o .:? "RegistryConfig")
+      <*> (o .:? "GenericResources")
+      <*> (o .:? "HttpProxy")
+      <*> (o .:? "HttpsProxy")
+      <*> (o .:? "NoProxy")
+      <*> (o .:? "Name")
+      <*> (o .:? "Labels")
+      <*> (o .:? "ExperimentalBuild")
+      <*> (o .:? "ServerVersion")
+      <*> (o .:? "ClusterStore")
+      <*> (o .:? "ClusterAdvertise")
+      <*> (o .:? "Runtimes")
+      <*> (o .:? "DefaultRuntime")
+      <*> (o .:? "Swarm")
+      <*> (o .:? "LiveRestoreEnabled")
+      <*> (o .:? "Isolation")
+      <*> (o .:? "InitBinary")
+      <*> (o .:? "ContainerdCommit")
+      <*> (o .:? "RuncCommit")
+      <*> (o .:? "InitCommit")
+      <*> (o .:? "SecurityOptions")
+
+-- | ToJSON SystemInfo
+instance A.ToJSON SystemInfo where
+  toJSON SystemInfo {..} =
+   _omitNulls
+      [ "ID" .= systemInfoId
+      , "Containers" .= systemInfoContainers
+      , "ContainersRunning" .= systemInfoContainersRunning
+      , "ContainersPaused" .= systemInfoContainersPaused
+      , "ContainersStopped" .= systemInfoContainersStopped
+      , "Images" .= systemInfoImages
+      , "Driver" .= systemInfoDriver
+      , "DriverStatus" .= systemInfoDriverStatus
+      , "DockerRootDir" .= systemInfoDockerRootDir
+      , "SystemStatus" .= systemInfoSystemStatus
+      , "Plugins" .= systemInfoPlugins
+      , "MemoryLimit" .= systemInfoMemoryLimit
+      , "SwapLimit" .= systemInfoSwapLimit
+      , "KernelMemory" .= systemInfoKernelMemory
+      , "CpuCfsPeriod" .= systemInfoCpuCfsPeriod
+      , "CpuCfsQuota" .= systemInfoCpuCfsQuota
+      , "CPUShares" .= systemInfoCpuShares
+      , "CPUSet" .= systemInfoCpuSet
+      , "OomKillDisable" .= systemInfoOomKillDisable
+      , "IPv4Forwarding" .= systemInfoIPv4Forwarding
+      , "BridgeNfIptables" .= systemInfoBridgeNfIptables
+      , "BridgeNfIp6tables" .= systemInfoBridgeNfIp6tables
+      , "Debug" .= systemInfoDebug
+      , "NFd" .= systemInfoNFd
+      , "NGoroutines" .= systemInfoNGoroutines
+      , "SystemTime" .= systemInfoSystemTime
+      , "LoggingDriver" .= systemInfoLoggingDriver
+      , "CgroupDriver" .= systemInfoCgroupDriver
+      , "NEventsListener" .= systemInfoNEventsListener
+      , "KernelVersion" .= systemInfoKernelVersion
+      , "OperatingSystem" .= systemInfoOperatingSystem
+      , "OSType" .= systemInfoOsType
+      , "Architecture" .= systemInfoArchitecture
+      , "NCPU" .= systemInfoNcpu
+      , "MemTotal" .= systemInfoMemTotal
+      , "IndexServerAddress" .= systemInfoIndexServerAddress
+      , "RegistryConfig" .= systemInfoRegistryConfig
+      , "GenericResources" .= systemInfoGenericResources
+      , "HttpProxy" .= systemInfoHttpProxy
+      , "HttpsProxy" .= systemInfoHttpsProxy
+      , "NoProxy" .= systemInfoNoProxy
+      , "Name" .= systemInfoName
+      , "Labels" .= systemInfoLabels
+      , "ExperimentalBuild" .= systemInfoExperimentalBuild
+      , "ServerVersion" .= systemInfoServerVersion
+      , "ClusterStore" .= systemInfoClusterStore
+      , "ClusterAdvertise" .= systemInfoClusterAdvertise
+      , "Runtimes" .= systemInfoRuntimes
+      , "DefaultRuntime" .= systemInfoDefaultRuntime
+      , "Swarm" .= systemInfoSwarm
+      , "LiveRestoreEnabled" .= systemInfoLiveRestoreEnabled
+      , "Isolation" .= systemInfoIsolation
+      , "InitBinary" .= systemInfoInitBinary
+      , "ContainerdCommit" .= systemInfoContainerdCommit
+      , "RuncCommit" .= systemInfoRuncCommit
+      , "InitCommit" .= systemInfoInitCommit
+      , "SecurityOptions" .= systemInfoSecurityOptions
+      ]
+
+
+-- | Construct a value of type 'SystemInfo' (by applying it's required fields, if any)
+mkSystemInfo
+  :: SystemInfo
+mkSystemInfo =
+  SystemInfo
+  { systemInfoId = Nothing
+  , systemInfoContainers = Nothing
+  , systemInfoContainersRunning = Nothing
+  , systemInfoContainersPaused = Nothing
+  , systemInfoContainersStopped = Nothing
+  , systemInfoImages = Nothing
+  , systemInfoDriver = Nothing
+  , systemInfoDriverStatus = Nothing
+  , systemInfoDockerRootDir = Nothing
+  , systemInfoSystemStatus = Nothing
+  , systemInfoPlugins = Nothing
+  , systemInfoMemoryLimit = Nothing
+  , systemInfoSwapLimit = Nothing
+  , systemInfoKernelMemory = Nothing
+  , systemInfoCpuCfsPeriod = Nothing
+  , systemInfoCpuCfsQuota = Nothing
+  , systemInfoCpuShares = Nothing
+  , systemInfoCpuSet = Nothing
+  , systemInfoOomKillDisable = Nothing
+  , systemInfoIPv4Forwarding = Nothing
+  , systemInfoBridgeNfIptables = Nothing
+  , systemInfoBridgeNfIp6tables = Nothing
+  , systemInfoDebug = Nothing
+  , systemInfoNFd = Nothing
+  , systemInfoNGoroutines = Nothing
+  , systemInfoSystemTime = Nothing
+  , systemInfoLoggingDriver = Nothing
+  , systemInfoCgroupDriver = Nothing
+  , systemInfoNEventsListener = Nothing
+  , systemInfoKernelVersion = Nothing
+  , systemInfoOperatingSystem = Nothing
+  , systemInfoOsType = Nothing
+  , systemInfoArchitecture = Nothing
+  , systemInfoNcpu = Nothing
+  , systemInfoMemTotal = Nothing
+  , systemInfoIndexServerAddress = Nothing
+  , systemInfoRegistryConfig = Nothing
+  , systemInfoGenericResources = Nothing
+  , systemInfoHttpProxy = Nothing
+  , systemInfoHttpsProxy = Nothing
+  , systemInfoNoProxy = Nothing
+  , systemInfoName = Nothing
+  , systemInfoLabels = Nothing
+  , systemInfoExperimentalBuild = Nothing
+  , systemInfoServerVersion = Nothing
+  , systemInfoClusterStore = Nothing
+  , systemInfoClusterAdvertise = Nothing
+  , systemInfoRuntimes = Nothing
+  , systemInfoDefaultRuntime = Nothing
+  , systemInfoSwarm = Nothing
+  , systemInfoLiveRestoreEnabled = Nothing
+  , systemInfoIsolation = Nothing
+  , systemInfoInitBinary = Nothing
+  , systemInfoContainerdCommit = Nothing
+  , systemInfoRuncCommit = Nothing
+  , systemInfoInitCommit = Nothing
+  , systemInfoSecurityOptions = Nothing
+  }
+
+-- ** SystemVersionResponse
+-- | SystemVersionResponse
+data SystemVersionResponse = SystemVersionResponse
+  { systemVersionResponsePlatform :: !(Maybe SystemVersionResponsePlatform) -- ^ "Platform"
+  , systemVersionResponseComponents :: !(Maybe [SystemVersionResponseComponents]) -- ^ "Components"
+  , systemVersionResponseVersion :: !(Maybe Text) -- ^ "Version"
+  , systemVersionResponseApiVersion :: !(Maybe Text) -- ^ "ApiVersion"
+  , systemVersionResponseMinApiVersion :: !(Maybe Text) -- ^ "MinAPIVersion"
+  , systemVersionResponseGitCommit :: !(Maybe Text) -- ^ "GitCommit"
+  , systemVersionResponseGoVersion :: !(Maybe Text) -- ^ "GoVersion"
+  , systemVersionResponseOs :: !(Maybe Text) -- ^ "Os"
+  , systemVersionResponseArch :: !(Maybe Text) -- ^ "Arch"
+  , systemVersionResponseKernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
+  , systemVersionResponseExperimental :: !(Maybe Bool) -- ^ "Experimental"
+  , systemVersionResponseBuildTime :: !(Maybe Text) -- ^ "BuildTime"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemVersionResponse
+instance A.FromJSON SystemVersionResponse where
+  parseJSON = A.withObject "SystemVersionResponse" $ \o ->
+    SystemVersionResponse
+      <$> (o .:? "Platform")
+      <*> (o .:? "Components")
+      <*> (o .:? "Version")
+      <*> (o .:? "ApiVersion")
+      <*> (o .:? "MinAPIVersion")
+      <*> (o .:? "GitCommit")
+      <*> (o .:? "GoVersion")
+      <*> (o .:? "Os")
+      <*> (o .:? "Arch")
+      <*> (o .:? "KernelVersion")
+      <*> (o .:? "Experimental")
+      <*> (o .:? "BuildTime")
+
+-- | ToJSON SystemVersionResponse
+instance A.ToJSON SystemVersionResponse where
+  toJSON SystemVersionResponse {..} =
+   _omitNulls
+      [ "Platform" .= systemVersionResponsePlatform
+      , "Components" .= systemVersionResponseComponents
+      , "Version" .= systemVersionResponseVersion
+      , "ApiVersion" .= systemVersionResponseApiVersion
+      , "MinAPIVersion" .= systemVersionResponseMinApiVersion
+      , "GitCommit" .= systemVersionResponseGitCommit
+      , "GoVersion" .= systemVersionResponseGoVersion
+      , "Os" .= systemVersionResponseOs
+      , "Arch" .= systemVersionResponseArch
+      , "KernelVersion" .= systemVersionResponseKernelVersion
+      , "Experimental" .= systemVersionResponseExperimental
+      , "BuildTime" .= systemVersionResponseBuildTime
+      ]
+
+
+-- | Construct a value of type 'SystemVersionResponse' (by applying it's required fields, if any)
+mkSystemVersionResponse
+  :: SystemVersionResponse
+mkSystemVersionResponse =
+  SystemVersionResponse
+  { systemVersionResponsePlatform = Nothing
+  , systemVersionResponseComponents = Nothing
+  , systemVersionResponseVersion = Nothing
+  , systemVersionResponseApiVersion = Nothing
+  , systemVersionResponseMinApiVersion = Nothing
+  , systemVersionResponseGitCommit = Nothing
+  , systemVersionResponseGoVersion = Nothing
+  , systemVersionResponseOs = Nothing
+  , systemVersionResponseArch = Nothing
+  , systemVersionResponseKernelVersion = Nothing
+  , systemVersionResponseExperimental = Nothing
+  , systemVersionResponseBuildTime = Nothing
+  }
+
+-- ** SystemVersionResponseComponents
+-- | SystemVersionResponseComponents
+data SystemVersionResponseComponents = SystemVersionResponseComponents
+  { systemVersionResponseComponentsName :: !(Text) -- ^ /Required/ "Name"
+  , systemVersionResponseComponentsVersion :: !(Text) -- ^ /Required/ "Version"
+  , systemVersionResponseComponentsDetails :: !(Maybe A.Value) -- ^ "Details"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemVersionResponseComponents
+instance A.FromJSON SystemVersionResponseComponents where
+  parseJSON = A.withObject "SystemVersionResponseComponents" $ \o ->
+    SystemVersionResponseComponents
+      <$> (o .:  "Name")
+      <*> (o .:  "Version")
+      <*> (o .:? "Details")
+
+-- | ToJSON SystemVersionResponseComponents
+instance A.ToJSON SystemVersionResponseComponents where
+  toJSON SystemVersionResponseComponents {..} =
+   _omitNulls
+      [ "Name" .= systemVersionResponseComponentsName
+      , "Version" .= systemVersionResponseComponentsVersion
+      , "Details" .= systemVersionResponseComponentsDetails
+      ]
+
+
+-- | Construct a value of type 'SystemVersionResponseComponents' (by applying it's required fields, if any)
+mkSystemVersionResponseComponents
+  :: Text -- ^ 'systemVersionResponseComponentsName'
+  -> Text -- ^ 'systemVersionResponseComponentsVersion'
+  -> SystemVersionResponseComponents
+mkSystemVersionResponseComponents systemVersionResponseComponentsName systemVersionResponseComponentsVersion =
+  SystemVersionResponseComponents
+  { systemVersionResponseComponentsName
+  , systemVersionResponseComponentsVersion
+  , systemVersionResponseComponentsDetails = Nothing
+  }
+
+-- ** SystemVersionResponsePlatform
+-- | SystemVersionResponsePlatform
+data SystemVersionResponsePlatform = SystemVersionResponsePlatform
+  { systemVersionResponsePlatformName :: !(Text) -- ^ /Required/ "Name"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON SystemVersionResponsePlatform
+instance A.FromJSON SystemVersionResponsePlatform where
+  parseJSON = A.withObject "SystemVersionResponsePlatform" $ \o ->
+    SystemVersionResponsePlatform
+      <$> (o .:  "Name")
+
+-- | ToJSON SystemVersionResponsePlatform
+instance A.ToJSON SystemVersionResponsePlatform where
+  toJSON SystemVersionResponsePlatform {..} =
+   _omitNulls
+      [ "Name" .= systemVersionResponsePlatformName
+      ]
+
+
+-- | Construct a value of type 'SystemVersionResponsePlatform' (by applying it's required fields, if any)
+mkSystemVersionResponsePlatform
+  :: Text -- ^ 'systemVersionResponsePlatformName'
+  -> SystemVersionResponsePlatform
+mkSystemVersionResponsePlatform systemVersionResponsePlatformName =
+  SystemVersionResponsePlatform
+  { systemVersionResponsePlatformName
   }
 
 -- ** TLSInfo
@@ -6587,6 +7042,7 @@ data Task = Task
   , taskServiceId :: !(Maybe Text) -- ^ "ServiceID" - The ID of the service this task is part of.
   , taskSlot :: !(Maybe Int) -- ^ "Slot"
   , taskNodeId :: !(Maybe Text) -- ^ "NodeID" - The ID of the node that this task is on.
+  , taskAssignedGenericResources :: !(Maybe [A.Value]) -- ^ "AssignedGenericResources" - User-defined resources can be either Integer resources (e.g, &#x60;SSD&#x3D;3&#x60;) or String resources (e.g, &#x60;GPU&#x3D;UUID1&#x60;)
   , taskStatus :: !(Maybe TaskStatus) -- ^ "Status"
   , taskDesiredState :: !(Maybe TaskState) -- ^ "DesiredState"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6605,6 +7061,7 @@ instance A.FromJSON Task where
       <*> (o .:? "ServiceID")
       <*> (o .:? "Slot")
       <*> (o .:? "NodeID")
+      <*> (o .:? "AssignedGenericResources")
       <*> (o .:? "Status")
       <*> (o .:? "DesiredState")
 
@@ -6622,6 +7079,7 @@ instance A.ToJSON Task where
       , "ServiceID" .= taskServiceId
       , "Slot" .= taskSlot
       , "NodeID" .= taskNodeId
+      , "AssignedGenericResources" .= taskAssignedGenericResources
       , "Status" .= taskStatus
       , "DesiredState" .= taskDesiredState
       ]
@@ -6642,6 +7100,7 @@ mkTask =
   , taskServiceId = Nothing
   , taskSlot = Nothing
   , taskNodeId = Nothing
+  , taskAssignedGenericResources = Nothing
   , taskStatus = Nothing
   , taskDesiredState = Nothing
   }
@@ -6650,7 +7109,8 @@ mkTask =
 -- | TaskSpec
 -- User modifiable task configuration.
 data TaskSpec = TaskSpec
-  { taskSpecContainerSpec :: !(Maybe TaskSpecContainerSpec) -- ^ "ContainerSpec"
+  { taskSpecPluginSpec :: !(Maybe TaskSpecPluginSpec) -- ^ "PluginSpec"
+  , taskSpecContainerSpec :: !(Maybe TaskSpecContainerSpec) -- ^ "ContainerSpec"
   , taskSpecResources :: !(Maybe TaskSpecResources) -- ^ "Resources"
   , taskSpecRestartPolicy :: !(Maybe TaskSpecRestartPolicy) -- ^ "RestartPolicy"
   , taskSpecPlacement :: !(Maybe TaskSpecPlacement) -- ^ "Placement"
@@ -6664,7 +7124,8 @@ data TaskSpec = TaskSpec
 instance A.FromJSON TaskSpec where
   parseJSON = A.withObject "TaskSpec" $ \o ->
     TaskSpec
-      <$> (o .:? "ContainerSpec")
+      <$> (o .:? "PluginSpec")
+      <*> (o .:? "ContainerSpec")
       <*> (o .:? "Resources")
       <*> (o .:? "RestartPolicy")
       <*> (o .:? "Placement")
@@ -6677,7 +7138,8 @@ instance A.FromJSON TaskSpec where
 instance A.ToJSON TaskSpec where
   toJSON TaskSpec {..} =
    _omitNulls
-      [ "ContainerSpec" .= taskSpecContainerSpec
+      [ "PluginSpec" .= taskSpecPluginSpec
+      , "ContainerSpec" .= taskSpecContainerSpec
       , "Resources" .= taskSpecResources
       , "RestartPolicy" .= taskSpecRestartPolicy
       , "Placement" .= taskSpecPlacement
@@ -6693,7 +7155,8 @@ mkTaskSpec
   :: TaskSpec
 mkTaskSpec =
   TaskSpec
-  { taskSpecContainerSpec = Nothing
+  { taskSpecPluginSpec = Nothing
+  , taskSpecContainerSpec = Nothing
   , taskSpecResources = Nothing
   , taskSpecRestartPolicy = Nothing
   , taskSpecPlacement = Nothing
@@ -6705,8 +7168,9 @@ mkTaskSpec =
 
 -- ** TaskSpecContainerSpec
 -- | TaskSpecContainerSpec
+-- Invalid when specified with `PluginSpec`.
 data TaskSpecContainerSpec = TaskSpecContainerSpec
-  { taskSpecContainerSpecImage :: !(Maybe Text) -- ^ "Image" - The image name to use for the container.
+  { taskSpecContainerSpecImage :: !(Maybe Text) -- ^ "Image" - The image name to use for the container
   , taskSpecContainerSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value data.
   , taskSpecContainerSpecCommand :: !(Maybe [Text]) -- ^ "Command" - The command to be run in the image.
   , taskSpecContainerSpecArgs :: !(Maybe [Text]) -- ^ "Args" - Arguments to the command.
@@ -6723,10 +7187,11 @@ data TaskSpecContainerSpec = TaskSpecContainerSpec
   , taskSpecContainerSpecStopSignal :: !(Maybe Text) -- ^ "StopSignal" - Signal to stop the container.
   , taskSpecContainerSpecStopGracePeriod :: !(Maybe Integer) -- ^ "StopGracePeriod" - Amount of time to wait for the container to terminate before forcefully killing it.
   , taskSpecContainerSpecHealthCheck :: !(Maybe HealthConfig) -- ^ "HealthCheck"
-  , taskSpecContainerSpecHosts :: !(Maybe [Text]) -- ^ "Hosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. The format of extra hosts on swarmkit is specified in: http://man7.org/linux/man-pages/man5/hosts.5.html   IP_address canonical_hostname [aliases...] 
+  , taskSpecContainerSpecHosts :: !(Maybe [Text]) -- ^ "Hosts" - A list of hostname/IP mappings to add to the container&#39;s &#x60;hosts&#x60; file. The format of extra hosts is specified in the [hosts(5)](http://man7.org/linux/man-pages/man5/hosts.5.html) man page:      IP_address canonical_hostname [aliases...]
   , taskSpecContainerSpecDnsConfig :: !(Maybe TaskSpecContainerSpecDNSConfig) -- ^ "DNSConfig"
   , taskSpecContainerSpecSecrets :: !(Maybe [TaskSpecContainerSpecSecrets]) -- ^ "Secrets" - Secrets contains references to zero or more secrets that will be exposed to the service.
   , taskSpecContainerSpecConfigs :: !(Maybe [TaskSpecContainerSpecConfigs]) -- ^ "Configs" - Configs contains references to zero or more configs that will be exposed to the service.
+  , taskSpecContainerSpecIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the containers running the service. (Windows only)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpec
@@ -6754,6 +7219,7 @@ instance A.FromJSON TaskSpecContainerSpec where
       <*> (o .:? "DNSConfig")
       <*> (o .:? "Secrets")
       <*> (o .:? "Configs")
+      <*> (o .:? "Isolation")
 
 -- | ToJSON TaskSpecContainerSpec
 instance A.ToJSON TaskSpecContainerSpec where
@@ -6780,6 +7246,7 @@ instance A.ToJSON TaskSpecContainerSpec where
       , "DNSConfig" .= taskSpecContainerSpecDnsConfig
       , "Secrets" .= taskSpecContainerSpecSecrets
       , "Configs" .= taskSpecContainerSpecConfigs
+      , "Isolation" .= taskSpecContainerSpecIsolation
       ]
 
 
@@ -6809,6 +7276,7 @@ mkTaskSpecContainerSpec =
   , taskSpecContainerSpecDnsConfig = Nothing
   , taskSpecContainerSpecSecrets = Nothing
   , taskSpecContainerSpecConfigs = Nothing
+  , taskSpecContainerSpecIsolation = Nothing
   }
 
 -- ** TaskSpecContainerSpecConfigs
@@ -6816,7 +7284,7 @@ mkTaskSpecContainerSpec =
 data TaskSpecContainerSpecConfigs = TaskSpecContainerSpecConfigs
   { taskSpecContainerSpecConfigsFile :: !(Maybe TaskSpecContainerSpecFile) -- ^ "File"
   , taskSpecContainerSpecConfigsConfigId :: !(Maybe Text) -- ^ "ConfigID" - ConfigID represents the ID of the specific config that we&#39;re referencing.
-  , taskSpecContainerSpecConfigsConfigName :: !(Maybe Text) -- ^ "ConfigName" - ConfigName is the name of the config that this references, but this is just provided for lookup/display purposes. The config in the reference will be identified by its ID. 
+  , taskSpecContainerSpecConfigsConfigName :: !(Maybe Text) -- ^ "ConfigName" - ConfigName is the name of the config that this references, but this is just provided for lookup/display purposes. The config in the reference will be identified by its ID.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecConfigs
@@ -6962,8 +7430,8 @@ mkTaskSpecContainerSpecPrivileges =
 -- | TaskSpecContainerSpecPrivilegesCredentialSpec
 -- CredentialSpec for managed service account (Windows only)
 data TaskSpecContainerSpecPrivilegesCredentialSpec = TaskSpecContainerSpecPrivilegesCredentialSpec
-  { taskSpecContainerSpecPrivilegesCredentialSpecFile :: !(Maybe Text) -- ^ "File" - Load credential spec from this file. The file is read by the daemon, and must be present in the &#x60;CredentialSpecs&#x60; subdirectory in the docker data directory, which defaults to &#x60;C:\\ProgramData\\Docker\\&#x60; on Windows.  For example, specifying &#x60;spec.json&#x60; loads &#x60;C:\\ProgramData\\Docker\\CredentialSpecs\\spec.json&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive. 
-  , taskSpecContainerSpecPrivilegesCredentialSpecRegistry :: !(Maybe Text) -- ^ "Registry" - Load credential spec from this value in the Windows registry. The specified registry value must be located in:  &#x60;HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Virtualization\\Containers\\CredentialSpecs&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;   &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive. 
+  { taskSpecContainerSpecPrivilegesCredentialSpecFile :: !(Maybe Text) -- ^ "File" - Load credential spec from this file. The file is read by the daemon, and must be present in the &#x60;CredentialSpecs&#x60; subdirectory in the docker data directory, which defaults to &#x60;C:\\ProgramData\\Docker\\&#x60; on Windows.  For example, specifying &#x60;spec.json&#x60; loads &#x60;C:\\ProgramData\\Docker\\CredentialSpecs\\spec.json&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive.
+  , taskSpecContainerSpecPrivilegesCredentialSpecRegistry :: !(Maybe Text) -- ^ "Registry" - Load credential spec from this value in the Windows registry. The specified registry value must be located in:  &#x60;HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Virtualization\\Containers\\CredentialSpecs&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;   &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecPrivilegesCredentialSpec
@@ -7041,7 +7509,7 @@ mkTaskSpecContainerSpecPrivilegesSELinuxContext =
 data TaskSpecContainerSpecSecrets = TaskSpecContainerSpecSecrets
   { taskSpecContainerSpecSecretsFile :: !(Maybe TaskSpecContainerSpecFile) -- ^ "File"
   , taskSpecContainerSpecSecretsSecretId :: !(Maybe Text) -- ^ "SecretID" - SecretID represents the ID of the specific secret that we&#39;re referencing.
-  , taskSpecContainerSpecSecretsSecretName :: !(Maybe Text) -- ^ "SecretName" - SecretName is the name of the secret that this references, but this is just provided for lookup/display purposes. The secret in the reference will be identified by its ID. 
+  , taskSpecContainerSpecSecretsSecretName :: !(Maybe Text) -- ^ "SecretName" - SecretName is the name of the secret that this references, but this is just provided for lookup/display purposes. The secret in the reference will be identified by its ID.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecSecrets
@@ -7142,7 +7610,7 @@ mkTaskSpecNetworks =
 data TaskSpecPlacement = TaskSpecPlacement
   { taskSpecPlacementConstraints :: !(Maybe [Text]) -- ^ "Constraints" - An array of constraints.
   , taskSpecPlacementPreferences :: !(Maybe [TaskSpecPlacementPreferences]) -- ^ "Preferences" - Preferences provide a way to make the scheduler aware of factors such as topology. They are provided in order from highest to lowest precedence.
-  , taskSpecPlacementPlatforms :: !(Maybe [NodeDescriptionPlatform]) -- ^ "Platforms" - An array of supported platforms.
+  , taskSpecPlacementPlatforms :: !(Maybe [Platform]) -- ^ "Platforms" - Platforms stores all the platforms that the service&#39;s image can run on. This field is used in the platform filter for scheduling. If empty, then the platform filter is off, meaning there are no scheduling restrictions.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecPlacement
@@ -7229,12 +7697,53 @@ mkTaskSpecPlacementSpread =
   { taskSpecPlacementSpreadSpreadDescriptor = Nothing
   }
 
+-- ** TaskSpecPluginSpec
+-- | TaskSpecPluginSpec
+-- Invalid when specified with `ContainerSpec`. *(Experimental release only.)*
+data TaskSpecPluginSpec = TaskSpecPluginSpec
+  { taskSpecPluginSpecName :: !(Maybe Text) -- ^ "Name" - The name or &#39;alias&#39; to use for the plugin.
+  , taskSpecPluginSpecRemote :: !(Maybe Text) -- ^ "Remote" - The plugin image reference to use.
+  , taskSpecPluginSpecDisabled :: !(Maybe Bool) -- ^ "Disabled" - Disable the plugin once scheduled.
+  , taskSpecPluginSpecPluginPrivilege :: !(Maybe [InlineObject]) -- ^ "PluginPrivilege"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON TaskSpecPluginSpec
+instance A.FromJSON TaskSpecPluginSpec where
+  parseJSON = A.withObject "TaskSpecPluginSpec" $ \o ->
+    TaskSpecPluginSpec
+      <$> (o .:? "Name")
+      <*> (o .:? "Remote")
+      <*> (o .:? "Disabled")
+      <*> (o .:? "PluginPrivilege")
+
+-- | ToJSON TaskSpecPluginSpec
+instance A.ToJSON TaskSpecPluginSpec where
+  toJSON TaskSpecPluginSpec {..} =
+   _omitNulls
+      [ "Name" .= taskSpecPluginSpecName
+      , "Remote" .= taskSpecPluginSpecRemote
+      , "Disabled" .= taskSpecPluginSpecDisabled
+      , "PluginPrivilege" .= taskSpecPluginSpecPluginPrivilege
+      ]
+
+
+-- | Construct a value of type 'TaskSpecPluginSpec' (by applying it's required fields, if any)
+mkTaskSpecPluginSpec
+  :: TaskSpecPluginSpec
+mkTaskSpecPluginSpec =
+  TaskSpecPluginSpec
+  { taskSpecPluginSpecName = Nothing
+  , taskSpecPluginSpecRemote = Nothing
+  , taskSpecPluginSpecDisabled = Nothing
+  , taskSpecPluginSpecPluginPrivilege = Nothing
+  }
+
 -- ** TaskSpecResources
 -- | TaskSpecResources
 -- Resource requirements which apply to each individual container created as part of the service.
 data TaskSpecResources = TaskSpecResources
-  { taskSpecResourcesLimits :: !(Maybe TaskSpecResourcesLimits) -- ^ "Limits"
-  , taskSpecResourcesReservation :: !(Maybe TaskSpecResourcesReservation) -- ^ "Reservation"
+  { taskSpecResourcesLimits :: !(Maybe ResourceObject) -- ^ "Limits"
+  , taskSpecResourcesReservation :: !(Maybe ResourceObject) -- ^ "Reservation"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecResources
@@ -7260,72 +7769,6 @@ mkTaskSpecResources =
   TaskSpecResources
   { taskSpecResourcesLimits = Nothing
   , taskSpecResourcesReservation = Nothing
-  }
-
--- ** TaskSpecResourcesLimits
--- | TaskSpecResourcesLimits
--- Define resources limits.
-data TaskSpecResourcesLimits = TaskSpecResourcesLimits
-  { taskSpecResourcesLimitsNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU limit in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPU shares.
-  , taskSpecResourcesLimitsMemoryBytes :: !(Maybe Integer) -- ^ "MemoryBytes" - Memory limit in Bytes.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON TaskSpecResourcesLimits
-instance A.FromJSON TaskSpecResourcesLimits where
-  parseJSON = A.withObject "TaskSpecResourcesLimits" $ \o ->
-    TaskSpecResourcesLimits
-      <$> (o .:? "NanoCPUs")
-      <*> (o .:? "MemoryBytes")
-
--- | ToJSON TaskSpecResourcesLimits
-instance A.ToJSON TaskSpecResourcesLimits where
-  toJSON TaskSpecResourcesLimits {..} =
-   _omitNulls
-      [ "NanoCPUs" .= taskSpecResourcesLimitsNanoCpUs
-      , "MemoryBytes" .= taskSpecResourcesLimitsMemoryBytes
-      ]
-
-
--- | Construct a value of type 'TaskSpecResourcesLimits' (by applying it's required fields, if any)
-mkTaskSpecResourcesLimits
-  :: TaskSpecResourcesLimits
-mkTaskSpecResourcesLimits =
-  TaskSpecResourcesLimits
-  { taskSpecResourcesLimitsNanoCpUs = Nothing
-  , taskSpecResourcesLimitsMemoryBytes = Nothing
-  }
-
--- ** TaskSpecResourcesReservation
--- | TaskSpecResourcesReservation
--- Define resources reservation.
-data TaskSpecResourcesReservation = TaskSpecResourcesReservation
-  { taskSpecResourcesReservationNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU reservation in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPU shares.
-  , taskSpecResourcesReservationMemoryBytes :: !(Maybe Integer) -- ^ "MemoryBytes" - Memory reservation in Bytes.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON TaskSpecResourcesReservation
-instance A.FromJSON TaskSpecResourcesReservation where
-  parseJSON = A.withObject "TaskSpecResourcesReservation" $ \o ->
-    TaskSpecResourcesReservation
-      <$> (o .:? "NanoCPUs")
-      <*> (o .:? "MemoryBytes")
-
--- | ToJSON TaskSpecResourcesReservation
-instance A.ToJSON TaskSpecResourcesReservation where
-  toJSON TaskSpecResourcesReservation {..} =
-   _omitNulls
-      [ "NanoCPUs" .= taskSpecResourcesReservationNanoCpUs
-      , "MemoryBytes" .= taskSpecResourcesReservationMemoryBytes
-      ]
-
-
--- | Construct a value of type 'TaskSpecResourcesReservation' (by applying it's required fields, if any)
-mkTaskSpecResourcesReservation
-  :: TaskSpecResourcesReservation
-mkTaskSpecResourcesReservation =
-  TaskSpecResourcesReservation
-  { taskSpecResourcesReservationNanoCpUs = Nothing
-  , taskSpecResourcesReservationMemoryBytes = Nothing
   }
 
 -- ** TaskSpecRestartPolicy
@@ -7481,13 +7924,42 @@ mkThrottleDevice =
   , throttleDeviceRate = Nothing
   }
 
+-- ** UnlockKeyResponse
+-- | UnlockKeyResponse
+data UnlockKeyResponse = UnlockKeyResponse
+  { unlockKeyResponseUnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON UnlockKeyResponse
+instance A.FromJSON UnlockKeyResponse where
+  parseJSON = A.withObject "UnlockKeyResponse" $ \o ->
+    UnlockKeyResponse
+      <$> (o .:? "UnlockKey")
+
+-- | ToJSON UnlockKeyResponse
+instance A.ToJSON UnlockKeyResponse where
+  toJSON UnlockKeyResponse {..} =
+   _omitNulls
+      [ "UnlockKey" .= unlockKeyResponseUnlockKey
+      ]
+
+
+-- | Construct a value of type 'UnlockKeyResponse' (by applying it's required fields, if any)
+mkUnlockKeyResponse
+  :: UnlockKeyResponse
+mkUnlockKeyResponse =
+  UnlockKeyResponse
+  { unlockKeyResponseUnlockKey = Nothing
+  }
+
 -- ** Volume
 -- | Volume
 data Volume = Volume
   { volumeName :: !(Text) -- ^ /Required/ "Name" - Name of the volume.
   , volumeDriver :: !(Text) -- ^ /Required/ "Driver" - Name of the volume driver used by the volume.
   , volumeMountpoint :: !(Text) -- ^ /Required/ "Mountpoint" - Mount path of the volume on the host.
-  , volumeStatus :: !(Maybe (Map.Map String A.Value)) -- ^ "Status" - Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: &#x60;{\&quot;key\&quot;:\&quot;value\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&#x60;.  The &#x60;Status&#x60; field is optional, and is omitted if the volume driver does not support this feature. 
+  , volumeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date/Time the volume was created.
+  , volumeStatus :: !(Maybe (Map.Map String A.Value)) -- ^ "Status" - Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: &#x60;{\&quot;key\&quot;:\&quot;value\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&#x60;.  The &#x60;Status&#x60; field is optional, and is omitted if the volume driver does not support this feature.
   , volumeLabels :: !((Map.Map String Text)) -- ^ /Required/ "Labels" - User-defined key/value metadata.
   , volumeScope :: !(E'Scope) -- ^ /Required/ "Scope" - The level at which the volume exists. Either &#x60;global&#x60; for cluster-wide, or &#x60;local&#x60; for machine level.
   , volumeOptions :: !((Map.Map String Text)) -- ^ /Required/ "Options" - The driver specific options used when creating the volume.
@@ -7501,6 +7973,7 @@ instance A.FromJSON Volume where
       <$> (o .:  "Name")
       <*> (o .:  "Driver")
       <*> (o .:  "Mountpoint")
+      <*> (o .:? "CreatedAt")
       <*> (o .:? "Status")
       <*> (o .:  "Labels")
       <*> (o .:  "Scope")
@@ -7514,6 +7987,7 @@ instance A.ToJSON Volume where
       [ "Name" .= volumeName
       , "Driver" .= volumeDriver
       , "Mountpoint" .= volumeMountpoint
+      , "CreatedAt" .= volumeCreatedAt
       , "Status" .= volumeStatus
       , "Labels" .= volumeLabels
       , "Scope" .= volumeScope
@@ -7536,6 +8010,7 @@ mkVolume volumeName volumeDriver volumeMountpoint volumeLabels volumeScope volum
   { volumeName
   , volumeDriver
   , volumeMountpoint
+  , volumeCreatedAt = Nothing
   , volumeStatus = Nothing
   , volumeLabels
   , volumeScope
@@ -7543,12 +8018,78 @@ mkVolume volumeName volumeDriver volumeMountpoint volumeLabels volumeScope volum
   , volumeUsageData = Nothing
   }
 
+-- ** VolumeListResponse
+-- | VolumeListResponse
+data VolumeListResponse = VolumeListResponse
+  { volumeListResponseVolumes :: !([Volume]) -- ^ /Required/ "Volumes" - List of volumes
+  , volumeListResponseWarnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings that occurred when fetching the list of volumes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON VolumeListResponse
+instance A.FromJSON VolumeListResponse where
+  parseJSON = A.withObject "VolumeListResponse" $ \o ->
+    VolumeListResponse
+      <$> (o .:  "Volumes")
+      <*> (o .:  "Warnings")
+
+-- | ToJSON VolumeListResponse
+instance A.ToJSON VolumeListResponse where
+  toJSON VolumeListResponse {..} =
+   _omitNulls
+      [ "Volumes" .= volumeListResponseVolumes
+      , "Warnings" .= volumeListResponseWarnings
+      ]
+
+
+-- | Construct a value of type 'VolumeListResponse' (by applying it's required fields, if any)
+mkVolumeListResponse
+  :: [Volume] -- ^ 'volumeListResponseVolumes': List of volumes
+  -> [Text] -- ^ 'volumeListResponseWarnings': Warnings that occurred when fetching the list of volumes
+  -> VolumeListResponse
+mkVolumeListResponse volumeListResponseVolumes volumeListResponseWarnings =
+  VolumeListResponse
+  { volumeListResponseVolumes
+  , volumeListResponseWarnings
+  }
+
+-- ** VolumePruneResponse
+-- | VolumePruneResponse
+data VolumePruneResponse = VolumePruneResponse
+  { volumePruneResponseVolumesDeleted :: !(Maybe [Text]) -- ^ "VolumesDeleted" - Volumes that were deleted
+  , volumePruneResponseSpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON VolumePruneResponse
+instance A.FromJSON VolumePruneResponse where
+  parseJSON = A.withObject "VolumePruneResponse" $ \o ->
+    VolumePruneResponse
+      <$> (o .:? "VolumesDeleted")
+      <*> (o .:? "SpaceReclaimed")
+
+-- | ToJSON VolumePruneResponse
+instance A.ToJSON VolumePruneResponse where
+  toJSON VolumePruneResponse {..} =
+   _omitNulls
+      [ "VolumesDeleted" .= volumePruneResponseVolumesDeleted
+      , "SpaceReclaimed" .= volumePruneResponseSpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'VolumePruneResponse' (by applying it's required fields, if any)
+mkVolumePruneResponse
+  :: VolumePruneResponse
+mkVolumePruneResponse =
+  VolumePruneResponse
+  { volumePruneResponseVolumesDeleted = Nothing
+  , volumePruneResponseSpaceReclaimed = Nothing
+  }
+
 -- ** VolumeUsageData
 -- | VolumeUsageData
--- Usage details about the volume. This information is used by the `GET /system/df` endpoint, and omitted in other endpoints. 
+-- Usage details about the volume. This information is used by the `GET /system/df` endpoint, and omitted in other endpoints.
 data VolumeUsageData = VolumeUsageData
-  { volumeUsageDataSize :: !(Int) -- ^ /Required/ "Size" - Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the &#x60;\&quot;local\&quot;&#x60; volume driver. For volumes created with other volume drivers, this field is set to &#x60;-1&#x60; (\&quot;not available\&quot;) 
-  , volumeUsageDataRefCount :: !(Int) -- ^ /Required/ "RefCount" - The number of containers referencing this volume. This field is set to &#x60;-1&#x60; if the reference-count is not available. 
+  { volumeUsageDataSize :: !(Int) -- ^ /Required/ "Size" - Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the &#x60;\&quot;local\&quot;&#x60; volume driver. For volumes created with other volume drivers, this field is set to &#x60;-1&#x60; (\&quot;not available\&quot;)
+  , volumeUsageDataRefCount :: !(Int) -- ^ /Required/ "RefCount" - The number of containers referencing this volume. This field is set to &#x60;-1&#x60; if the reference-count is not available.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON VolumeUsageData
@@ -7569,8 +8110,8 @@ instance A.ToJSON VolumeUsageData where
 
 -- | Construct a value of type 'VolumeUsageData' (by applying it's required fields, if any)
 mkVolumeUsageData
-  :: Int -- ^ 'volumeUsageDataSize': Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the `\"local\"` volume driver. For volumes created with other volume drivers, this field is set to `-1` (\"not available\") 
-  -> Int -- ^ 'volumeUsageDataRefCount': The number of containers referencing this volume. This field is set to `-1` if the reference-count is not available. 
+  :: Int -- ^ 'volumeUsageDataSize': Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the `\"local\"` volume driver. For volumes created with other volume drivers, this field is set to `-1` (\"not available\")
+  -> Int -- ^ 'volumeUsageDataRefCount': The number of containers referencing this volume. This field is set to `-1` if the reference-count is not available.
   -> VolumeUsageData
 mkVolumeUsageData volumeUsageDataSize volumeUsageDataRefCount =
   VolumeUsageData
@@ -7584,7 +8125,7 @@ mkVolumeUsageData volumeUsageDataSize volumeUsageDataRefCount =
 
 -- ** E'Availability
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Availability of the node.
 data E'Availability
   = E'Availability'Active -- ^ @"active"@
@@ -7614,9 +8155,38 @@ toE'Availability = \case
   s -> P.Left $ "toE'Availability: enum parse failure: " P.++ P.show s
 
 
+-- ** E'CgroupDriver
+
+-- | Enum of 'Text' .
+-- The driver to use for managing cgroups.
+data E'CgroupDriver
+  = E'CgroupDriver'Cgroupfs -- ^ @"cgroupfs"@
+  | E'CgroupDriver'Systemd -- ^ @"systemd"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'CgroupDriver where toJSON = A.toJSON . fromE'CgroupDriver
+instance A.FromJSON E'CgroupDriver where parseJSON o = P.either P.fail (pure . P.id) . toE'CgroupDriver =<< A.parseJSON o
+instance WH.ToHttpApiData E'CgroupDriver where toQueryParam = WH.toQueryParam . fromE'CgroupDriver
+instance WH.FromHttpApiData E'CgroupDriver where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'CgroupDriver
+instance MimeRender MimeMultipartFormData E'CgroupDriver where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'CgroupDriver' enum
+fromE'CgroupDriver :: E'CgroupDriver -> Text
+fromE'CgroupDriver = \case
+  E'CgroupDriver'Cgroupfs -> "cgroupfs"
+  E'CgroupDriver'Systemd -> "systemd"
+
+-- | parse 'E'CgroupDriver' enum
+toE'CgroupDriver :: Text -> P.Either String E'CgroupDriver
+toE'CgroupDriver = \case
+  "cgroupfs" -> P.Right E'CgroupDriver'Cgroupfs
+  "systemd" -> P.Right E'CgroupDriver'Systemd
+  s -> P.Left $ "toE'CgroupDriver: enum parse failure: " P.++ P.show s
+
+
 -- ** E'Condition
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Condition for restart.
 data E'Condition
   = E'Condition'None -- ^ @"none"@
@@ -7673,7 +8243,7 @@ toE'ContentType = \case
 
 -- ** E'FailureAction
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Action to take if an updated task fails to run, or stops running during the update.
 data E'FailureAction
   = E'FailureAction'Continue -- ^ @"continue"@
@@ -7705,7 +8275,7 @@ toE'FailureAction = \case
 
 -- ** E'FailureAction2
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Action to take if an rolled back task fails to run, or stops running during the rollback.
 data E'FailureAction2
   = E'FailureAction2'Continue -- ^ @"continue"@
@@ -7734,7 +8304,7 @@ toE'FailureAction2 = \case
 
 -- ** E'Isolation
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Isolation technology of the container. (Windows only)
 data E'Isolation
   = E'Isolation'Default -- ^ @"default"@
@@ -7764,9 +8334,41 @@ toE'Isolation = \case
   s -> P.Left $ "toE'Isolation: enum parse failure: " P.++ P.show s
 
 
+-- ** E'Isolation2
+
+-- | Enum of 'Text' .
+-- Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is `hyperv`, and on Windows server, the default is `process`.  This option is currently not used on other platforms.
+data E'Isolation2
+  = E'Isolation2'Default -- ^ @"default"@
+  | E'Isolation2'Hyperv -- ^ @"hyperv"@
+  | E'Isolation2'Process -- ^ @"process"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'Isolation2 where toJSON = A.toJSON . fromE'Isolation2
+instance A.FromJSON E'Isolation2 where parseJSON o = P.either P.fail (pure . P.id) . toE'Isolation2 =<< A.parseJSON o
+instance WH.ToHttpApiData E'Isolation2 where toQueryParam = WH.toQueryParam . fromE'Isolation2
+instance WH.FromHttpApiData E'Isolation2 where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'Isolation2
+instance MimeRender MimeMultipartFormData E'Isolation2 where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'Isolation2' enum
+fromE'Isolation2 :: E'Isolation2 -> Text
+fromE'Isolation2 = \case
+  E'Isolation2'Default -> "default"
+  E'Isolation2'Hyperv -> "hyperv"
+  E'Isolation2'Process -> "process"
+
+-- | parse 'E'Isolation2' enum
+toE'Isolation2 :: Text -> P.Either String E'Isolation2
+toE'Isolation2 = \case
+  "default" -> P.Right E'Isolation2'Default
+  "hyperv" -> P.Right E'Isolation2'Hyperv
+  "process" -> P.Right E'Isolation2'Process
+  s -> P.Left $ "toE'Isolation2: enum parse failure: " P.++ P.show s
+
+
 -- ** E'Mode
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- The mode of resolution to use for internal load balancing between tasks.
 data E'Mode
   = E'Mode'Vip -- ^ @"vip"@
@@ -7795,8 +8397,8 @@ toE'Mode = \case
 
 -- ** E'Name
 
--- | Enum of 'Text' . 
--- - Empty string means not to restart - `always` Always restart - `unless-stopped` Restart always except when the user has manually stopped the container - `on-failure` Restart only when the container exit code is non-zero 
+-- | Enum of 'Text' .
+-- - Empty string means not to restart - `always` Always restart - `unless-stopped` Restart always except when the user has manually stopped the container - `on-failure` Restart only when the container exit code is non-zero
 data E'Name
   = E'Name'Empty -- ^ @""@
   | E'Name'Always -- ^ @"always"@
@@ -7830,7 +8432,7 @@ toE'Name = \case
 
 -- ** E'Order
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- The order of operations when rolling out an updated task. Either the old task is shut down before the new task is started, or the new task is started before the old task is shut down.
 data E'Order
   = E'Order'Stop_first -- ^ @"stop-first"@
@@ -7857,9 +8459,50 @@ toE'Order = \case
   s -> P.Left $ "toE'Order: enum parse failure: " P.++ P.show s
 
 
+-- ** E'Propagation
+
+-- | Enum of 'Text' .
+-- A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
+data E'Propagation
+  = E'Propagation'Private -- ^ @"private"@
+  | E'Propagation'Rprivate -- ^ @"rprivate"@
+  | E'Propagation'Shared -- ^ @"shared"@
+  | E'Propagation'Rshared -- ^ @"rshared"@
+  | E'Propagation'Slave -- ^ @"slave"@
+  | E'Propagation'Rslave -- ^ @"rslave"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'Propagation where toJSON = A.toJSON . fromE'Propagation
+instance A.FromJSON E'Propagation where parseJSON o = P.either P.fail (pure . P.id) . toE'Propagation =<< A.parseJSON o
+instance WH.ToHttpApiData E'Propagation where toQueryParam = WH.toQueryParam . fromE'Propagation
+instance WH.FromHttpApiData E'Propagation where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'Propagation
+instance MimeRender MimeMultipartFormData E'Propagation where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'Propagation' enum
+fromE'Propagation :: E'Propagation -> Text
+fromE'Propagation = \case
+  E'Propagation'Private -> "private"
+  E'Propagation'Rprivate -> "rprivate"
+  E'Propagation'Shared -> "shared"
+  E'Propagation'Rshared -> "rshared"
+  E'Propagation'Slave -> "slave"
+  E'Propagation'Rslave -> "rslave"
+
+-- | parse 'E'Propagation' enum
+toE'Propagation :: Text -> P.Either String E'Propagation
+toE'Propagation = \case
+  "private" -> P.Right E'Propagation'Private
+  "rprivate" -> P.Right E'Propagation'Rprivate
+  "shared" -> P.Right E'Propagation'Shared
+  "rshared" -> P.Right E'Propagation'Rshared
+  "slave" -> P.Right E'Propagation'Slave
+  "rslave" -> P.Right E'Propagation'Rslave
+  s -> P.Left $ "toE'Propagation: enum parse failure: " P.++ P.show s
+
+
 -- ** E'Protocol
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Protocol for communication with the external CA (currently only `cfssl` is supported).
 data E'Protocol
   = E'Protocol'Cfssl -- ^ @"cfssl"@
@@ -7883,9 +8526,38 @@ toE'Protocol = \case
   s -> P.Left $ "toE'Protocol: enum parse failure: " P.++ P.show s
 
 
+-- ** E'PublishMode
+
+-- | Enum of 'Text' .
+-- The mode in which port is published.  <p><br /></p>  - \"ingress\" makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \"host\" bypasses the routing mesh and publish the port directly on   the swarm node where that service is running.
+data E'PublishMode
+  = E'PublishMode'Ingress -- ^ @"ingress"@
+  | E'PublishMode'Host -- ^ @"host"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'PublishMode where toJSON = A.toJSON . fromE'PublishMode
+instance A.FromJSON E'PublishMode where parseJSON o = P.either P.fail (pure . P.id) . toE'PublishMode =<< A.parseJSON o
+instance WH.ToHttpApiData E'PublishMode where toQueryParam = WH.toQueryParam . fromE'PublishMode
+instance WH.FromHttpApiData E'PublishMode where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'PublishMode
+instance MimeRender MimeMultipartFormData E'PublishMode where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'PublishMode' enum
+fromE'PublishMode :: E'PublishMode -> Text
+fromE'PublishMode = \case
+  E'PublishMode'Ingress -> "ingress"
+  E'PublishMode'Host -> "host"
+
+-- | parse 'E'PublishMode' enum
+toE'PublishMode :: Text -> P.Either String E'PublishMode
+toE'PublishMode = \case
+  "ingress" -> P.Right E'PublishMode'Ingress
+  "host" -> P.Right E'PublishMode'Host
+  s -> P.Left $ "toE'PublishMode: enum parse failure: " P.++ P.show s
+
+
 -- ** E'Role
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- Role of the node.
 data E'Role
   = E'Role'Worker -- ^ @"worker"@
@@ -7914,7 +8586,7 @@ toE'Role = \case
 
 -- ** E'Scope
 
--- | Enum of 'Text' . 
+-- | Enum of 'Text' .
 -- The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
 data E'Scope
   = E'Scope'Local -- ^ @"local"@
@@ -7974,8 +8646,8 @@ toE'State = \case
 
 -- ** E'Status
 
--- | Enum of 'Text' . 
--- The status of the container. For example, `\"running\"` or `\"exited\"`. 
+-- | Enum of 'Text' .
+-- The status of the container. For example, `\"running\"` or `\"exited\"`.
 data E'Status
   = E'Status'Created -- ^ @"created"@
   | E'Status'Running -- ^ @"running"@
@@ -8046,8 +8718,8 @@ toE'Type = \case
 
 -- ** E'Type2
 
--- | Enum of 'Text' . 
--- The mount type. Available types:  - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container. - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs. 
+-- | Enum of 'Text' .
+-- The mount type. Available types:  - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container. - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
 data E'Type2
   = E'Type2'Bind -- ^ @"bind"@
   | E'Type2'Volume -- ^ @"volume"@
@@ -8125,6 +8797,114 @@ toE'Type3 = \case
   s -> P.Left $ "toE'Type3: enum parse failure: " P.++ P.show s
 
 
+-- ** LocalNodeState
+
+-- | Enum of 'Text' .
+-- Current local status of this node.
+data LocalNodeState
+  = LocalNodeState'Empty -- ^ @""@
+  | LocalNodeState'Inactive -- ^ @"inactive"@
+  | LocalNodeState'Pending -- ^ @"pending"@
+  | LocalNodeState'Active -- ^ @"active"@
+  | LocalNodeState'Error -- ^ @"error"@
+  | LocalNodeState'Locked -- ^ @"locked"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON LocalNodeState where toJSON = A.toJSON . fromLocalNodeState
+instance A.FromJSON LocalNodeState where parseJSON o = P.either P.fail (pure . P.id) . toLocalNodeState =<< A.parseJSON o
+instance WH.ToHttpApiData LocalNodeState where toQueryParam = WH.toQueryParam . fromLocalNodeState
+instance WH.FromHttpApiData LocalNodeState where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toLocalNodeState
+instance MimeRender MimeMultipartFormData LocalNodeState where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'LocalNodeState' enum
+fromLocalNodeState :: LocalNodeState -> Text
+fromLocalNodeState = \case
+  LocalNodeState'Empty -> ""
+  LocalNodeState'Inactive -> "inactive"
+  LocalNodeState'Pending -> "pending"
+  LocalNodeState'Active -> "active"
+  LocalNodeState'Error -> "error"
+  LocalNodeState'Locked -> "locked"
+
+-- | parse 'LocalNodeState' enum
+toLocalNodeState :: Text -> P.Either String LocalNodeState
+toLocalNodeState = \case
+  "" -> P.Right LocalNodeState'Empty
+  "inactive" -> P.Right LocalNodeState'Inactive
+  "pending" -> P.Right LocalNodeState'Pending
+  "active" -> P.Right LocalNodeState'Active
+  "error" -> P.Right LocalNodeState'Error
+  "locked" -> P.Right LocalNodeState'Locked
+  s -> P.Left $ "toLocalNodeState: enum parse failure: " P.++ P.show s
+
+
+-- ** NodeState
+
+-- | Enum of 'Text' .
+-- NodeState represents the state of a node.
+data NodeState
+  = NodeState'Unknown -- ^ @"unknown"@
+  | NodeState'Down -- ^ @"down"@
+  | NodeState'Ready -- ^ @"ready"@
+  | NodeState'Disconnected -- ^ @"disconnected"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON NodeState where toJSON = A.toJSON . fromNodeState
+instance A.FromJSON NodeState where parseJSON o = P.either P.fail (pure . P.id) . toNodeState =<< A.parseJSON o
+instance WH.ToHttpApiData NodeState where toQueryParam = WH.toQueryParam . fromNodeState
+instance WH.FromHttpApiData NodeState where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toNodeState
+instance MimeRender MimeMultipartFormData NodeState where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'NodeState' enum
+fromNodeState :: NodeState -> Text
+fromNodeState = \case
+  NodeState'Unknown -> "unknown"
+  NodeState'Down -> "down"
+  NodeState'Ready -> "ready"
+  NodeState'Disconnected -> "disconnected"
+
+-- | parse 'NodeState' enum
+toNodeState :: Text -> P.Either String NodeState
+toNodeState = \case
+  "unknown" -> P.Right NodeState'Unknown
+  "down" -> P.Right NodeState'Down
+  "ready" -> P.Right NodeState'Ready
+  "disconnected" -> P.Right NodeState'Disconnected
+  s -> P.Left $ "toNodeState: enum parse failure: " P.++ P.show s
+
+
+-- ** Reachability
+
+-- | Enum of 'Text' .
+-- Reachability represents the reachability of a node.
+data Reachability
+  = Reachability'Unknown -- ^ @"unknown"@
+  | Reachability'Unreachable -- ^ @"unreachable"@
+  | Reachability'Reachable -- ^ @"reachable"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON Reachability where toJSON = A.toJSON . fromReachability
+instance A.FromJSON Reachability where parseJSON o = P.either P.fail (pure . P.id) . toReachability =<< A.parseJSON o
+instance WH.ToHttpApiData Reachability where toQueryParam = WH.toQueryParam . fromReachability
+instance WH.FromHttpApiData Reachability where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toReachability
+instance MimeRender MimeMultipartFormData Reachability where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'Reachability' enum
+fromReachability :: Reachability -> Text
+fromReachability = \case
+  Reachability'Unknown -> "unknown"
+  Reachability'Unreachable -> "unreachable"
+  Reachability'Reachable -> "reachable"
+
+-- | parse 'Reachability' enum
+toReachability :: Text -> P.Either String Reachability
+toReachability = \case
+  "unknown" -> P.Right Reachability'Unknown
+  "unreachable" -> P.Right Reachability'Unreachable
+  "reachable" -> P.Right Reachability'Reachable
+  s -> P.Left $ "toReachability: enum parse failure: " P.++ P.show s
+
+
 -- ** TaskState
 
 -- | Enum of 'Text'
@@ -8184,6 +8964,3 @@ toTaskState = \case
   "failed" -> P.Right TaskState'Failed
   "rejected" -> P.Right TaskState'Rejected
   s -> P.Left $ "toTaskState: enum parse failure: " P.++ P.show s
-
-
-

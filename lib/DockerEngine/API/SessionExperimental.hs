@@ -9,7 +9,7 @@
 -}
 
 {-|
-Module : DockerEngine.API.Volume
+Module : DockerEngine.API.SessionExperimental
 -}
 
 {-# LANGUAGE FlexibleContexts #-}
@@ -19,7 +19,7 @@ Module : DockerEngine.API.Volume
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing -fno-warn-unused-binds -fno-warn-unused-imports #-}
 
-module DockerEngine.API.Volume where
+module DockerEngine.API.SessionExperimental where
 
 import DockerEngine.Core
 import DockerEngine.MimeTypes
@@ -55,116 +55,24 @@ import qualified Prelude as P
 -- * Operations
 
 
--- ** Volume
+-- ** SessionExperimental
 
--- *** volumeCreate
+-- *** session
 
--- | @POST \/volumes\/create@
+-- | @POST \/session@
 -- 
--- Create a volume
+-- Initialize interactive session
 -- 
-volumeCreate 
-  :: (Consumes VolumeCreate MimeJSON, MimeRender MimeJSON InlineObject2)
-  => InlineObject2 -- ^ "volumeConfig"
-  -> DockerEngineRequest VolumeCreate MimeJSON Volume MimeJSON
-volumeCreate volumeConfig =
-  _mkRequest "POST" ["/volumes/create"]
-    `setBodyParam` volumeConfig
-
-data VolumeCreate 
-instance HasBodyParam VolumeCreate InlineObject2 
-
--- | @application/json@
-instance Consumes VolumeCreate MimeJSON
-
--- | @application/json@
-instance Produces VolumeCreate MimeJSON
-
-
--- *** volumeDelete
-
--- | @DELETE \/volumes\/{name}@
--- 
--- Remove a volume
--- 
--- Instruct the driver to remove the volume.
+-- Start a new interactive session with a server. Session allows server to call back to the client for advanced capabilities.  > **Note**: This endpoint is *experimental* and only available if the daemon is started with experimental > features enabled. The specifications for this endpoint may still change in a future version of the API.  ### Hijacking  This endpoint hijacks the HTTP connection to HTTP2 transport that allows the client to expose gPRC services on that connection.  For example, the client sends this request to upgrade the connection:  ``` POST /session HTTP/1.1 Upgrade: h2c Connection: Upgrade ```  The Docker daemon will respond with a `101 UPGRADED` response follow with the raw stream:  ``` HTTP/1.1 101 UPGRADED Connection: Upgrade Upgrade: h2c ``` 
 -- 
 -- Note: Has 'Produces' instances, but no response schema
 -- 
-volumeDelete 
-  :: Accept accept -- ^ request accept ('MimeType')
-  -> Name -- ^ "name" -  Volume name or ID
-  -> DockerEngineRequest VolumeDelete MimeNoContent res accept
-volumeDelete  _ (Name name) =
-  _mkRequest "DELETE" ["/volumes/",toPath name]
+session 
+  :: DockerEngineRequest Session MimeNoContent res MimeVndDockerRawStream
+session =
+  _mkRequest "POST" ["/session"]
 
-data VolumeDelete  
-
--- | /Optional Param/ "force" - Force the removal of the volume
-instance HasOptionalParam VolumeDelete Force where
-  applyOptionalParam req (Force xs) =
-    req `setQuery` toQuery ("force", Just xs)
--- | @application/json@
-instance Produces VolumeDelete MimeJSON
--- | @text/plain@
-instance Produces VolumeDelete MimePlainText
-
-
--- *** volumeInspect
-
--- | @GET \/volumes\/{name}@
--- 
--- Inspect a volume
--- 
-volumeInspect 
-  :: Name -- ^ "name" -  Volume name or ID
-  -> DockerEngineRequest VolumeInspect MimeNoContent Volume MimeJSON
-volumeInspect (Name name) =
-  _mkRequest "GET" ["/volumes/",toPath name]
-
-data VolumeInspect  
--- | @application/json@
-instance Produces VolumeInspect MimeJSON
-
-
--- *** volumeList
-
--- | @GET \/volumes@
--- 
--- List volumes
--- 
-volumeList 
-  :: DockerEngineRequest VolumeList MimeNoContent VolumeListResponse MimeJSON
-volumeList =
-  _mkRequest "GET" ["/volumes"]
-
-data VolumeList  
-
--- | /Optional Param/ "filters" - JSON encoded value of the filters (a `map[string][]string`) to process on the volumes list. Available filters:  - `dangling=<boolean>` When set to `true` (or `1`), returns all    volumes that are not in use by a container. When set to `false`    (or `0`), only volumes that are in use by one or more    containers are returned. - `driver=<volume-driver-name>` Matches volumes based on their driver. - `label=<key>` or `label=<key>:<value>` Matches volumes based on    the presence of a `label` alone or a `label` and a value. - `name=<volume-name>` Matches all or part of a volume name. 
-instance HasOptionalParam VolumeList Filters where
-  applyOptionalParam req (Filters xs) =
-    req `setQuery` toQuery ("filters", Just xs)
--- | @application/json@
-instance Produces VolumeList MimeJSON
-
-
--- *** volumePrune
-
--- | @POST \/volumes\/prune@
--- 
--- Delete unused volumes
--- 
-volumePrune 
-  :: DockerEngineRequest VolumePrune MimeNoContent VolumePruneResponse MimeJSON
-volumePrune =
-  _mkRequest "POST" ["/volumes/prune"]
-
-data VolumePrune  
-
--- | /Optional Param/ "filters" - Filters to process on the prune list, encoded as JSON (a `map[string][]string`).  Available filters: - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels. 
-instance HasOptionalParam VolumePrune Filters where
-  applyOptionalParam req (Filters xs) =
-    req `setQuery` toQuery ("filters", Just xs)
--- | @application/json@
-instance Produces VolumePrune MimeJSON
+data Session  
+-- | @application/vnd.docker.raw-stream@
+instance Produces Session MimeVndDockerRawStream
 

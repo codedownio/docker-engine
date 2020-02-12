@@ -1,10 +1,10 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release of Docker, so API calls are versioned to ensure that clients don't break.  For Docker Engine 17.06, the API version is 1.30. To lock to this version, you prefix the URL with `/v1.30`. For example, calling `/info` is the same as calling `/v1.30/info`.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  In previous versions of Docker, it was possible to access the API without providing a version. This behaviour is now deprecated will be removed in a future version of Docker.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer Docker daemons.  This documentation is for version 1.30 of the API, which was introduced with Docker 17.06. Use this table to find documentation for previous versions of the API:  Docker version  | API version | Changes ----------------|-------------|--------- 17.05.x | [1.29](https://docs.docker.com/engine/api/v1.29/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-29-api-changes) 17.04.x | [1.28](https://docs.docker.com/engine/api/v1.28/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-28-api-changes) 17.03.1 | [1.27](https://docs.docker.com/engine/api/v1.27/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-27-api-changes) 1.13.1 & 17.03.0 | [1.26](https://docs.docker.com/engine/api/v1.26/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-26-api-changes) 1.13.0 | [1.25](https://docs.docker.com/engine/api/v1.25/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-25-api-changes) 1.12.x | [1.24](https://docs.docker.com/engine/api/v1.24/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-24-api-changes) 1.11.x | [1.23](https://docs.docker.com/engine/api/v1.23/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-23-api-changes) 1.10.x | [1.22](https://docs.docker.com/engine/api/v1.22/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-22-api-changes) 1.9.x | [1.21](https://docs.docker.com/engine/api/v1.21/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-21-api-changes) 1.8.x | [1.20](https://docs.docker.com/engine/api/v1.20/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-20-api-changes) 1.7.x | [1.19](https://docs.docker.com/engine/api/v1.19/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-19-api-changes) 1.6.x | [1.18](https://docs.docker.com/engine/api/v1.18/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-18-api-changes)  # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
 
    OpenAPI Version: 3.0.1
-   Docker Engine API API version: 1.30
+   Docker Engine API API version: 1.36
    Generated by OpenAPI Generator (https://openapi-generator.tech)
 -}
 
@@ -60,14 +60,14 @@ import qualified Prelude as P
 -- *** containerArchive
 
 -- | @GET \/containers\/{id}\/archive@
--- 
+--
 -- Get an archive of a filesystem resource in a container
--- 
+--
 -- Get a tar archive of a resource in the filesystem of container id.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerArchive 
+--
+containerArchive
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> Path -- ^ "path" -  Resource in the container’s filesystem to archive.
@@ -76,7 +76,7 @@ containerArchive  _ (Id id) (Path path) =
   _mkRequest "GET" ["/containers/",toPath id,"/archive"]
     `setQuery` toQuery ("path", Just path)
 
-data ContainerArchive  
+data ContainerArchive
 -- | @application/x-tar@
 instance Produces ContainerArchive MimeXTar
 -- | @application/json@
@@ -86,14 +86,14 @@ instance Produces ContainerArchive MimeJSON
 -- *** containerArchiveInfo
 
 -- | @HEAD \/containers\/{id}\/archive@
--- 
+--
 -- Get information about files in a container
--- 
+--
 -- A response header `X-Docker-Container-Path-Stat` is return containing a base64 - encoded JSON object with some filesystem header information about the path.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerArchiveInfo 
+--
+containerArchiveInfo
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> Path -- ^ "path" -  Resource in the container’s filesystem to archive.
@@ -102,7 +102,7 @@ containerArchiveInfo  _ (Id id) (Path path) =
   _mkRequest "HEAD" ["/containers/",toPath id,"/archive"]
     `setQuery` toQuery ("path", Just path)
 
-data ContainerArchiveInfo  
+data ContainerArchiveInfo
 -- | @application/json@
 instance Produces ContainerArchiveInfo MimeJSON
 -- | @text/plain@
@@ -112,28 +112,28 @@ instance Produces ContainerArchiveInfo MimePlainText
 -- *** containerAttach
 
 -- | @POST \/containers\/{id}\/attach@
--- 
+--
 -- Attach to a container
--- 
--- Attach to a container to read its output or send it input. You can attach to the same container multiple times and you can reattach to containers that have been detached.  Either the `stream` or `logs` parameter must be `true` for this endpoint to do anything.  See [the documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/) for more details.  ### Hijacking  This endpoint hijacks the HTTP connection to transport `stdin`, `stdout`, and `stderr` on the same socket.  This is the response from the daemon for an attach request:  ``` HTTP/1.1 200 OK Content-Type: application/vnd.docker.raw-stream  [STREAM] ```  After the headers and two new lines, the TCP connection can now be used for raw, bidirectional communication between the client and server.  To hint potential proxies about connection hijacking, the Docker client can also optionally send connection upgrade headers.  For example, the client sends this request to upgrade the connection:  ``` POST /containers/16253994b7c4/attach?stream=1&stdout=1 HTTP/1.1 Upgrade: tcp Connection: Upgrade ```  The Docker daemon will respond with a `101 UPGRADED` response, and will similarly follow with the raw stream:  ``` HTTP/1.1 101 UPGRADED Content-Type: application/vnd.docker.raw-stream Connection: Upgrade Upgrade: tcp  [STREAM] ```  ### Stream format  When the TTY setting is disabled in [`POST /containers/create`](#operation/ContainerCreate), the stream over the hijacked connected is multiplexed to separate out `stdout` and `stderr`. The stream consists of a series of frames, each containing a header and a payload.  The header contains the information which the stream writes (`stdout` or `stderr`). It also contains the size of the associated frame encoded in the last four bytes (`uint32`).  It is encoded on the first eight bytes like this:  ```go header := [8]byte{STREAM_TYPE, 0, 0, 0, SIZE1, SIZE2, SIZE3, SIZE4} ```  `STREAM_TYPE` can be:  - 0: `stdin` (is written on `stdout`) - 1: `stdout` - 2: `stderr`  `SIZE1, SIZE2, SIZE3, SIZE4` are the four bytes of the `uint32` size encoded as big endian.  Following the header is the payload, which is the specified number of bytes of `STREAM_TYPE`.  The simplest way to implement this protocol is the following:  1. Read 8 bytes. 2. Choose `stdout` or `stderr` depending on the first byte. 3. Extract the frame size from the last four bytes. 4. Read the extracted size and output it on the correct output. 5. Goto 1.  ### Stream format when using a TTY  When the TTY setting is enabled in [`POST /containers/create`](#operation/ContainerCreate), the stream is not multiplexed. The data exchanged over the hijacked connection is simply the raw data from the process PTY and client's `stdin`. 
--- 
+--
+-- Attach to a container to read its output or send it input. You can attach to the same container multiple times and you can reattach to containers that have been detached.  Either the `stream` or `logs` parameter must be `true` for this endpoint to do anything.  See [the documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/) for more details.  ### Hijacking  This endpoint hijacks the HTTP connection to transport `stdin`, `stdout`, and `stderr` on the same socket.  This is the response from the daemon for an attach request:  ``` HTTP/1.1 200 OK Content-Type: application/vnd.docker.raw-stream  [STREAM] ```  After the headers and two new lines, the TCP connection can now be used for raw, bidirectional communication between the client and server.  To hint potential proxies about connection hijacking, the Docker client can also optionally send connection upgrade headers.  For example, the client sends this request to upgrade the connection:  ``` POST /containers/16253994b7c4/attach?stream=1&stdout=1 HTTP/1.1 Upgrade: tcp Connection: Upgrade ```  The Docker daemon will respond with a `101 UPGRADED` response, and will similarly follow with the raw stream:  ``` HTTP/1.1 101 UPGRADED Content-Type: application/vnd.docker.raw-stream Connection: Upgrade Upgrade: tcp  [STREAM] ```  ### Stream format  When the TTY setting is disabled in [`POST /containers/create`](#operation/ContainerCreate), the stream over the hijacked connected is multiplexed to separate out `stdout` and `stderr`. The stream consists of a series of frames, each containing a header and a payload.  The header contains the information which the stream writes (`stdout` or `stderr`). It also contains the size of the associated frame encoded in the last four bytes (`uint32`).  It is encoded on the first eight bytes like this:  ```go header := [8]byte{STREAM_TYPE, 0, 0, 0, SIZE1, SIZE2, SIZE3, SIZE4} ```  `STREAM_TYPE` can be:  - 0: `stdin` (is written on `stdout`) - 1: `stdout` - 2: `stderr`  `SIZE1, SIZE2, SIZE3, SIZE4` are the four bytes of the `uint32` size encoded as big endian.  Following the header is the payload, which is the specified number of bytes of `STREAM_TYPE`.  The simplest way to implement this protocol is the following:  1. Read 8 bytes. 2. Choose `stdout` or `stderr` depending on the first byte. 3. Extract the frame size from the last four bytes. 4. Read the extracted size and output it on the correct output. 5. Goto 1.  ### Stream format when using a TTY  When the TTY setting is enabled in [`POST /containers/create`](#operation/ContainerCreate), the stream is not multiplexed. The data exchanged over the hijacked connection is simply the raw data from the process PTY and client's `stdin`.
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerAttach 
+--
+containerAttach
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerAttach MimeNoContent res accept
 containerAttach  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/attach"]
 
-data ContainerAttach  
+data ContainerAttach
 
 -- | /Optional Param/ "detachKeys" - Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
 instance HasOptionalParam ContainerAttach DetachKeys where
   applyOptionalParam req (DetachKeys xs) =
     req `setQuery` toQuery ("detachKeys", Just xs)
 
--- | /Optional Param/ "logs" - Replay previous logs from the container.  This is useful for attaching to a container that has started and you want to output everything since the container started.  If `stream` is also enabled, once all the previous output has been returned, it will seamlessly transition into streaming current output. 
+-- | /Optional Param/ "logs" - Replay previous logs from the container.  This is useful for attaching to a container that has started and you want to output everything since the container started.  If `stream` is also enabled, once all the previous output has been returned, it will seamlessly transition into streaming current output.
 instance HasOptionalParam ContainerAttach Logs where
   applyOptionalParam req (Logs xs) =
     req `setQuery` toQuery ("logs", Just xs)
@@ -166,19 +166,19 @@ instance Produces ContainerAttach MimeVndDockerRawStream
 -- *** containerAttachWebsocket
 
 -- | @GET \/containers\/{id}\/attach\/ws@
--- 
+--
 -- Attach to a container via a websocket
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerAttachWebsocket 
+--
+containerAttachWebsocket
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerAttachWebsocket MimeNoContent res accept
 containerAttachWebsocket  _ (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/attach/ws"]
 
-data ContainerAttachWebsocket  
+data ContainerAttachWebsocket
 
 -- | /Optional Param/ "detachKeys" - Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`, or `_`.
 instance HasOptionalParam ContainerAttachWebsocket DetachKeys where
@@ -218,18 +218,18 @@ instance Produces ContainerAttachWebsocket MimePlainText
 -- *** containerChanges
 
 -- | @GET \/containers\/{id}\/changes@
--- 
+--
 -- Get changes on a container’s filesystem
--- 
--- Returns which files in a container's filesystem have been added, deleted, or modified. The `Kind` of modification can be one of:  - `0`: Modified - `1`: Added - `2`: Deleted 
--- 
-containerChanges 
+--
+-- Returns which files in a container's filesystem have been added, deleted, or modified. The `Kind` of modification can be one of:  - `0`: Modified - `1`: Added - `2`: Deleted
+--
+containerChanges
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerChanges MimeNoContent [InlineResponse2001] MimeJSON
+  -> DockerEngineRequest ContainerChanges MimeNoContent [ContainerChangeResponseItem] MimeJSON
 containerChanges (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/changes"]
 
-data ContainerChanges  
+data ContainerChanges
 -- | @application/json@
 instance Produces ContainerChanges MimeJSON
 
@@ -237,19 +237,19 @@ instance Produces ContainerChanges MimeJSON
 -- *** containerCreate
 
 -- | @POST \/containers\/create@
--- 
+--
 -- Create a container
--- 
-containerCreate 
+--
+containerCreate
   :: (Consumes ContainerCreate contentType, MimeRender contentType ContainerConfig)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> ContainerConfig -- ^ "body" -  Container to create
-  -> DockerEngineRequest ContainerCreate contentType InlineResponse201 MimeJSON
+  -> DockerEngineRequest ContainerCreate contentType ContainerCreateResponse MimeJSON
 containerCreate _ body =
   _mkRequest "POST" ["/containers/create"]
     `setBodyParam` body
 
-data ContainerCreate 
+data ContainerCreate
 
 -- | /Body Param/ "body" - Container to create
 instance HasBodyParam ContainerCreate ContainerConfig
@@ -271,19 +271,19 @@ instance Produces ContainerCreate MimeJSON
 -- *** containerDelete
 
 -- | @DELETE \/containers\/{id}@
--- 
+--
 -- Remove a container
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerDelete 
+--
+containerDelete
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerDelete MimeNoContent res accept
 containerDelete  _ (Id id) =
   _mkRequest "DELETE" ["/containers/",toPath id]
 
-data ContainerDelete  
+data ContainerDelete
 
 -- | /Optional Param/ "v" - Remove the volumes associated with the container.
 instance HasOptionalParam ContainerDelete V where
@@ -308,21 +308,21 @@ instance Produces ContainerDelete MimePlainText
 -- *** containerExport
 
 -- | @GET \/containers\/{id}\/export@
--- 
+--
 -- Export a container
--- 
+--
 -- Export the contents of a container as a tarball.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerExport 
+--
+containerExport
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerExport MimeNoContent res accept
 containerExport  _ (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/export"]
 
-data ContainerExport  
+data ContainerExport
 -- | @application/octet-stream@
 instance Produces ContainerExport MimeOctetStream
 -- | @application/json@
@@ -332,18 +332,18 @@ instance Produces ContainerExport MimeJSON
 -- *** containerInspect
 
 -- | @GET \/containers\/{id}\/json@
--- 
+--
 -- Inspect a container
--- 
+--
 -- Return low-level information about a container.
--- 
-containerInspect 
+--
+containerInspect
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerInspect MimeNoContent InspectResponse MimeJSON
+  -> DockerEngineRequest ContainerInspect MimeNoContent ContainerInspectResponse MimeJSON
 containerInspect (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/json"]
 
-data ContainerInspect  
+data ContainerInspect
 
 -- | /Optional Param/ "size" - Return the size of container as fields `SizeRw` and `SizeRootFs`
 instance HasOptionalParam ContainerInspect Size where
@@ -356,21 +356,21 @@ instance Produces ContainerInspect MimeJSON
 -- *** containerKill
 
 -- | @POST \/containers\/{id}\/kill@
--- 
+--
 -- Kill a container
--- 
+--
 -- Send a POSIX signal to a container, defaulting to killing to the container.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerKill 
+--
+containerKill
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerKill MimeNoContent res accept
 containerKill  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/kill"]
 
-data ContainerKill  
+data ContainerKill
 
 -- | /Optional Param/ "signal" - Signal to send to the container as an integer or string (e.g. `SIGINT`)
 instance HasOptionalParam ContainerKill Signal where
@@ -385,15 +385,17 @@ instance Produces ContainerKill MimePlainText
 -- *** containerList
 
 -- | @GET \/containers\/json@
--- 
+--
 -- List containers
--- 
-containerList 
-  :: DockerEngineRequest ContainerList MimeNoContent ContainerSummary MimeJSON
+--
+-- Returns a list of containers. For details on the format, see [the inspect endpoint](#operation/ContainerInspect).  Note that it uses a different, smaller representation of a container than inspecting a single container. For example, the list of linked containers is not propagated .
+--
+containerList
+  :: DockerEngineRequest ContainerList MimeNoContent [A.Value] MimeJSON
 containerList =
   _mkRequest "GET" ["/containers/json"]
 
-data ContainerList  
+data ContainerList
 
 -- | /Optional Param/ "all" - Return all containers. By default, only running containers are shown
 instance HasOptionalParam ContainerList All where
@@ -410,7 +412,7 @@ instance HasOptionalParam ContainerList Size where
   applyOptionalParam req (Size xs) =
     req `setQuery` toQuery ("size", Just xs)
 
--- | /Optional Param/ "filters" - Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{\"status\": [\"paused\"]}` will only return paused containers. Available filters:  - `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`) - `before`=(`<container id>` or `<container name>`) - `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `exited=<int>` containers with exit code of `<int>` - `health`=(`starting`|`healthy`|`unhealthy`|`none`) - `id=<ID>` a container's ID - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only) - `is-task=`(`true`|`false`) - `label=key` or `label=\"key=value\"` of a container label - `name=<name>` a container's name - `network`=(`<network id>` or `<network name>`) - `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `since`=(`<container id>` or `<container name>`) - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`) - `volume`=(`<volume name>` or `<mount point destination>`) 
+-- | /Optional Param/ "filters" - Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{\"status\": [\"paused\"]}` will only return paused containers. Available filters:  - `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`) - `before`=(`<container id>` or `<container name>`) - `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `exited=<int>` containers with exit code of `<int>` - `health`=(`starting`|`healthy`|`unhealthy`|`none`) - `id=<ID>` a container's ID - `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only) - `is-task=`(`true`|`false`) - `label=key` or `label=\"key=value\"` of a container label - `name=<name>` a container's name - `network`=(`<network id>` or `<network name>`) - `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`) - `since`=(`<container id>` or `<container name>`) - `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`) - `volume`=(`<volume name>` or `<mount point destination>`)
 instance HasOptionalParam ContainerList Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
@@ -421,21 +423,21 @@ instance Produces ContainerList MimeJSON
 -- *** containerLogs
 
 -- | @GET \/containers\/{id}\/logs@
--- 
+--
 -- Get container logs
--- 
--- Get `stdout` and `stderr` logs from a container.  Note: This endpoint works only for containers with the `json-file` or `journald` logging driver. 
--- 
-containerLogs 
+--
+-- Get `stdout` and `stderr` logs from a container.  Note: This endpoint works only for containers with the `json-file` or `journald` logging driver.
+--
+containerLogs
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerLogs MimeNoContent Text accept
 containerLogs  _ (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/logs"]
 
-data ContainerLogs  
+data ContainerLogs
 
--- | /Optional Param/ "follow" - Return the logs as a stream.  This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach). 
+-- | /Optional Param/ "follow" - Return the logs as a stream.  This will return a `101` HTTP response with a `Connection: upgrade` header, then hijack the HTTP connection to send raw output. For more information about hijacking and the stream format, [see the documentation for the attach endpoint](#operation/ContainerAttach).
 instance HasOptionalParam ContainerLogs Follow where
   applyOptionalParam req (Follow xs) =
     req `setQuery` toQuery ("follow", Just xs)
@@ -455,6 +457,11 @@ instance HasOptionalParam ContainerLogs Since where
   applyOptionalParam req (Since xs) =
     req `setQuery` toQuery ("since", Just xs)
 
+-- | /Optional Param/ "until" - Only return logs before this time, as a UNIX timestamp
+instance HasOptionalParam ContainerLogs Until where
+  applyOptionalParam req (Until xs) =
+    req `setQuery` toQuery ("until", Just xs)
+
 -- | /Optional Param/ "timestamps" - Add timestamps to every log line
 instance HasOptionalParam ContainerLogs Timestamps where
   applyOptionalParam req (Timestamps xs) =
@@ -473,21 +480,21 @@ instance Produces ContainerLogs MimePlainText
 -- *** containerPause
 
 -- | @POST \/containers\/{id}\/pause@
--- 
+--
 -- Pause a container
--- 
--- Use the cgroups freezer to suspend all processes in a container.  Traditionally, when suspending a process the `SIGSTOP` signal is used, which is observable by the process being suspended. With the cgroups freezer the process is unaware, and unable to capture, that it is being suspended, and subsequently resumed. 
--- 
+--
+-- Use the cgroups freezer to suspend all processes in a container.  Traditionally, when suspending a process the `SIGSTOP` signal is used, which is observable by the process being suspended. With the cgroups freezer the process is unaware, and unable to capture, that it is being suspended, and subsequently resumed.
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerPause 
+--
+containerPause
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerPause MimeNoContent res accept
 containerPause  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/pause"]
 
-data ContainerPause  
+data ContainerPause
 -- | @application/json@
 instance Produces ContainerPause MimeJSON
 -- | @text/plain@
@@ -497,17 +504,17 @@ instance Produces ContainerPause MimePlainText
 -- *** containerPrune
 
 -- | @POST \/containers\/prune@
--- 
+--
 -- Delete stopped containers
--- 
-containerPrune 
-  :: DockerEngineRequest ContainerPrune MimeNoContent InlineResponse2004 MimeJSON
+--
+containerPrune
+  :: DockerEngineRequest ContainerPrune MimeNoContent ContainerPruneResponse MimeJSON
 containerPrune =
   _mkRequest "POST" ["/containers/prune"]
 
-data ContainerPrune  
+data ContainerPrune
 
--- | /Optional Param/ "filters" - Filters to process on the prune list, encoded as JSON (a `map[string][]string`).  Available filters: - `until=<timestamp>` Prune containers created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time. - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune containers with (or without, in case `label!=...` is used) the specified labels. 
+-- | /Optional Param/ "filters" - Filters to process on the prune list, encoded as JSON (a `map[string][]string`).  Available filters: - `until=<timestamp>` Prune containers created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time. - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune containers with (or without, in case `label!=...` is used) the specified labels.
 instance HasOptionalParam ContainerPrune Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
@@ -518,12 +525,12 @@ instance Produces ContainerPrune MimeJSON
 -- *** containerRename
 
 -- | @POST \/containers\/{id}\/rename@
--- 
+--
 -- Rename a container
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerRename 
+--
+containerRename
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> Name -- ^ "name" -  New name for the container
@@ -532,7 +539,7 @@ containerRename  _ (Id id) (Name name) =
   _mkRequest "POST" ["/containers/",toPath id,"/rename"]
     `setQuery` toQuery ("name", Just name)
 
-data ContainerRename  
+data ContainerRename
 -- | @application/json@
 instance Produces ContainerRename MimeJSON
 -- | @text/plain@
@@ -542,21 +549,21 @@ instance Produces ContainerRename MimePlainText
 -- *** containerResize
 
 -- | @POST \/containers\/{id}\/resize@
--- 
+--
 -- Resize a container TTY
--- 
+--
 -- Resize the TTY for a container. You must restart the container for the resize to take effect.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerResize 
+--
+containerResize
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerResize MimeNoContent res accept
 containerResize  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/resize"]
 
-data ContainerResize  
+data ContainerResize
 
 -- | /Optional Param/ "h" - Height of the tty session in characters
 instance HasOptionalParam ContainerResize H where
@@ -576,19 +583,19 @@ instance Produces ContainerResize MimePlainText
 -- *** containerRestart
 
 -- | @POST \/containers\/{id}\/restart@
--- 
+--
 -- Restart a container
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerRestart 
+--
+containerRestart
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerRestart MimeNoContent res accept
 containerRestart  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/restart"]
 
-data ContainerRestart  
+data ContainerRestart
 
 -- | /Optional Param/ "t" - Number of seconds to wait before killing the container
 instance HasOptionalParam ContainerRestart T where
@@ -603,19 +610,19 @@ instance Produces ContainerRestart MimePlainText
 -- *** containerStart
 
 -- | @POST \/containers\/{id}\/start@
--- 
+--
 -- Start a container
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerStart 
+--
+containerStart
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerStart MimeNoContent res accept
 containerStart  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/start"]
 
-data ContainerStart  
+data ContainerStart
 
 -- | /Optional Param/ "detachKeys" - Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` or `_`.
 instance HasOptionalParam ContainerStart DetachKeys where
@@ -630,18 +637,18 @@ instance Produces ContainerStart MimePlainText
 -- *** containerStats
 
 -- | @GET \/containers\/{id}\/stats@
--- 
+--
 -- Get container stats based on resource usage
--- 
--- This endpoint returns a live stream of a container’s resource usage statistics.  The `precpu_stats` is the CPU statistic of last read, which is used for calculating the CPU usage percentage. It is not the same as the `cpu_stats` field.  If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is nil then for compatibility with older daemons the length of the corresponding `cpu_usage.percpu_usage` array should be used. 
--- 
-containerStats 
+--
+-- This endpoint returns a live stream of a container’s resource usage statistics.  The `precpu_stats` is the CPU statistic of last read, which is used for calculating the CPU usage percentage. It is not the same as the `cpu_stats` field.  If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is nil then for compatibility with older daemons the length of the corresponding `cpu_usage.percpu_usage` array should be used.
+--
+containerStats
   :: Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerStats MimeNoContent A.Value MimeJSON
 containerStats (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/stats"]
 
-data ContainerStats  
+data ContainerStats
 
 -- | /Optional Param/ "stream" - Stream the output. If false, the stats will be output once and then it will disconnect.
 instance HasOptionalParam ContainerStats Stream where
@@ -654,19 +661,19 @@ instance Produces ContainerStats MimeJSON
 -- *** containerStop
 
 -- | @POST \/containers\/{id}\/stop@
--- 
+--
 -- Stop a container
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerStop 
+--
+containerStop
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerStop MimeNoContent res accept
 containerStop  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/stop"]
 
-data ContainerStop  
+data ContainerStop
 
 -- | /Optional Param/ "t" - Number of seconds to wait before killing the container
 instance HasOptionalParam ContainerStop T where
@@ -681,19 +688,19 @@ instance Produces ContainerStop MimePlainText
 -- *** containerTop
 
 -- | @GET \/containers\/{id}\/top@
--- 
+--
 -- List processes running inside a container
--- 
+--
 -- On Unix systems, this is done by running the `ps` command. This endpoint is not supported on Windows.
--- 
-containerTop 
+--
+containerTop
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerTop MimeNoContent InlineResponse200 accept
+  -> DockerEngineRequest ContainerTop MimeNoContent ContainerTopResponse accept
 containerTop  _ (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/top"]
 
-data ContainerTop  
+data ContainerTop
 
 -- | /Optional Param/ "ps_args" - The arguments to pass to `ps`. For example, `aux`
 instance HasOptionalParam ContainerTop PsArgs where
@@ -708,21 +715,21 @@ instance Produces ContainerTop MimePlainText
 -- *** containerUnpause
 
 -- | @POST \/containers\/{id}\/unpause@
--- 
+--
 -- Unpause a container
--- 
+--
 -- Resume a container which has been paused.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-containerUnpause 
+--
+containerUnpause
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
   -> DockerEngineRequest ContainerUnpause MimeNoContent res accept
 containerUnpause  _ (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/unpause"]
 
-data ContainerUnpause  
+data ContainerUnpause
 -- | @application/json@
 instance Produces ContainerUnpause MimeJSON
 -- | @text/plain@
@@ -732,21 +739,21 @@ instance Produces ContainerUnpause MimePlainText
 -- *** containerUpdate
 
 -- | @POST \/containers\/{id}\/update@
--- 
+--
 -- Update a container
--- 
+--
 -- Change various configuration options of a container without having to recreate it.
--- 
-containerUpdate 
+--
+containerUpdate
   :: (Consumes ContainerUpdate MimeJSON, MimeRender MimeJSON Resources)
   => Resources -- ^ "update"
   -> Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerUpdate MimeJSON InlineResponse2002 MimeJSON
+  -> DockerEngineRequest ContainerUpdate MimeJSON ContainerUpdateResponse MimeJSON
 containerUpdate update (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/update"]
     `setBodyParam` update
 
-data ContainerUpdate 
+data ContainerUpdate
 instance HasBodyParam ContainerUpdate Resources
 
 -- | @application/json@
@@ -759,18 +766,18 @@ instance Produces ContainerUpdate MimeJSON
 -- *** containerWait
 
 -- | @POST \/containers\/{id}\/wait@
--- 
+--
 -- Wait for a container
--- 
+--
 -- Block until a container stops, then returns the exit code.
--- 
-containerWait 
+--
+containerWait
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerWait MimeNoContent InlineResponse2003 MimeJSON
+  -> DockerEngineRequest ContainerWait MimeNoContent ContainerWaitResponse MimeJSON
 containerWait (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/wait"]
 
-data ContainerWait  
+data ContainerWait
 
 -- | /Optional Param/ "condition" - Wait until a container state reaches the given condition, either 'not-running' (default), 'next-exit', or 'removed'.
 instance HasOptionalParam ContainerWait Condition where
@@ -783,30 +790,30 @@ instance Produces ContainerWait MimeJSON
 -- *** putContainerArchive
 
 -- | @PUT \/containers\/{id}\/archive@
--- 
+--
 -- Extract an archive of files or folders to a directory in a container
--- 
+--
 -- Upload a tar archive to be extracted to a path in the filesystem of container id.
--- 
+--
 -- Note: Has 'Produces' instances, but no response schema
--- 
-putContainerArchive 
+--
+putContainerArchive
   :: (Consumes PutContainerArchive contentType, MimeRender contentType InputStream)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
   -> InputStream -- ^ "inputStream" -  The input stream must be a tar archive compressed with one of the following algorithms: identity (no compression), gzip, bzip2, xz.
   -> Id -- ^ "id" -  ID or name of the container
-  -> Path -- ^ "path" -  Path to a directory in the container to extract the archive’s contents into. 
+  -> Path -- ^ "path" -  Path to a directory in the container to extract the archive’s contents into.
   -> DockerEngineRequest PutContainerArchive contentType res accept
 putContainerArchive _  _ inputStream (Id id) (Path path) =
   _mkRequest "PUT" ["/containers/",toPath id,"/archive"]
     `setBodyParam` inputStream
     `setQuery` toQuery ("path", Just path)
 
-data PutContainerArchive 
+data PutContainerArchive
 
 -- | /Body Param/ "inputStream" - The input stream must be a tar archive compressed with one of the following algorithms: identity (no compression), gzip, bzip2, xz.
-instance HasBodyParam PutContainerArchive InputStream 
+instance HasBodyParam PutContainerArchive InputStream
 
 -- | /Optional Param/ "noOverwriteDirNonDir" - If “1”, “true”, or “True” then it will be an error if unpacking the given content would cause an existing directory to be replaced with a non-directory and vice versa.
 instance HasOptionalParam PutContainerArchive NoOverwriteDirNonDir where
@@ -822,4 +829,3 @@ instance Consumes PutContainerArchive MimeOctetStream
 instance Produces PutContainerArchive MimeJSON
 -- | @text/plain@
 instance Produces PutContainerArchive MimePlainText
-

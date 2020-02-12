@@ -1,10 +1,10 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release of Docker, so API calls are versioned to ensure that clients don't break.  For Docker Engine 17.06, the API version is 1.30. To lock to this version, you prefix the URL with `/v1.30`. For example, calling `/info` is the same as calling `/v1.30/info`.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  In previous versions of Docker, it was possible to access the API without providing a version. This behaviour is now deprecated will be removed in a future version of Docker.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer Docker daemons.  This documentation is for version 1.30 of the API, which was introduced with Docker 17.06. Use this table to find documentation for previous versions of the API:  Docker version  | API version | Changes ----------------|-------------|--------- 17.05.x | [1.29](https://docs.docker.com/engine/api/v1.29/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-29-api-changes) 17.04.x | [1.28](https://docs.docker.com/engine/api/v1.28/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-28-api-changes) 17.03.1 | [1.27](https://docs.docker.com/engine/api/v1.27/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-27-api-changes) 1.13.1 & 17.03.0 | [1.26](https://docs.docker.com/engine/api/v1.26/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-26-api-changes) 1.13.0 | [1.25](https://docs.docker.com/engine/api/v1.25/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-25-api-changes) 1.12.x | [1.24](https://docs.docker.com/engine/api/v1.24/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-24-api-changes) 1.11.x | [1.23](https://docs.docker.com/engine/api/v1.23/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-23-api-changes) 1.10.x | [1.22](https://docs.docker.com/engine/api/v1.22/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-22-api-changes) 1.9.x | [1.21](https://docs.docker.com/engine/api/v1.21/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-21-api-changes) 1.8.x | [1.20](https://docs.docker.com/engine/api/v1.20/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-20-api-changes) 1.7.x | [1.19](https://docs.docker.com/engine/api/v1.19/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-19-api-changes) 1.6.x | [1.18](https://docs.docker.com/engine/api/v1.18/) | [API changes](https://docs.docker.com/engine/api/version-history/#v1-18-api-changes)  # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
-   Docker Engine API API version: 1.30
+   Docker Engine API API version: 1.36
    Generated by OpenAPI Generator (https://openapi-generator.tech)
 -}
 
@@ -67,7 +67,7 @@ import qualified Prelude as P
 -- 
 systemAuth 
   :: (Consumes SystemAuth MimeJSON)
-  => DockerEngineRequest SystemAuth MimeJSON InlineResponse2008 MimeJSON
+  => DockerEngineRequest SystemAuth MimeJSON SystemAuthResponse MimeJSON
 systemAuth =
   _mkRequest "POST" ["/auth"]
 
@@ -91,7 +91,7 @@ instance Produces SystemAuth MimeJSON
 -- 
 systemDataUsage 
   :: Accept accept -- ^ request accept ('MimeType')
-  -> DockerEngineRequest SystemDataUsage MimeNoContent InlineResponse20012 accept
+  -> DockerEngineRequest SystemDataUsage MimeNoContent SystemDataUsageResponse accept
 systemDataUsage  _ =
   _mkRequest "GET" ["/system/df"]
 
@@ -108,10 +108,10 @@ instance Produces SystemDataUsage MimePlainText
 -- 
 -- Monitor events
 -- 
--- Stream real-time events from the server.  Various objects within Docker report events when something happens to them.  Containers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, and `update`  Images report these events: `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, and `untag`  Volumes report these events: `create`, `mount`, `unmount`, and `destroy`  Networks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, and `remove`  The Docker daemon reports these events: `reload`  Services report these events: `create`, `update`, and `remove`  Nodes report these events: `create`, `update`, and `remove`  Secrets report these events: `create`, `update`, and `remove` 
+-- Stream real-time events from the server.  Various objects within Docker report events when something happens to them.  Containers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, and `update`  Images report these events: `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, and `untag`  Volumes report these events: `create`, `mount`, `unmount`, and `destroy`  Networks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, and `remove`  The Docker daemon reports these events: `reload`  Services report these events: `create`, `update`, and `remove`  Nodes report these events: `create`, `update`, and `remove`  Secrets report these events: `create`, `update`, and `remove`  Configs report these events: `create`, `update`, and `remove` 
 -- 
 systemEvents 
-  :: DockerEngineRequest SystemEvents MimeNoContent InlineResponse20011 MimeJSON
+  :: DockerEngineRequest SystemEvents MimeNoContent SystemEventsResponse MimeJSON
 systemEvents =
   _mkRequest "GET" ["/events"]
 
@@ -123,11 +123,11 @@ instance HasOptionalParam SystemEvents SinceText where
     req `setQuery` toQuery ("since", Just xs)
 
 -- | /Optional Param/ "until" - Show events created until this timestamp then stop streaming.
-instance HasOptionalParam SystemEvents Until where
-  applyOptionalParam req (Until xs) =
+instance HasOptionalParam SystemEvents UntilText where
+  applyOptionalParam req (UntilText xs) =
     req `setQuery` toQuery ("until", Just xs)
 
--- | /Optional Param/ "filters" - A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:  - `container=<string>` container name or ID - `daemon=<string>` daemon name or ID - `event=<string>` event type - `image=<string>` image name or ID - `label=<string>` image or container label - `network=<string>` network name or ID - `plugin`=<string> plugin name or ID - `scope`＝<string> local or swarm - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service` or `secret` - `volume=<string>` volume name or ID 
+-- | /Optional Param/ "filters" - A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:  - `config=<string>` config name or ID - `container=<string>` container name or ID - `daemon=<string>` daemon name or ID - `event=<string>` event type - `image=<string>` image name or ID - `label=<string>` image or container label - `network=<string>` network name or ID - `node=<string>` node ID - `plugin`=<string> plugin name or ID - `scope`=<string> local or swarm - `secret=<string>` secret name or ID - `service=<string>` service name or ID - `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service`, `secret` or `config` - `volume=<string>` volume name 
 instance HasOptionalParam SystemEvents Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
@@ -135,20 +135,20 @@ instance HasOptionalParam SystemEvents Filters where
 instance Produces SystemEvents MimeJSON
 
 
--- *** systemInfo
+-- *** systemInfo0
 
 -- | @GET \/info@
 -- 
 -- Get system information
 -- 
-systemInfo 
-  :: DockerEngineRequest SystemInfo MimeNoContent InlineResponse2009 MimeJSON
-systemInfo =
+systemInfo0 
+  :: DockerEngineRequest SystemInfo0 MimeNoContent SystemInfo MimeJSON
+systemInfo0 =
   _mkRequest "GET" ["/info"]
 
-data SystemInfo  
+data SystemInfo0  
 -- | @application/json@
-instance Produces SystemInfo MimeJSON
+instance Produces SystemInfo0 MimeJSON
 
 
 -- *** systemPing
@@ -178,7 +178,7 @@ instance Produces SystemPing MimePlainText
 -- Returns the version of Docker that is running and various information about the system that Docker is running on.
 -- 
 systemVersion 
-  :: DockerEngineRequest SystemVersion MimeNoContent InlineResponse20010 MimeJSON
+  :: DockerEngineRequest SystemVersion MimeNoContent SystemVersionResponse MimeJSON
 systemVersion =
   _mkRequest "GET" ["/version"]
 
