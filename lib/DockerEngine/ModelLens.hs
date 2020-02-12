@@ -127,6 +127,73 @@ buildPruneResponseSpaceReclaimedL f BuildPruneResponse{..} = (\buildPruneRespons
 
 
 
+-- * CPUStats
+
+-- | 'cPUStatsCpuUsage' Lens
+cPUStatsCpuUsageL :: Lens_' CPUStats (Maybe CPUStatsCpuUsage)
+cPUStatsCpuUsageL f CPUStats{..} = (\cPUStatsCpuUsage -> CPUStats { cPUStatsCpuUsage, ..} ) <$> f cPUStatsCpuUsage
+{-# INLINE cPUStatsCpuUsageL #-}
+
+-- | 'cPUStatsSystemCpuUsage' Lens
+cPUStatsSystemCpuUsageL :: Lens_' CPUStats (Maybe Int)
+cPUStatsSystemCpuUsageL f CPUStats{..} = (\cPUStatsSystemCpuUsage -> CPUStats { cPUStatsSystemCpuUsage, ..} ) <$> f cPUStatsSystemCpuUsage
+{-# INLINE cPUStatsSystemCpuUsageL #-}
+
+-- | 'cPUStatsOnlineCpus' Lens
+cPUStatsOnlineCpusL :: Lens_' CPUStats (Maybe Int)
+cPUStatsOnlineCpusL f CPUStats{..} = (\cPUStatsOnlineCpus -> CPUStats { cPUStatsOnlineCpus, ..} ) <$> f cPUStatsOnlineCpus
+{-# INLINE cPUStatsOnlineCpusL #-}
+
+-- | 'cPUStatsThrottlingData' Lens
+cPUStatsThrottlingDataL :: Lens_' CPUStats (Maybe CPUStatsThrottlingData)
+cPUStatsThrottlingDataL f CPUStats{..} = (\cPUStatsThrottlingData -> CPUStats { cPUStatsThrottlingData, ..} ) <$> f cPUStatsThrottlingData
+{-# INLINE cPUStatsThrottlingDataL #-}
+
+
+
+-- * CPUStatsCpuUsage
+
+-- | 'cPUStatsCpuUsagePercpuUsage' Lens
+cPUStatsCpuUsagePercpuUsageL :: Lens_' CPUStatsCpuUsage (Maybe [Int])
+cPUStatsCpuUsagePercpuUsageL f CPUStatsCpuUsage{..} = (\cPUStatsCpuUsagePercpuUsage -> CPUStatsCpuUsage { cPUStatsCpuUsagePercpuUsage, ..} ) <$> f cPUStatsCpuUsagePercpuUsage
+{-# INLINE cPUStatsCpuUsagePercpuUsageL #-}
+
+-- | 'cPUStatsCpuUsageUsageInUsermode' Lens
+cPUStatsCpuUsageUsageInUsermodeL :: Lens_' CPUStatsCpuUsage (Maybe Int)
+cPUStatsCpuUsageUsageInUsermodeL f CPUStatsCpuUsage{..} = (\cPUStatsCpuUsageUsageInUsermode -> CPUStatsCpuUsage { cPUStatsCpuUsageUsageInUsermode, ..} ) <$> f cPUStatsCpuUsageUsageInUsermode
+{-# INLINE cPUStatsCpuUsageUsageInUsermodeL #-}
+
+-- | 'cPUStatsCpuUsageTotalUsage' Lens
+cPUStatsCpuUsageTotalUsageL :: Lens_' CPUStatsCpuUsage (Maybe Int)
+cPUStatsCpuUsageTotalUsageL f CPUStatsCpuUsage{..} = (\cPUStatsCpuUsageTotalUsage -> CPUStatsCpuUsage { cPUStatsCpuUsageTotalUsage, ..} ) <$> f cPUStatsCpuUsageTotalUsage
+{-# INLINE cPUStatsCpuUsageTotalUsageL #-}
+
+-- | 'cPUStatsCpuUsageUsageInKernelmode' Lens
+cPUStatsCpuUsageUsageInKernelmodeL :: Lens_' CPUStatsCpuUsage (Maybe Int)
+cPUStatsCpuUsageUsageInKernelmodeL f CPUStatsCpuUsage{..} = (\cPUStatsCpuUsageUsageInKernelmode -> CPUStatsCpuUsage { cPUStatsCpuUsageUsageInKernelmode, ..} ) <$> f cPUStatsCpuUsageUsageInKernelmode
+{-# INLINE cPUStatsCpuUsageUsageInKernelmodeL #-}
+
+
+
+-- * CPUStatsThrottlingData
+
+-- | 'cPUStatsThrottlingDataPeriods' Lens
+cPUStatsThrottlingDataPeriodsL :: Lens_' CPUStatsThrottlingData (Maybe Int)
+cPUStatsThrottlingDataPeriodsL f CPUStatsThrottlingData{..} = (\cPUStatsThrottlingDataPeriods -> CPUStatsThrottlingData { cPUStatsThrottlingDataPeriods, ..} ) <$> f cPUStatsThrottlingDataPeriods
+{-# INLINE cPUStatsThrottlingDataPeriodsL #-}
+
+-- | 'cPUStatsThrottlingDataThrottledPeriods' Lens
+cPUStatsThrottlingDataThrottledPeriodsL :: Lens_' CPUStatsThrottlingData (Maybe Int)
+cPUStatsThrottlingDataThrottledPeriodsL f CPUStatsThrottlingData{..} = (\cPUStatsThrottlingDataThrottledPeriods -> CPUStatsThrottlingData { cPUStatsThrottlingDataThrottledPeriods, ..} ) <$> f cPUStatsThrottlingDataThrottledPeriods
+{-# INLINE cPUStatsThrottlingDataThrottledPeriodsL #-}
+
+-- | 'cPUStatsThrottlingDataThrottledTime' Lens
+cPUStatsThrottlingDataThrottledTimeL :: Lens_' CPUStatsThrottlingData (Maybe Int)
+cPUStatsThrottlingDataThrottledTimeL f CPUStatsThrottlingData{..} = (\cPUStatsThrottlingDataThrottledTime -> CPUStatsThrottlingData { cPUStatsThrottlingDataThrottledTime, ..} ) <$> f cPUStatsThrottlingDataThrottledTime
+{-# INLINE cPUStatsThrottlingDataThrottledTimeL #-}
+
+
+
 -- * ClusterInfo
 
 -- | 'clusterInfoId' Lens
@@ -593,6 +660,49 @@ containerPruneResponseContainersDeletedL f ContainerPruneResponse{..} = (\contai
 containerPruneResponseSpaceReclaimedL :: Lens_' ContainerPruneResponse (Maybe Integer)
 containerPruneResponseSpaceReclaimedL f ContainerPruneResponse{..} = (\containerPruneResponseSpaceReclaimed -> ContainerPruneResponse { containerPruneResponseSpaceReclaimed, ..} ) <$> f containerPruneResponseSpaceReclaimed
 {-# INLINE containerPruneResponseSpaceReclaimedL #-}
+
+
+
+-- * ContainerStatsResponse
+
+-- | 'containerStatsResponsePidsStats' Lens
+containerStatsResponsePidsStatsL :: Lens_' ContainerStatsResponse (Maybe ContainerStatsResponsePidsStats)
+containerStatsResponsePidsStatsL f ContainerStatsResponse{..} = (\containerStatsResponsePidsStats -> ContainerStatsResponse { containerStatsResponsePidsStats, ..} ) <$> f containerStatsResponsePidsStats
+{-# INLINE containerStatsResponsePidsStatsL #-}
+
+-- | 'containerStatsResponseNetworks' Lens
+containerStatsResponseNetworksL :: Lens_' ContainerStatsResponse (Maybe (Map.Map String NetworkStats))
+containerStatsResponseNetworksL f ContainerStatsResponse{..} = (\containerStatsResponseNetworks -> ContainerStatsResponse { containerStatsResponseNetworks, ..} ) <$> f containerStatsResponseNetworks
+{-# INLINE containerStatsResponseNetworksL #-}
+
+-- | 'containerStatsResponseMemoryStats' Lens
+containerStatsResponseMemoryStatsL :: Lens_' ContainerStatsResponse (Maybe MemoryStats)
+containerStatsResponseMemoryStatsL f ContainerStatsResponse{..} = (\containerStatsResponseMemoryStats -> ContainerStatsResponse { containerStatsResponseMemoryStats, ..} ) <$> f containerStatsResponseMemoryStats
+{-# INLINE containerStatsResponseMemoryStatsL #-}
+
+-- | 'containerStatsResponseBlkioStats' Lens
+containerStatsResponseBlkioStatsL :: Lens_' ContainerStatsResponse (Maybe A.Value)
+containerStatsResponseBlkioStatsL f ContainerStatsResponse{..} = (\containerStatsResponseBlkioStats -> ContainerStatsResponse { containerStatsResponseBlkioStats, ..} ) <$> f containerStatsResponseBlkioStats
+{-# INLINE containerStatsResponseBlkioStatsL #-}
+
+-- | 'containerStatsResponseCpuStats' Lens
+containerStatsResponseCpuStatsL :: Lens_' ContainerStatsResponse (Maybe CPUStats)
+containerStatsResponseCpuStatsL f ContainerStatsResponse{..} = (\containerStatsResponseCpuStats -> ContainerStatsResponse { containerStatsResponseCpuStats, ..} ) <$> f containerStatsResponseCpuStats
+{-# INLINE containerStatsResponseCpuStatsL #-}
+
+-- | 'containerStatsResponsePrecpuStats' Lens
+containerStatsResponsePrecpuStatsL :: Lens_' ContainerStatsResponse (Maybe CPUStats)
+containerStatsResponsePrecpuStatsL f ContainerStatsResponse{..} = (\containerStatsResponsePrecpuStats -> ContainerStatsResponse { containerStatsResponsePrecpuStats, ..} ) <$> f containerStatsResponsePrecpuStats
+{-# INLINE containerStatsResponsePrecpuStatsL #-}
+
+
+
+-- * ContainerStatsResponsePidsStats
+
+-- | 'containerStatsResponsePidsStatsCurrent' Lens
+containerStatsResponsePidsStatsCurrentL :: Lens_' ContainerStatsResponsePidsStats (Maybe A.Value)
+containerStatsResponsePidsStatsCurrentL f ContainerStatsResponsePidsStats{..} = (\containerStatsResponsePidsStatsCurrent -> ContainerStatsResponsePidsStats { containerStatsResponsePidsStatsCurrent, ..} ) <$> f containerStatsResponsePidsStatsCurrent
+{-# INLINE containerStatsResponsePidsStatsCurrentL #-}
 
 
 
@@ -1127,7 +1237,7 @@ graphDriverDataNameL f GraphDriverData{..} = (\graphDriverDataName -> GraphDrive
 {-# INLINE graphDriverDataNameL #-}
 
 -- | 'graphDriverDataData' Lens
-graphDriverDataDataL :: Lens_' GraphDriverData ((Map.Map String Text))
+graphDriverDataDataL :: Lens_' GraphDriverData (Maybe (Map.Map String Text))
 graphDriverDataDataL f GraphDriverData{..} = (\graphDriverDataData -> GraphDriverData { graphDriverDataData, ..} ) <$> f graphDriverDataData
 {-# INLINE graphDriverDataDataL #-}
 
@@ -2274,6 +2384,184 @@ managerStatusAddrL f ManagerStatus{..} = (\managerStatusAddr -> ManagerStatus { 
 
 
 
+-- * MemoryStats
+
+-- | 'memoryStatsStats' Lens
+memoryStatsStatsL :: Lens_' MemoryStats (Maybe MemoryStatsStats)
+memoryStatsStatsL f MemoryStats{..} = (\memoryStatsStats -> MemoryStats { memoryStatsStats, ..} ) <$> f memoryStatsStats
+{-# INLINE memoryStatsStatsL #-}
+
+-- | 'memoryStatsMaxUsage' Lens
+memoryStatsMaxUsageL :: Lens_' MemoryStats (Maybe Int)
+memoryStatsMaxUsageL f MemoryStats{..} = (\memoryStatsMaxUsage -> MemoryStats { memoryStatsMaxUsage, ..} ) <$> f memoryStatsMaxUsage
+{-# INLINE memoryStatsMaxUsageL #-}
+
+-- | 'memoryStatsUsage' Lens
+memoryStatsUsageL :: Lens_' MemoryStats (Maybe Int)
+memoryStatsUsageL f MemoryStats{..} = (\memoryStatsUsage -> MemoryStats { memoryStatsUsage, ..} ) <$> f memoryStatsUsage
+{-# INLINE memoryStatsUsageL #-}
+
+-- | 'memoryStatsFailcnt' Lens
+memoryStatsFailcntL :: Lens_' MemoryStats (Maybe Int)
+memoryStatsFailcntL f MemoryStats{..} = (\memoryStatsFailcnt -> MemoryStats { memoryStatsFailcnt, ..} ) <$> f memoryStatsFailcnt
+{-# INLINE memoryStatsFailcntL #-}
+
+-- | 'memoryStatsLimit' Lens
+memoryStatsLimitL :: Lens_' MemoryStats (Maybe Int)
+memoryStatsLimitL f MemoryStats{..} = (\memoryStatsLimit -> MemoryStats { memoryStatsLimit, ..} ) <$> f memoryStatsLimit
+{-# INLINE memoryStatsLimitL #-}
+
+
+
+-- * MemoryStatsStats
+
+-- | 'memoryStatsStatsTotalPgmajfault' Lens
+memoryStatsStatsTotalPgmajfaultL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalPgmajfaultL f MemoryStatsStats{..} = (\memoryStatsStatsTotalPgmajfault -> MemoryStatsStats { memoryStatsStatsTotalPgmajfault, ..} ) <$> f memoryStatsStatsTotalPgmajfault
+{-# INLINE memoryStatsStatsTotalPgmajfaultL #-}
+
+-- | 'memoryStatsStatsCache' Lens
+memoryStatsStatsCacheL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsCacheL f MemoryStatsStats{..} = (\memoryStatsStatsCache -> MemoryStatsStats { memoryStatsStatsCache, ..} ) <$> f memoryStatsStatsCache
+{-# INLINE memoryStatsStatsCacheL #-}
+
+-- | 'memoryStatsStatsMappedFile' Lens
+memoryStatsStatsMappedFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsMappedFileL f MemoryStatsStats{..} = (\memoryStatsStatsMappedFile -> MemoryStatsStats { memoryStatsStatsMappedFile, ..} ) <$> f memoryStatsStatsMappedFile
+{-# INLINE memoryStatsStatsMappedFileL #-}
+
+-- | 'memoryStatsStatsTotalInactiveFile' Lens
+memoryStatsStatsTotalInactiveFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalInactiveFileL f MemoryStatsStats{..} = (\memoryStatsStatsTotalInactiveFile -> MemoryStatsStats { memoryStatsStatsTotalInactiveFile, ..} ) <$> f memoryStatsStatsTotalInactiveFile
+{-# INLINE memoryStatsStatsTotalInactiveFileL #-}
+
+-- | 'memoryStatsStatsPgpgout' Lens
+memoryStatsStatsPgpgoutL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsPgpgoutL f MemoryStatsStats{..} = (\memoryStatsStatsPgpgout -> MemoryStatsStats { memoryStatsStatsPgpgout, ..} ) <$> f memoryStatsStatsPgpgout
+{-# INLINE memoryStatsStatsPgpgoutL #-}
+
+-- | 'memoryStatsStatsRss' Lens
+memoryStatsStatsRssL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsRssL f MemoryStatsStats{..} = (\memoryStatsStatsRss -> MemoryStatsStats { memoryStatsStatsRss, ..} ) <$> f memoryStatsStatsRss
+{-# INLINE memoryStatsStatsRssL #-}
+
+-- | 'memoryStatsStatsTotalMappedFile' Lens
+memoryStatsStatsTotalMappedFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalMappedFileL f MemoryStatsStats{..} = (\memoryStatsStatsTotalMappedFile -> MemoryStatsStats { memoryStatsStatsTotalMappedFile, ..} ) <$> f memoryStatsStatsTotalMappedFile
+{-# INLINE memoryStatsStatsTotalMappedFileL #-}
+
+-- | 'memoryStatsStatsWriteback' Lens
+memoryStatsStatsWritebackL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsWritebackL f MemoryStatsStats{..} = (\memoryStatsStatsWriteback -> MemoryStatsStats { memoryStatsStatsWriteback, ..} ) <$> f memoryStatsStatsWriteback
+{-# INLINE memoryStatsStatsWritebackL #-}
+
+-- | 'memoryStatsStatsUnevictable' Lens
+memoryStatsStatsUnevictableL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsUnevictableL f MemoryStatsStats{..} = (\memoryStatsStatsUnevictable -> MemoryStatsStats { memoryStatsStatsUnevictable, ..} ) <$> f memoryStatsStatsUnevictable
+{-# INLINE memoryStatsStatsUnevictableL #-}
+
+-- | 'memoryStatsStatsPgpgin' Lens
+memoryStatsStatsPgpginL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsPgpginL f MemoryStatsStats{..} = (\memoryStatsStatsPgpgin -> MemoryStatsStats { memoryStatsStatsPgpgin, ..} ) <$> f memoryStatsStatsPgpgin
+{-# INLINE memoryStatsStatsPgpginL #-}
+
+-- | 'memoryStatsStatsTotalUnevictable' Lens
+memoryStatsStatsTotalUnevictableL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalUnevictableL f MemoryStatsStats{..} = (\memoryStatsStatsTotalUnevictable -> MemoryStatsStats { memoryStatsStatsTotalUnevictable, ..} ) <$> f memoryStatsStatsTotalUnevictable
+{-# INLINE memoryStatsStatsTotalUnevictableL #-}
+
+-- | 'memoryStatsStatsPgmajfault' Lens
+memoryStatsStatsPgmajfaultL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsPgmajfaultL f MemoryStatsStats{..} = (\memoryStatsStatsPgmajfault -> MemoryStatsStats { memoryStatsStatsPgmajfault, ..} ) <$> f memoryStatsStatsPgmajfault
+{-# INLINE memoryStatsStatsPgmajfaultL #-}
+
+-- | 'memoryStatsStatsTotalRss' Lens
+memoryStatsStatsTotalRssL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalRssL f MemoryStatsStats{..} = (\memoryStatsStatsTotalRss -> MemoryStatsStats { memoryStatsStatsTotalRss, ..} ) <$> f memoryStatsStatsTotalRss
+{-# INLINE memoryStatsStatsTotalRssL #-}
+
+-- | 'memoryStatsStatsTotalRssHuge' Lens
+memoryStatsStatsTotalRssHugeL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalRssHugeL f MemoryStatsStats{..} = (\memoryStatsStatsTotalRssHuge -> MemoryStatsStats { memoryStatsStatsTotalRssHuge, ..} ) <$> f memoryStatsStatsTotalRssHuge
+{-# INLINE memoryStatsStatsTotalRssHugeL #-}
+
+-- | 'memoryStatsStatsTotalWriteback' Lens
+memoryStatsStatsTotalWritebackL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalWritebackL f MemoryStatsStats{..} = (\memoryStatsStatsTotalWriteback -> MemoryStatsStats { memoryStatsStatsTotalWriteback, ..} ) <$> f memoryStatsStatsTotalWriteback
+{-# INLINE memoryStatsStatsTotalWritebackL #-}
+
+-- | 'memoryStatsStatsTotalInactiveAnon' Lens
+memoryStatsStatsTotalInactiveAnonL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalInactiveAnonL f MemoryStatsStats{..} = (\memoryStatsStatsTotalInactiveAnon -> MemoryStatsStats { memoryStatsStatsTotalInactiveAnon, ..} ) <$> f memoryStatsStatsTotalInactiveAnon
+{-# INLINE memoryStatsStatsTotalInactiveAnonL #-}
+
+-- | 'memoryStatsStatsRssHuge' Lens
+memoryStatsStatsRssHugeL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsRssHugeL f MemoryStatsStats{..} = (\memoryStatsStatsRssHuge -> MemoryStatsStats { memoryStatsStatsRssHuge, ..} ) <$> f memoryStatsStatsRssHuge
+{-# INLINE memoryStatsStatsRssHugeL #-}
+
+-- | 'memoryStatsStatsHierarchicalMemoryLimit' Lens
+memoryStatsStatsHierarchicalMemoryLimitL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsHierarchicalMemoryLimitL f MemoryStatsStats{..} = (\memoryStatsStatsHierarchicalMemoryLimit -> MemoryStatsStats { memoryStatsStatsHierarchicalMemoryLimit, ..} ) <$> f memoryStatsStatsHierarchicalMemoryLimit
+{-# INLINE memoryStatsStatsHierarchicalMemoryLimitL #-}
+
+-- | 'memoryStatsStatsTotalPgfault' Lens
+memoryStatsStatsTotalPgfaultL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalPgfaultL f MemoryStatsStats{..} = (\memoryStatsStatsTotalPgfault -> MemoryStatsStats { memoryStatsStatsTotalPgfault, ..} ) <$> f memoryStatsStatsTotalPgfault
+{-# INLINE memoryStatsStatsTotalPgfaultL #-}
+
+-- | 'memoryStatsStatsTotalActiveFile' Lens
+memoryStatsStatsTotalActiveFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalActiveFileL f MemoryStatsStats{..} = (\memoryStatsStatsTotalActiveFile -> MemoryStatsStats { memoryStatsStatsTotalActiveFile, ..} ) <$> f memoryStatsStatsTotalActiveFile
+{-# INLINE memoryStatsStatsTotalActiveFileL #-}
+
+-- | 'memoryStatsStatsActiveAnon' Lens
+memoryStatsStatsActiveAnonL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsActiveAnonL f MemoryStatsStats{..} = (\memoryStatsStatsActiveAnon -> MemoryStatsStats { memoryStatsStatsActiveAnon, ..} ) <$> f memoryStatsStatsActiveAnon
+{-# INLINE memoryStatsStatsActiveAnonL #-}
+
+-- | 'memoryStatsStatsTotalActiveAnon' Lens
+memoryStatsStatsTotalActiveAnonL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalActiveAnonL f MemoryStatsStats{..} = (\memoryStatsStatsTotalActiveAnon -> MemoryStatsStats { memoryStatsStatsTotalActiveAnon, ..} ) <$> f memoryStatsStatsTotalActiveAnon
+{-# INLINE memoryStatsStatsTotalActiveAnonL #-}
+
+-- | 'memoryStatsStatsTotalPgpgout' Lens
+memoryStatsStatsTotalPgpgoutL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalPgpgoutL f MemoryStatsStats{..} = (\memoryStatsStatsTotalPgpgout -> MemoryStatsStats { memoryStatsStatsTotalPgpgout, ..} ) <$> f memoryStatsStatsTotalPgpgout
+{-# INLINE memoryStatsStatsTotalPgpgoutL #-}
+
+-- | 'memoryStatsStatsTotalCache' Lens
+memoryStatsStatsTotalCacheL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalCacheL f MemoryStatsStats{..} = (\memoryStatsStatsTotalCache -> MemoryStatsStats { memoryStatsStatsTotalCache, ..} ) <$> f memoryStatsStatsTotalCache
+{-# INLINE memoryStatsStatsTotalCacheL #-}
+
+-- | 'memoryStatsStatsInactiveAnon' Lens
+memoryStatsStatsInactiveAnonL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsInactiveAnonL f MemoryStatsStats{..} = (\memoryStatsStatsInactiveAnon -> MemoryStatsStats { memoryStatsStatsInactiveAnon, ..} ) <$> f memoryStatsStatsInactiveAnon
+{-# INLINE memoryStatsStatsInactiveAnonL #-}
+
+-- | 'memoryStatsStatsActiveFile' Lens
+memoryStatsStatsActiveFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsActiveFileL f MemoryStatsStats{..} = (\memoryStatsStatsActiveFile -> MemoryStatsStats { memoryStatsStatsActiveFile, ..} ) <$> f memoryStatsStatsActiveFile
+{-# INLINE memoryStatsStatsActiveFileL #-}
+
+-- | 'memoryStatsStatsPgfault' Lens
+memoryStatsStatsPgfaultL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsPgfaultL f MemoryStatsStats{..} = (\memoryStatsStatsPgfault -> MemoryStatsStats { memoryStatsStatsPgfault, ..} ) <$> f memoryStatsStatsPgfault
+{-# INLINE memoryStatsStatsPgfaultL #-}
+
+-- | 'memoryStatsStatsInactiveFile' Lens
+memoryStatsStatsInactiveFileL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsInactiveFileL f MemoryStatsStats{..} = (\memoryStatsStatsInactiveFile -> MemoryStatsStats { memoryStatsStatsInactiveFile, ..} ) <$> f memoryStatsStatsInactiveFile
+{-# INLINE memoryStatsStatsInactiveFileL #-}
+
+-- | 'memoryStatsStatsTotalPgpgin' Lens
+memoryStatsStatsTotalPgpginL :: Lens_' MemoryStatsStats (Maybe Int)
+memoryStatsStatsTotalPgpginL f MemoryStatsStats{..} = (\memoryStatsStatsTotalPgpgin -> MemoryStatsStats { memoryStatsStatsTotalPgpgin, ..} ) <$> f memoryStatsStatsTotalPgpgin
+{-# INLINE memoryStatsStatsTotalPgpginL #-}
+
+
+
 -- * Mount
 
 -- | 'mountTarget' Lens
@@ -2630,6 +2918,50 @@ networkSettingsMacAddressL f NetworkSettings{..} = (\networkSettingsMacAddress -
 networkSettingsNetworksL :: Lens_' NetworkSettings (Maybe (Map.Map String EndpointSettings))
 networkSettingsNetworksL f NetworkSettings{..} = (\networkSettingsNetworks -> NetworkSettings { networkSettingsNetworks, ..} ) <$> f networkSettingsNetworks
 {-# INLINE networkSettingsNetworksL #-}
+
+
+
+-- * NetworkStats
+
+-- | 'networkStatsRxBytes' Lens
+networkStatsRxBytesL :: Lens_' NetworkStats (Maybe Int)
+networkStatsRxBytesL f NetworkStats{..} = (\networkStatsRxBytes -> NetworkStats { networkStatsRxBytes, ..} ) <$> f networkStatsRxBytes
+{-# INLINE networkStatsRxBytesL #-}
+
+-- | 'networkStatsRxDropped' Lens
+networkStatsRxDroppedL :: Lens_' NetworkStats (Maybe Int)
+networkStatsRxDroppedL f NetworkStats{..} = (\networkStatsRxDropped -> NetworkStats { networkStatsRxDropped, ..} ) <$> f networkStatsRxDropped
+{-# INLINE networkStatsRxDroppedL #-}
+
+-- | 'networkStatsRxErrors' Lens
+networkStatsRxErrorsL :: Lens_' NetworkStats (Maybe Int)
+networkStatsRxErrorsL f NetworkStats{..} = (\networkStatsRxErrors -> NetworkStats { networkStatsRxErrors, ..} ) <$> f networkStatsRxErrors
+{-# INLINE networkStatsRxErrorsL #-}
+
+-- | 'networkStatsRxPackets' Lens
+networkStatsRxPacketsL :: Lens_' NetworkStats (Maybe Int)
+networkStatsRxPacketsL f NetworkStats{..} = (\networkStatsRxPackets -> NetworkStats { networkStatsRxPackets, ..} ) <$> f networkStatsRxPackets
+{-# INLINE networkStatsRxPacketsL #-}
+
+-- | 'networkStatsTxBytes' Lens
+networkStatsTxBytesL :: Lens_' NetworkStats (Maybe Int)
+networkStatsTxBytesL f NetworkStats{..} = (\networkStatsTxBytes -> NetworkStats { networkStatsTxBytes, ..} ) <$> f networkStatsTxBytes
+{-# INLINE networkStatsTxBytesL #-}
+
+-- | 'networkStatsTxDropped' Lens
+networkStatsTxDroppedL :: Lens_' NetworkStats (Maybe Int)
+networkStatsTxDroppedL f NetworkStats{..} = (\networkStatsTxDropped -> NetworkStats { networkStatsTxDropped, ..} ) <$> f networkStatsTxDropped
+{-# INLINE networkStatsTxDroppedL #-}
+
+-- | 'networkStatsTxErrors' Lens
+networkStatsTxErrorsL :: Lens_' NetworkStats (Maybe Int)
+networkStatsTxErrorsL f NetworkStats{..} = (\networkStatsTxErrors -> NetworkStats { networkStatsTxErrors, ..} ) <$> f networkStatsTxErrors
+{-# INLINE networkStatsTxErrorsL #-}
+
+-- | 'networkStatsTxPackets' Lens
+networkStatsTxPacketsL :: Lens_' NetworkStats (Maybe Int)
+networkStatsTxPacketsL f NetworkStats{..} = (\networkStatsTxPackets -> NetworkStats { networkStatsTxPackets, ..} ) <$> f networkStatsTxPackets
+{-# INLINE networkStatsTxPacketsL #-}
 
 
 

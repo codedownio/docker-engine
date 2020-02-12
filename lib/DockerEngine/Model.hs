@@ -490,6 +490,123 @@ mkBuildPruneResponse =
   { buildPruneResponseSpaceReclaimed = Nothing
   }
 
+-- ** CPUStats
+-- | CPUStats
+-- Stats about CPU usage
+data CPUStats = CPUStats
+  { cPUStatsCpuUsage :: !(Maybe CPUStatsCpuUsage) -- ^ "cpu_usage"
+  , cPUStatsSystemCpuUsage :: !(Maybe Int) -- ^ "system_cpu_usage"
+  , cPUStatsOnlineCpus :: !(Maybe Int) -- ^ "online_cpus"
+  , cPUStatsThrottlingData :: !(Maybe CPUStatsThrottlingData) -- ^ "throttling_data"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON CPUStats
+instance A.FromJSON CPUStats where
+  parseJSON = A.withObject "CPUStats" $ \o ->
+    CPUStats
+      <$> (o .:? "cpu_usage")
+      <*> (o .:? "system_cpu_usage")
+      <*> (o .:? "online_cpus")
+      <*> (o .:? "throttling_data")
+
+-- | ToJSON CPUStats
+instance A.ToJSON CPUStats where
+  toJSON CPUStats {..} =
+   _omitNulls
+      [ "cpu_usage" .= cPUStatsCpuUsage
+      , "system_cpu_usage" .= cPUStatsSystemCpuUsage
+      , "online_cpus" .= cPUStatsOnlineCpus
+      , "throttling_data" .= cPUStatsThrottlingData
+      ]
+
+
+-- | Construct a value of type 'CPUStats' (by applying it's required fields, if any)
+mkCPUStats
+  :: CPUStats
+mkCPUStats =
+  CPUStats
+  { cPUStatsCpuUsage = Nothing
+  , cPUStatsSystemCpuUsage = Nothing
+  , cPUStatsOnlineCpus = Nothing
+  , cPUStatsThrottlingData = Nothing
+  }
+
+-- ** CPUStatsCpuUsage
+-- | CPUStatsCpuUsage
+data CPUStatsCpuUsage = CPUStatsCpuUsage
+  { cPUStatsCpuUsagePercpuUsage :: !(Maybe [Int]) -- ^ "percpu_usage"
+  , cPUStatsCpuUsageUsageInUsermode :: !(Maybe Int) -- ^ "usage_in_usermode"
+  , cPUStatsCpuUsageTotalUsage :: !(Maybe Int) -- ^ "total_usage"
+  , cPUStatsCpuUsageUsageInKernelmode :: !(Maybe Int) -- ^ "usage_in_kernelmode"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON CPUStatsCpuUsage
+instance A.FromJSON CPUStatsCpuUsage where
+  parseJSON = A.withObject "CPUStatsCpuUsage" $ \o ->
+    CPUStatsCpuUsage
+      <$> (o .:? "percpu_usage")
+      <*> (o .:? "usage_in_usermode")
+      <*> (o .:? "total_usage")
+      <*> (o .:? "usage_in_kernelmode")
+
+-- | ToJSON CPUStatsCpuUsage
+instance A.ToJSON CPUStatsCpuUsage where
+  toJSON CPUStatsCpuUsage {..} =
+   _omitNulls
+      [ "percpu_usage" .= cPUStatsCpuUsagePercpuUsage
+      , "usage_in_usermode" .= cPUStatsCpuUsageUsageInUsermode
+      , "total_usage" .= cPUStatsCpuUsageTotalUsage
+      , "usage_in_kernelmode" .= cPUStatsCpuUsageUsageInKernelmode
+      ]
+
+
+-- | Construct a value of type 'CPUStatsCpuUsage' (by applying it's required fields, if any)
+mkCPUStatsCpuUsage
+  :: CPUStatsCpuUsage
+mkCPUStatsCpuUsage =
+  CPUStatsCpuUsage
+  { cPUStatsCpuUsagePercpuUsage = Nothing
+  , cPUStatsCpuUsageUsageInUsermode = Nothing
+  , cPUStatsCpuUsageTotalUsage = Nothing
+  , cPUStatsCpuUsageUsageInKernelmode = Nothing
+  }
+
+-- ** CPUStatsThrottlingData
+-- | CPUStatsThrottlingData
+data CPUStatsThrottlingData = CPUStatsThrottlingData
+  { cPUStatsThrottlingDataPeriods :: !(Maybe Int) -- ^ "periods"
+  , cPUStatsThrottlingDataThrottledPeriods :: !(Maybe Int) -- ^ "throttled_periods"
+  , cPUStatsThrottlingDataThrottledTime :: !(Maybe Int) -- ^ "throttled_time"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON CPUStatsThrottlingData
+instance A.FromJSON CPUStatsThrottlingData where
+  parseJSON = A.withObject "CPUStatsThrottlingData" $ \o ->
+    CPUStatsThrottlingData
+      <$> (o .:? "periods")
+      <*> (o .:? "throttled_periods")
+      <*> (o .:? "throttled_time")
+
+-- | ToJSON CPUStatsThrottlingData
+instance A.ToJSON CPUStatsThrottlingData where
+  toJSON CPUStatsThrottlingData {..} =
+   _omitNulls
+      [ "periods" .= cPUStatsThrottlingDataPeriods
+      , "throttled_periods" .= cPUStatsThrottlingDataThrottledPeriods
+      , "throttled_time" .= cPUStatsThrottlingDataThrottledTime
+      ]
+
+
+-- | Construct a value of type 'CPUStatsThrottlingData' (by applying it's required fields, if any)
+mkCPUStatsThrottlingData
+  :: CPUStatsThrottlingData
+mkCPUStatsThrottlingData =
+  CPUStatsThrottlingData
+  { cPUStatsThrottlingDataPeriods = Nothing
+  , cPUStatsThrottlingDataThrottledPeriods = Nothing
+  , cPUStatsThrottlingDataThrottledTime = Nothing
+  }
+
 -- ** ClusterInfo
 -- | ClusterInfo
 -- ClusterInfo represents information about the swarm as is returned by the \"/info\" endpoint. Join-tokens are not included. 
@@ -1103,6 +1220,83 @@ mkContainerPruneResponse =
   ContainerPruneResponse
   { containerPruneResponseContainersDeleted = Nothing
   , containerPruneResponseSpaceReclaimed = Nothing
+  }
+
+-- ** ContainerStatsResponse
+-- | ContainerStatsResponse
+-- Resource usage stats for a container
+data ContainerStatsResponse = ContainerStatsResponse
+  { containerStatsResponsePidsStats :: !(Maybe ContainerStatsResponsePidsStats) -- ^ "pids_stats"
+  , containerStatsResponseNetworks :: !(Maybe (Map.Map String NetworkStats)) -- ^ "networks"
+  , containerStatsResponseMemoryStats :: !(Maybe MemoryStats) -- ^ "memory_stats"
+  , containerStatsResponseBlkioStats :: !(Maybe A.Value) -- ^ "blkio_stats"
+  , containerStatsResponseCpuStats :: !(Maybe CPUStats) -- ^ "cpu_stats"
+  , containerStatsResponsePrecpuStats :: !(Maybe CPUStats) -- ^ "precpu_stats"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerStatsResponse
+instance A.FromJSON ContainerStatsResponse where
+  parseJSON = A.withObject "ContainerStatsResponse" $ \o ->
+    ContainerStatsResponse
+      <$> (o .:? "pids_stats")
+      <*> (o .:? "networks")
+      <*> (o .:? "memory_stats")
+      <*> (o .:? "blkio_stats")
+      <*> (o .:? "cpu_stats")
+      <*> (o .:? "precpu_stats")
+
+-- | ToJSON ContainerStatsResponse
+instance A.ToJSON ContainerStatsResponse where
+  toJSON ContainerStatsResponse {..} =
+   _omitNulls
+      [ "pids_stats" .= containerStatsResponsePidsStats
+      , "networks" .= containerStatsResponseNetworks
+      , "memory_stats" .= containerStatsResponseMemoryStats
+      , "blkio_stats" .= containerStatsResponseBlkioStats
+      , "cpu_stats" .= containerStatsResponseCpuStats
+      , "precpu_stats" .= containerStatsResponsePrecpuStats
+      ]
+
+
+-- | Construct a value of type 'ContainerStatsResponse' (by applying it's required fields, if any)
+mkContainerStatsResponse
+  :: ContainerStatsResponse
+mkContainerStatsResponse =
+  ContainerStatsResponse
+  { containerStatsResponsePidsStats = Nothing
+  , containerStatsResponseNetworks = Nothing
+  , containerStatsResponseMemoryStats = Nothing
+  , containerStatsResponseBlkioStats = Nothing
+  , containerStatsResponseCpuStats = Nothing
+  , containerStatsResponsePrecpuStats = Nothing
+  }
+
+-- ** ContainerStatsResponsePidsStats
+-- | ContainerStatsResponsePidsStats
+data ContainerStatsResponsePidsStats = ContainerStatsResponsePidsStats
+  { containerStatsResponsePidsStatsCurrent :: !(Maybe A.Value) -- ^ "current"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerStatsResponsePidsStats
+instance A.FromJSON ContainerStatsResponsePidsStats where
+  parseJSON = A.withObject "ContainerStatsResponsePidsStats" $ \o ->
+    ContainerStatsResponsePidsStats
+      <$> (o .:? "current")
+
+-- | ToJSON ContainerStatsResponsePidsStats
+instance A.ToJSON ContainerStatsResponsePidsStats where
+  toJSON ContainerStatsResponsePidsStats {..} =
+   _omitNulls
+      [ "current" .= containerStatsResponsePidsStatsCurrent
+      ]
+
+
+-- | Construct a value of type 'ContainerStatsResponsePidsStats' (by applying it's required fields, if any)
+mkContainerStatsResponsePidsStats
+  :: ContainerStatsResponsePidsStats
+mkContainerStatsResponsePidsStats =
+  ContainerStatsResponsePidsStats
+  { containerStatsResponsePidsStatsCurrent = Nothing
   }
 
 -- ** ContainerSummary
@@ -2004,7 +2198,7 @@ mkExecInspectResponse =
 -- Information about a container's graph driver.
 data GraphDriverData = GraphDriverData
   { graphDriverDataName :: !(Text) -- ^ /Required/ "Name"
-  , graphDriverDataData :: !((Map.Map String Text)) -- ^ /Required/ "Data"
+  , graphDriverDataData :: !(Maybe (Map.Map String Text)) -- ^ "Data"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON GraphDriverData
@@ -2012,7 +2206,7 @@ instance A.FromJSON GraphDriverData where
   parseJSON = A.withObject "GraphDriverData" $ \o ->
     GraphDriverData
       <$> (o .:  "Name")
-      <*> (o .:  "Data")
+      <*> (o .:? "Data")
 
 -- | ToJSON GraphDriverData
 instance A.ToJSON GraphDriverData where
@@ -2026,12 +2220,11 @@ instance A.ToJSON GraphDriverData where
 -- | Construct a value of type 'GraphDriverData' (by applying it's required fields, if any)
 mkGraphDriverData
   :: Text -- ^ 'graphDriverDataName' 
-  -> (Map.Map String Text) -- ^ 'graphDriverDataData' 
   -> GraphDriverData
-mkGraphDriverData graphDriverDataName graphDriverDataData =
+mkGraphDriverData graphDriverDataName =
   GraphDriverData
   { graphDriverDataName
-  , graphDriverDataData
+  , graphDriverDataData = Nothing
   }
 
 -- ** HealthConfig
@@ -3568,6 +3761,191 @@ mkManagerStatus =
   , managerStatusAddr = Nothing
   }
 
+-- ** MemoryStats
+-- | MemoryStats
+-- Stats about memory usage
+data MemoryStats = MemoryStats
+  { memoryStatsStats :: !(Maybe MemoryStatsStats) -- ^ "stats"
+  , memoryStatsMaxUsage :: !(Maybe Int) -- ^ "max_usage"
+  , memoryStatsUsage :: !(Maybe Int) -- ^ "usage"
+  , memoryStatsFailcnt :: !(Maybe Int) -- ^ "failcnt"
+  , memoryStatsLimit :: !(Maybe Int) -- ^ "limit"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON MemoryStats
+instance A.FromJSON MemoryStats where
+  parseJSON = A.withObject "MemoryStats" $ \o ->
+    MemoryStats
+      <$> (o .:? "stats")
+      <*> (o .:? "max_usage")
+      <*> (o .:? "usage")
+      <*> (o .:? "failcnt")
+      <*> (o .:? "limit")
+
+-- | ToJSON MemoryStats
+instance A.ToJSON MemoryStats where
+  toJSON MemoryStats {..} =
+   _omitNulls
+      [ "stats" .= memoryStatsStats
+      , "max_usage" .= memoryStatsMaxUsage
+      , "usage" .= memoryStatsUsage
+      , "failcnt" .= memoryStatsFailcnt
+      , "limit" .= memoryStatsLimit
+      ]
+
+
+-- | Construct a value of type 'MemoryStats' (by applying it's required fields, if any)
+mkMemoryStats
+  :: MemoryStats
+mkMemoryStats =
+  MemoryStats
+  { memoryStatsStats = Nothing
+  , memoryStatsMaxUsage = Nothing
+  , memoryStatsUsage = Nothing
+  , memoryStatsFailcnt = Nothing
+  , memoryStatsLimit = Nothing
+  }
+
+-- ** MemoryStatsStats
+-- | MemoryStatsStats
+data MemoryStatsStats = MemoryStatsStats
+  { memoryStatsStatsTotalPgmajfault :: !(Maybe Int) -- ^ "total_pgmajfault"
+  , memoryStatsStatsCache :: !(Maybe Int) -- ^ "cache"
+  , memoryStatsStatsMappedFile :: !(Maybe Int) -- ^ "mapped_file"
+  , memoryStatsStatsTotalInactiveFile :: !(Maybe Int) -- ^ "total_inactive_file"
+  , memoryStatsStatsPgpgout :: !(Maybe Int) -- ^ "pgpgout"
+  , memoryStatsStatsRss :: !(Maybe Int) -- ^ "rss"
+  , memoryStatsStatsTotalMappedFile :: !(Maybe Int) -- ^ "total_mapped_file"
+  , memoryStatsStatsWriteback :: !(Maybe Int) -- ^ "writeback"
+  , memoryStatsStatsUnevictable :: !(Maybe Int) -- ^ "unevictable"
+  , memoryStatsStatsPgpgin :: !(Maybe Int) -- ^ "pgpgin"
+  , memoryStatsStatsTotalUnevictable :: !(Maybe Int) -- ^ "total_unevictable"
+  , memoryStatsStatsPgmajfault :: !(Maybe Int) -- ^ "pgmajfault"
+  , memoryStatsStatsTotalRss :: !(Maybe Int) -- ^ "total_rss"
+  , memoryStatsStatsTotalRssHuge :: !(Maybe Int) -- ^ "total_rss_huge"
+  , memoryStatsStatsTotalWriteback :: !(Maybe Int) -- ^ "total_writeback"
+  , memoryStatsStatsTotalInactiveAnon :: !(Maybe Int) -- ^ "total_inactive_anon"
+  , memoryStatsStatsRssHuge :: !(Maybe Int) -- ^ "rss_huge"
+  , memoryStatsStatsHierarchicalMemoryLimit :: !(Maybe Int) -- ^ "hierarchical_memory_limit"
+  , memoryStatsStatsTotalPgfault :: !(Maybe Int) -- ^ "total_pgfault"
+  , memoryStatsStatsTotalActiveFile :: !(Maybe Int) -- ^ "total_active_file"
+  , memoryStatsStatsActiveAnon :: !(Maybe Int) -- ^ "active_anon"
+  , memoryStatsStatsTotalActiveAnon :: !(Maybe Int) -- ^ "total_active_anon"
+  , memoryStatsStatsTotalPgpgout :: !(Maybe Int) -- ^ "total_pgpgout"
+  , memoryStatsStatsTotalCache :: !(Maybe Int) -- ^ "total_cache"
+  , memoryStatsStatsInactiveAnon :: !(Maybe Int) -- ^ "inactive_anon"
+  , memoryStatsStatsActiveFile :: !(Maybe Int) -- ^ "active_file"
+  , memoryStatsStatsPgfault :: !(Maybe Int) -- ^ "pgfault"
+  , memoryStatsStatsInactiveFile :: !(Maybe Int) -- ^ "inactive_file"
+  , memoryStatsStatsTotalPgpgin :: !(Maybe Int) -- ^ "total_pgpgin"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON MemoryStatsStats
+instance A.FromJSON MemoryStatsStats where
+  parseJSON = A.withObject "MemoryStatsStats" $ \o ->
+    MemoryStatsStats
+      <$> (o .:? "total_pgmajfault")
+      <*> (o .:? "cache")
+      <*> (o .:? "mapped_file")
+      <*> (o .:? "total_inactive_file")
+      <*> (o .:? "pgpgout")
+      <*> (o .:? "rss")
+      <*> (o .:? "total_mapped_file")
+      <*> (o .:? "writeback")
+      <*> (o .:? "unevictable")
+      <*> (o .:? "pgpgin")
+      <*> (o .:? "total_unevictable")
+      <*> (o .:? "pgmajfault")
+      <*> (o .:? "total_rss")
+      <*> (o .:? "total_rss_huge")
+      <*> (o .:? "total_writeback")
+      <*> (o .:? "total_inactive_anon")
+      <*> (o .:? "rss_huge")
+      <*> (o .:? "hierarchical_memory_limit")
+      <*> (o .:? "total_pgfault")
+      <*> (o .:? "total_active_file")
+      <*> (o .:? "active_anon")
+      <*> (o .:? "total_active_anon")
+      <*> (o .:? "total_pgpgout")
+      <*> (o .:? "total_cache")
+      <*> (o .:? "inactive_anon")
+      <*> (o .:? "active_file")
+      <*> (o .:? "pgfault")
+      <*> (o .:? "inactive_file")
+      <*> (o .:? "total_pgpgin")
+
+-- | ToJSON MemoryStatsStats
+instance A.ToJSON MemoryStatsStats where
+  toJSON MemoryStatsStats {..} =
+   _omitNulls
+      [ "total_pgmajfault" .= memoryStatsStatsTotalPgmajfault
+      , "cache" .= memoryStatsStatsCache
+      , "mapped_file" .= memoryStatsStatsMappedFile
+      , "total_inactive_file" .= memoryStatsStatsTotalInactiveFile
+      , "pgpgout" .= memoryStatsStatsPgpgout
+      , "rss" .= memoryStatsStatsRss
+      , "total_mapped_file" .= memoryStatsStatsTotalMappedFile
+      , "writeback" .= memoryStatsStatsWriteback
+      , "unevictable" .= memoryStatsStatsUnevictable
+      , "pgpgin" .= memoryStatsStatsPgpgin
+      , "total_unevictable" .= memoryStatsStatsTotalUnevictable
+      , "pgmajfault" .= memoryStatsStatsPgmajfault
+      , "total_rss" .= memoryStatsStatsTotalRss
+      , "total_rss_huge" .= memoryStatsStatsTotalRssHuge
+      , "total_writeback" .= memoryStatsStatsTotalWriteback
+      , "total_inactive_anon" .= memoryStatsStatsTotalInactiveAnon
+      , "rss_huge" .= memoryStatsStatsRssHuge
+      , "hierarchical_memory_limit" .= memoryStatsStatsHierarchicalMemoryLimit
+      , "total_pgfault" .= memoryStatsStatsTotalPgfault
+      , "total_active_file" .= memoryStatsStatsTotalActiveFile
+      , "active_anon" .= memoryStatsStatsActiveAnon
+      , "total_active_anon" .= memoryStatsStatsTotalActiveAnon
+      , "total_pgpgout" .= memoryStatsStatsTotalPgpgout
+      , "total_cache" .= memoryStatsStatsTotalCache
+      , "inactive_anon" .= memoryStatsStatsInactiveAnon
+      , "active_file" .= memoryStatsStatsActiveFile
+      , "pgfault" .= memoryStatsStatsPgfault
+      , "inactive_file" .= memoryStatsStatsInactiveFile
+      , "total_pgpgin" .= memoryStatsStatsTotalPgpgin
+      ]
+
+
+-- | Construct a value of type 'MemoryStatsStats' (by applying it's required fields, if any)
+mkMemoryStatsStats
+  :: MemoryStatsStats
+mkMemoryStatsStats =
+  MemoryStatsStats
+  { memoryStatsStatsTotalPgmajfault = Nothing
+  , memoryStatsStatsCache = Nothing
+  , memoryStatsStatsMappedFile = Nothing
+  , memoryStatsStatsTotalInactiveFile = Nothing
+  , memoryStatsStatsPgpgout = Nothing
+  , memoryStatsStatsRss = Nothing
+  , memoryStatsStatsTotalMappedFile = Nothing
+  , memoryStatsStatsWriteback = Nothing
+  , memoryStatsStatsUnevictable = Nothing
+  , memoryStatsStatsPgpgin = Nothing
+  , memoryStatsStatsTotalUnevictable = Nothing
+  , memoryStatsStatsPgmajfault = Nothing
+  , memoryStatsStatsTotalRss = Nothing
+  , memoryStatsStatsTotalRssHuge = Nothing
+  , memoryStatsStatsTotalWriteback = Nothing
+  , memoryStatsStatsTotalInactiveAnon = Nothing
+  , memoryStatsStatsRssHuge = Nothing
+  , memoryStatsStatsHierarchicalMemoryLimit = Nothing
+  , memoryStatsStatsTotalPgfault = Nothing
+  , memoryStatsStatsTotalActiveFile = Nothing
+  , memoryStatsStatsActiveAnon = Nothing
+  , memoryStatsStatsTotalActiveAnon = Nothing
+  , memoryStatsStatsTotalPgpgout = Nothing
+  , memoryStatsStatsTotalCache = Nothing
+  , memoryStatsStatsInactiveAnon = Nothing
+  , memoryStatsStatsActiveFile = Nothing
+  , memoryStatsStatsPgfault = Nothing
+  , memoryStatsStatsInactiveFile = Nothing
+  , memoryStatsStatsTotalPgpgin = Nothing
+  }
+
 -- ** Mount
 -- | Mount
 data Mount = Mount
@@ -4088,6 +4466,63 @@ mkNetworkSettings =
   , networkSettingsIPv6Gateway = Nothing
   , networkSettingsMacAddress = Nothing
   , networkSettingsNetworks = Nothing
+  }
+
+-- ** NetworkStats
+-- | NetworkStats
+-- Stats about network usage
+data NetworkStats = NetworkStats
+  { networkStatsRxBytes :: !(Maybe Int) -- ^ "rx_bytes"
+  , networkStatsRxDropped :: !(Maybe Int) -- ^ "rx_dropped"
+  , networkStatsRxErrors :: !(Maybe Int) -- ^ "rx_errors"
+  , networkStatsRxPackets :: !(Maybe Int) -- ^ "rx_packets"
+  , networkStatsTxBytes :: !(Maybe Int) -- ^ "tx_bytes"
+  , networkStatsTxDropped :: !(Maybe Int) -- ^ "tx_dropped"
+  , networkStatsTxErrors :: !(Maybe Int) -- ^ "tx_errors"
+  , networkStatsTxPackets :: !(Maybe Int) -- ^ "tx_packets"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NetworkStats
+instance A.FromJSON NetworkStats where
+  parseJSON = A.withObject "NetworkStats" $ \o ->
+    NetworkStats
+      <$> (o .:? "rx_bytes")
+      <*> (o .:? "rx_dropped")
+      <*> (o .:? "rx_errors")
+      <*> (o .:? "rx_packets")
+      <*> (o .:? "tx_bytes")
+      <*> (o .:? "tx_dropped")
+      <*> (o .:? "tx_errors")
+      <*> (o .:? "tx_packets")
+
+-- | ToJSON NetworkStats
+instance A.ToJSON NetworkStats where
+  toJSON NetworkStats {..} =
+   _omitNulls
+      [ "rx_bytes" .= networkStatsRxBytes
+      , "rx_dropped" .= networkStatsRxDropped
+      , "rx_errors" .= networkStatsRxErrors
+      , "rx_packets" .= networkStatsRxPackets
+      , "tx_bytes" .= networkStatsTxBytes
+      , "tx_dropped" .= networkStatsTxDropped
+      , "tx_errors" .= networkStatsTxErrors
+      , "tx_packets" .= networkStatsTxPackets
+      ]
+
+
+-- | Construct a value of type 'NetworkStats' (by applying it's required fields, if any)
+mkNetworkStats
+  :: NetworkStats
+mkNetworkStats =
+  NetworkStats
+  { networkStatsRxBytes = Nothing
+  , networkStatsRxDropped = Nothing
+  , networkStatsRxErrors = Nothing
+  , networkStatsRxPackets = Nothing
+  , networkStatsTxBytes = Nothing
+  , networkStatsTxDropped = Nothing
+  , networkStatsTxErrors = Nothing
+  , networkStatsTxPackets = Nothing
   }
 
 -- ** Node

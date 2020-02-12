@@ -147,6 +147,155 @@ tags:
     x-displayName: "System"
 
 definitions:
+  ContainerStatsResponse:
+    type: "object"
+    description: "Resource usage stats for a container"
+    properties:
+      read:
+        type: "datetime"
+      pids_stats:
+        type: "object"
+        properties:
+          current: "integer"
+      networks:
+        type: "object"
+        additionalProperties:
+          $ref: "#/definitions/NetworkStats"
+      memory_stats:
+        $ref: "#/definitions/MemoryStats"
+      blkio_stats:
+        type: "object"
+      cpu_stats:
+        $ref: "#/definitions/CPUStats"
+      precpu_stats:
+        $ref: "#/definitions/CPUStats"
+
+  NetworkStats:
+    type: "object"
+    description: "Stats about network usage"
+    properties:
+      rx_bytes:
+        type: "integer"
+      rx_dropped:
+        type: "integer"
+      rx_errors:
+        type: "integer"
+      rx_packets:
+        type: "integer"
+      tx_bytes:
+        type: "integer"
+      tx_dropped:
+        type: "integer"
+      tx_errors:
+        type: "integer"
+      tx_packets:
+        type: "integer"
+
+  MemoryStats:
+    type: "object"
+    description: "Stats about memory usage"
+    properties:
+      stats:
+        type: "object"
+        properties:
+          total_pgmajfault:
+            type: "integer"
+          cache:
+            type: "integer"
+          mapped_file:
+            type: "integer"
+          total_inactive_file:
+            type: "integer"
+          pgpgout:
+            type: "integer"
+          rss:
+            type: "integer"
+          total_mapped_file:
+            type: "integer"
+          writeback:
+            type: "integer"
+          unevictable:
+            type: "integer"
+          pgpgin:
+            type: "integer"
+          total_unevictable:
+            type: "integer"
+          pgmajfault:
+            type: "integer"
+          total_rss:
+            type: "integer"
+          total_rss_huge:
+            type: "integer"
+          total_writeback:
+            type: "integer"
+          total_inactive_anon:
+            type: "integer"
+          rss_huge:
+            type: "integer"
+          hierarchical_memory_limit:
+            type: "integer"
+          total_pgfault:
+            type: "integer"
+          total_active_file:
+            type: "integer"
+          active_anon:
+            type: "integer"
+          total_active_anon:
+            type: "integer"
+          total_pgpgout:
+            type: "integer"
+          total_cache:
+            type: "integer"
+          inactive_anon:
+            type: "integer"
+          active_file:
+            type: "integer"
+          pgfault:
+            type: "integer"
+          inactive_file:
+            type: "integer"
+          total_pgpgin:
+            type: "integer"
+      max_usage:
+        type: "integer"
+      usage:
+        type: "integer"
+      failcnt:
+        type: "integer"
+      limit:
+        type: "integer"
+
+  CPUStats:
+    type: "object"
+    description: "Stats about CPU usage"
+    properties:
+      cpu_usage:
+        type: "object"
+        properties:
+          percpu_usage:
+            type: "array"
+            items:
+              type: "integer"
+          usage_in_usermode:
+            type: "integer"
+          total_usage:
+            type: "integer"
+          usage_in_kernelmode:
+            type: "integer"
+      system_cpu_usage:
+        type: "integer"
+      online_cpus:
+        type: "integer"
+      throttling_data:
+        type: "object"
+        properties:
+          periods:
+            type: "integer"
+          throttled_periods:
+            type: "integer"
+          throttled_time:
+            type: "integer"
+
   Port:
     type: "object"
     description: "An open port on a container"
@@ -1107,14 +1256,14 @@ definitions:
   GraphDriverData:
     description: "Information about a container's graph driver."
     type: "object"
-    required: [Name, Data]
+    required: [Name]
     properties:
       Name:
         type: "string"
         x-nullable: false
       Data:
         type: "object"
-        x-nullable: false
+        x-nullable: true
         additionalProperties:
           type: "string"
 
@@ -5087,7 +5236,7 @@ paths:
         200:
           description: "no error"
           schema:
-            type: "object"
+            $ref: "#/definitions/ContainerStatsResponse"
           examples:
             application/json:
               read: "2015-01-08T22:57:31.547920715Z"

@@ -659,7 +659,7 @@ instance Produces ContainerStart MimePlainText
 --
 containerStats
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerStats MimeNoContent A.Value MimeJSON
+  -> DockerEngineRequest ContainerStats MimeNoContent ContainerStatsResponse MimeJSON
 containerStats (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/stats"]
 

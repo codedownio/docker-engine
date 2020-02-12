@@ -976,7 +976,7 @@ paths:
                     throttled_periods: 0
                     throttled_time: 0
               schema:
-                type: object
+                $ref: '#/components/schemas/ContainerStatsResponse'
           description: no error
         "404":
           content:
@@ -6919,6 +6919,206 @@ components:
             $ref: '#/components/schemas/inline_object_2'
       required: true
   schemas:
+    ContainerStatsResponse:
+      description: Resource usage stats for a container
+      example:
+        precpu_stats:
+          system_cpu_usage: 3
+          throttling_data:
+            throttled_time: 4
+            periods: 5
+            throttled_periods: 3
+          online_cpus: 7
+          cpu_usage:
+            percpu_usage:
+            - 4
+            - 4
+            usage_in_kernelmode: 3
+            total_usage: 7
+            usage_in_usermode: 8
+        cpu_stats:
+          system_cpu_usage: 3
+          throttling_data:
+            throttled_time: 4
+            periods: 5
+            throttled_periods: 3
+          online_cpus: 7
+          cpu_usage:
+            percpu_usage:
+            - 4
+            - 4
+            usage_in_kernelmode: 3
+            total_usage: 7
+            usage_in_usermode: 8
+        pids_stats:
+          current: '{}'
+        networks:
+          key:
+            tx_packets: 9
+            tx_errors: 7
+            tx_dropped: 2
+            rx_dropped: 6
+            rx_bytes: 0
+            tx_bytes: 5
+            rx_errors: 1
+            rx_packets: 5
+        memory_stats:
+          failcnt: 6
+          stats:
+            inactive_anon: 5
+            total_pgfault: 3
+            total_unevictable: 4
+            pgfault: 3
+            mapped_file: 4
+            total_pgpgout: 6
+            total_active_anon: 2
+            total_rss: 9
+            rss: 1
+            total_inactive_anon: 8
+            active_file: 6
+            total_mapped_file: 1
+            total_inactive_file: 7
+            total_rss_huge: 9
+            cache: 2
+            rss_huge: 9
+            total_pgpgin: 7
+            unevictable: 7
+            active_anon: 1
+            total_active_file: 6
+            hierarchical_memory_limit: 6
+            total_cache: 6
+            pgpgin: 1
+            pgmajfault: 5
+            inactive_file: 3
+            writeback: 6
+            pgpgout: 1
+            total_pgmajfault: 3
+            total_writeback: 6
+          max_usage: 0
+          usage: 7
+          limit: 0
+        blkio_stats: '{}'
+      properties:
+        pids_stats:
+          $ref: '#/components/schemas/ContainerStatsResponse_pids_stats'
+        networks:
+          additionalProperties:
+            $ref: '#/components/schemas/NetworkStats'
+          type: object
+        memory_stats:
+          $ref: '#/components/schemas/MemoryStats'
+        blkio_stats:
+          properties: {}
+          type: object
+        cpu_stats:
+          $ref: '#/components/schemas/CPUStats'
+        precpu_stats:
+          $ref: '#/components/schemas/CPUStats'
+      type: object
+    NetworkStats:
+      description: Stats about network usage
+      example:
+        tx_packets: 9
+        tx_errors: 7
+        tx_dropped: 2
+        rx_dropped: 6
+        rx_bytes: 0
+        tx_bytes: 5
+        rx_errors: 1
+        rx_packets: 5
+      properties:
+        rx_bytes:
+          type: integer
+        rx_dropped:
+          type: integer
+        rx_errors:
+          type: integer
+        rx_packets:
+          type: integer
+        tx_bytes:
+          type: integer
+        tx_dropped:
+          type: integer
+        tx_errors:
+          type: integer
+        tx_packets:
+          type: integer
+      type: object
+    MemoryStats:
+      description: Stats about memory usage
+      example:
+        failcnt: 6
+        stats:
+          inactive_anon: 5
+          total_pgfault: 3
+          total_unevictable: 4
+          pgfault: 3
+          mapped_file: 4
+          total_pgpgout: 6
+          total_active_anon: 2
+          total_rss: 9
+          rss: 1
+          total_inactive_anon: 8
+          active_file: 6
+          total_mapped_file: 1
+          total_inactive_file: 7
+          total_rss_huge: 9
+          cache: 2
+          rss_huge: 9
+          total_pgpgin: 7
+          unevictable: 7
+          active_anon: 1
+          total_active_file: 6
+          hierarchical_memory_limit: 6
+          total_cache: 6
+          pgpgin: 1
+          pgmajfault: 5
+          inactive_file: 3
+          writeback: 6
+          pgpgout: 1
+          total_pgmajfault: 3
+          total_writeback: 6
+        max_usage: 0
+        usage: 7
+        limit: 0
+      properties:
+        stats:
+          $ref: '#/components/schemas/MemoryStats_stats'
+        max_usage:
+          type: integer
+        usage:
+          type: integer
+        failcnt:
+          type: integer
+        limit:
+          type: integer
+      type: object
+    CPUStats:
+      description: Stats about CPU usage
+      example:
+        system_cpu_usage: 3
+        throttling_data:
+          throttled_time: 4
+          periods: 5
+          throttled_periods: 3
+        online_cpus: 7
+        cpu_usage:
+          percpu_usage:
+          - 4
+          - 4
+          usage_in_kernelmode: 3
+          total_usage: 7
+          usage_in_usermode: 8
+      properties:
+        cpu_usage:
+          $ref: '#/components/schemas/CPUStats_cpu_usage'
+        system_cpu_usage:
+          type: integer
+        online_cpus:
+          type: integer
+        throttling_data:
+          $ref: '#/components/schemas/CPUStats_throttling_data'
+      type: object
     Port:
       description: An open port on a container
       example:
@@ -7839,10 +8039,9 @@ components:
         Data:
           additionalProperties:
             type: string
-          nullable: false
+          nullable: true
           type: object
       required:
-      - Data
       - Name
       type: object
     Image:
@@ -12584,6 +12783,133 @@ components:
       required:
       - Descriptor
       - Platforms
+    ContainerStatsResponse_pids_stats:
+      example:
+        current: '{}'
+      properties:
+        current:
+          type: object
+    MemoryStats_stats:
+      example:
+        inactive_anon: 5
+        total_pgfault: 3
+        total_unevictable: 4
+        pgfault: 3
+        mapped_file: 4
+        total_pgpgout: 6
+        total_active_anon: 2
+        total_rss: 9
+        rss: 1
+        total_inactive_anon: 8
+        active_file: 6
+        total_mapped_file: 1
+        total_inactive_file: 7
+        total_rss_huge: 9
+        cache: 2
+        rss_huge: 9
+        total_pgpgin: 7
+        unevictable: 7
+        active_anon: 1
+        total_active_file: 6
+        hierarchical_memory_limit: 6
+        total_cache: 6
+        pgpgin: 1
+        pgmajfault: 5
+        inactive_file: 3
+        writeback: 6
+        pgpgout: 1
+        total_pgmajfault: 3
+        total_writeback: 6
+      properties:
+        total_pgmajfault:
+          type: integer
+        cache:
+          type: integer
+        mapped_file:
+          type: integer
+        total_inactive_file:
+          type: integer
+        pgpgout:
+          type: integer
+        rss:
+          type: integer
+        total_mapped_file:
+          type: integer
+        writeback:
+          type: integer
+        unevictable:
+          type: integer
+        pgpgin:
+          type: integer
+        total_unevictable:
+          type: integer
+        pgmajfault:
+          type: integer
+        total_rss:
+          type: integer
+        total_rss_huge:
+          type: integer
+        total_writeback:
+          type: integer
+        total_inactive_anon:
+          type: integer
+        rss_huge:
+          type: integer
+        hierarchical_memory_limit:
+          type: integer
+        total_pgfault:
+          type: integer
+        total_active_file:
+          type: integer
+        active_anon:
+          type: integer
+        total_active_anon:
+          type: integer
+        total_pgpgout:
+          type: integer
+        total_cache:
+          type: integer
+        inactive_anon:
+          type: integer
+        active_file:
+          type: integer
+        pgfault:
+          type: integer
+        inactive_file:
+          type: integer
+        total_pgpgin:
+          type: integer
+    CPUStats_cpu_usage:
+      example:
+        percpu_usage:
+        - 4
+        - 4
+        usage_in_kernelmode: 3
+        total_usage: 7
+        usage_in_usermode: 8
+      properties:
+        percpu_usage:
+          items:
+            type: integer
+          type: array
+        usage_in_usermode:
+          type: integer
+        total_usage:
+          type: integer
+        usage_in_kernelmode:
+          type: integer
+    CPUStats_throttling_data:
+      example:
+        throttled_time: 4
+        periods: 5
+        throttled_periods: 3
+      properties:
+        periods:
+          type: integer
+        throttled_periods:
+          type: integer
+        throttled_time:
+          type: integer
     Mount_BindOptions:
       description: Optional configuration for the `bind` type.
       example:

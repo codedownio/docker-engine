@@ -147,6 +147,38 @@ genBuildPruneResponse n =
   BuildPruneResponse
     <$> arbitraryReducedMaybe n -- buildPruneResponseSpaceReclaimed :: Maybe Integer
   
+instance Arbitrary CPUStats where
+  arbitrary = sized genCPUStats
+
+genCPUStats :: Int -> Gen CPUStats
+genCPUStats n =
+  CPUStats
+    <$> arbitraryReducedMaybe n -- cPUStatsCpuUsage :: Maybe CPUStatsCpuUsage
+    <*> arbitraryReducedMaybe n -- cPUStatsSystemCpuUsage :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsOnlineCpus :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsThrottlingData :: Maybe CPUStatsThrottlingData
+  
+instance Arbitrary CPUStatsCpuUsage where
+  arbitrary = sized genCPUStatsCpuUsage
+
+genCPUStatsCpuUsage :: Int -> Gen CPUStatsCpuUsage
+genCPUStatsCpuUsage n =
+  CPUStatsCpuUsage
+    <$> arbitraryReducedMaybe n -- cPUStatsCpuUsagePercpuUsage :: Maybe [Int]
+    <*> arbitraryReducedMaybe n -- cPUStatsCpuUsageUsageInUsermode :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsCpuUsageTotalUsage :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsCpuUsageUsageInKernelmode :: Maybe Int
+  
+instance Arbitrary CPUStatsThrottlingData where
+  arbitrary = sized genCPUStatsThrottlingData
+
+genCPUStatsThrottlingData :: Int -> Gen CPUStatsThrottlingData
+genCPUStatsThrottlingData n =
+  CPUStatsThrottlingData
+    <$> arbitraryReducedMaybe n -- cPUStatsThrottlingDataPeriods :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsThrottlingDataThrottledPeriods :: Maybe Int
+    <*> arbitraryReducedMaybe n -- cPUStatsThrottlingDataThrottledTime :: Maybe Int
+  
 instance Arbitrary ClusterInfo where
   arbitrary = sized genClusterInfo
 
@@ -308,6 +340,27 @@ genContainerPruneResponse n =
   ContainerPruneResponse
     <$> arbitraryReducedMaybe n -- containerPruneResponseContainersDeleted :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerPruneResponseSpaceReclaimed :: Maybe Integer
+  
+instance Arbitrary ContainerStatsResponse where
+  arbitrary = sized genContainerStatsResponse
+
+genContainerStatsResponse :: Int -> Gen ContainerStatsResponse
+genContainerStatsResponse n =
+  ContainerStatsResponse
+    <$> arbitraryReducedMaybe n -- containerStatsResponsePidsStats :: Maybe ContainerStatsResponsePidsStats
+    <*> arbitraryReducedMaybe n -- containerStatsResponseNetworks :: Maybe (Map.Map String NetworkStats)
+    <*> arbitraryReducedMaybe n -- containerStatsResponseMemoryStats :: Maybe MemoryStats
+    <*> arbitraryReducedMaybeValue n -- containerStatsResponseBlkioStats :: Maybe A.Value
+    <*> arbitraryReducedMaybe n -- containerStatsResponseCpuStats :: Maybe CPUStats
+    <*> arbitraryReducedMaybe n -- containerStatsResponsePrecpuStats :: Maybe CPUStats
+  
+instance Arbitrary ContainerStatsResponsePidsStats where
+  arbitrary = sized genContainerStatsResponsePidsStats
+
+genContainerStatsResponsePidsStats :: Int -> Gen ContainerStatsResponsePidsStats
+genContainerStatsResponsePidsStats n =
+  ContainerStatsResponsePidsStats
+    <$> arbitraryReducedMaybeValue n -- containerStatsResponsePidsStatsCurrent :: Maybe A.Value
   
 instance Arbitrary ContainerSummary where
   arbitrary = sized genContainerSummary
@@ -557,7 +610,7 @@ genGraphDriverData :: Int -> Gen GraphDriverData
 genGraphDriverData n =
   GraphDriverData
     <$> arbitrary -- graphDriverDataName :: Text
-    <*> arbitrary -- graphDriverDataData :: (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- graphDriverDataData :: Maybe (Map.Map String Text)
   
 instance Arbitrary HealthConfig where
   arbitrary = sized genHealthConfig
@@ -960,6 +1013,54 @@ genManagerStatus n =
     <*> arbitraryReducedMaybe n -- managerStatusReachability :: Maybe Reachability
     <*> arbitraryReducedMaybe n -- managerStatusAddr :: Maybe Text
   
+instance Arbitrary MemoryStats where
+  arbitrary = sized genMemoryStats
+
+genMemoryStats :: Int -> Gen MemoryStats
+genMemoryStats n =
+  MemoryStats
+    <$> arbitraryReducedMaybe n -- memoryStatsStats :: Maybe MemoryStatsStats
+    <*> arbitraryReducedMaybe n -- memoryStatsMaxUsage :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsUsage :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsFailcnt :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsLimit :: Maybe Int
+  
+instance Arbitrary MemoryStatsStats where
+  arbitrary = sized genMemoryStatsStats
+
+genMemoryStatsStats :: Int -> Gen MemoryStatsStats
+genMemoryStatsStats n =
+  MemoryStatsStats
+    <$> arbitraryReducedMaybe n -- memoryStatsStatsTotalPgmajfault :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsCache :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsMappedFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalInactiveFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsPgpgout :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsRss :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalMappedFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsWriteback :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsUnevictable :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsPgpgin :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalUnevictable :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsPgmajfault :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalRss :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalRssHuge :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalWriteback :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalInactiveAnon :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsRssHuge :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsHierarchicalMemoryLimit :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalPgfault :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalActiveFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsActiveAnon :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalActiveAnon :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalPgpgout :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalCache :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsInactiveAnon :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsActiveFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsPgfault :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsInactiveFile :: Maybe Int
+    <*> arbitraryReducedMaybe n -- memoryStatsStatsTotalPgpgin :: Maybe Int
+  
 instance Arbitrary Mount where
   arbitrary = sized genMount
 
@@ -1099,6 +1200,21 @@ genNetworkSettings n =
     <*> arbitraryReducedMaybe n -- networkSettingsIPv6Gateway :: Maybe Text
     <*> arbitraryReducedMaybe n -- networkSettingsMacAddress :: Maybe Text
     <*> arbitraryReducedMaybe n -- networkSettingsNetworks :: Maybe (Map.Map String EndpointSettings)
+  
+instance Arbitrary NetworkStats where
+  arbitrary = sized genNetworkStats
+
+genNetworkStats :: Int -> Gen NetworkStats
+genNetworkStats n =
+  NetworkStats
+    <$> arbitraryReducedMaybe n -- networkStatsRxBytes :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsRxDropped :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsRxErrors :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsRxPackets :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsTxBytes :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsTxDropped :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsTxErrors :: Maybe Int
+    <*> arbitraryReducedMaybe n -- networkStatsTxPackets :: Maybe Int
   
 instance Arbitrary Node where
   arbitrary = sized genNode
