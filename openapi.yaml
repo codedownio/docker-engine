@@ -10858,6 +10858,7 @@ components:
           - default
           - hyperv
           - process
+          - ""
           type: string
         InitBinary:
           description: |
@@ -12898,6 +12899,7 @@ components:
           - default
           - process
           - hyperv
+          - ""
           type: string
     ContainerConfig_Volumes:
       description: An object mapping mount point paths inside the container to empty

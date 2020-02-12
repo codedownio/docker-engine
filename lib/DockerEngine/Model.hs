@@ -7332,7 +7332,7 @@ data TaskSpecContainerSpec = TaskSpecContainerSpec
   , taskSpecContainerSpecDnsConfig :: !(Maybe TaskSpecContainerSpecDNSConfig) -- ^ "DNSConfig"
   , taskSpecContainerSpecSecrets :: !(Maybe [TaskSpecContainerSpecSecrets]) -- ^ "Secrets" - Secrets contains references to zero or more secrets that will be exposed to the service.
   , taskSpecContainerSpecConfigs :: !(Maybe [TaskSpecContainerSpecConfigs]) -- ^ "Configs" - Configs contains references to zero or more configs that will be exposed to the service.
-  , taskSpecContainerSpecIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the containers running the service. (Windows only)
+  , taskSpecContainerSpecIsolation :: !(Maybe E'Isolation3) -- ^ "Isolation" - Isolation technology of the containers running the service. (Windows only)
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpec
@@ -8451,6 +8451,7 @@ data E'Isolation
   = E'Isolation'Default -- ^ @"default"@
   | E'Isolation'Process -- ^ @"process"@
   | E'Isolation'Hyperv -- ^ @"hyperv"@
+  | E'Isolation'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation where toJSON = A.toJSON . fromE'Isolation
@@ -8465,6 +8466,7 @@ fromE'Isolation = \case
   E'Isolation'Default -> "default"
   E'Isolation'Process -> "process"
   E'Isolation'Hyperv -> "hyperv"
+  E'Isolation'Empty -> ""
 
 -- | parse 'E'Isolation' enum
 toE'Isolation :: Text -> P.Either String E'Isolation
@@ -8472,6 +8474,7 @@ toE'Isolation = \case
   "default" -> P.Right E'Isolation'Default
   "process" -> P.Right E'Isolation'Process
   "hyperv" -> P.Right E'Isolation'Hyperv
+  "" -> P.Right E'Isolation'Empty
   s -> P.Left $ "toE'Isolation: enum parse failure: " P.++ P.show s
 
 
@@ -8483,6 +8486,7 @@ data E'Isolation2
   = E'Isolation2'Default -- ^ @"default"@
   | E'Isolation2'Hyperv -- ^ @"hyperv"@
   | E'Isolation2'Process -- ^ @"process"@
+  | E'Isolation2'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation2 where toJSON = A.toJSON . fromE'Isolation2
@@ -8497,6 +8501,7 @@ fromE'Isolation2 = \case
   E'Isolation2'Default -> "default"
   E'Isolation2'Hyperv -> "hyperv"
   E'Isolation2'Process -> "process"
+  E'Isolation2'Empty -> ""
 
 -- | parse 'E'Isolation2' enum
 toE'Isolation2 :: Text -> P.Either String E'Isolation2
@@ -8504,7 +8509,40 @@ toE'Isolation2 = \case
   "default" -> P.Right E'Isolation2'Default
   "hyperv" -> P.Right E'Isolation2'Hyperv
   "process" -> P.Right E'Isolation2'Process
+  "" -> P.Right E'Isolation2'Empty
   s -> P.Left $ "toE'Isolation2: enum parse failure: " P.++ P.show s
+
+
+-- ** E'Isolation3
+
+-- | Enum of 'Text' . 
+-- Isolation technology of the containers running the service. (Windows only)
+data E'Isolation3
+  = E'Isolation3'Default -- ^ @"default"@
+  | E'Isolation3'Process -- ^ @"process"@
+  | E'Isolation3'Hyperv -- ^ @"hyperv"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'Isolation3 where toJSON = A.toJSON . fromE'Isolation3
+instance A.FromJSON E'Isolation3 where parseJSON o = P.either P.fail (pure . P.id) . toE'Isolation3 =<< A.parseJSON o
+instance WH.ToHttpApiData E'Isolation3 where toQueryParam = WH.toQueryParam . fromE'Isolation3
+instance WH.FromHttpApiData E'Isolation3 where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'Isolation3
+instance MimeRender MimeMultipartFormData E'Isolation3 where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'Isolation3' enum
+fromE'Isolation3 :: E'Isolation3 -> Text
+fromE'Isolation3 = \case
+  E'Isolation3'Default -> "default"
+  E'Isolation3'Process -> "process"
+  E'Isolation3'Hyperv -> "hyperv"
+
+-- | parse 'E'Isolation3' enum
+toE'Isolation3 :: Text -> P.Either String E'Isolation3
+toE'Isolation3 = \case
+  "default" -> P.Right E'Isolation3'Default
+  "process" -> P.Right E'Isolation3'Process
+  "hyperv" -> P.Right E'Isolation3'Hyperv
+  s -> P.Left $ "toE'Isolation3: enum parse failure: " P.++ P.show s
 
 
 -- ** E'Mode

@@ -1979,7 +1979,7 @@ genTaskSpecContainerSpec n =
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecDnsConfig :: Maybe TaskSpecContainerSpecDNSConfig
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecSecrets :: Maybe [TaskSpecContainerSpecSecrets]
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecConfigs :: Maybe [TaskSpecContainerSpecConfigs]
-    <*> arbitraryReducedMaybe n -- taskSpecContainerSpecIsolation :: Maybe E'Isolation
+    <*> arbitraryReducedMaybe n -- taskSpecContainerSpecIsolation :: Maybe E'Isolation3
   
 instance Arbitrary TaskSpecContainerSpecConfigs where
   arbitrary = sized genTaskSpecContainerSpecConfigs
@@ -2234,6 +2234,9 @@ instance Arbitrary E'Isolation where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Isolation2 where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary E'Isolation3 where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Mode where

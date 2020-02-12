@@ -767,6 +767,7 @@ definitions:
               - "default"
               - "process"
               - "hyperv"
+              - ""
 
   ContainerConfig:
     description: "Configuration for a container that is portable between hosts"
@@ -3790,6 +3791,7 @@ definitions:
           - "default"
           - "hyperv"
           - "process"
+          - ""
       InitBinary:
         description: |
           Name and, optional, path of the the `docker-init` binary.
