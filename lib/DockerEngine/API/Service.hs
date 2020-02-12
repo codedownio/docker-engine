@@ -62,7 +62,6 @@ import qualified Prelude as P
 -- | @POST \/services\/create@
 --
 -- Create a service
---
 serviceCreate
   :: (Consumes ServiceCreate MimeJSON, MimeRender MimeJSON ServiceSpec)
   => ServiceSpec -- ^ "body"

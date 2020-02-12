@@ -309,6 +309,44 @@ genContainerPruneResponse n =
     <$> arbitraryReducedMaybe n -- containerPruneResponseContainersDeleted :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerPruneResponseSpaceReclaimed :: Maybe Integer
   
+instance Arbitrary ContainerSummary where
+  arbitrary = sized genContainerSummary
+
+genContainerSummary :: Int -> Gen ContainerSummary
+genContainerSummary n =
+  ContainerSummary
+    <$> arbitraryReducedMaybe n -- containerSummaryId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryNames :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerSummaryImage :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryImageId :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryCommand :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryCreated :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- containerSummaryPorts :: Maybe [Port]
+    <*> arbitraryReducedMaybe n -- containerSummarySizeRw :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- containerSummarySizeRootFs :: Maybe Integer
+    <*> arbitraryReducedMaybe n -- containerSummaryLabels :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- containerSummaryState :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryStatus :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerSummaryHostConfig :: Maybe ContainerSummaryHostConfig
+    <*> arbitraryReducedMaybe n -- containerSummaryNetworkSettings :: Maybe ContainerSummaryNetworkSettings
+    <*> arbitraryReducedMaybe n -- containerSummaryMounts :: Maybe [Mount]
+  
+instance Arbitrary ContainerSummaryHostConfig where
+  arbitrary = sized genContainerSummaryHostConfig
+
+genContainerSummaryHostConfig :: Int -> Gen ContainerSummaryHostConfig
+genContainerSummaryHostConfig n =
+  ContainerSummaryHostConfig
+    <$> arbitraryReducedMaybe n -- containerSummaryHostConfigNetworkMode :: Maybe Text
+  
+instance Arbitrary ContainerSummaryNetworkSettings where
+  arbitrary = sized genContainerSummaryNetworkSettings
+
+genContainerSummaryNetworkSettings :: Int -> Gen ContainerSummaryNetworkSettings
+genContainerSummaryNetworkSettings n =
+  ContainerSummaryNetworkSettings
+    <$> arbitraryReducedMaybe n -- containerSummaryNetworkSettingsNetworks :: Maybe (Map.Map String EndpointSettings)
+  
 instance Arbitrary ContainerTopResponse where
   arbitrary = sized genContainerTopResponse
 
@@ -1743,7 +1781,7 @@ genSystemDataUsageResponse n =
   SystemDataUsageResponse
     <$> arbitraryReducedMaybe n -- systemDataUsageResponseLayersSize :: Maybe Integer
     <*> arbitraryReducedMaybe n -- systemDataUsageResponseImages :: Maybe [ImageSummary]
-    <*> arbitraryReducedMaybe n -- systemDataUsageResponseContainers :: Maybe [Array]
+    <*> arbitraryReducedMaybe n -- systemDataUsageResponseContainers :: Maybe [ContainerSummary]
     <*> arbitraryReducedMaybe n -- systemDataUsageResponseVolumes :: Maybe [Volume]
   
 instance Arbitrary SystemEventsResponse where

@@ -7001,6 +7001,25 @@ components:
           type: integer
       type: object
     Mount:
+      example:
+        ReadOnly: true
+        BindOptions:
+          Propagation: private
+        Target: Target
+        Type: bind
+        VolumeOptions:
+          NoCopy: false
+          DriverConfig:
+            Options:
+              key: Options
+            Name: Name
+          Labels:
+            key: Labels
+        Consistency: Consistency
+        TmpfsOptions:
+          Mode: 5
+          SizeBytes: 5
+        Source: Source
       properties:
         Target:
           description: Container path.
@@ -9805,75 +9824,152 @@ components:
           type: array
       type: object
     ContainerSummary:
-      items:
-        properties:
-          Id:
-            description: The ID of this container
+      example:
+        Status: Status
+        Mounts:
+        - ReadOnly: true
+          BindOptions:
+            Propagation: private
+          Target: Target
+          Type: bind
+          VolumeOptions:
+            NoCopy: false
+            DriverConfig:
+              Options:
+                key: Options
+              Name: Name
+            Labels:
+              key: Labels
+          Consistency: Consistency
+          TmpfsOptions:
+            Mode: 5
+            SizeBytes: 5
+          Source: Source
+        - ReadOnly: true
+          BindOptions:
+            Propagation: private
+          Target: Target
+          Type: bind
+          VolumeOptions:
+            NoCopy: false
+            DriverConfig:
+              Options:
+                key: Options
+              Name: Name
+            Labels:
+              key: Labels
+          Consistency: Consistency
+          TmpfsOptions:
+            Mode: 5
+            SizeBytes: 5
+          Source: Source
+        SizeRw: 6
+        Ports:
+        - PrivatePort: 8080
+          PublicPort: 80
+          Type: tcp
+        - PrivatePort: 8080
+          PublicPort: 80
+          Type: tcp
+        Labels:
+          key: Labels
+        Image: Image
+        Created: 0
+        Names:
+        - Names
+        - Names
+        NetworkSettings:
+          Networks:
+            key:
+              GlobalIPv6Address: 2001:db8::5689
+              IPPrefixLen: 16
+              GlobalIPv6PrefixLen: 64
+              Aliases:
+              - server_x
+              - server_y
+              NetworkID: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+              MacAddress: 02:42:ac:11:00:04
+              IPAMConfig:
+                LinkLocalIPs:
+                - 169.254.34.68
+                - fe80::3468
+                IPv6Address: 2001:db8:abcd::3033
+                IPv4Address: 172.20.30.33
+              DriverOpts:
+                com.example.some-label: some-value
+                com.example.some-other-label: some-other-value
+              Gateway: 172.17.0.1
+              EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+              Links:
+              - container_1
+              - container_2
+              IPv6Gateway: 2001:db8:2::100
+              IPAddress: 172.17.0.4
+        SizeRootFs: 1
+        Command: Command
+        State: State
+        ImageID: ImageID
+        HostConfig:
+          NetworkMode: NetworkMode
+        Id: Id
+      properties:
+        Id:
+          description: The ID of this container
+          type: string
+          x-go-name: ID
+        Names:
+          description: The names that this container has been given
+          items:
             type: string
-            x-go-name: ID
-          Names:
-            description: The names that this container has been given
-            items:
-              type: string
-            type: array
-          Image:
-            description: The name of the image used when creating this container
+          type: array
+        Image:
+          description: The name of the image used when creating this container
+          type: string
+        ImageID:
+          description: The ID of the image that this container was created from
+          type: string
+        Command:
+          description: Command to run when starting the container
+          type: string
+        Created:
+          description: When the container was created
+          format: int64
+          type: integer
+        Ports:
+          description: The ports exposed by this container
+          items:
+            $ref: '#/components/schemas/Port'
+          type: array
+        SizeRw:
+          description: The size of files that have been created or changed by this
+            container
+          format: int64
+          type: integer
+        SizeRootFs:
+          description: The total size of all the files in this container
+          format: int64
+          type: integer
+        Labels:
+          additionalProperties:
             type: string
-          ImageID:
-            description: The ID of the image that this container was created from
-            type: string
-          Command:
-            description: Command to run when starting the container
-            type: string
-          Created:
-            description: When the container was created
-            format: int64
-            type: integer
-          Ports:
-            description: The ports exposed by this container
-            items:
-              $ref: '#/components/schemas/Port'
-            type: array
-          SizeRw:
-            description: The size of files that have been created or changed by this
-              container
-            format: int64
-            type: integer
-          SizeRootFs:
-            description: The total size of all the files in this container
-            format: int64
-            type: integer
-          Labels:
-            additionalProperties:
-              type: string
-            description: User-defined key/value metadata.
-            type: object
-          State:
-            description: The state of this container (e.g. `Exited`)
-            type: string
-          Status:
-            description: Additional human-readable status of this container (e.g.
-              `Exit 0`)
-            type: string
-          HostConfig:
-            properties:
-              NetworkMode:
-                type: string
-            type: object
-          NetworkSettings:
-            description: A summary of the container's network settings
-            properties:
-              Networks:
-                additionalProperties:
-                  $ref: '#/components/schemas/EndpointSettings'
-                type: object
-            type: object
-          Mounts:
-            items:
-              $ref: '#/components/schemas/Mount'
-            type: array
-        type: object
-      type: array
+          description: User-defined key/value metadata.
+          type: object
+        State:
+          description: The state of this container (e.g. `Exited`)
+          type: string
+        Status:
+          description: Additional human-readable status of this container (e.g. `Exit
+            0`)
+          type: string
+        HostConfig:
+          $ref: '#/components/schemas/ContainerSummary_HostConfig'
+        NetworkSettings:
+          $ref: '#/components/schemas/ContainerSummary_NetworkSettings'
+        Mounts:
+          items:
+            $ref: '#/components/schemas/Mount'
+          type: array
+      type: object
     Driver:
       description: Driver represents a driver (network, logging, secrets).
       example:
@@ -12489,6 +12585,8 @@ components:
       - Platforms
     Mount_BindOptions:
       description: Optional configuration for the `bind` type.
+      example:
+        Propagation: private
       properties:
         Propagation:
           description: A propagation mode with the value `[r]private`, `[r]shared`,
@@ -12503,6 +12601,10 @@ components:
           type: string
     Mount_VolumeOptions_DriverConfig:
       description: Map of driver specific options
+      example:
+        Options:
+          key: Options
+        Name: Name
       properties:
         Name:
           description: Name of the driver to use to create the volume.
@@ -12514,6 +12616,14 @@ components:
           type: object
     Mount_VolumeOptions:
       description: Optional configuration for the `volume` type.
+      example:
+        NoCopy: false
+        DriverConfig:
+          Options:
+            key: Options
+          Name: Name
+        Labels:
+          key: Labels
       properties:
         NoCopy:
           default: false
@@ -12528,6 +12638,9 @@ components:
           $ref: '#/components/schemas/Mount_VolumeOptions_DriverConfig'
     Mount_TmpfsOptions:
       description: Optional configuration for the `tmpfs` type.
+      example:
+        Mode: 5
+        SizeBytes: 5
       properties:
         SizeBytes:
           description: The size for the tmpfs mount in bytes.
@@ -13871,3 +13984,43 @@ components:
           type: string
         Message:
           type: string
+    ContainerSummary_HostConfig:
+      example:
+        NetworkMode: NetworkMode
+      properties:
+        NetworkMode:
+          type: string
+    ContainerSummary_NetworkSettings:
+      description: A summary of the container's network settings
+      example:
+        Networks:
+          key:
+            GlobalIPv6Address: 2001:db8::5689
+            IPPrefixLen: 16
+            GlobalIPv6PrefixLen: 64
+            Aliases:
+            - server_x
+            - server_y
+            NetworkID: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+            MacAddress: 02:42:ac:11:00:04
+            IPAMConfig:
+              LinkLocalIPs:
+              - 169.254.34.68
+              - fe80::3468
+              IPv6Address: 2001:db8:abcd::3033
+              IPv4Address: 172.20.30.33
+            DriverOpts:
+              com.example.some-label: some-value
+              com.example.some-other-label: some-other-value
+            Gateway: 172.17.0.1
+            EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+            Links:
+            - container_1
+            - container_2
+            IPv6Gateway: 2001:db8:2::100
+            IPAddress: 172.17.0.4
+      properties:
+        Networks:
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointSettings'
+          type: object

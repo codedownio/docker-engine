@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.36
@@ -492,12 +492,12 @@ mkBuildPruneResponse =
 
 -- ** ClusterInfo
 -- | ClusterInfo
--- ClusterInfo represents information about the swarm as is returned by the \"/info\" endpoint. Join-tokens are not included.
+-- ClusterInfo represents information about the swarm as is returned by the \"/info\" endpoint. Join-tokens are not included. 
 data ClusterInfo = ClusterInfo
   { clusterInfoId :: !(Maybe Text) -- ^ "ID" - The ID of the swarm.
   , clusterInfoVersion :: !(Maybe ObjectVersion) -- ^ "Version"
-  , clusterInfoCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-  , clusterInfoUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , clusterInfoCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
+  , clusterInfoUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
   , clusterInfoSpec :: !(Maybe SwarmSpec) -- ^ "Spec"
   , clusterInfoTlsInfo :: !(Maybe TLSInfo) -- ^ "TLSInfo"
   , clusterInfoRootRotationInProgress :: !(Maybe Bool) -- ^ "RootRotationInProgress" - Whether there is currently a root CA rotation in progress for the swarm
@@ -545,10 +545,10 @@ mkClusterInfo =
 
 -- ** Commit
 -- | Commit
--- Commit holds the Git-commit (SHA1) that a binary was built from, as reported in the version-string of external tools, such as `containerd`, or `runC`.
+-- Commit holds the Git-commit (SHA1) that a binary was built from, as reported in the version-string of external tools, such as `containerd`, or `runC`. 
 data Commit = Commit
   { commitId :: !(Maybe Text) -- ^ "ID" - Actual commit ID of external tool.
-  , commitExpected :: !(Maybe Text) -- ^ "Expected" - Commit ID of external tool expected by dockerd as set at build time.
+  , commitExpected :: !(Maybe Text) -- ^ "Expected" - Commit ID of external tool expected by dockerd as set at build time. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Commit
@@ -625,7 +625,7 @@ mkConfig =
 data ConfigSpec = ConfigSpec
   { configSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) config data.
+  , configSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) config data. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ConfigSpec
@@ -701,18 +701,18 @@ data ContainerConfig = ContainerConfig
   , containerConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.
   , containerConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.
   , containerConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.
-  , containerConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp&gt;\&quot;: {}}&#x60;
+  , containerConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp&gt;\&quot;: {}}&#x60; 
   , containerConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.
   , containerConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;
   , containerConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects
-  , containerConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value.
+  , containerConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value. 
   , containerConfigCmd :: !(Maybe [Text]) -- ^ "Cmd" - Command to run specified as a string or an array of strings.
   , containerConfigHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
   , containerConfigArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
   , containerConfigImage :: !(Maybe Text) -- ^ "Image" - The name of the image to use when creating the container
   , containerConfigVolumes :: !(Maybe ContainerConfigVolumes) -- ^ "Volumes"
   , containerConfigWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
-  , containerConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;).
+  , containerConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;). 
   , containerConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.
   , containerConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.
   , containerConfigOnBuild :: !(Maybe [Text]) -- ^ "OnBuild" - &#x60;ONBUILD&#x60; metadata that were defined in the image&#39;s &#x60;Dockerfile&#x60;.
@@ -1008,8 +1008,8 @@ mkContainerInspectResponse =
 -- | ContainerInspectResponseState
 -- The state of the container.
 data ContainerInspectResponseState = ContainerInspectResponseState
-  { containerInspectResponseStateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;.
-  , containerInspectResponseStateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;.
+  { containerInspectResponseStateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;. 
+  , containerInspectResponseStateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;. 
   , containerInspectResponseStatePaused :: !(Maybe Bool) -- ^ "Paused" - Whether this container is paused.
   , containerInspectResponseStateRestarting :: !(Maybe Bool) -- ^ "Restarting" - Whether this container is restarting.
   , containerInspectResponseStateOomKilled :: !(Maybe Bool) -- ^ "OOMKilled" - Whether this container has been killed because it ran out of memory.
@@ -1103,6 +1103,147 @@ mkContainerPruneResponse =
   ContainerPruneResponse
   { containerPruneResponseContainersDeleted = Nothing
   , containerPruneResponseSpaceReclaimed = Nothing
+  }
+
+-- ** ContainerSummary
+-- | ContainerSummary
+data ContainerSummary = ContainerSummary
+  { containerSummaryId :: !(Maybe Text) -- ^ "Id" - The ID of this container
+  , containerSummaryNames :: !(Maybe [Text]) -- ^ "Names" - The names that this container has been given
+  , containerSummaryImage :: !(Maybe Text) -- ^ "Image" - The name of the image used when creating this container
+  , containerSummaryImageId :: !(Maybe Text) -- ^ "ImageID" - The ID of the image that this container was created from
+  , containerSummaryCommand :: !(Maybe Text) -- ^ "Command" - Command to run when starting the container
+  , containerSummaryCreated :: !(Maybe Integer) -- ^ "Created" - When the container was created
+  , containerSummaryPorts :: !(Maybe [Port]) -- ^ "Ports" - The ports exposed by this container
+  , containerSummarySizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container
+  , containerSummarySizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container
+  , containerSummaryLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
+  , containerSummaryState :: !(Maybe Text) -- ^ "State" - The state of this container (e.g. &#x60;Exited&#x60;)
+  , containerSummaryStatus :: !(Maybe Text) -- ^ "Status" - Additional human-readable status of this container (e.g. &#x60;Exit 0&#x60;)
+  , containerSummaryHostConfig :: !(Maybe ContainerSummaryHostConfig) -- ^ "HostConfig"
+  , containerSummaryNetworkSettings :: !(Maybe ContainerSummaryNetworkSettings) -- ^ "NetworkSettings"
+  , containerSummaryMounts :: !(Maybe [Mount]) -- ^ "Mounts"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerSummary
+instance A.FromJSON ContainerSummary where
+  parseJSON = A.withObject "ContainerSummary" $ \o ->
+    ContainerSummary
+      <$> (o .:? "Id")
+      <*> (o .:? "Names")
+      <*> (o .:? "Image")
+      <*> (o .:? "ImageID")
+      <*> (o .:? "Command")
+      <*> (o .:? "Created")
+      <*> (o .:? "Ports")
+      <*> (o .:? "SizeRw")
+      <*> (o .:? "SizeRootFs")
+      <*> (o .:? "Labels")
+      <*> (o .:? "State")
+      <*> (o .:? "Status")
+      <*> (o .:? "HostConfig")
+      <*> (o .:? "NetworkSettings")
+      <*> (o .:? "Mounts")
+
+-- | ToJSON ContainerSummary
+instance A.ToJSON ContainerSummary where
+  toJSON ContainerSummary {..} =
+   _omitNulls
+      [ "Id" .= containerSummaryId
+      , "Names" .= containerSummaryNames
+      , "Image" .= containerSummaryImage
+      , "ImageID" .= containerSummaryImageId
+      , "Command" .= containerSummaryCommand
+      , "Created" .= containerSummaryCreated
+      , "Ports" .= containerSummaryPorts
+      , "SizeRw" .= containerSummarySizeRw
+      , "SizeRootFs" .= containerSummarySizeRootFs
+      , "Labels" .= containerSummaryLabels
+      , "State" .= containerSummaryState
+      , "Status" .= containerSummaryStatus
+      , "HostConfig" .= containerSummaryHostConfig
+      , "NetworkSettings" .= containerSummaryNetworkSettings
+      , "Mounts" .= containerSummaryMounts
+      ]
+
+
+-- | Construct a value of type 'ContainerSummary' (by applying it's required fields, if any)
+mkContainerSummary
+  :: ContainerSummary
+mkContainerSummary =
+  ContainerSummary
+  { containerSummaryId = Nothing
+  , containerSummaryNames = Nothing
+  , containerSummaryImage = Nothing
+  , containerSummaryImageId = Nothing
+  , containerSummaryCommand = Nothing
+  , containerSummaryCreated = Nothing
+  , containerSummaryPorts = Nothing
+  , containerSummarySizeRw = Nothing
+  , containerSummarySizeRootFs = Nothing
+  , containerSummaryLabels = Nothing
+  , containerSummaryState = Nothing
+  , containerSummaryStatus = Nothing
+  , containerSummaryHostConfig = Nothing
+  , containerSummaryNetworkSettings = Nothing
+  , containerSummaryMounts = Nothing
+  }
+
+-- ** ContainerSummaryHostConfig
+-- | ContainerSummaryHostConfig
+data ContainerSummaryHostConfig = ContainerSummaryHostConfig
+  { containerSummaryHostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerSummaryHostConfig
+instance A.FromJSON ContainerSummaryHostConfig where
+  parseJSON = A.withObject "ContainerSummaryHostConfig" $ \o ->
+    ContainerSummaryHostConfig
+      <$> (o .:? "NetworkMode")
+
+-- | ToJSON ContainerSummaryHostConfig
+instance A.ToJSON ContainerSummaryHostConfig where
+  toJSON ContainerSummaryHostConfig {..} =
+   _omitNulls
+      [ "NetworkMode" .= containerSummaryHostConfigNetworkMode
+      ]
+
+
+-- | Construct a value of type 'ContainerSummaryHostConfig' (by applying it's required fields, if any)
+mkContainerSummaryHostConfig
+  :: ContainerSummaryHostConfig
+mkContainerSummaryHostConfig =
+  ContainerSummaryHostConfig
+  { containerSummaryHostConfigNetworkMode = Nothing
+  }
+
+-- ** ContainerSummaryNetworkSettings
+-- | ContainerSummaryNetworkSettings
+-- A summary of the container's network settings
+data ContainerSummaryNetworkSettings = ContainerSummaryNetworkSettings
+  { containerSummaryNetworkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerSummaryNetworkSettings
+instance A.FromJSON ContainerSummaryNetworkSettings where
+  parseJSON = A.withObject "ContainerSummaryNetworkSettings" $ \o ->
+    ContainerSummaryNetworkSettings
+      <$> (o .:? "Networks")
+
+-- | ToJSON ContainerSummaryNetworkSettings
+instance A.ToJSON ContainerSummaryNetworkSettings where
+  toJSON ContainerSummaryNetworkSettings {..} =
+   _omitNulls
+      [ "Networks" .= containerSummaryNetworkSettingsNetworks
+      ]
+
+
+-- | Construct a value of type 'ContainerSummaryNetworkSettings' (by applying it's required fields, if any)
+mkContainerSummaryNetworkSettings
+  :: ContainerSummaryNetworkSettings
+mkContainerSummaryNetworkSettings =
+  ContainerSummaryNetworkSettings
+  { containerSummaryNetworkSettingsNetworks = Nothing
   }
 
 -- ** ContainerTopResponse
@@ -1336,7 +1477,7 @@ instance A.ToJSON DistributionInspectResponse where
 
 -- | Construct a value of type 'DistributionInspectResponse' (by applying it's required fields, if any)
 mkDistributionInspectResponse
-  :: DistributionInspectResponseDescriptor -- ^ 'distributionInspectResponseDescriptor'
+  :: DistributionInspectResponseDescriptor -- ^ 'distributionInspectResponseDescriptor' 
   -> [DistributionInspectResponsePlatforms] -- ^ 'distributionInspectResponsePlatforms': An array containing all platforms supported by the image
   -> DistributionInspectResponse
 mkDistributionInspectResponse distributionInspectResponseDescriptor distributionInspectResponsePlatforms =
@@ -1470,7 +1611,7 @@ mkDriver driverName =
 
 -- ** EndpointIPAMConfig
 -- | EndpointIPAMConfig
--- EndpointIPAMConfig represents an endpoint's IPAM configuration.
+-- EndpointIPAMConfig represents an endpoint's IPAM configuration. 
 data EndpointIPAMConfig = EndpointIPAMConfig
   { endpointIPAMConfigIPv4Address :: !(Maybe Text) -- ^ "IPv4Address"
   , endpointIPAMConfigIPv6Address :: !(Maybe Text) -- ^ "IPv6Address"
@@ -1512,7 +1653,7 @@ data EndpointPortConfig = EndpointPortConfig
   , endpointPortConfigProtocol :: !(Maybe E'Type) -- ^ "Protocol"
   , endpointPortConfigTargetPort :: !(Maybe Int) -- ^ "TargetPort" - The port inside the container.
   , endpointPortConfigPublishedPort :: !(Maybe Int) -- ^ "PublishedPort" - The port on the swarm hosts.
-  , endpointPortConfigPublishMode :: !(Maybe E'PublishMode) -- ^ "PublishMode" - The mode in which port is published.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  - \&quot;ingress\&quot; makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \&quot;host\&quot; bypasses the routing mesh and publish the port directly on   the swarm node where that service is running.
+  , endpointPortConfigPublishMode :: !(Maybe E'PublishMode) -- ^ "PublishMode" - The mode in which port is published.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  - \&quot;ingress\&quot; makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \&quot;host\&quot; bypasses the routing mesh and publish the port directly on   the swarm node where that service is running. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON EndpointPortConfig
@@ -1556,16 +1697,16 @@ data EndpointSettings = EndpointSettings
   { endpointSettingsIpamConfig :: !(Maybe EndpointIPAMConfig) -- ^ "IPAMConfig"
   , endpointSettingsLinks :: !(Maybe [Text]) -- ^ "Links"
   , endpointSettingsAliases :: !(Maybe [Text]) -- ^ "Aliases"
-  , endpointSettingsNetworkId :: !(Maybe Text) -- ^ "NetworkID" - Unique ID of the network.
-  , endpointSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - Unique ID for the service endpoint in a Sandbox.
-  , endpointSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for this network.
-  , endpointSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address.
-  , endpointSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address.
-  , endpointSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address.
-  , endpointSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address.
-  , endpointSettingsGlobalIPv6PrefixLen :: !(Maybe Integer) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address.
-  , endpointSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the endpoint on this network.
-  , endpointSettingsDriverOpts :: !(Maybe (Map.Map String Text)) -- ^ "DriverOpts" - DriverOpts is a mapping of driver options and values. These options are passed directly to the driver and are driver specific.
+  , endpointSettingsNetworkId :: !(Maybe Text) -- ^ "NetworkID" - Unique ID of the network. 
+  , endpointSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - Unique ID for the service endpoint in a Sandbox. 
+  , endpointSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for this network. 
+  , endpointSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address. 
+  , endpointSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address. 
+  , endpointSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address. 
+  , endpointSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address. 
+  , endpointSettingsGlobalIPv6PrefixLen :: !(Maybe Integer) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address. 
+  , endpointSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the endpoint on this network. 
+  , endpointSettingsDriverOpts :: !(Maybe (Map.Map String Text)) -- ^ "DriverOpts" - DriverOpts is a mapping of driver options and values. These options are passed directly to the driver and are driver specific. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON EndpointSettings
@@ -1884,8 +2025,8 @@ instance A.ToJSON GraphDriverData where
 
 -- | Construct a value of type 'GraphDriverData' (by applying it's required fields, if any)
 mkGraphDriverData
-  :: Text -- ^ 'graphDriverDataName'
-  -> (Map.Map String Text) -- ^ 'graphDriverDataData'
+  :: Text -- ^ 'graphDriverDataName' 
+  -> (Map.Map String Text) -- ^ 'graphDriverDataData' 
   -> GraphDriverData
 mkGraphDriverData graphDriverDataName graphDriverDataData =
   GraphDriverData
@@ -1897,7 +2038,7 @@ mkGraphDriverData graphDriverDataName graphDriverDataData =
 -- | HealthConfig
 -- A test to perform to check that the container is healthy.
 data HealthConfig = HealthConfig
-  { healthConfigTest :: !(Maybe [Text]) -- ^ "Test" - The test to perform. Possible values are:  - &#x60;[]&#x60; inherit healthcheck from image or parent image - &#x60;[\&quot;NONE\&quot;]&#x60; disable healthcheck - &#x60;[\&quot;CMD\&quot;, args...]&#x60; exec arguments directly - &#x60;[\&quot;CMD-SHELL\&quot;, command]&#x60; run command with system&#39;s default shell
+  { healthConfigTest :: !(Maybe [Text]) -- ^ "Test" - The test to perform. Possible values are:  - &#x60;[]&#x60; inherit healthcheck from image or parent image - &#x60;[\&quot;NONE\&quot;]&#x60; disable healthcheck - &#x60;[\&quot;CMD\&quot;, args...]&#x60; exec arguments directly - &#x60;[\&quot;CMD-SHELL\&quot;, command]&#x60; run command with system&#39;s default shell 
   , healthConfigInterval :: !(Maybe Int) -- ^ "Interval" - The time to wait between checks in nanoseconds. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
   , healthConfigTimeout :: !(Maybe Int) -- ^ "Timeout" - The time to wait before considering the check to have hung. It should be 0 or at least 1000000 (1 ms). 0 means inherit.
   , healthConfigRetries :: !(Maybe Int) -- ^ "Retries" - The number of consecutive failures needed to consider a container as unhealthy. 0 means inherit.
@@ -1976,12 +2117,12 @@ instance A.ToJSON HistoryResponseItem where
 
 -- | Construct a value of type 'HistoryResponseItem' (by applying it's required fields, if any)
 mkHistoryResponseItem
-  :: Text -- ^ 'historyResponseItemId'
-  -> Integer -- ^ 'historyResponseItemCreated'
-  -> Text -- ^ 'historyResponseItemCreatedBy'
-  -> [Text] -- ^ 'historyResponseItemTags'
-  -> Integer -- ^ 'historyResponseItemSize'
-  -> Text -- ^ 'historyResponseItemComment'
+  :: Text -- ^ 'historyResponseItemId' 
+  -> Integer -- ^ 'historyResponseItemCreated' 
+  -> Text -- ^ 'historyResponseItemCreatedBy' 
+  -> [Text] -- ^ 'historyResponseItemTags' 
+  -> Integer -- ^ 'historyResponseItemSize' 
+  -> Text -- ^ 'historyResponseItemComment' 
   -> HistoryResponseItem
 mkHistoryResponseItem historyResponseItemId historyResponseItemCreated historyResponseItemCreatedBy historyResponseItemTags historyResponseItemSize historyResponseItemComment =
   HistoryResponseItem
@@ -2001,11 +2142,11 @@ data HostConfig = HostConfig
   , hostConfigMemory :: !(Maybe Integer) -- ^ "Memory" - Memory limit in bytes.
   , hostConfigCgroupParent :: !(Maybe Text) -- ^ "CgroupParent" - Path to &#x60;cgroups&#x60; under which the container&#39;s &#x60;cgroup&#x60; is created. If the path is not absolute, the path is considered to be relative to the &#x60;cgroups&#x60; path of the init process. Cgroups are created if they do not already exist.
   , hostConfigBlkioWeight :: !(Maybe Int) -- ^ "BlkioWeight" - Block IO weight (relative weight).
-  , hostConfigBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;.
-  , hostConfigBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , hostConfigBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , hostConfigBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , hostConfigBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , hostConfigBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;. 
+  , hostConfigBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , hostConfigBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , hostConfigBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , hostConfigBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
   , hostConfigCpuPeriod :: !(Maybe Integer) -- ^ "CpuPeriod" - The length of a CPU period in microseconds.
   , hostConfigCpuQuota :: !(Maybe Integer) -- ^ "CpuQuota" - Microseconds of CPU time that the container can get in a CPU period.
   , hostConfigCpuRealtimePeriod :: !(Maybe Integer) -- ^ "CpuRealtimePeriod" - The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
@@ -2022,16 +2163,16 @@ data HostConfig = HostConfig
   , hostConfigNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU quota in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPUs.
   , hostConfigOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Disable OOM Killer for the container.
   , hostConfigPidsLimit :: !(Maybe Integer) -- ^ "PidsLimit" - Tune a container&#39;s pids limit. Set -1 for unlimited.
-  , hostConfigUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot;
-  , hostConfigCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
-  , hostConfigCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
+  , hostConfigUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot; 
+  , hostConfigCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
+  , hostConfigCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
   , hostConfigIoMaximumIOps :: !(Maybe Integer) -- ^ "IOMaximumIOps" - Maximum IOps for the container system drive (Windows only)
   , hostConfigIoMaximumBandwidth :: !(Maybe Integer) -- ^ "IOMaximumBandwidth" - Maximum IO in bytes per second for the container system drive (Windows only)
-  , hostConfigBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path.
+  , hostConfigBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path. 
   , hostConfigContainerIdFile :: !(Maybe Text) -- ^ "ContainerIDFile" - Path to a file where the container ID is written
   , hostConfigLogConfig :: !(Maybe HostConfigAllOfLogConfig) -- ^ "LogConfig"
   , hostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode" - Network mode to use for this container. Supported standard values are: &#x60;bridge&#x60;, &#x60;host&#x60;, &#x60;none&#x60;, and &#x60;container:&lt;name|id&gt;&#x60;. Any other value is taken as a custom network&#39;s name to which this container should connect to.
-  , hostConfigPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
+  , hostConfigPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table. 
   , hostConfigRestartPolicy :: !(Maybe RestartPolicy) -- ^ "RestartPolicy"
   , hostConfigAutoRemove :: !(Maybe Bool) -- ^ "AutoRemove" - Automatically remove the container when the container&#39;s process exits. This has no effect if &#x60;RestartPolicy&#x60; is set.
   , hostConfigVolumeDriver :: !(Maybe Text) -- ^ "VolumeDriver" - Driver that this container uses to mount volumes.
@@ -2042,23 +2183,23 @@ data HostConfig = HostConfig
   , hostConfigDns :: !(Maybe [Text]) -- ^ "Dns" - A list of DNS servers for the container to use.
   , hostConfigDnsOptions :: !(Maybe [Text]) -- ^ "DnsOptions" - A list of DNS options.
   , hostConfigDnsSearch :: !(Maybe [Text]) -- ^ "DnsSearch" - A list of DNS search domains.
-  , hostConfigExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;.
+  , hostConfigExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;. 
   , hostConfigGroupAdd :: !(Maybe [Text]) -- ^ "GroupAdd" - A list of additional groups that the container process will run as.
-  , hostConfigIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration.
+  , hostConfigIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration. 
   , hostConfigCgroup :: !(Maybe Text) -- ^ "Cgroup" - Cgroup to use for the container.
   , hostConfigLinks :: !(Maybe [Text]) -- ^ "Links" - A list of links for the container in the form &#x60;container_name:alias&#x60;.
   , hostConfigOomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj" - An integer value containing the score given to the container in order to tune OOM killer preferences.
-  , hostConfigPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container
+  , hostConfigPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container 
   , hostConfigPrivileged :: !(Maybe Bool) -- ^ "Privileged" - Gives the container full access to the host.
-  , hostConfigPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;.
+  , hostConfigPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;. 
   , hostConfigReadonlyRootfs :: !(Maybe Bool) -- ^ "ReadonlyRootfs" - Mount the container&#39;s root filesystem as read only.
   , hostConfigSecurityOpt :: !(Maybe [Text]) -- ^ "SecurityOpt" - A list of string values to customize labels for MLS systems, such as SELinux.
-  , hostConfigStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;.
-  , hostConfigTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;.
+  , hostConfigStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;. 
+  , hostConfigTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;. 
   , hostConfigUtsMode :: !(Maybe Text) -- ^ "UTSMode" - UTS namespace to use for the container.
   , hostConfigUsernsMode :: !(Maybe Text) -- ^ "UsernsMode" - Sets the usernamespace mode for the container when usernamespace remapping option is enabled.
   , hostConfigShmSize :: !(Maybe Int) -- ^ "ShmSize" - Size of &#x60;/dev/shm&#x60; in bytes. If omitted, the system uses 64MB.
-  , hostConfigSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60;
+  , hostConfigSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60; 
   , hostConfigRuntime :: !(Maybe Text) -- ^ "Runtime" - Runtime to use with this container.
   , hostConfigConsoleSize :: !(Maybe [Int]) -- ^ "ConsoleSize" - Initial console size, as an &#x60;[height, width]&#x60; array. (Windows only)
   , hostConfigIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the container. (Windows only)
@@ -2281,11 +2422,11 @@ mkHostConfig =
 -- ** HostConfigAllOf
 -- | HostConfigAllOf
 data HostConfigAllOf = HostConfigAllOf
-  { hostConfigAllOfBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path.
+  { hostConfigAllOfBinds :: !(Maybe [Text]) -- ^ "Binds" - A list of volume bindings for this container. Each volume binding is a string in one of these forms:  - &#x60;host-src:container-dest&#x60; to bind-mount a host path into the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;host-src:container-dest:ro&#x60; to make the bind mount read-only inside the container. Both &#x60;host-src&#x60;, and &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest&#x60; to bind-mount a volume managed by a volume driver into the container. &#x60;container-dest&#x60; must be an _absolute_ path. - &#x60;volume-name:container-dest:ro&#x60; to mount the volume read-only inside the container.  &#x60;container-dest&#x60; must be an _absolute_ path. 
   , hostConfigAllOfContainerIdFile :: !(Maybe Text) -- ^ "ContainerIDFile" - Path to a file where the container ID is written
   , hostConfigAllOfLogConfig :: !(Maybe HostConfigAllOfLogConfig) -- ^ "LogConfig"
   , hostConfigAllOfNetworkMode :: !(Maybe Text) -- ^ "NetworkMode" - Network mode to use for this container. Supported standard values are: &#x60;bridge&#x60;, &#x60;host&#x60;, &#x60;none&#x60;, and &#x60;container:&lt;name|id&gt;&#x60;. Any other value is taken as a custom network&#39;s name to which this container should connect to.
-  , hostConfigAllOfPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
+  , hostConfigAllOfPortBindings :: !(Maybe (Map.Map String [PortBinding])) -- ^ "PortBindings" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table. 
   , hostConfigAllOfRestartPolicy :: !(Maybe RestartPolicy) -- ^ "RestartPolicy"
   , hostConfigAllOfAutoRemove :: !(Maybe Bool) -- ^ "AutoRemove" - Automatically remove the container when the container&#39;s process exits. This has no effect if &#x60;RestartPolicy&#x60; is set.
   , hostConfigAllOfVolumeDriver :: !(Maybe Text) -- ^ "VolumeDriver" - Driver that this container uses to mount volumes.
@@ -2296,23 +2437,23 @@ data HostConfigAllOf = HostConfigAllOf
   , hostConfigAllOfDns :: !(Maybe [Text]) -- ^ "Dns" - A list of DNS servers for the container to use.
   , hostConfigAllOfDnsOptions :: !(Maybe [Text]) -- ^ "DnsOptions" - A list of DNS options.
   , hostConfigAllOfDnsSearch :: !(Maybe [Text]) -- ^ "DnsSearch" - A list of DNS search domains.
-  , hostConfigAllOfExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;.
+  , hostConfigAllOfExtraHosts :: !(Maybe [Text]) -- ^ "ExtraHosts" - A list of hostnames/IP mappings to add to the container&#39;s &#x60;/etc/hosts&#x60; file. Specified in the form &#x60;[\&quot;hostname:IP\&quot;]&#x60;. 
   , hostConfigAllOfGroupAdd :: !(Maybe [Text]) -- ^ "GroupAdd" - A list of additional groups that the container process will run as.
-  , hostConfigAllOfIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration.
+  , hostConfigAllOfIpcMode :: !(Maybe Text) -- ^ "IpcMode" - IPC sharing mode for the container. Possible values are:  - &#x60;\&quot;none\&quot;&#x60;: own private IPC namespace, with /dev/shm not mounted - &#x60;\&quot;private\&quot;&#x60;: own private IPC namespace - &#x60;\&quot;shareable\&quot;&#x60;: own private IPC namespace, with a possibility to share it with other containers - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: join another (shareable) container&#39;s IPC namespace - &#x60;\&quot;host\&quot;&#x60;: use the host system&#39;s IPC namespace  If not specified, daemon default is used, which can either be &#x60;\&quot;private\&quot;&#x60; or &#x60;\&quot;shareable\&quot;&#x60;, depending on daemon version and configuration. 
   , hostConfigAllOfCgroup :: !(Maybe Text) -- ^ "Cgroup" - Cgroup to use for the container.
   , hostConfigAllOfLinks :: !(Maybe [Text]) -- ^ "Links" - A list of links for the container in the form &#x60;container_name:alias&#x60;.
   , hostConfigAllOfOomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj" - An integer value containing the score given to the container in order to tune OOM killer preferences.
-  , hostConfigAllOfPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container
+  , hostConfigAllOfPidMode :: !(Maybe Text) -- ^ "PidMode" - Set the PID (Process) Namespace mode for the container. It can be either:  - &#x60;\&quot;container:&lt;name|id&gt;\&quot;&#x60;: joins another container&#39;s PID namespace - &#x60;\&quot;host\&quot;&#x60;: use the host&#39;s PID namespace inside the container 
   , hostConfigAllOfPrivileged :: !(Maybe Bool) -- ^ "Privileged" - Gives the container full access to the host.
-  , hostConfigAllOfPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;.
+  , hostConfigAllOfPublishAllPorts :: !(Maybe Bool) -- ^ "PublishAllPorts" - Allocates an ephemeral host port for all of a container&#39;s exposed ports.  Ports are de-allocated when the container stops and allocated when the container starts. The allocated port might be changed when restarting the container.  The port is selected from the ephemeral port range that depends on the kernel. For example, on Linux the range is defined by &#x60;/proc/sys/net/ipv4/ip_local_port_range&#x60;. 
   , hostConfigAllOfReadonlyRootfs :: !(Maybe Bool) -- ^ "ReadonlyRootfs" - Mount the container&#39;s root filesystem as read only.
   , hostConfigAllOfSecurityOpt :: !(Maybe [Text]) -- ^ "SecurityOpt" - A list of string values to customize labels for MLS systems, such as SELinux.
-  , hostConfigAllOfStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;.
-  , hostConfigAllOfTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;.
+  , hostConfigAllOfStorageOpt :: !(Maybe (Map.Map String Text)) -- ^ "StorageOpt" - Storage driver options for this container, in the form &#x60;{\&quot;size\&quot;: \&quot;120G\&quot;}&#x60;. 
+  , hostConfigAllOfTmpfs :: !(Maybe (Map.Map String Text)) -- ^ "Tmpfs" - A map of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. For example: &#x60;{ \&quot;/run\&quot;: \&quot;rw,noexec,nosuid,size&#x3D;65536k\&quot; }&#x60;. 
   , hostConfigAllOfUtsMode :: !(Maybe Text) -- ^ "UTSMode" - UTS namespace to use for the container.
   , hostConfigAllOfUsernsMode :: !(Maybe Text) -- ^ "UsernsMode" - Sets the usernamespace mode for the container when usernamespace remapping option is enabled.
   , hostConfigAllOfShmSize :: !(Maybe Int) -- ^ "ShmSize" - Size of &#x60;/dev/shm&#x60; in bytes. If omitted, the system uses 64MB.
-  , hostConfigAllOfSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60;
+  , hostConfigAllOfSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - A list of kernel parameters (sysctls) to set in the container. For example: &#x60;{\&quot;net.ipv4.ip_forward\&quot;: \&quot;1\&quot;}&#x60; 
   , hostConfigAllOfRuntime :: !(Maybe Text) -- ^ "Runtime" - Runtime to use with this container.
   , hostConfigAllOfConsoleSize :: !(Maybe [Int]) -- ^ "ConsoleSize" - Initial console size, as an &#x60;[height, width]&#x60; array. (Windows only)
   , hostConfigAllOfIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the container. (Windows only)
@@ -2617,19 +2758,19 @@ instance A.ToJSON Image where
 
 -- | Construct a value of type 'Image' (by applying it's required fields, if any)
 mkImage
-  :: Text -- ^ 'imageId'
-  -> Text -- ^ 'imageParent'
-  -> Text -- ^ 'imageComment'
-  -> Text -- ^ 'imageCreated'
-  -> Text -- ^ 'imageContainer'
-  -> Text -- ^ 'imageDockerVersion'
-  -> Text -- ^ 'imageAuthor'
-  -> Text -- ^ 'imageArchitecture'
-  -> Text -- ^ 'imageOs'
-  -> Integer -- ^ 'imageSize'
-  -> Integer -- ^ 'imageVirtualSize'
-  -> GraphDriverData -- ^ 'imageGraphDriver'
-  -> ImageRootFS -- ^ 'imageRootFs'
+  :: Text -- ^ 'imageId' 
+  -> Text -- ^ 'imageParent' 
+  -> Text -- ^ 'imageComment' 
+  -> Text -- ^ 'imageCreated' 
+  -> Text -- ^ 'imageContainer' 
+  -> Text -- ^ 'imageDockerVersion' 
+  -> Text -- ^ 'imageAuthor' 
+  -> Text -- ^ 'imageArchitecture' 
+  -> Text -- ^ 'imageOs' 
+  -> Integer -- ^ 'imageSize' 
+  -> Integer -- ^ 'imageVirtualSize' 
+  -> GraphDriverData -- ^ 'imageGraphDriver' 
+  -> ImageRootFS -- ^ 'imageRootFs' 
   -> Image
 mkImage imageId imageParent imageComment imageCreated imageContainer imageDockerVersion imageAuthor imageArchitecture imageOs imageSize imageVirtualSize imageGraphDriver imageRootFs =
   Image
@@ -2803,7 +2944,7 @@ instance A.ToJSON ImageRootFS where
 
 -- | Construct a value of type 'ImageRootFS' (by applying it's required fields, if any)
 mkImageRootFS
-  :: Text -- ^ 'imageRootFSType'
+  :: Text -- ^ 'imageRootFSType' 
   -> ImageRootFS
 mkImageRootFS imageRootFSType =
   ImageRootFS
@@ -2905,16 +3046,16 @@ instance A.ToJSON ImageSummary where
 
 -- | Construct a value of type 'ImageSummary' (by applying it's required fields, if any)
 mkImageSummary
-  :: Text -- ^ 'imageSummaryId'
-  -> Text -- ^ 'imageSummaryParentId'
-  -> [Text] -- ^ 'imageSummaryRepoTags'
-  -> [Text] -- ^ 'imageSummaryRepoDigests'
-  -> Int -- ^ 'imageSummaryCreated'
-  -> Int -- ^ 'imageSummarySize'
-  -> Int -- ^ 'imageSummarySharedSize'
-  -> Int -- ^ 'imageSummaryVirtualSize'
-  -> (Map.Map String Text) -- ^ 'imageSummaryLabels'
-  -> Int -- ^ 'imageSummaryContainers'
+  :: Text -- ^ 'imageSummaryId' 
+  -> Text -- ^ 'imageSummaryParentId' 
+  -> [Text] -- ^ 'imageSummaryRepoTags' 
+  -> [Text] -- ^ 'imageSummaryRepoDigests' 
+  -> Int -- ^ 'imageSummaryCreated' 
+  -> Int -- ^ 'imageSummarySize' 
+  -> Int -- ^ 'imageSummarySharedSize' 
+  -> Int -- ^ 'imageSummaryVirtualSize' 
+  -> (Map.Map String Text) -- ^ 'imageSummaryLabels' 
+  -> Int -- ^ 'imageSummaryContainers' 
   -> ImageSummary
 mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSummaryRepoDigests imageSummaryCreated imageSummarySize imageSummarySharedSize imageSummaryVirtualSize imageSummaryLabels imageSummaryContainers =
   ImageSummary
@@ -2934,10 +3075,10 @@ mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSum
 -- | IndexInfo
 -- IndexInfo contains information about a registry.
 data IndexInfo = IndexInfo
-  { indexInfoName :: !(Maybe Text) -- ^ "Name" - Name of the registry, such as \&quot;docker.io\&quot;.
-  , indexInfoMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of mirrors, expressed as URIs.
-  , indexInfoSecure :: !(Maybe Bool) -- ^ "Secure" - Indicates if the the registry is part of the list of insecure registries.  If &#x60;false&#x60;, the registry is insecure. Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  &gt; **Warning**: Insecure registries can be useful when running a local &gt; registry. However, because its use creates security vulnerabilities &gt; it should ONLY be enabled for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of &gt; trusted CAs instead of enabling this option.
-  , indexInfoOfficial :: !(Maybe Bool) -- ^ "Official" - Indicates whether this is an official registry (i.e., Docker Hub / docker.io)
+  { indexInfoName :: !(Maybe Text) -- ^ "Name" - Name of the registry, such as \&quot;docker.io\&quot;. 
+  , indexInfoMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of mirrors, expressed as URIs. 
+  , indexInfoSecure :: !(Maybe Bool) -- ^ "Secure" - Indicates if the the registry is part of the list of insecure registries.  If &#x60;false&#x60;, the registry is insecure. Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  &gt; **Warning**: Insecure registries can be useful when running a local &gt; registry. However, because its use creates security vulnerabilities &gt; it should ONLY be enabled for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of &gt; trusted CAs instead of enabling this option. 
+  , indexInfoOfficial :: !(Maybe Bool) -- ^ "Official" - Indicates whether this is an official registry (i.e., Docker Hub / docker.io) 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON IndexInfo
@@ -3214,7 +3355,7 @@ mkInlineObject5 =
 data InlineObject6 = InlineObject6
   { inlineObject6ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
   , inlineObject6AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject6DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster.
+  , inlineObject6DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
   , inlineObject6ForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
   , inlineObject6Spec :: !(Maybe SwarmSpec) -- ^ "Spec"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -3258,7 +3399,7 @@ mkInlineObject6 =
 data InlineObject7 = InlineObject7
   { inlineObject7ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
   , inlineObject7AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject7DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster.
+  , inlineObject7DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
   , inlineObject7RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
   , inlineObject7JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -3359,10 +3500,10 @@ mkInlineResponse400 =
 
 -- ** JoinTokens
 -- | JoinTokens
--- JoinTokens contains the tokens workers and managers need to join the swarm.
+-- JoinTokens contains the tokens workers and managers need to join the swarm. 
 data JoinTokens = JoinTokens
-  { joinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm.
-  , joinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm.
+  { joinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm. 
+  , joinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON JoinTokens
@@ -3392,11 +3533,11 @@ mkJoinTokens =
 
 -- ** ManagerStatus
 -- | ManagerStatus
--- ManagerStatus represents the status of a manager.  It provides the current status of a node's manager component, if the node is a manager.
+-- ManagerStatus represents the status of a manager.  It provides the current status of a node's manager component, if the node is a manager. 
 data ManagerStatus = ManagerStatus
   { managerStatusLeader :: !(Maybe Bool) -- ^ "Leader"
   , managerStatusReachability :: !(Maybe Reachability) -- ^ "Reachability"
-  , managerStatusAddr :: !(Maybe Text) -- ^ "Addr" - The IP address and port at which the manager is reachable.
+  , managerStatusAddr :: !(Maybe Text) -- ^ "Addr" - The IP address and port at which the manager is reachable. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ManagerStatus
@@ -3432,7 +3573,7 @@ mkManagerStatus =
 data Mount = Mount
   { mountTarget :: !(Maybe Text) -- ^ "Target" - Container path.
   , mountSource :: !(Maybe Text) -- ^ "Source" - Mount source (e.g. a volume name, a host path).
-  , mountType :: !(Maybe E'Type2) -- ^ "Type" - The mount type. Available types:  - &#x60;bind&#x60; Mounts a file or directory from the host into the container. Must exist prior to creating the container. - &#x60;volume&#x60; Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - &#x60;tmpfs&#x60; Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+  , mountType :: !(Maybe E'Type2) -- ^ "Type" - The mount type. Available types:  - &#x60;bind&#x60; Mounts a file or directory from the host into the container. Must exist prior to creating the container. - &#x60;volume&#x60; Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - &#x60;tmpfs&#x60; Create a tmpfs with the given options. The mount source cannot be specified for tmpfs. 
   , mountReadOnly :: !(Maybe Bool) -- ^ "ReadOnly" - Whether the mount should be read-only.
   , mountConsistency :: !(Maybe Text) -- ^ "Consistency" - The consistency requirement for the mount: &#x60;default&#x60;, &#x60;consistent&#x60;, &#x60;cached&#x60;, or &#x60;delegated&#x60;.
   , mountBindOptions :: !(Maybe MountBindOptions) -- ^ "BindOptions"
@@ -3858,22 +3999,22 @@ mkNetworkPruneResponse =
 data NetworkSettings = NetworkSettings
   { networkSettingsBridge :: !(Maybe Text) -- ^ "Bridge" - Name of the network&#39;a bridge (for example, &#x60;docker0&#x60;).
   , networkSettingsSandboxId :: !(Maybe Text) -- ^ "SandboxID" - SandboxID uniquely represents a container&#39;s network stack.
-  , networkSettingsHairpinMode :: !(Maybe Bool) -- ^ "HairpinMode" - Indicates if hairpin NAT should be enabled on the virtual interface.
+  , networkSettingsHairpinMode :: !(Maybe Bool) -- ^ "HairpinMode" - Indicates if hairpin NAT should be enabled on the virtual interface. 
   , networkSettingsLinkLocalIPv6Address :: !(Maybe Text) -- ^ "LinkLocalIPv6Address" - IPv6 unicast address using the link-local prefix.
   , networkSettingsLinkLocalIPv6PrefixLen :: !(Maybe Int) -- ^ "LinkLocalIPv6PrefixLen" - Prefix length of the IPv6 unicast address.
-  , networkSettingsPorts :: !(Maybe (Map.Map String [PortBinding])) -- ^ "Ports" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table.
+  , networkSettingsPorts :: !(Maybe (Map.Map String [PortBinding])) -- ^ "Ports" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table. 
   , networkSettingsSandboxKey :: !(Maybe Text) -- ^ "SandboxKey" - SandboxKey identifies the sandbox
-  , networkSettingsSecondaryIpAddresses :: !(Maybe [Address]) -- ^ "SecondaryIPAddresses" -
-  , networkSettingsSecondaryIPv6Addresses :: !(Maybe [Address]) -- ^ "SecondaryIPv6Addresses" -
-  , networkSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - EndpointID uniquely represents a service endpoint in a Sandbox.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsGlobalIPv6PrefixLen :: !(Maybe Int) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address for this network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the container on the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0
-  , networkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks" - Information about all networks that the container is connected to.
+  , networkSettingsSecondaryIpAddresses :: !(Maybe [Address]) -- ^ "SecondaryIPAddresses" - 
+  , networkSettingsSecondaryIPv6Addresses :: !(Maybe [Address]) -- ^ "SecondaryIPv6Addresses" - 
+  , networkSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - EndpointID uniquely represents a service endpoint in a Sandbox.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsGlobalIPv6Address :: !(Maybe Text) -- ^ "GlobalIPv6Address" - Global IPv6 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsGlobalIPv6PrefixLen :: !(Maybe Int) -- ^ "GlobalIPv6PrefixLen" - Mask length of the global IPv6 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsIpAddress :: !(Maybe Text) -- ^ "IPAddress" - IPv4 address for the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsIpPrefixLen :: !(Maybe Int) -- ^ "IPPrefixLen" - Mask length of the IPv4 address.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsIPv6Gateway :: !(Maybe Text) -- ^ "IPv6Gateway" - IPv6 gateway address for this network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the container on the default \&quot;bridge\&quot; network.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: This field is only propagated when attached to the &gt; default \&quot;bridge\&quot; network. Use the information from the \&quot;bridge\&quot; &gt; network inside the &#x60;Networks&#x60; map instead, which contains the same &gt; information. This field was deprecated in Docker 1.9 and is scheduled &gt; to be removed in Docker 17.12.0 
+  , networkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks" - Information about all networks that the container is connected to. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON NetworkSettings
@@ -3954,8 +4095,8 @@ mkNetworkSettings =
 data Node = Node
   { nodeId :: !(Maybe Text) -- ^ "ID"
   , nodeVersion :: !(Maybe ObjectVersion) -- ^ "Version"
-  , nodeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the node was added to the swarm in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-  , nodeUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the node was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , nodeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the node was added to the swarm in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
+  , nodeUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the node was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
   , nodeSpec :: !(Maybe NodeSpec) -- ^ "Spec"
   , nodeDescription :: !(Maybe NodeDescription) -- ^ "Description"
   , nodeStatus :: !(Maybe NodeStatus) -- ^ "Status"
@@ -4007,7 +4148,7 @@ mkNode =
 
 -- ** NodeDescription
 -- | NodeDescription
--- NodeDescription encapsulates the properties of the Node as reported by the agent.
+-- NodeDescription encapsulates the properties of the Node as reported by the agent. 
 data NodeDescription = NodeDescription
   { nodeDescriptionHostname :: !(Maybe Text) -- ^ "Hostname"
   , nodeDescriptionPlatform :: !(Maybe Platform) -- ^ "Platform"
@@ -4092,7 +4233,7 @@ mkNodeSpec =
 
 -- ** NodeStatus
 -- | NodeStatus
--- NodeStatus represents the status of a node.  It provides the current status of the node, as seen by the manager.
+-- NodeStatus represents the status of a node.  It provides the current status of the node, as seen by the manager. 
 data NodeStatus = NodeStatus
   { nodeStatusState :: !(Maybe NodeState) -- ^ "State"
   , nodeStatusMessage :: !(Maybe Text) -- ^ "Message"
@@ -4129,7 +4270,7 @@ mkNodeStatus =
 
 -- ** ObjectVersion
 -- | ObjectVersion
--- The version number of the object such as node, service, etc. This is needed to avoid conflicting writes. The client must send the version number along with the modified specification when updating these objects. This approach ensures safe concurrency and determinism in that the change on the object may not be applied if the version number has changed from the last read. In other words, if two update requests specify the same base version, only one of the requests can succeed. As a result, two separate update requests that happen at the same time will not unintentionally overwrite each other.
+-- The version number of the object such as node, service, etc. This is needed to avoid conflicting writes. The client must send the version number along with the modified specification when updating these objects. This approach ensures safe concurrency and determinism in that the change on the object may not be applied if the version number has changed from the last read. In other words, if two update requests specify the same base version, only one of the requests can succeed. As a result, two separate update requests that happen at the same time will not unintentionally overwrite each other. 
 data ObjectVersion = ObjectVersion
   { objectVersionIndex :: !(Maybe Int) -- ^ "Index"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -4161,7 +4302,7 @@ mkObjectVersion =
 -- Represents a peer-node in the swarm
 data PeerNode = PeerNode
   { peerNodeNodeId :: !(Maybe Text) -- ^ "NodeID" - Unique identifier of for this node in the swarm.
-  , peerNodeAddr :: !(Maybe Text) -- ^ "Addr" - IP address and ports at which this node can be reached.
+  , peerNodeAddr :: !(Maybe Text) -- ^ "Addr" - IP address and ports at which this node can be reached. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON PeerNode
@@ -4191,10 +4332,10 @@ mkPeerNode =
 
 -- ** Platform
 -- | Platform
--- Platform represents the platform (Arch/OS).
+-- Platform represents the platform (Arch/OS). 
 data Platform = Platform
-  { platformArchitecture :: !(Maybe Text) -- ^ "Architecture" - Architecture represents the hardware architecture (for example, &#x60;x86_64&#x60;).
-  , platformOs :: !(Maybe Text) -- ^ "OS" - OS represents the Operating System (for example, &#x60;linux&#x60; or &#x60;windows&#x60;).
+  { platformArchitecture :: !(Maybe Text) -- ^ "Architecture" - Architecture represents the hardware architecture (for example, &#x60;x86_64&#x60;). 
+  , platformOs :: !(Maybe Text) -- ^ "OS" - OS represents the Operating System (for example, &#x60;linux&#x60; or &#x60;windows&#x60;). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Platform
@@ -4260,10 +4401,10 @@ instance A.ToJSON Plugin where
 
 -- | Construct a value of type 'Plugin' (by applying it's required fields, if any)
 mkPlugin
-  :: Text -- ^ 'pluginName'
+  :: Text -- ^ 'pluginName' 
   -> Bool -- ^ 'pluginEnabled': True if the plugin is running. False if the plugin is not running, only installed.
-  -> PluginSettings -- ^ 'pluginSettings'
-  -> PluginConfig -- ^ 'pluginConfig'
+  -> PluginSettings -- ^ 'pluginSettings' 
+  -> PluginConfig -- ^ 'pluginConfig' 
   -> Plugin
 mkPlugin pluginName pluginEnabled pluginSettings pluginConfig =
   Plugin
@@ -4343,19 +4484,19 @@ instance A.ToJSON PluginConfig where
 
 -- | Construct a value of type 'PluginConfig' (by applying it's required fields, if any)
 mkPluginConfig
-  :: Text -- ^ 'pluginConfigDescription'
-  -> Text -- ^ 'pluginConfigDocumentation'
-  -> PluginConfigInterface -- ^ 'pluginConfigInterface'
-  -> [Text] -- ^ 'pluginConfigEntrypoint'
-  -> Text -- ^ 'pluginConfigWorkDir'
-  -> PluginConfigNetwork -- ^ 'pluginConfigNetwork'
-  -> PluginConfigLinux -- ^ 'pluginConfigLinux'
-  -> Text -- ^ 'pluginConfigPropagatedMount'
-  -> Bool -- ^ 'pluginConfigIpcHost'
-  -> Bool -- ^ 'pluginConfigPidHost'
-  -> [PluginMount] -- ^ 'pluginConfigMounts'
-  -> [PluginEnv] -- ^ 'pluginConfigEnv'
-  -> PluginConfigArgs -- ^ 'pluginConfigArgs'
+  :: Text -- ^ 'pluginConfigDescription' 
+  -> Text -- ^ 'pluginConfigDocumentation' 
+  -> PluginConfigInterface -- ^ 'pluginConfigInterface' 
+  -> [Text] -- ^ 'pluginConfigEntrypoint' 
+  -> Text -- ^ 'pluginConfigWorkDir' 
+  -> PluginConfigNetwork -- ^ 'pluginConfigNetwork' 
+  -> PluginConfigLinux -- ^ 'pluginConfigLinux' 
+  -> Text -- ^ 'pluginConfigPropagatedMount' 
+  -> Bool -- ^ 'pluginConfigIpcHost' 
+  -> Bool -- ^ 'pluginConfigPidHost' 
+  -> [PluginMount] -- ^ 'pluginConfigMounts' 
+  -> [PluginEnv] -- ^ 'pluginConfigEnv' 
+  -> PluginConfigArgs -- ^ 'pluginConfigArgs' 
   -> PluginConfig
 mkPluginConfig pluginConfigDescription pluginConfigDocumentation pluginConfigInterface pluginConfigEntrypoint pluginConfigWorkDir pluginConfigNetwork pluginConfigLinux pluginConfigPropagatedMount pluginConfigIpcHost pluginConfigPidHost pluginConfigMounts pluginConfigEnv pluginConfigArgs =
   PluginConfig
@@ -4408,10 +4549,10 @@ instance A.ToJSON PluginConfigArgs where
 
 -- | Construct a value of type 'PluginConfigArgs' (by applying it's required fields, if any)
 mkPluginConfigArgs
-  :: Text -- ^ 'pluginConfigArgsName'
-  -> Text -- ^ 'pluginConfigArgsDescription'
-  -> [Text] -- ^ 'pluginConfigArgsSettable'
-  -> [Text] -- ^ 'pluginConfigArgsValue'
+  :: Text -- ^ 'pluginConfigArgsName' 
+  -> Text -- ^ 'pluginConfigArgsDescription' 
+  -> [Text] -- ^ 'pluginConfigArgsSettable' 
+  -> [Text] -- ^ 'pluginConfigArgsValue' 
   -> PluginConfigArgs
 mkPluginConfigArgs pluginConfigArgsName pluginConfigArgsDescription pluginConfigArgsSettable pluginConfigArgsValue =
   PluginConfigArgs
@@ -4447,8 +4588,8 @@ instance A.ToJSON PluginConfigInterface where
 
 -- | Construct a value of type 'PluginConfigInterface' (by applying it's required fields, if any)
 mkPluginConfigInterface
-  :: [PluginInterfaceType] -- ^ 'pluginConfigInterfaceTypes'
-  -> Text -- ^ 'pluginConfigInterfaceSocket'
+  :: [PluginInterfaceType] -- ^ 'pluginConfigInterfaceTypes' 
+  -> Text -- ^ 'pluginConfigInterfaceSocket' 
   -> PluginConfigInterface
 mkPluginConfigInterface pluginConfigInterfaceTypes pluginConfigInterfaceSocket =
   PluginConfigInterface
@@ -4484,9 +4625,9 @@ instance A.ToJSON PluginConfigLinux where
 
 -- | Construct a value of type 'PluginConfigLinux' (by applying it's required fields, if any)
 mkPluginConfigLinux
-  :: [Text] -- ^ 'pluginConfigLinuxCapabilities'
-  -> Bool -- ^ 'pluginConfigLinuxAllowAllDevices'
-  -> [PluginDevice] -- ^ 'pluginConfigLinuxDevices'
+  :: [Text] -- ^ 'pluginConfigLinuxCapabilities' 
+  -> Bool -- ^ 'pluginConfigLinuxAllowAllDevices' 
+  -> [PluginDevice] -- ^ 'pluginConfigLinuxDevices' 
   -> PluginConfigLinux
 mkPluginConfigLinux pluginConfigLinuxCapabilities pluginConfigLinuxAllowAllDevices pluginConfigLinuxDevices =
   PluginConfigLinux
@@ -4517,7 +4658,7 @@ instance A.ToJSON PluginConfigNetwork where
 
 -- | Construct a value of type 'PluginConfigNetwork' (by applying it's required fields, if any)
 mkPluginConfigNetwork
-  :: Text -- ^ 'pluginConfigNetworkType'
+  :: Text -- ^ 'pluginConfigNetworkType' 
   -> PluginConfigNetwork
 mkPluginConfigNetwork pluginConfigNetworkType =
   PluginConfigNetwork
@@ -4619,10 +4760,10 @@ instance A.ToJSON PluginDevice where
 
 -- | Construct a value of type 'PluginDevice' (by applying it's required fields, if any)
 mkPluginDevice
-  :: Text -- ^ 'pluginDeviceName'
-  -> Text -- ^ 'pluginDeviceDescription'
-  -> [Text] -- ^ 'pluginDeviceSettable'
-  -> Text -- ^ 'pluginDevicePath'
+  :: Text -- ^ 'pluginDeviceName' 
+  -> Text -- ^ 'pluginDeviceDescription' 
+  -> [Text] -- ^ 'pluginDeviceSettable' 
+  -> Text -- ^ 'pluginDevicePath' 
   -> PluginDevice
 mkPluginDevice pluginDeviceName pluginDeviceDescription pluginDeviceSettable pluginDevicePath =
   PluginDevice
@@ -4663,10 +4804,10 @@ instance A.ToJSON PluginEnv where
 
 -- | Construct a value of type 'PluginEnv' (by applying it's required fields, if any)
 mkPluginEnv
-  :: Text -- ^ 'pluginEnvName'
-  -> Text -- ^ 'pluginEnvDescription'
-  -> [Text] -- ^ 'pluginEnvSettable'
-  -> Text -- ^ 'pluginEnvValue'
+  :: Text -- ^ 'pluginEnvName' 
+  -> Text -- ^ 'pluginEnvDescription' 
+  -> [Text] -- ^ 'pluginEnvSettable' 
+  -> Text -- ^ 'pluginEnvValue' 
   -> PluginEnv
 mkPluginEnv pluginEnvName pluginEnvDescription pluginEnvSettable pluginEnvValue =
   PluginEnv
@@ -4704,9 +4845,9 @@ instance A.ToJSON PluginInterfaceType where
 
 -- | Construct a value of type 'PluginInterfaceType' (by applying it's required fields, if any)
 mkPluginInterfaceType
-  :: Text -- ^ 'pluginInterfaceTypePrefix'
-  -> Text -- ^ 'pluginInterfaceTypeCapability'
-  -> Text -- ^ 'pluginInterfaceTypeVersion'
+  :: Text -- ^ 'pluginInterfaceTypePrefix' 
+  -> Text -- ^ 'pluginInterfaceTypeCapability' 
+  -> Text -- ^ 'pluginInterfaceTypeVersion' 
   -> PluginInterfaceType
 mkPluginInterfaceType pluginInterfaceTypePrefix pluginInterfaceTypeCapability pluginInterfaceTypeVersion =
   PluginInterfaceType
@@ -4755,13 +4896,13 @@ instance A.ToJSON PluginMount where
 
 -- | Construct a value of type 'PluginMount' (by applying it's required fields, if any)
 mkPluginMount
-  :: Text -- ^ 'pluginMountName'
-  -> Text -- ^ 'pluginMountDescription'
-  -> [Text] -- ^ 'pluginMountSettable'
-  -> Text -- ^ 'pluginMountSource'
-  -> Text -- ^ 'pluginMountDestination'
-  -> Text -- ^ 'pluginMountType'
-  -> [Text] -- ^ 'pluginMountOptions'
+  :: Text -- ^ 'pluginMountName' 
+  -> Text -- ^ 'pluginMountDescription' 
+  -> [Text] -- ^ 'pluginMountSettable' 
+  -> Text -- ^ 'pluginMountSource' 
+  -> Text -- ^ 'pluginMountDestination' 
+  -> Text -- ^ 'pluginMountType' 
+  -> [Text] -- ^ 'pluginMountOptions' 
   -> PluginMount
 mkPluginMount pluginMountName pluginMountDescription pluginMountSettable pluginMountSource pluginMountDestination pluginMountType pluginMountOptions =
   PluginMount
@@ -4843,10 +4984,10 @@ instance A.ToJSON PluginSettings where
 
 -- | Construct a value of type 'PluginSettings' (by applying it's required fields, if any)
 mkPluginSettings
-  :: [PluginMount] -- ^ 'pluginSettingsMounts'
-  -> [Text] -- ^ 'pluginSettingsEnv'
-  -> [Text] -- ^ 'pluginSettingsArgs'
-  -> [PluginDevice] -- ^ 'pluginSettingsDevices'
+  :: [PluginMount] -- ^ 'pluginSettingsMounts' 
+  -> [Text] -- ^ 'pluginSettingsEnv' 
+  -> [Text] -- ^ 'pluginSettingsArgs' 
+  -> [PluginDevice] -- ^ 'pluginSettingsDevices' 
   -> PluginSettings
 mkPluginSettings pluginSettingsMounts pluginSettingsEnv pluginSettingsArgs pluginSettingsDevices =
   PluginSettings
@@ -4858,7 +4999,7 @@ mkPluginSettings pluginSettingsMounts pluginSettingsEnv pluginSettingsArgs plugi
 
 -- ** PluginsInfo
 -- | PluginsInfo
--- Available plugins per type.  <p><br /></p>  > **Note**: Only unmanaged (V1) plugins are included in this list. > V1 plugins are \"lazily\" loaded, and are not returned in this list > if there is no resource using the plugin.
+-- Available plugins per type.  <p><br /></p>  > **Note**: Only unmanaged (V1) plugins are included in this list. > V1 plugins are \"lazily\" loaded, and are not returned in this list > if there is no resource using the plugin. 
 data PluginsInfo = PluginsInfo
   { pluginsInfoVolume :: !(Maybe [Text]) -- ^ "Volume" - Names of available volume-drivers, and network-driver plugins.
   , pluginsInfoNetwork :: !(Maybe [Text]) -- ^ "Network" - Names of available network-drivers, and network-driver plugins.
@@ -4930,7 +5071,7 @@ instance A.ToJSON Port where
 -- | Construct a value of type 'Port' (by applying it's required fields, if any)
 mkPort
   :: Int -- ^ 'portPrivatePort': Port on the container
-  -> E'Type -- ^ 'portType'
+  -> E'Type -- ^ 'portType' 
   -> Port
 mkPort portPrivatePort portType =
   Port
@@ -4942,7 +5083,7 @@ mkPort portPrivatePort portType =
 
 -- ** PortBinding
 -- | PortBinding
--- PortBinding represents a binding between a host IP address and a host port.
+-- PortBinding represents a binding between a host IP address and a host port. 
 data PortBinding = PortBinding
   { portBindingHostIp :: !(Maybe Text) -- ^ "HostIp" - Host IP address that the container&#39;s port is mapped to.
   , portBindingHostPort :: !(Maybe Text) -- ^ "HostPort" - Host port number that the container&#39;s port is mapped to.
@@ -5091,13 +5232,13 @@ mkPushImageInfo =
 
 -- ** RegistryServiceConfig
 -- | RegistryServiceConfig
--- RegistryServiceConfig stores daemon registry services configuration.
+-- RegistryServiceConfig stores daemon registry services configuration. 
 data RegistryServiceConfig = RegistryServiceConfig
-  { registryServiceConfigAllowNondistributableArtifactsCidRs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior, and enables the daemon to push nondistributable artifacts to all registries whose resolved IP address is within the subnet described by the CIDR syntax.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts.
-  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior for the specified registries.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts.
-  , registryServiceConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs" - List of IP ranges of insecure registries, using the CIDR syntax ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  By default, local registries (&#x60;127.0.0.0/8&#x60;) are configured as insecure. All other registries are secure. Communicating with an insecure registry is not possible if the daemon assumes that registry is secure.  This configuration override this behavior, insecure communication with registries whose resolved IP address is within the subnet described by the CIDR syntax.  Registries can also be marked insecure by hostname. Those registries are listed under &#x60;IndexConfigs&#x60; and have their &#x60;Secure&#x60; field set to &#x60;false&#x60;.  &gt; **Warning**: Using this option can be useful when running a local &gt; registry, but introduces security vulnerabilities. This option &gt; should therefore ONLY be used for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of trusted &gt; CAs instead of enabling this option.
+  { registryServiceConfigAllowNondistributableArtifactsCidRs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior, and enables the daemon to push nondistributable artifacts to all registries whose resolved IP address is within the subnet described by the CIDR syntax.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
+  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior for the specified registries.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
+  , registryServiceConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs" - List of IP ranges of insecure registries, using the CIDR syntax ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  By default, local registries (&#x60;127.0.0.0/8&#x60;) are configured as insecure. All other registries are secure. Communicating with an insecure registry is not possible if the daemon assumes that registry is secure.  This configuration override this behavior, insecure communication with registries whose resolved IP address is within the subnet described by the CIDR syntax.  Registries can also be marked insecure by hostname. Those registries are listed under &#x60;IndexConfigs&#x60; and have their &#x60;Secure&#x60; field set to &#x60;false&#x60;.  &gt; **Warning**: Using this option can be useful when running a local &gt; registry, but introduces security vulnerabilities. This option &gt; should therefore ONLY be used for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of trusted &gt; CAs instead of enabling this option. 
   , registryServiceConfigIndexConfigs :: !(Maybe (Map.Map String IndexInfo)) -- ^ "IndexConfigs"
-  , registryServiceConfigMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of registry URLs that act as a mirror for the official (&#x60;docker.io&#x60;) registry.
+  , registryServiceConfigMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of registry URLs that act as a mirror for the official (&#x60;docker.io&#x60;) registry. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON RegistryServiceConfig
@@ -5179,11 +5320,11 @@ data Resources = Resources
   , resourcesMemory :: !(Maybe Integer) -- ^ "Memory" - Memory limit in bytes.
   , resourcesCgroupParent :: !(Maybe Text) -- ^ "CgroupParent" - Path to &#x60;cgroups&#x60; under which the container&#39;s &#x60;cgroup&#x60; is created. If the path is not absolute, the path is considered to be relative to the &#x60;cgroups&#x60; path of the init process. Cgroups are created if they do not already exist.
   , resourcesBlkioWeight :: !(Maybe Int) -- ^ "BlkioWeight" - Block IO weight (relative weight).
-  , resourcesBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;.
-  , resourcesBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , resourcesBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , resourcesBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
-  , resourcesBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;.
+  , resourcesBlkioWeightDevice :: !(Maybe [ResourcesBlkioWeightDevice]) -- ^ "BlkioWeightDevice" - Block IO weight (relative device weight) in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Weight\&quot;: weight}]&#x60;. 
+  , resourcesBlkioDeviceReadBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadBps" - Limit read rate (bytes per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , resourcesBlkioDeviceWriteBps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteBps" - Limit write rate (bytes per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , resourcesBlkioDeviceReadIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceReadIOps" - Limit read rate (IO per second) from a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
+  , resourcesBlkioDeviceWriteIOps :: !(Maybe [ThrottleDevice]) -- ^ "BlkioDeviceWriteIOps" - Limit write rate (IO per second) to a device, in the form &#x60;[{\&quot;Path\&quot;: \&quot;device_path\&quot;, \&quot;Rate\&quot;: rate}]&#x60;. 
   , resourcesCpuPeriod :: !(Maybe Integer) -- ^ "CpuPeriod" - The length of a CPU period in microseconds.
   , resourcesCpuQuota :: !(Maybe Integer) -- ^ "CpuQuota" - Microseconds of CPU time that the container can get in a CPU period.
   , resourcesCpuRealtimePeriod :: !(Maybe Integer) -- ^ "CpuRealtimePeriod" - The length of a CPU real-time period in microseconds. Set to 0 to allocate no time allocated to real-time tasks.
@@ -5200,9 +5341,9 @@ data Resources = Resources
   , resourcesNanoCpUs :: !(Maybe Integer) -- ^ "NanoCPUs" - CPU quota in units of 10&lt;sup&gt;-9&lt;/sup&gt; CPUs.
   , resourcesOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Disable OOM Killer for the container.
   , resourcesPidsLimit :: !(Maybe Integer) -- ^ "PidsLimit" - Tune a container&#39;s pids limit. Set -1 for unlimited.
-  , resourcesUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot;
-  , resourcesCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
-  , resourcesCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last.
+  , resourcesUlimits :: !(Maybe [ResourcesUlimits]) -- ^ "Ulimits" - A list of resource limits to set in the container. For example: &#x60;{\&quot;Name\&quot;: \&quot;nofile\&quot;, \&quot;Soft\&quot;: 1024, \&quot;Hard\&quot;: 2048}&#x60;\&quot; 
+  , resourcesCpuCount :: !(Maybe Integer) -- ^ "CpuCount" - The number of usable CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
+  , resourcesCpuPercent :: !(Maybe Integer) -- ^ "CpuPercent" - The usable percentage of the available CPUs (Windows only).  On Windows Server containers, the processor resource controls are mutually exclusive. The order of precedence is &#x60;CPUCount&#x60; first, then &#x60;CPUShares&#x60;, and &#x60;CPUPercent&#x60; last. 
   , resourcesIoMaximumIOps :: !(Maybe Integer) -- ^ "IOMaximumIOps" - Maximum IOps for the container system drive (Windows only)
   , resourcesIoMaximumBandwidth :: !(Maybe Integer) -- ^ "IOMaximumBandwidth" - Maximum IO in bytes per second for the container system drive (Windows only)
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -5386,9 +5527,9 @@ mkResourcesUlimits =
 
 -- ** RestartPolicy
 -- | RestartPolicy
--- The behavior to apply when the container exits. The default is not to restart.  An ever increasing delay (double the previous delay, starting at 100ms) is added before each restart to prevent flooding the server.
+-- The behavior to apply when the container exits. The default is not to restart.  An ever increasing delay (double the previous delay, starting at 100ms) is added before each restart to prevent flooding the server. 
 data RestartPolicy = RestartPolicy
-  { restartPolicyName :: !(Maybe E'Name) -- ^ "Name" - - Empty string means not to restart - &#x60;always&#x60; Always restart - &#x60;unless-stopped&#x60; Restart always except when the user has manually stopped the container - &#x60;on-failure&#x60; Restart only when the container exit code is non-zero
+  { restartPolicyName :: !(Maybe E'Name) -- ^ "Name" - - Empty string means not to restart - &#x60;always&#x60; Always restart - &#x60;unless-stopped&#x60; Restart always except when the user has manually stopped the container - &#x60;on-failure&#x60; Restart only when the container exit code is non-zero 
   , restartPolicyMaximumRetryCount :: !(Maybe Int) -- ^ "MaximumRetryCount" - If &#x60;on-failure&#x60; is used, the number of times to retry before giving up
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5419,10 +5560,10 @@ mkRestartPolicy =
 
 -- ** Runtime
 -- | Runtime
--- Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec) runtime.  The runtime is invoked by the daemon via the `containerd` daemon. OCI runtimes act as an interface to the Linux kernel namespaces, cgroups, and SELinux.
+-- Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec) runtime.  The runtime is invoked by the daemon via the `containerd` daemon. OCI runtimes act as an interface to the Linux kernel namespaces, cgroups, and SELinux. 
 data Runtime = Runtime
-  { runtimePath :: !(Maybe Text) -- ^ "path" - Name and, optional, path, of the OCI executable binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result.
-  , runtimeRuntimeArgs :: !(Maybe [Text]) -- ^ "runtimeArgs" - List of command-line arguments to pass to the runtime when invoked.
+  { runtimePath :: !(Maybe Text) -- ^ "path" - Name and, optional, path, of the OCI executable binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result. 
+  , runtimeRuntimeArgs :: !(Maybe [Text]) -- ^ "runtimeArgs" - List of command-line arguments to pass to the runtime when invoked. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON Runtime
@@ -5499,7 +5640,7 @@ mkSecret =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints.
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5976,8 +6117,8 @@ mkServiceUpdateStatus =
 data Swarm = Swarm
   { swarmId :: !(Maybe Text) -- ^ "ID" - The ID of the swarm.
   , swarmVersion :: !(Maybe ObjectVersion) -- ^ "Version"
-  , swarmCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-  , swarmUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+  , swarmCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date and time at which the swarm was initialised in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
+  , swarmUpdatedAt :: !(Maybe Text) -- ^ "UpdatedAt" - Date and time at which the swarm was last updated in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
   , swarmSpec :: !(Maybe SwarmSpec) -- ^ "Spec"
   , swarmTlsInfo :: !(Maybe TLSInfo) -- ^ "TLSInfo"
   , swarmRootRotationInProgress :: !(Maybe Bool) -- ^ "RootRotationInProgress" - Whether there is currently a root CA rotation in progress for the swarm
@@ -6057,14 +6198,14 @@ mkSwarmAllOf =
 
 -- ** SwarmInfo
 -- | SwarmInfo
--- Represents generic information about swarm.
+-- Represents generic information about swarm. 
 data SwarmInfo = SwarmInfo
   { swarmInfoNodeId :: !(Maybe Text) -- ^ "NodeID" - Unique identifier of for this node in the swarm.
-  , swarmInfoNodeAddr :: !(Maybe Text) -- ^ "NodeAddr" - IP address at which this node can be reached by other nodes in the swarm.
+  , swarmInfoNodeAddr :: !(Maybe Text) -- ^ "NodeAddr" - IP address at which this node can be reached by other nodes in the swarm. 
   , swarmInfoLocalNodeState :: !(Maybe LocalNodeState) -- ^ "LocalNodeState"
   , swarmInfoControlAvailable :: !(Maybe Bool) -- ^ "ControlAvailable"
   , swarmInfoError :: !(Maybe Text) -- ^ "Error"
-  , swarmInfoRemoteManagers :: !(Maybe [PeerNode]) -- ^ "RemoteManagers" - List of ID&#39;s and addresses of other managers in the swarm.
+  , swarmInfoRemoteManagers :: !(Maybe [PeerNode]) -- ^ "RemoteManagers" - List of ID&#39;s and addresses of other managers in the swarm. 
   , swarmInfoNodes :: !(Maybe Int) -- ^ "Nodes" - Total number of nodes in the swarm.
   , swarmInfoManagers :: !(Maybe Int) -- ^ "Managers" - Total number of managers in the swarm.
   , swarmInfoCluster :: !(Maybe ClusterInfo) -- ^ "Cluster"
@@ -6352,8 +6493,8 @@ data SwarmSpecRaft = SwarmSpecRaft
   { swarmSpecRaftSnapshotInterval :: !(Maybe Int) -- ^ "SnapshotInterval" - The number of log entries between snapshots.
   , swarmSpecRaftKeepOldSnapshots :: !(Maybe Int) -- ^ "KeepOldSnapshots" - The number of snapshots to keep beyond the current snapshot.
   , swarmSpecRaftLogEntriesForSlowFollowers :: !(Maybe Int) -- ^ "LogEntriesForSlowFollowers" - The number of log entries to keep around to sync up slow followers after a snapshot is created.
-  , swarmSpecRaftElectionTick :: !(Maybe Int) -- ^ "ElectionTick" - The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. &#x60;ElectionTick&#x60; must be greater than &#x60;HeartbeatTick&#x60;.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
-  , swarmSpecRaftHeartbeatTick :: !(Maybe Int) -- ^ "HeartbeatTick" - The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed.
+  , swarmSpecRaftElectionTick :: !(Maybe Int) -- ^ "ElectionTick" - The number of ticks that a follower will wait for a message from the leader before becoming a candidate and starting an election. &#x60;ElectionTick&#x60; must be greater than &#x60;HeartbeatTick&#x60;.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed. 
+  , swarmSpecRaftHeartbeatTick :: !(Maybe Int) -- ^ "HeartbeatTick" - The number of ticks between heartbeats. Every HeartbeatTick ticks, the leader will send a heartbeat to the followers.  A tick currently defaults to one second, so these translate directly to seconds currently, but this is NOT guaranteed. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecRaft
@@ -6421,10 +6562,10 @@ mkSwarmSpecTaskDefaults =
 
 -- ** SwarmSpecTaskDefaultsLogDriver
 -- | SwarmSpecTaskDefaultsLogDriver
--- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value only affects new tasks. Existing tasks continue to use their previously configured log driver until recreated.
+-- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value only affects new tasks. Existing tasks continue to use their previously configured log driver until recreated. 
 data SwarmSpecTaskDefaultsLogDriver = SwarmSpecTaskDefaultsLogDriver
-  { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name" - The log driver to use as a default for new tasks.
-  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selectd log driver, specified as key/value pairs.
+  { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name" - The log driver to use as a default for new tasks. 
+  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selectd log driver, specified as key/value pairs. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecTaskDefaultsLogDriver
@@ -6490,7 +6631,7 @@ mkSystemAuthResponse systemAuthResponseStatus =
 data SystemDataUsageResponse = SystemDataUsageResponse
   { systemDataUsageResponseLayersSize :: !(Maybe Integer) -- ^ "LayersSize"
   , systemDataUsageResponseImages :: !(Maybe [ImageSummary]) -- ^ "Images"
-  , systemDataUsageResponseContainers :: !(Maybe [A.Array]) -- ^ "Containers"
+  , systemDataUsageResponseContainers :: !(Maybe [ContainerSummary]) -- ^ "Containers"
   , systemDataUsageResponseVolumes :: !(Maybe [Volume]) -- ^ "Volumes"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6604,16 +6745,16 @@ mkSystemEventsResponseActor =
 -- ** SystemInfo
 -- | SystemInfo
 data SystemInfo = SystemInfo
-  { systemInfoId :: !(Maybe Text) -- ^ "ID" - Unique identifier of the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The format of the ID itself is not part of the API, and &gt; should not be considered stable.
+  { systemInfoId :: !(Maybe Text) -- ^ "ID" - Unique identifier of the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The format of the ID itself is not part of the API, and &gt; should not be considered stable. 
   , systemInfoContainers :: !(Maybe Int) -- ^ "Containers" - Total number of containers on the host.
-  , systemInfoContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning" - Number of containers with status &#x60;\&quot;running\&quot;&#x60;.
-  , systemInfoContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused" - Number of containers with status &#x60;\&quot;paused\&quot;&#x60;.
-  , systemInfoContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped" - Number of containers with status &#x60;\&quot;stopped\&quot;&#x60;.
-  , systemInfoImages :: !(Maybe Int) -- ^ "Images" - Total number of images on the host.  Both _tagged_ and _untagged_ (dangling) images are counted.
+  , systemInfoContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning" - Number of containers with status &#x60;\&quot;running\&quot;&#x60;. 
+  , systemInfoContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused" - Number of containers with status &#x60;\&quot;paused\&quot;&#x60;. 
+  , systemInfoContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped" - Number of containers with status &#x60;\&quot;stopped\&quot;&#x60;. 
+  , systemInfoImages :: !(Maybe Int) -- ^ "Images" - Total number of images on the host.  Both _tagged_ and _untagged_ (dangling) images are counted. 
   , systemInfoDriver :: !(Maybe Text) -- ^ "Driver" - Name of the storage driver in use.
-  , systemInfoDriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus" - Information specific to the storage driver, provided as \&quot;label\&quot; / \&quot;value\&quot; pairs.  This information is provided by the storage driver, and formatted in a way consistent with the output of &#x60;docker info&#x60; on the command line.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field, including the &gt; formatting of values and labels, should not be considered stable, &gt; and may change without notice.
-  , systemInfoDockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir" - Root directory of persistent Docker state.  Defaults to &#x60;/var/lib/docker&#x60; on Linux, and &#x60;C:\\ProgramData\\docker&#x60; on Windows.
-  , systemInfoSystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus" - Status information about this node (standalone Swarm API).  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field is only propagated &gt; by the Swarm standalone API, and is empty (&#x60;null&#x60;) when using &gt; built-in swarm mode.
+  , systemInfoDriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus" - Information specific to the storage driver, provided as \&quot;label\&quot; / \&quot;value\&quot; pairs.  This information is provided by the storage driver, and formatted in a way consistent with the output of &#x60;docker info&#x60; on the command line.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field, including the &gt; formatting of values and labels, should not be considered stable, &gt; and may change without notice. 
+  , systemInfoDockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir" - Root directory of persistent Docker state.  Defaults to &#x60;/var/lib/docker&#x60; on Linux, and &#x60;C:\\ProgramData\\docker&#x60; on Windows. 
+  , systemInfoSystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus" - Status information about this node (standalone Swarm API).  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: The information returned in this field is only propagated &gt; by the Swarm standalone API, and is empty (&#x60;null&#x60;) when using &gt; built-in swarm mode. 
   , systemInfoPlugins :: !(Maybe PluginsInfo) -- ^ "Plugins"
   , systemInfoMemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit" - Indicates if the host has memory limit support enabled.
   , systemInfoSwapLimit :: !(Maybe Bool) -- ^ "SwapLimit" - Indicates if the host has memory swap limit support enabled.
@@ -6621,46 +6762,46 @@ data SystemInfo = SystemInfo
   , systemInfoCpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod" - Indicates if CPU CFS(Completely Fair Scheduler) period is supported by the host.
   , systemInfoCpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota" - Indicates if CPU CFS(Completely Fair Scheduler) quota is supported by the host.
   , systemInfoCpuShares :: !(Maybe Bool) -- ^ "CPUShares" - Indicates if CPU Shares limiting is supported by the host.
-  , systemInfoCpuSet :: !(Maybe Bool) -- ^ "CPUSet" - Indicates if CPUsets (cpuset.cpus, cpuset.mems) are supported by the host.  See [cpuset(7)](https://www.kernel.org/doc/Documentation/cgroup-v1/cpusets.txt)
+  , systemInfoCpuSet :: !(Maybe Bool) -- ^ "CPUSet" - Indicates if CPUsets (cpuset.cpus, cpuset.mems) are supported by the host.  See [cpuset(7)](https://www.kernel.org/doc/Documentation/cgroup-v1/cpusets.txt) 
   , systemInfoOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Indicates if OOM killer disable is supported on the host.
   , systemInfoIPv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding" - Indicates IPv4 forwarding is enabled.
   , systemInfoBridgeNfIptables :: !(Maybe Bool) -- ^ "BridgeNfIptables" - Indicates if &#x60;bridge-nf-call-iptables&#x60; is available on the host.
   , systemInfoBridgeNfIp6tables :: !(Maybe Bool) -- ^ "BridgeNfIp6tables" - Indicates if &#x60;bridge-nf-call-ip6tables&#x60; is available on the host.
   , systemInfoDebug :: !(Maybe Bool) -- ^ "Debug" - Indicates if the daemon is running in debug-mode / with debug-level logging enabled.
-  , systemInfoNFd :: !(Maybe Int) -- ^ "NFd" - The total number of file Descriptors in use by the daemon process.  This information is only returned if debug-mode is enabled.
-  , systemInfoNGoroutines :: !(Maybe Int) -- ^ "NGoroutines" - The  number of goroutines that currently exist.  This information is only returned if debug-mode is enabled.
-  , systemInfoSystemTime :: !(Maybe Text) -- ^ "SystemTime" - Current system-time in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-  , systemInfoLoggingDriver :: !(Maybe Text) -- ^ "LoggingDriver" - The logging driver to use as a default for new containers.
-  , systemInfoCgroupDriver :: !(Maybe E'CgroupDriver) -- ^ "CgroupDriver" - The driver to use for managing cgroups.
+  , systemInfoNFd :: !(Maybe Int) -- ^ "NFd" - The total number of file Descriptors in use by the daemon process.  This information is only returned if debug-mode is enabled. 
+  , systemInfoNGoroutines :: !(Maybe Int) -- ^ "NGoroutines" - The  number of goroutines that currently exist.  This information is only returned if debug-mode is enabled. 
+  , systemInfoSystemTime :: !(Maybe Text) -- ^ "SystemTime" - Current system-time in [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds. 
+  , systemInfoLoggingDriver :: !(Maybe Text) -- ^ "LoggingDriver" - The logging driver to use as a default for new containers. 
+  , systemInfoCgroupDriver :: !(Maybe E'CgroupDriver) -- ^ "CgroupDriver" - The driver to use for managing cgroups. 
   , systemInfoNEventsListener :: !(Maybe Int) -- ^ "NEventsListener" - Number of event listeners subscribed.
-  , systemInfoKernelVersion :: !(Maybe Text) -- ^ "KernelVersion" - Kernel version of the host.  On Linux, this information obtained from &#x60;uname&#x60;. On Windows this information is queried from the &lt;kbd&gt;HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\&lt;/kbd&gt; registry value, for example _\&quot;10.0 14393 (14393.1198.amd64fre.rs1_release_sec.170427-1353)\&quot;_.
-  , systemInfoOperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem" - Name of the host&#39;s operating system, for example: \&quot;Ubuntu 16.04.2 LTS\&quot; or \&quot;Windows Server 2016 Datacenter\&quot;
-  , systemInfoOsType :: !(Maybe Text) -- ^ "OSType" - Generic type of the operating system of the host, as returned by the Go runtime (&#x60;GOOS&#x60;).  Currently returned values are \&quot;linux\&quot; and \&quot;windows\&quot;. A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment).
-  , systemInfoArchitecture :: !(Maybe Text) -- ^ "Architecture" - Hardware architecture of the host, as returned by the Go runtime (&#x60;GOARCH&#x60;).  A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment).
-  , systemInfoNcpu :: !(Maybe Int) -- ^ "NCPU" - The number of logical CPUs usable by the daemon.  The number of available CPUs is checked by querying the operating system when the daemon starts. Changes to operating system CPU allocation after the daemon is started are not reflected.
-  , systemInfoMemTotal :: !(Maybe Integer) -- ^ "MemTotal" - Total amount of physical memory available on the host, in kilobytes (kB).
-  , systemInfoIndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress" - Address / URL of the index server that is used for image search, and as a default for user authentication for Docker Hub and Docker Cloud.
+  , systemInfoKernelVersion :: !(Maybe Text) -- ^ "KernelVersion" - Kernel version of the host.  On Linux, this information obtained from &#x60;uname&#x60;. On Windows this information is queried from the &lt;kbd&gt;HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\&lt;/kbd&gt; registry value, for example _\&quot;10.0 14393 (14393.1198.amd64fre.rs1_release_sec.170427-1353)\&quot;_. 
+  , systemInfoOperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem" - Name of the host&#39;s operating system, for example: \&quot;Ubuntu 16.04.2 LTS\&quot; or \&quot;Windows Server 2016 Datacenter\&quot; 
+  , systemInfoOsType :: !(Maybe Text) -- ^ "OSType" - Generic type of the operating system of the host, as returned by the Go runtime (&#x60;GOOS&#x60;).  Currently returned values are \&quot;linux\&quot; and \&quot;windows\&quot;. A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment). 
+  , systemInfoArchitecture :: !(Maybe Text) -- ^ "Architecture" - Hardware architecture of the host, as returned by the Go runtime (&#x60;GOARCH&#x60;).  A full list of possible values can be found in the [Go documentation](https://golang.org/doc/install/source#environment). 
+  , systemInfoNcpu :: !(Maybe Int) -- ^ "NCPU" - The number of logical CPUs usable by the daemon.  The number of available CPUs is checked by querying the operating system when the daemon starts. Changes to operating system CPU allocation after the daemon is started are not reflected. 
+  , systemInfoMemTotal :: !(Maybe Integer) -- ^ "MemTotal" - Total amount of physical memory available on the host, in kilobytes (kB). 
+  , systemInfoIndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress" - Address / URL of the index server that is used for image search, and as a default for user authentication for Docker Hub and Docker Cloud. 
   , systemInfoRegistryConfig :: !(Maybe RegistryServiceConfig) -- ^ "RegistryConfig"
   , systemInfoGenericResources :: !(Maybe [A.Value]) -- ^ "GenericResources" - User-defined resources can be either Integer resources (e.g, &#x60;SSD&#x3D;3&#x60;) or String resources (e.g, &#x60;GPU&#x3D;UUID1&#x60;)
-  , systemInfoHttpProxy :: !(Maybe Text) -- ^ "HttpProxy" - HTTP-proxy configured for the daemon. This value is obtained from the [&#x60;HTTP_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
-  , systemInfoHttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy" - HTTPS-proxy configured for the daemon. This value is obtained from the [&#x60;HTTPS_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
-  , systemInfoNoProxy :: !(Maybe Text) -- ^ "NoProxy" - Comma-separated list of domain extensions for which no proxy should be used. This value is obtained from the [&#x60;NO_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration.
+  , systemInfoHttpProxy :: !(Maybe Text) -- ^ "HttpProxy" - HTTP-proxy configured for the daemon. This value is obtained from the [&#x60;HTTP_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration. 
+  , systemInfoHttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy" - HTTPS-proxy configured for the daemon. This value is obtained from the [&#x60;HTTPS_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration. 
+  , systemInfoNoProxy :: !(Maybe Text) -- ^ "NoProxy" - Comma-separated list of domain extensions for which no proxy should be used. This value is obtained from the [&#x60;NO_PROXY&#x60;](https://www.gnu.org/software/wget/manual/html_node/Proxies.html) environment variable.  Containers do not automatically inherit this configuration. 
   , systemInfoName :: !(Maybe Text) -- ^ "Name" - Hostname of the host.
-  , systemInfoLabels :: !(Maybe [Text]) -- ^ "Labels" - User-defined labels (key/value metadata) as set on the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: When part of a Swarm, nodes can both have _daemon_ labels, &gt; set through the daemon configuration, and _node_ labels, set from a &gt; manager node in the Swarm. Node labels are not included in this &gt; field. Node labels can be retrieved using the &#x60;/nodes/(id)&#x60; endpoint &gt; on a manager node in the Swarm.
-  , systemInfoExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild" - Indicates if experimental features are enabled on the daemon.
-  , systemInfoServerVersion :: !(Maybe Text) -- ^ "ServerVersion" - Version string of the daemon.  &gt; **Note**: the [standalone Swarm API](https://docs.docker.com/swarm/swarm-api/) &gt; returns the Swarm version instead of the daemon  version, for example &gt; &#x60;swarm/1.2.8&#x60;.
-  , systemInfoClusterStore :: !(Maybe Text) -- ^ "ClusterStore" - URL of the distributed storage backend.   The storage backend is used for multihost networking (to store network and endpoint information) and by the node discovery mechanism.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty.
-  , systemInfoClusterAdvertise :: !(Maybe Text) -- ^ "ClusterAdvertise" - The network endpoint that the Engine advertises for the purpose of node discovery. ClusterAdvertise is a &#x60;host:port&#x60; combination on which the daemon is reachable by other hosts.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty.
-  , systemInfoRuntimes :: !(Maybe (Map.Map String Runtime)) -- ^ "Runtimes" - List of [OCI compliant](https://github.com/opencontainers/runtime-spec) runtimes configured on the daemon. Keys hold the \&quot;name\&quot; used to reference the runtime.  The Docker daemon relies on an OCI compliant runtime (invoked via the &#x60;containerd&#x60; daemon) as its interface to the Linux kernel namespaces, cgroups, and SELinux.  The default runtime is &#x60;runc&#x60;, and automatically configured. Additional runtimes can be configured by the user and will be listed here.
-  , systemInfoDefaultRuntime :: !(Maybe Text) -- ^ "DefaultRuntime" - Name of the default OCI runtime that is used when starting containers.  The default can be overridden per-container at create time.
+  , systemInfoLabels :: !(Maybe [Text]) -- ^ "Labels" - User-defined labels (key/value metadata) as set on the daemon.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: When part of a Swarm, nodes can both have _daemon_ labels, &gt; set through the daemon configuration, and _node_ labels, set from a &gt; manager node in the Swarm. Node labels are not included in this &gt; field. Node labels can be retrieved using the &#x60;/nodes/(id)&#x60; endpoint &gt; on a manager node in the Swarm. 
+  , systemInfoExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild" - Indicates if experimental features are enabled on the daemon. 
+  , systemInfoServerVersion :: !(Maybe Text) -- ^ "ServerVersion" - Version string of the daemon.  &gt; **Note**: the [standalone Swarm API](https://docs.docker.com/swarm/swarm-api/) &gt; returns the Swarm version instead of the daemon  version, for example &gt; &#x60;swarm/1.2.8&#x60;. 
+  , systemInfoClusterStore :: !(Maybe Text) -- ^ "ClusterStore" - URL of the distributed storage backend.   The storage backend is used for multihost networking (to store network and endpoint information) and by the node discovery mechanism.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty. 
+  , systemInfoClusterAdvertise :: !(Maybe Text) -- ^ "ClusterAdvertise" - The network endpoint that the Engine advertises for the purpose of node discovery. ClusterAdvertise is a &#x60;host:port&#x60; combination on which the daemon is reachable by other hosts.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: This field is only propagated when using standalone Swarm &gt; mode, and overlay networking using an external k/v store. Overlay &gt; networks with Swarm mode enabled use the built-in raft store, and &gt; this field will be empty. 
+  , systemInfoRuntimes :: !(Maybe (Map.Map String Runtime)) -- ^ "Runtimes" - List of [OCI compliant](https://github.com/opencontainers/runtime-spec) runtimes configured on the daemon. Keys hold the \&quot;name\&quot; used to reference the runtime.  The Docker daemon relies on an OCI compliant runtime (invoked via the &#x60;containerd&#x60; daemon) as its interface to the Linux kernel namespaces, cgroups, and SELinux.  The default runtime is &#x60;runc&#x60;, and automatically configured. Additional runtimes can be configured by the user and will be listed here. 
+  , systemInfoDefaultRuntime :: !(Maybe Text) -- ^ "DefaultRuntime" - Name of the default OCI runtime that is used when starting containers.  The default can be overridden per-container at create time. 
   , systemInfoSwarm :: !(Maybe SwarmInfo) -- ^ "Swarm"
-  , systemInfoLiveRestoreEnabled :: !(Maybe Bool) -- ^ "LiveRestoreEnabled" - Indicates if live restore is enabled.  If enabled, containers are kept running when the daemon is shutdown or upon daemon start if running containers are detected.
-  , systemInfoIsolation :: !(Maybe E'Isolation2) -- ^ "Isolation" - Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is &#x60;hyperv&#x60;, and on Windows server, the default is &#x60;process&#x60;.  This option is currently not used on other platforms.
-  , systemInfoInitBinary :: !(Maybe Text) -- ^ "InitBinary" - Name and, optional, path of the the &#x60;docker-init&#x60; binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result.
+  , systemInfoLiveRestoreEnabled :: !(Maybe Bool) -- ^ "LiveRestoreEnabled" - Indicates if live restore is enabled.  If enabled, containers are kept running when the daemon is shutdown or upon daemon start if running containers are detected. 
+  , systemInfoIsolation :: !(Maybe E'Isolation2) -- ^ "Isolation" - Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is &#x60;hyperv&#x60;, and on Windows server, the default is &#x60;process&#x60;.  This option is currently not used on other platforms. 
+  , systemInfoInitBinary :: !(Maybe Text) -- ^ "InitBinary" - Name and, optional, path of the the &#x60;docker-init&#x60; binary.  If the path is omitted, the daemon searches the host&#39;s &#x60;$PATH&#x60; for the binary and uses the first result. 
   , systemInfoContainerdCommit :: !(Maybe Commit) -- ^ "ContainerdCommit"
   , systemInfoRuncCommit :: !(Maybe Commit) -- ^ "RuncCommit"
   , systemInfoInitCommit :: !(Maybe Commit) -- ^ "InitCommit"
-  , systemInfoSecurityOptions :: !(Maybe [Text]) -- ^ "SecurityOptions" - List of security features that are enabled on the daemon, such as apparmor, seccomp, SELinux, and user-namespaces (userns).  Additional configuration options for each security feature may be present, and are included as a comma-separated list of key/value pairs.
+  , systemInfoSecurityOptions :: !(Maybe [Text]) -- ^ "SecurityOptions" - List of security features that are enabled on the daemon, such as apparmor, seccomp, SELinux, and user-namespaces (userns).  Additional configuration options for each security feature may be present, and are included as a comma-separated list of key/value pairs. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SystemInfo
@@ -6953,8 +7094,8 @@ instance A.ToJSON SystemVersionResponseComponents where
 
 -- | Construct a value of type 'SystemVersionResponseComponents' (by applying it's required fields, if any)
 mkSystemVersionResponseComponents
-  :: Text -- ^ 'systemVersionResponseComponentsName'
-  -> Text -- ^ 'systemVersionResponseComponentsVersion'
+  :: Text -- ^ 'systemVersionResponseComponentsName' 
+  -> Text -- ^ 'systemVersionResponseComponentsVersion' 
   -> SystemVersionResponseComponents
 mkSystemVersionResponseComponents systemVersionResponseComponentsName systemVersionResponseComponentsVersion =
   SystemVersionResponseComponents
@@ -6985,7 +7126,7 @@ instance A.ToJSON SystemVersionResponsePlatform where
 
 -- | Construct a value of type 'SystemVersionResponsePlatform' (by applying it's required fields, if any)
 mkSystemVersionResponsePlatform
-  :: Text -- ^ 'systemVersionResponsePlatformName'
+  :: Text -- ^ 'systemVersionResponsePlatformName' 
   -> SystemVersionResponsePlatform
 mkSystemVersionResponsePlatform systemVersionResponsePlatformName =
   SystemVersionResponsePlatform
@@ -7187,7 +7328,7 @@ data TaskSpecContainerSpec = TaskSpecContainerSpec
   , taskSpecContainerSpecStopSignal :: !(Maybe Text) -- ^ "StopSignal" - Signal to stop the container.
   , taskSpecContainerSpecStopGracePeriod :: !(Maybe Integer) -- ^ "StopGracePeriod" - Amount of time to wait for the container to terminate before forcefully killing it.
   , taskSpecContainerSpecHealthCheck :: !(Maybe HealthConfig) -- ^ "HealthCheck"
-  , taskSpecContainerSpecHosts :: !(Maybe [Text]) -- ^ "Hosts" - A list of hostname/IP mappings to add to the container&#39;s &#x60;hosts&#x60; file. The format of extra hosts is specified in the [hosts(5)](http://man7.org/linux/man-pages/man5/hosts.5.html) man page:      IP_address canonical_hostname [aliases...]
+  , taskSpecContainerSpecHosts :: !(Maybe [Text]) -- ^ "Hosts" - A list of hostname/IP mappings to add to the container&#39;s &#x60;hosts&#x60; file. The format of extra hosts is specified in the [hosts(5)](http://man7.org/linux/man-pages/man5/hosts.5.html) man page:      IP_address canonical_hostname [aliases...] 
   , taskSpecContainerSpecDnsConfig :: !(Maybe TaskSpecContainerSpecDNSConfig) -- ^ "DNSConfig"
   , taskSpecContainerSpecSecrets :: !(Maybe [TaskSpecContainerSpecSecrets]) -- ^ "Secrets" - Secrets contains references to zero or more secrets that will be exposed to the service.
   , taskSpecContainerSpecConfigs :: !(Maybe [TaskSpecContainerSpecConfigs]) -- ^ "Configs" - Configs contains references to zero or more configs that will be exposed to the service.
@@ -7284,7 +7425,7 @@ mkTaskSpecContainerSpec =
 data TaskSpecContainerSpecConfigs = TaskSpecContainerSpecConfigs
   { taskSpecContainerSpecConfigsFile :: !(Maybe TaskSpecContainerSpecFile) -- ^ "File"
   , taskSpecContainerSpecConfigsConfigId :: !(Maybe Text) -- ^ "ConfigID" - ConfigID represents the ID of the specific config that we&#39;re referencing.
-  , taskSpecContainerSpecConfigsConfigName :: !(Maybe Text) -- ^ "ConfigName" - ConfigName is the name of the config that this references, but this is just provided for lookup/display purposes. The config in the reference will be identified by its ID.
+  , taskSpecContainerSpecConfigsConfigName :: !(Maybe Text) -- ^ "ConfigName" - ConfigName is the name of the config that this references, but this is just provided for lookup/display purposes. The config in the reference will be identified by its ID. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecConfigs
@@ -7430,8 +7571,8 @@ mkTaskSpecContainerSpecPrivileges =
 -- | TaskSpecContainerSpecPrivilegesCredentialSpec
 -- CredentialSpec for managed service account (Windows only)
 data TaskSpecContainerSpecPrivilegesCredentialSpec = TaskSpecContainerSpecPrivilegesCredentialSpec
-  { taskSpecContainerSpecPrivilegesCredentialSpecFile :: !(Maybe Text) -- ^ "File" - Load credential spec from this file. The file is read by the daemon, and must be present in the &#x60;CredentialSpecs&#x60; subdirectory in the docker data directory, which defaults to &#x60;C:\\ProgramData\\Docker\\&#x60; on Windows.  For example, specifying &#x60;spec.json&#x60; loads &#x60;C:\\ProgramData\\Docker\\CredentialSpecs\\spec.json&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive.
-  , taskSpecContainerSpecPrivilegesCredentialSpecRegistry :: !(Maybe Text) -- ^ "Registry" - Load credential spec from this value in the Windows registry. The specified registry value must be located in:  &#x60;HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Virtualization\\Containers\\CredentialSpecs&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;   &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive.
+  { taskSpecContainerSpecPrivilegesCredentialSpecFile :: !(Maybe Text) -- ^ "File" - Load credential spec from this file. The file is read by the daemon, and must be present in the &#x60;CredentialSpecs&#x60; subdirectory in the docker data directory, which defaults to &#x60;C:\\ProgramData\\Docker\\&#x60; on Windows.  For example, specifying &#x60;spec.json&#x60; loads &#x60;C:\\ProgramData\\Docker\\CredentialSpecs\\spec.json&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive. 
+  , taskSpecContainerSpecPrivilegesCredentialSpecRegistry :: !(Maybe Text) -- ^ "Registry" - Load credential spec from this value in the Windows registry. The specified registry value must be located in:  &#x60;HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Virtualization\\Containers\\CredentialSpecs&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;   &gt; **Note**: &#x60;CredentialSpec.File&#x60; and &#x60;CredentialSpec.Registry&#x60; are mutually exclusive. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecPrivilegesCredentialSpec
@@ -7509,7 +7650,7 @@ mkTaskSpecContainerSpecPrivilegesSELinuxContext =
 data TaskSpecContainerSpecSecrets = TaskSpecContainerSpecSecrets
   { taskSpecContainerSpecSecretsFile :: !(Maybe TaskSpecContainerSpecFile) -- ^ "File"
   , taskSpecContainerSpecSecretsSecretId :: !(Maybe Text) -- ^ "SecretID" - SecretID represents the ID of the specific secret that we&#39;re referencing.
-  , taskSpecContainerSpecSecretsSecretName :: !(Maybe Text) -- ^ "SecretName" - SecretName is the name of the secret that this references, but this is just provided for lookup/display purposes. The secret in the reference will be identified by its ID.
+  , taskSpecContainerSpecSecretsSecretName :: !(Maybe Text) -- ^ "SecretName" - SecretName is the name of the secret that this references, but this is just provided for lookup/display purposes. The secret in the reference will be identified by its ID. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecContainerSpecSecrets
@@ -7610,7 +7751,7 @@ mkTaskSpecNetworks =
 data TaskSpecPlacement = TaskSpecPlacement
   { taskSpecPlacementConstraints :: !(Maybe [Text]) -- ^ "Constraints" - An array of constraints.
   , taskSpecPlacementPreferences :: !(Maybe [TaskSpecPlacementPreferences]) -- ^ "Preferences" - Preferences provide a way to make the scheduler aware of factors such as topology. They are provided in order from highest to lowest precedence.
-  , taskSpecPlacementPlatforms :: !(Maybe [Platform]) -- ^ "Platforms" - Platforms stores all the platforms that the service&#39;s image can run on. This field is used in the platform filter for scheduling. If empty, then the platform filter is off, meaning there are no scheduling restrictions.
+  , taskSpecPlacementPlatforms :: !(Maybe [Platform]) -- ^ "Platforms" - Platforms stores all the platforms that the service&#39;s image can run on. This field is used in the platform filter for scheduling. If empty, then the platform filter is off, meaning there are no scheduling restrictions. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON TaskSpecPlacement
@@ -7959,7 +8100,7 @@ data Volume = Volume
   , volumeDriver :: !(Text) -- ^ /Required/ "Driver" - Name of the volume driver used by the volume.
   , volumeMountpoint :: !(Text) -- ^ /Required/ "Mountpoint" - Mount path of the volume on the host.
   , volumeCreatedAt :: !(Maybe Text) -- ^ "CreatedAt" - Date/Time the volume was created.
-  , volumeStatus :: !(Maybe (Map.Map String A.Value)) -- ^ "Status" - Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: &#x60;{\&quot;key\&quot;:\&quot;value\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&#x60;.  The &#x60;Status&#x60; field is optional, and is omitted if the volume driver does not support this feature.
+  , volumeStatus :: !(Maybe (Map.Map String A.Value)) -- ^ "Status" - Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: &#x60;{\&quot;key\&quot;:\&quot;value\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&#x60;.  The &#x60;Status&#x60; field is optional, and is omitted if the volume driver does not support this feature. 
   , volumeLabels :: !((Map.Map String Text)) -- ^ /Required/ "Labels" - User-defined key/value metadata.
   , volumeScope :: !(E'Scope) -- ^ /Required/ "Scope" - The level at which the volume exists. Either &#x60;global&#x60; for cluster-wide, or &#x60;local&#x60; for machine level.
   , volumeOptions :: !((Map.Map String Text)) -- ^ /Required/ "Options" - The driver specific options used when creating the volume.
@@ -8086,10 +8227,10 @@ mkVolumePruneResponse =
 
 -- ** VolumeUsageData
 -- | VolumeUsageData
--- Usage details about the volume. This information is used by the `GET /system/df` endpoint, and omitted in other endpoints.
+-- Usage details about the volume. This information is used by the `GET /system/df` endpoint, and omitted in other endpoints. 
 data VolumeUsageData = VolumeUsageData
-  { volumeUsageDataSize :: !(Int) -- ^ /Required/ "Size" - Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the &#x60;\&quot;local\&quot;&#x60; volume driver. For volumes created with other volume drivers, this field is set to &#x60;-1&#x60; (\&quot;not available\&quot;)
-  , volumeUsageDataRefCount :: !(Int) -- ^ /Required/ "RefCount" - The number of containers referencing this volume. This field is set to &#x60;-1&#x60; if the reference-count is not available.
+  { volumeUsageDataSize :: !(Int) -- ^ /Required/ "Size" - Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the &#x60;\&quot;local\&quot;&#x60; volume driver. For volumes created with other volume drivers, this field is set to &#x60;-1&#x60; (\&quot;not available\&quot;) 
+  , volumeUsageDataRefCount :: !(Int) -- ^ /Required/ "RefCount" - The number of containers referencing this volume. This field is set to &#x60;-1&#x60; if the reference-count is not available. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON VolumeUsageData
@@ -8110,8 +8251,8 @@ instance A.ToJSON VolumeUsageData where
 
 -- | Construct a value of type 'VolumeUsageData' (by applying it's required fields, if any)
 mkVolumeUsageData
-  :: Int -- ^ 'volumeUsageDataSize': Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the `\"local\"` volume driver. For volumes created with other volume drivers, this field is set to `-1` (\"not available\")
-  -> Int -- ^ 'volumeUsageDataRefCount': The number of containers referencing this volume. This field is set to `-1` if the reference-count is not available.
+  :: Int -- ^ 'volumeUsageDataSize': Amount of disk space used by the volume (in bytes). This information is only available for volumes created with the `\"local\"` volume driver. For volumes created with other volume drivers, this field is set to `-1` (\"not available\") 
+  -> Int -- ^ 'volumeUsageDataRefCount': The number of containers referencing this volume. This field is set to `-1` if the reference-count is not available. 
   -> VolumeUsageData
 mkVolumeUsageData volumeUsageDataSize volumeUsageDataRefCount =
   VolumeUsageData
@@ -8125,7 +8266,7 @@ mkVolumeUsageData volumeUsageDataSize volumeUsageDataRefCount =
 
 -- ** E'Availability
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Availability of the node.
 data E'Availability
   = E'Availability'Active -- ^ @"active"@
@@ -8157,8 +8298,8 @@ toE'Availability = \case
 
 -- ** E'CgroupDriver
 
--- | Enum of 'Text' .
--- The driver to use for managing cgroups.
+-- | Enum of 'Text' . 
+-- The driver to use for managing cgroups. 
 data E'CgroupDriver
   = E'CgroupDriver'Cgroupfs -- ^ @"cgroupfs"@
   | E'CgroupDriver'Systemd -- ^ @"systemd"@
@@ -8186,7 +8327,7 @@ toE'CgroupDriver = \case
 
 -- ** E'Condition
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Condition for restart.
 data E'Condition
   = E'Condition'None -- ^ @"none"@
@@ -8243,7 +8384,7 @@ toE'ContentType = \case
 
 -- ** E'FailureAction
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Action to take if an updated task fails to run, or stops running during the update.
 data E'FailureAction
   = E'FailureAction'Continue -- ^ @"continue"@
@@ -8275,7 +8416,7 @@ toE'FailureAction = \case
 
 -- ** E'FailureAction2
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Action to take if an rolled back task fails to run, or stops running during the rollback.
 data E'FailureAction2
   = E'FailureAction2'Continue -- ^ @"continue"@
@@ -8304,7 +8445,7 @@ toE'FailureAction2 = \case
 
 -- ** E'Isolation
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Isolation technology of the container. (Windows only)
 data E'Isolation
   = E'Isolation'Default -- ^ @"default"@
@@ -8336,8 +8477,8 @@ toE'Isolation = \case
 
 -- ** E'Isolation2
 
--- | Enum of 'Text' .
--- Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is `hyperv`, and on Windows server, the default is `process`.  This option is currently not used on other platforms.
+-- | Enum of 'Text' . 
+-- Represents the isolation technology to use as a default for containers. The supported values are platform-specific.  If no isolation value is specified on daemon start, on Windows client, the default is `hyperv`, and on Windows server, the default is `process`.  This option is currently not used on other platforms. 
 data E'Isolation2
   = E'Isolation2'Default -- ^ @"default"@
   | E'Isolation2'Hyperv -- ^ @"hyperv"@
@@ -8368,7 +8509,7 @@ toE'Isolation2 = \case
 
 -- ** E'Mode
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- The mode of resolution to use for internal load balancing between tasks.
 data E'Mode
   = E'Mode'Vip -- ^ @"vip"@
@@ -8397,8 +8538,8 @@ toE'Mode = \case
 
 -- ** E'Name
 
--- | Enum of 'Text' .
--- - Empty string means not to restart - `always` Always restart - `unless-stopped` Restart always except when the user has manually stopped the container - `on-failure` Restart only when the container exit code is non-zero
+-- | Enum of 'Text' . 
+-- - Empty string means not to restart - `always` Always restart - `unless-stopped` Restart always except when the user has manually stopped the container - `on-failure` Restart only when the container exit code is non-zero 
 data E'Name
   = E'Name'Empty -- ^ @""@
   | E'Name'Always -- ^ @"always"@
@@ -8432,7 +8573,7 @@ toE'Name = \case
 
 -- ** E'Order
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- The order of operations when rolling out an updated task. Either the old task is shut down before the new task is started, or the new task is started before the old task is shut down.
 data E'Order
   = E'Order'Stop_first -- ^ @"stop-first"@
@@ -8461,7 +8602,7 @@ toE'Order = \case
 
 -- ** E'Propagation
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
 data E'Propagation
   = E'Propagation'Private -- ^ @"private"@
@@ -8502,7 +8643,7 @@ toE'Propagation = \case
 
 -- ** E'Protocol
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Protocol for communication with the external CA (currently only `cfssl` is supported).
 data E'Protocol
   = E'Protocol'Cfssl -- ^ @"cfssl"@
@@ -8528,8 +8669,8 @@ toE'Protocol = \case
 
 -- ** E'PublishMode
 
--- | Enum of 'Text' .
--- The mode in which port is published.  <p><br /></p>  - \"ingress\" makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \"host\" bypasses the routing mesh and publish the port directly on   the swarm node where that service is running.
+-- | Enum of 'Text' . 
+-- The mode in which port is published.  <p><br /></p>  - \"ingress\" makes the target port accessible on on every node,   regardless of whether there is a task for the service running on   that node or not. - \"host\" bypasses the routing mesh and publish the port directly on   the swarm node where that service is running. 
 data E'PublishMode
   = E'PublishMode'Ingress -- ^ @"ingress"@
   | E'PublishMode'Host -- ^ @"host"@
@@ -8557,7 +8698,7 @@ toE'PublishMode = \case
 
 -- ** E'Role
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Role of the node.
 data E'Role
   = E'Role'Worker -- ^ @"worker"@
@@ -8586,7 +8727,7 @@ toE'Role = \case
 
 -- ** E'Scope
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
 data E'Scope
   = E'Scope'Local -- ^ @"local"@
@@ -8646,8 +8787,8 @@ toE'State = \case
 
 -- ** E'Status
 
--- | Enum of 'Text' .
--- The status of the container. For example, `\"running\"` or `\"exited\"`.
+-- | Enum of 'Text' . 
+-- The status of the container. For example, `\"running\"` or `\"exited\"`. 
 data E'Status
   = E'Status'Created -- ^ @"created"@
   | E'Status'Running -- ^ @"running"@
@@ -8718,8 +8859,8 @@ toE'Type = \case
 
 -- ** E'Type2
 
--- | Enum of 'Text' .
--- The mount type. Available types:  - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container. - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs.
+-- | Enum of 'Text' . 
+-- The mount type. Available types:  - `bind` Mounts a file or directory from the host into the container. Must exist prior to creating the container. - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed. - `tmpfs` Create a tmpfs with the given options. The mount source cannot be specified for tmpfs. 
 data E'Type2
   = E'Type2'Bind -- ^ @"bind"@
   | E'Type2'Volume -- ^ @"volume"@
@@ -8799,7 +8940,7 @@ toE'Type3 = \case
 
 -- ** LocalNodeState
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Current local status of this node.
 data LocalNodeState
   = LocalNodeState'Empty -- ^ @""@
@@ -8840,7 +8981,7 @@ toLocalNodeState = \case
 
 -- ** NodeState
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- NodeState represents the state of a node.
 data NodeState
   = NodeState'Unknown -- ^ @"unknown"@
@@ -8875,7 +9016,7 @@ toNodeState = \case
 
 -- ** Reachability
 
--- | Enum of 'Text' .
+-- | Enum of 'Text' . 
 -- Reachability represents the reachability of a node.
 data Reachability
   = Reachability'Unknown -- ^ @"unknown"@
@@ -8964,3 +9105,6 @@ toTaskState = \case
   "failed" -> P.Right TaskState'Failed
   "rejected" -> P.Right TaskState'Rejected
   s -> P.Left $ "toTaskState: enum parse failure: " P.++ P.show s
+
+
+

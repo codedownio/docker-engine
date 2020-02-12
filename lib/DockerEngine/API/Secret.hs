@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.36
@@ -60,10 +60,10 @@ import qualified Prelude as P
 -- *** secretCreate
 
 -- | @POST \/secrets\/create@
---
+-- 
 -- Create a secret
---
-secretCreate
+-- 
+secretCreate 
   :: (Consumes SecretCreate MimeJSON)
   => DockerEngineRequest SecretCreate MimeJSON IdResponse MimeJSON
 secretCreate =
@@ -82,18 +82,18 @@ instance Produces SecretCreate MimeJSON
 -- *** secretDelete
 
 -- | @DELETE \/secrets\/{id}@
---
+-- 
 -- Delete a secret
---
+-- 
 -- Note: Has 'Produces' instances, but no response schema
---
-secretDelete
+-- 
+secretDelete 
   :: Id -- ^ "id" -  ID of the secret
   -> DockerEngineRequest SecretDelete MimeNoContent res MimeJSON
 secretDelete (Id id) =
   _mkRequest "DELETE" ["/secrets/",toPath id]
 
-data SecretDelete
+data SecretDelete  
 -- | @application/json@
 instance Produces SecretDelete MimeJSON
 
@@ -101,16 +101,16 @@ instance Produces SecretDelete MimeJSON
 -- *** secretInspect
 
 -- | @GET \/secrets\/{id}@
---
+-- 
 -- Inspect a secret
---
-secretInspect
+-- 
+secretInspect 
   :: Id -- ^ "id" -  ID of the secret
   -> DockerEngineRequest SecretInspect MimeNoContent Secret MimeJSON
 secretInspect (Id id) =
   _mkRequest "GET" ["/secrets/",toPath id]
 
-data SecretInspect
+data SecretInspect  
 -- | @application/json@
 instance Produces SecretInspect MimeJSON
 
@@ -118,17 +118,17 @@ instance Produces SecretInspect MimeJSON
 -- *** secretList
 
 -- | @GET \/secrets@
---
+-- 
 -- List secrets
---
-secretList
+-- 
+secretList 
   :: DockerEngineRequest SecretList MimeNoContent [Secret] MimeJSON
 secretList =
   _mkRequest "GET" ["/secrets"]
 
-data SecretList
+data SecretList  
 
--- | /Optional Param/ "filters" - A JSON encoded value of the filters (a `map[string][]string`) to process on the secrets list. Available filters:  - `id=<secret id>` - `label=<key> or label=<key>=value` - `name=<secret name>` - `names=<secret name>`
+-- | /Optional Param/ "filters" - A JSON encoded value of the filters (a `map[string][]string`) to process on the secrets list. Available filters:  - `id=<secret id>` - `label=<key> or label=<key>=value` - `name=<secret name>` - `names=<secret name>` 
 instance HasOptionalParam SecretList Filters where
   applyOptionalParam req (Filters xs) =
     req `setQuery` toQuery ("filters", Just xs)
@@ -139,12 +139,12 @@ instance Produces SecretList MimeJSON
 -- *** secretUpdate
 
 -- | @POST \/secrets\/{id}\/update@
---
+-- 
 -- Update a Secret
---
+-- 
 -- Note: Has 'Produces' instances, but no response schema
---
-secretUpdate
+-- 
+secretUpdate 
   :: (Consumes SecretUpdate contentType)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
@@ -155,10 +155,10 @@ secretUpdate _  _ (Id id) (Version version) =
   _mkRequest "POST" ["/secrets/",toPath id,"/update"]
     `setQuery` toQuery ("version", Just version)
 
-data SecretUpdate
+data SecretUpdate 
 
 -- | /Body Param/ "body" - The spec of the secret to update. Currently, only the Labels field can be updated. All other fields must remain unchanged from the [SecretInspect endpoint](#operation/SecretInspect) response values.
-instance HasBodyParam SecretUpdate SecretSpec
+instance HasBodyParam SecretUpdate SecretSpec 
 
 -- | @application/json@
 instance Consumes SecretUpdate MimeJSON
@@ -169,3 +169,4 @@ instance Consumes SecretUpdate MimePlainText
 instance Produces SecretUpdate MimeJSON
 -- | @text/plain@
 instance Produces SecretUpdate MimePlainText
+

@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ```
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.36) is used. For example, calling `/info` is the same as calling `/v1.36/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.36
@@ -32,8 +32,8 @@ import Data.Text (Text)
 import Prelude (($), (.),(<$>),(<*>),(=<<),Maybe(..),Bool(..),Char,Double,FilePath,Float,Int,Integer,String,fmap,undefined,mempty,maybe,pure,Monad,Applicative,Functor)
 import qualified Prelude as P
 
-import DockerEngine.Core
 import DockerEngine.Model
+import DockerEngine.Core
 
 
 -- * Address
@@ -593,6 +593,103 @@ containerPruneResponseContainersDeletedL f ContainerPruneResponse{..} = (\contai
 containerPruneResponseSpaceReclaimedL :: Lens_' ContainerPruneResponse (Maybe Integer)
 containerPruneResponseSpaceReclaimedL f ContainerPruneResponse{..} = (\containerPruneResponseSpaceReclaimed -> ContainerPruneResponse { containerPruneResponseSpaceReclaimed, ..} ) <$> f containerPruneResponseSpaceReclaimed
 {-# INLINE containerPruneResponseSpaceReclaimedL #-}
+
+
+
+-- * ContainerSummary
+
+-- | 'containerSummaryId' Lens
+containerSummaryIdL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryIdL f ContainerSummary{..} = (\containerSummaryId -> ContainerSummary { containerSummaryId, ..} ) <$> f containerSummaryId
+{-# INLINE containerSummaryIdL #-}
+
+-- | 'containerSummaryNames' Lens
+containerSummaryNamesL :: Lens_' ContainerSummary (Maybe [Text])
+containerSummaryNamesL f ContainerSummary{..} = (\containerSummaryNames -> ContainerSummary { containerSummaryNames, ..} ) <$> f containerSummaryNames
+{-# INLINE containerSummaryNamesL #-}
+
+-- | 'containerSummaryImage' Lens
+containerSummaryImageL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryImageL f ContainerSummary{..} = (\containerSummaryImage -> ContainerSummary { containerSummaryImage, ..} ) <$> f containerSummaryImage
+{-# INLINE containerSummaryImageL #-}
+
+-- | 'containerSummaryImageId' Lens
+containerSummaryImageIdL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryImageIdL f ContainerSummary{..} = (\containerSummaryImageId -> ContainerSummary { containerSummaryImageId, ..} ) <$> f containerSummaryImageId
+{-# INLINE containerSummaryImageIdL #-}
+
+-- | 'containerSummaryCommand' Lens
+containerSummaryCommandL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryCommandL f ContainerSummary{..} = (\containerSummaryCommand -> ContainerSummary { containerSummaryCommand, ..} ) <$> f containerSummaryCommand
+{-# INLINE containerSummaryCommandL #-}
+
+-- | 'containerSummaryCreated' Lens
+containerSummaryCreatedL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummaryCreatedL f ContainerSummary{..} = (\containerSummaryCreated -> ContainerSummary { containerSummaryCreated, ..} ) <$> f containerSummaryCreated
+{-# INLINE containerSummaryCreatedL #-}
+
+-- | 'containerSummaryPorts' Lens
+containerSummaryPortsL :: Lens_' ContainerSummary (Maybe [Port])
+containerSummaryPortsL f ContainerSummary{..} = (\containerSummaryPorts -> ContainerSummary { containerSummaryPorts, ..} ) <$> f containerSummaryPorts
+{-# INLINE containerSummaryPortsL #-}
+
+-- | 'containerSummarySizeRw' Lens
+containerSummarySizeRwL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummarySizeRwL f ContainerSummary{..} = (\containerSummarySizeRw -> ContainerSummary { containerSummarySizeRw, ..} ) <$> f containerSummarySizeRw
+{-# INLINE containerSummarySizeRwL #-}
+
+-- | 'containerSummarySizeRootFs' Lens
+containerSummarySizeRootFsL :: Lens_' ContainerSummary (Maybe Integer)
+containerSummarySizeRootFsL f ContainerSummary{..} = (\containerSummarySizeRootFs -> ContainerSummary { containerSummarySizeRootFs, ..} ) <$> f containerSummarySizeRootFs
+{-# INLINE containerSummarySizeRootFsL #-}
+
+-- | 'containerSummaryLabels' Lens
+containerSummaryLabelsL :: Lens_' ContainerSummary (Maybe (Map.Map String Text))
+containerSummaryLabelsL f ContainerSummary{..} = (\containerSummaryLabels -> ContainerSummary { containerSummaryLabels, ..} ) <$> f containerSummaryLabels
+{-# INLINE containerSummaryLabelsL #-}
+
+-- | 'containerSummaryState' Lens
+containerSummaryStateL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryStateL f ContainerSummary{..} = (\containerSummaryState -> ContainerSummary { containerSummaryState, ..} ) <$> f containerSummaryState
+{-# INLINE containerSummaryStateL #-}
+
+-- | 'containerSummaryStatus' Lens
+containerSummaryStatusL :: Lens_' ContainerSummary (Maybe Text)
+containerSummaryStatusL f ContainerSummary{..} = (\containerSummaryStatus -> ContainerSummary { containerSummaryStatus, ..} ) <$> f containerSummaryStatus
+{-# INLINE containerSummaryStatusL #-}
+
+-- | 'containerSummaryHostConfig' Lens
+containerSummaryHostConfigL :: Lens_' ContainerSummary (Maybe ContainerSummaryHostConfig)
+containerSummaryHostConfigL f ContainerSummary{..} = (\containerSummaryHostConfig -> ContainerSummary { containerSummaryHostConfig, ..} ) <$> f containerSummaryHostConfig
+{-# INLINE containerSummaryHostConfigL #-}
+
+-- | 'containerSummaryNetworkSettings' Lens
+containerSummaryNetworkSettingsL :: Lens_' ContainerSummary (Maybe ContainerSummaryNetworkSettings)
+containerSummaryNetworkSettingsL f ContainerSummary{..} = (\containerSummaryNetworkSettings -> ContainerSummary { containerSummaryNetworkSettings, ..} ) <$> f containerSummaryNetworkSettings
+{-# INLINE containerSummaryNetworkSettingsL #-}
+
+-- | 'containerSummaryMounts' Lens
+containerSummaryMountsL :: Lens_' ContainerSummary (Maybe [Mount])
+containerSummaryMountsL f ContainerSummary{..} = (\containerSummaryMounts -> ContainerSummary { containerSummaryMounts, ..} ) <$> f containerSummaryMounts
+{-# INLINE containerSummaryMountsL #-}
+
+
+
+-- * ContainerSummaryHostConfig
+
+-- | 'containerSummaryHostConfigNetworkMode' Lens
+containerSummaryHostConfigNetworkModeL :: Lens_' ContainerSummaryHostConfig (Maybe Text)
+containerSummaryHostConfigNetworkModeL f ContainerSummaryHostConfig{..} = (\containerSummaryHostConfigNetworkMode -> ContainerSummaryHostConfig { containerSummaryHostConfigNetworkMode, ..} ) <$> f containerSummaryHostConfigNetworkMode
+{-# INLINE containerSummaryHostConfigNetworkModeL #-}
+
+
+
+-- * ContainerSummaryNetworkSettings
+
+-- | 'containerSummaryNetworkSettingsNetworks' Lens
+containerSummaryNetworkSettingsNetworksL :: Lens_' ContainerSummaryNetworkSettings (Maybe (Map.Map String EndpointSettings))
+containerSummaryNetworkSettingsNetworksL f ContainerSummaryNetworkSettings{..} = (\containerSummaryNetworkSettingsNetworks -> ContainerSummaryNetworkSettings { containerSummaryNetworkSettingsNetworks, ..} ) <$> f containerSummaryNetworkSettingsNetworks
+{-# INLINE containerSummaryNetworkSettingsNetworksL #-}
 
 
 
@@ -4062,7 +4159,7 @@ systemDataUsageResponseImagesL f SystemDataUsageResponse{..} = (\systemDataUsage
 {-# INLINE systemDataUsageResponseImagesL #-}
 
 -- | 'systemDataUsageResponseContainers' Lens
-systemDataUsageResponseContainersL :: Lens_' SystemDataUsageResponse (Maybe [A.Array])
+systemDataUsageResponseContainersL :: Lens_' SystemDataUsageResponse (Maybe [ContainerSummary])
 systemDataUsageResponseContainersL f SystemDataUsageResponse{..} = (\systemDataUsageResponseContainers -> SystemDataUsageResponse { systemDataUsageResponseContainers, ..} ) <$> f systemDataUsageResponseContainers
 {-# INLINE systemDataUsageResponseContainersL #-}
 
@@ -5176,3 +5273,5 @@ volumeUsageDataSizeL f VolumeUsageData{..} = (\volumeUsageDataSize -> VolumeUsag
 volumeUsageDataRefCountL :: Lens_' VolumeUsageData (Int)
 volumeUsageDataRefCountL f VolumeUsageData{..} = (\volumeUsageDataRefCount -> VolumeUsageData { volumeUsageDataRefCount, ..} ) <$> f volumeUsageDataRefCount
 {-# INLINE volumeUsageDataRefCountL #-}
+
+
