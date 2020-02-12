@@ -215,7 +215,7 @@ instance Produces NetworkList MimeJSON
 -- Delete unused networks
 -- 
 networkPrune 
-  :: DockerEngineRequest NetworkPrune MimeNoContent InlineResponse20017 MimeJSON
+  :: DockerEngineRequest NetworkPrune MimeNoContent InlineResponse20016 MimeJSON
 networkPrune =
   _mkRequest "POST" ["/networks/prune"]
 

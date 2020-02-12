@@ -66,7 +66,7 @@ import qualified Prelude as P
 getPluginPrivileges 
   :: Accept accept -- ^ request accept ('MimeType')
   -> Remote -- ^ "remote" -  The name of the plugin. The `:latest` tag is optional, and is the default if omitted.
-  -> DockerEngineRequest GetPluginPrivileges MimeNoContent [InlineResponse20018] accept
+  -> DockerEngineRequest GetPluginPrivileges MimeNoContent [InlineResponse20017] accept
 getPluginPrivileges  _ (Remote remote) =
   _mkRequest "GET" ["/plugins/privileges"]
     `setQuery` toQuery ("remote", Just remote)

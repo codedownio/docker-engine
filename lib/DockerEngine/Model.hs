@@ -2426,92 +2426,23 @@ mkInlineObject8 =
 -- ** InlineResponse200
 -- | InlineResponse200
 data InlineResponse200 = InlineResponse200
-  { inlineResponse200Id :: !(Maybe Text) -- ^ "Id" - The ID of the container
-  , inlineResponse200Created :: !(Maybe Text) -- ^ "Created" - The time the container was created
-  , inlineResponse200Path :: !(Maybe Text) -- ^ "Path" - The path to the command being run
-  , inlineResponse200Args :: !(Maybe [Text]) -- ^ "Args" - The arguments to the command being run
-  , inlineResponse200State :: !(Maybe InlineResponse200State) -- ^ "State"
-  , inlineResponse200Image :: !(Maybe Text) -- ^ "Image" - The container&#39;s image
-  , inlineResponse200ResolvConfPath :: !(Maybe Text) -- ^ "ResolvConfPath"
-  , inlineResponse200HostnamePath :: !(Maybe Text) -- ^ "HostnamePath"
-  , inlineResponse200HostsPath :: !(Maybe Text) -- ^ "HostsPath"
-  , inlineResponse200LogPath :: !(Maybe Text) -- ^ "LogPath"
-  , inlineResponse200Node :: !(Maybe A.Value) -- ^ "Node" - TODO
-  , inlineResponse200Name :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse200RestartCount :: !(Maybe Int) -- ^ "RestartCount"
-  , inlineResponse200Driver :: !(Maybe Text) -- ^ "Driver"
-  , inlineResponse200MountLabel :: !(Maybe Text) -- ^ "MountLabel"
-  , inlineResponse200ProcessLabel :: !(Maybe Text) -- ^ "ProcessLabel"
-  , inlineResponse200AppArmorProfile :: !(Maybe Text) -- ^ "AppArmorProfile"
-  , inlineResponse200ExecIDs :: !(Maybe Text) -- ^ "ExecIDs"
-  , inlineResponse200HostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
-  , inlineResponse200GraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
-  , inlineResponse200SizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container.
-  , inlineResponse200SizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container.
-  , inlineResponse200Mounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
-  , inlineResponse200Config :: !(Maybe ContainerConfig) -- ^ "Config"
-  , inlineResponse200NetworkSettings :: !(Maybe NetworkConfig) -- ^ "NetworkSettings"
+  { inlineResponse200Titles :: !(Maybe [Text]) -- ^ "Titles" - The ps column titles
+  , inlineResponse200Processes :: !(Maybe [[Text]]) -- ^ "Processes" - Each process running in the container, where each is process is an array of values corresponding to the titles
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineResponse200
 instance A.FromJSON InlineResponse200 where
   parseJSON = A.withObject "InlineResponse200" $ \o ->
     InlineResponse200
-      <$> (o .:? "Id")
-      <*> (o .:? "Created")
-      <*> (o .:? "Path")
-      <*> (o .:? "Args")
-      <*> (o .:? "State")
-      <*> (o .:? "Image")
-      <*> (o .:? "ResolvConfPath")
-      <*> (o .:? "HostnamePath")
-      <*> (o .:? "HostsPath")
-      <*> (o .:? "LogPath")
-      <*> (o .:? "Node")
-      <*> (o .:? "Name")
-      <*> (o .:? "RestartCount")
-      <*> (o .:? "Driver")
-      <*> (o .:? "MountLabel")
-      <*> (o .:? "ProcessLabel")
-      <*> (o .:? "AppArmorProfile")
-      <*> (o .:? "ExecIDs")
-      <*> (o .:? "HostConfig")
-      <*> (o .:? "GraphDriver")
-      <*> (o .:? "SizeRw")
-      <*> (o .:? "SizeRootFs")
-      <*> (o .:? "Mounts")
-      <*> (o .:? "Config")
-      <*> (o .:? "NetworkSettings")
+      <$> (o .:? "Titles")
+      <*> (o .:? "Processes")
 
 -- | ToJSON InlineResponse200
 instance A.ToJSON InlineResponse200 where
   toJSON InlineResponse200 {..} =
    _omitNulls
-      [ "Id" .= inlineResponse200Id
-      , "Created" .= inlineResponse200Created
-      , "Path" .= inlineResponse200Path
-      , "Args" .= inlineResponse200Args
-      , "State" .= inlineResponse200State
-      , "Image" .= inlineResponse200Image
-      , "ResolvConfPath" .= inlineResponse200ResolvConfPath
-      , "HostnamePath" .= inlineResponse200HostnamePath
-      , "HostsPath" .= inlineResponse200HostsPath
-      , "LogPath" .= inlineResponse200LogPath
-      , "Node" .= inlineResponse200Node
-      , "Name" .= inlineResponse200Name
-      , "RestartCount" .= inlineResponse200RestartCount
-      , "Driver" .= inlineResponse200Driver
-      , "MountLabel" .= inlineResponse200MountLabel
-      , "ProcessLabel" .= inlineResponse200ProcessLabel
-      , "AppArmorProfile" .= inlineResponse200AppArmorProfile
-      , "ExecIDs" .= inlineResponse200ExecIDs
-      , "HostConfig" .= inlineResponse200HostConfig
-      , "GraphDriver" .= inlineResponse200GraphDriver
-      , "SizeRw" .= inlineResponse200SizeRw
-      , "SizeRootFs" .= inlineResponse200SizeRootFs
-      , "Mounts" .= inlineResponse200Mounts
-      , "Config" .= inlineResponse200Config
-      , "NetworkSettings" .= inlineResponse200NetworkSettings
+      [ "Titles" .= inlineResponse200Titles
+      , "Processes" .= inlineResponse200Processes
       ]
 
 
@@ -2520,115 +2451,933 @@ mkInlineResponse200
   :: InlineResponse200
 mkInlineResponse200 =
   InlineResponse200
-  { inlineResponse200Id = Nothing
-  , inlineResponse200Created = Nothing
-  , inlineResponse200Path = Nothing
-  , inlineResponse200Args = Nothing
-  , inlineResponse200State = Nothing
-  , inlineResponse200Image = Nothing
-  , inlineResponse200ResolvConfPath = Nothing
-  , inlineResponse200HostnamePath = Nothing
-  , inlineResponse200HostsPath = Nothing
-  , inlineResponse200LogPath = Nothing
-  , inlineResponse200Node = Nothing
-  , inlineResponse200Name = Nothing
-  , inlineResponse200RestartCount = Nothing
-  , inlineResponse200Driver = Nothing
-  , inlineResponse200MountLabel = Nothing
-  , inlineResponse200ProcessLabel = Nothing
-  , inlineResponse200AppArmorProfile = Nothing
-  , inlineResponse200ExecIDs = Nothing
-  , inlineResponse200HostConfig = Nothing
-  , inlineResponse200GraphDriver = Nothing
-  , inlineResponse200SizeRw = Nothing
-  , inlineResponse200SizeRootFs = Nothing
-  , inlineResponse200Mounts = Nothing
-  , inlineResponse200Config = Nothing
-  , inlineResponse200NetworkSettings = Nothing
+  { inlineResponse200Titles = Nothing
+  , inlineResponse200Processes = Nothing
   }
 
 -- ** InlineResponse2001
 -- | InlineResponse2001
 data InlineResponse2001 = InlineResponse2001
-  { inlineResponse2001Titles :: !(Maybe [Text]) -- ^ "Titles" - The ps column titles
-  , inlineResponse2001Processes :: !(Maybe [[Text]]) -- ^ "Processes" - Each process running in the container, where each is process is an array of values corresponding to the titles
+  { inlineResponse2001Path :: !(Text) -- ^ /Required/ "Path" - Path to file that has changed
+  , inlineResponse2001Kind :: !(Int) -- ^ /Required/ "Kind" - Kind of change
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineResponse2001
 instance A.FromJSON InlineResponse2001 where
   parseJSON = A.withObject "InlineResponse2001" $ \o ->
     InlineResponse2001
-      <$> (o .:? "Titles")
-      <*> (o .:? "Processes")
+      <$> (o .:  "Path")
+      <*> (o .:  "Kind")
 
 -- | ToJSON InlineResponse2001
 instance A.ToJSON InlineResponse2001 where
   toJSON InlineResponse2001 {..} =
    _omitNulls
-      [ "Titles" .= inlineResponse2001Titles
-      , "Processes" .= inlineResponse2001Processes
+      [ "Path" .= inlineResponse2001Path
+      , "Kind" .= inlineResponse2001Kind
       ]
 
 
 -- | Construct a value of type 'InlineResponse2001' (by applying it's required fields, if any)
 mkInlineResponse2001
-  :: InlineResponse2001
-mkInlineResponse2001 =
+  :: Text -- ^ 'inlineResponse2001Path': Path to file that has changed
+  -> Int -- ^ 'inlineResponse2001Kind': Kind of change
+  -> InlineResponse2001
+mkInlineResponse2001 inlineResponse2001Path inlineResponse2001Kind =
   InlineResponse2001
-  { inlineResponse2001Titles = Nothing
-  , inlineResponse2001Processes = Nothing
+  { inlineResponse2001Path
+  , inlineResponse2001Kind
   }
 
 -- ** InlineResponse20010
 -- | InlineResponse20010
 data InlineResponse20010 = InlineResponse20010
-  { inlineResponse20010Architecture :: !(Maybe Text) -- ^ "Architecture"
-  , inlineResponse20010Containers :: !(Maybe Int) -- ^ "Containers"
-  , inlineResponse20010ContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning"
-  , inlineResponse20010ContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped"
-  , inlineResponse20010ContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused"
-  , inlineResponse20010CpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod"
-  , inlineResponse20010CpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota"
-  , inlineResponse20010Debug :: !(Maybe Bool) -- ^ "Debug"
-  , inlineResponse20010DiscoveryBackend :: !(Maybe Text) -- ^ "DiscoveryBackend"
-  , inlineResponse20010DockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir"
-  , inlineResponse20010Driver :: !(Maybe Text) -- ^ "Driver"
-  , inlineResponse20010DriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus"
-  , inlineResponse20010SystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus"
-  , inlineResponse20010Plugins :: !(Maybe InlineResponse20010Plugins) -- ^ "Plugins"
-  , inlineResponse20010ExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild"
-  , inlineResponse20010HttpProxy :: !(Maybe Text) -- ^ "HttpProxy"
-  , inlineResponse20010HttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy"
-  , inlineResponse20010Id :: !(Maybe Text) -- ^ "ID"
-  , inlineResponse20010IPv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding"
-  , inlineResponse20010Images :: !(Maybe Int) -- ^ "Images"
-  , inlineResponse20010IndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress"
-  , inlineResponse20010InitPath :: !(Maybe Text) -- ^ "InitPath"
-  , inlineResponse20010InitSha1 :: !(Maybe Text) -- ^ "InitSha1"
+  { inlineResponse20010Version :: !(Maybe Text) -- ^ "Version"
+  , inlineResponse20010ApiVersion :: !(Maybe Text) -- ^ "ApiVersion"
+  , inlineResponse20010MinApiVersion :: !(Maybe Text) -- ^ "MinAPIVersion"
+  , inlineResponse20010GitCommit :: !(Maybe Text) -- ^ "GitCommit"
+  , inlineResponse20010GoVersion :: !(Maybe Text) -- ^ "GoVersion"
+  , inlineResponse20010Os :: !(Maybe Text) -- ^ "Os"
+  , inlineResponse20010Arch :: !(Maybe Text) -- ^ "Arch"
   , inlineResponse20010KernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
-  , inlineResponse20010Labels :: !(Maybe [Text]) -- ^ "Labels"
-  , inlineResponse20010MemTotal :: !(Maybe Int) -- ^ "MemTotal"
-  , inlineResponse20010MemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit"
-  , inlineResponse20010Ncpu :: !(Maybe Int) -- ^ "NCPU"
-  , inlineResponse20010NEventsListener :: !(Maybe Int) -- ^ "NEventsListener"
-  , inlineResponse20010NFd :: !(Maybe Int) -- ^ "NFd"
-  , inlineResponse20010NGoroutines :: !(Maybe Int) -- ^ "NGoroutines"
-  , inlineResponse20010Name :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse20010NoProxy :: !(Maybe Text) -- ^ "NoProxy"
-  , inlineResponse20010OomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable"
-  , inlineResponse20010OsType :: !(Maybe Text) -- ^ "OSType"
-  , inlineResponse20010OomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj"
-  , inlineResponse20010OperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem"
-  , inlineResponse20010RegistryConfig :: !(Maybe InlineResponse20010RegistryConfig) -- ^ "RegistryConfig"
-  , inlineResponse20010SwapLimit :: !(Maybe Bool) -- ^ "SwapLimit"
-  , inlineResponse20010SystemTime :: !(Maybe Text) -- ^ "SystemTime"
-  , inlineResponse20010ServerVersion :: !(Maybe Text) -- ^ "ServerVersion"
+  , inlineResponse20010Experimental :: !(Maybe Bool) -- ^ "Experimental"
+  , inlineResponse20010BuildTime :: !(Maybe Text) -- ^ "BuildTime"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineResponse20010
 instance A.FromJSON InlineResponse20010 where
   parseJSON = A.withObject "InlineResponse20010" $ \o ->
     InlineResponse20010
+      <$> (o .:? "Version")
+      <*> (o .:? "ApiVersion")
+      <*> (o .:? "MinAPIVersion")
+      <*> (o .:? "GitCommit")
+      <*> (o .:? "GoVersion")
+      <*> (o .:? "Os")
+      <*> (o .:? "Arch")
+      <*> (o .:? "KernelVersion")
+      <*> (o .:? "Experimental")
+      <*> (o .:? "BuildTime")
+
+-- | ToJSON InlineResponse20010
+instance A.ToJSON InlineResponse20010 where
+  toJSON InlineResponse20010 {..} =
+   _omitNulls
+      [ "Version" .= inlineResponse20010Version
+      , "ApiVersion" .= inlineResponse20010ApiVersion
+      , "MinAPIVersion" .= inlineResponse20010MinApiVersion
+      , "GitCommit" .= inlineResponse20010GitCommit
+      , "GoVersion" .= inlineResponse20010GoVersion
+      , "Os" .= inlineResponse20010Os
+      , "Arch" .= inlineResponse20010Arch
+      , "KernelVersion" .= inlineResponse20010KernelVersion
+      , "Experimental" .= inlineResponse20010Experimental
+      , "BuildTime" .= inlineResponse20010BuildTime
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20010' (by applying it's required fields, if any)
+mkInlineResponse20010
+  :: InlineResponse20010
+mkInlineResponse20010 =
+  InlineResponse20010
+  { inlineResponse20010Version = Nothing
+  , inlineResponse20010ApiVersion = Nothing
+  , inlineResponse20010MinApiVersion = Nothing
+  , inlineResponse20010GitCommit = Nothing
+  , inlineResponse20010GoVersion = Nothing
+  , inlineResponse20010Os = Nothing
+  , inlineResponse20010Arch = Nothing
+  , inlineResponse20010KernelVersion = Nothing
+  , inlineResponse20010Experimental = Nothing
+  , inlineResponse20010BuildTime = Nothing
+  }
+
+-- ** InlineResponse20011
+-- | InlineResponse20011
+data InlineResponse20011 = InlineResponse20011
+  { inlineResponse20011Type :: !(Maybe Text) -- ^ "Type" - The type of object emitting the event
+  , inlineResponse20011Action :: !(Maybe Text) -- ^ "Action" - The type of event
+  , inlineResponse20011Actor :: !(Maybe InlineResponse20011Actor) -- ^ "Actor"
+  , inlineResponse20011Time :: !(Maybe Int) -- ^ "time" - Timestamp of event
+  , inlineResponse20011TimeNano :: !(Maybe Integer) -- ^ "timeNano" - Timestamp of event, with nanosecond accuracy
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20011
+instance A.FromJSON InlineResponse20011 where
+  parseJSON = A.withObject "InlineResponse20011" $ \o ->
+    InlineResponse20011
+      <$> (o .:? "Type")
+      <*> (o .:? "Action")
+      <*> (o .:? "Actor")
+      <*> (o .:? "time")
+      <*> (o .:? "timeNano")
+
+-- | ToJSON InlineResponse20011
+instance A.ToJSON InlineResponse20011 where
+  toJSON InlineResponse20011 {..} =
+   _omitNulls
+      [ "Type" .= inlineResponse20011Type
+      , "Action" .= inlineResponse20011Action
+      , "Actor" .= inlineResponse20011Actor
+      , "time" .= inlineResponse20011Time
+      , "timeNano" .= inlineResponse20011TimeNano
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20011' (by applying it's required fields, if any)
+mkInlineResponse20011
+  :: InlineResponse20011
+mkInlineResponse20011 =
+  InlineResponse20011
+  { inlineResponse20011Type = Nothing
+  , inlineResponse20011Action = Nothing
+  , inlineResponse20011Actor = Nothing
+  , inlineResponse20011Time = Nothing
+  , inlineResponse20011TimeNano = Nothing
+  }
+
+-- ** InlineResponse20011Actor
+-- | InlineResponse20011Actor
+data InlineResponse20011Actor = InlineResponse20011Actor
+  { inlineResponse20011ActorId :: !(Maybe Text) -- ^ "ID" - The ID of the object emitting the event
+  , inlineResponse20011ActorAttributes :: !(Maybe (Map.Map String Text)) -- ^ "Attributes" - Various key/value attributes of the object, depending on its type
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20011Actor
+instance A.FromJSON InlineResponse20011Actor where
+  parseJSON = A.withObject "InlineResponse20011Actor" $ \o ->
+    InlineResponse20011Actor
+      <$> (o .:? "ID")
+      <*> (o .:? "Attributes")
+
+-- | ToJSON InlineResponse20011Actor
+instance A.ToJSON InlineResponse20011Actor where
+  toJSON InlineResponse20011Actor {..} =
+   _omitNulls
+      [ "ID" .= inlineResponse20011ActorId
+      , "Attributes" .= inlineResponse20011ActorAttributes
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20011Actor' (by applying it's required fields, if any)
+mkInlineResponse20011Actor
+  :: InlineResponse20011Actor
+mkInlineResponse20011Actor =
+  InlineResponse20011Actor
+  { inlineResponse20011ActorId = Nothing
+  , inlineResponse20011ActorAttributes = Nothing
+  }
+
+-- ** InlineResponse20012
+-- | InlineResponse20012
+data InlineResponse20012 = InlineResponse20012
+  { inlineResponse20012LayersSize :: !(Maybe Integer) -- ^ "LayersSize"
+  , inlineResponse20012Images :: !(Maybe [ImageSummary]) -- ^ "Images"
+  , inlineResponse20012Containers :: !(Maybe [ContainerSummary]) -- ^ "Containers"
+  , inlineResponse20012Volumes :: !(Maybe [Volume]) -- ^ "Volumes"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20012
+instance A.FromJSON InlineResponse20012 where
+  parseJSON = A.withObject "InlineResponse20012" $ \o ->
+    InlineResponse20012
+      <$> (o .:? "LayersSize")
+      <*> (o .:? "Images")
+      <*> (o .:? "Containers")
+      <*> (o .:? "Volumes")
+
+-- | ToJSON InlineResponse20012
+instance A.ToJSON InlineResponse20012 where
+  toJSON InlineResponse20012 {..} =
+   _omitNulls
+      [ "LayersSize" .= inlineResponse20012LayersSize
+      , "Images" .= inlineResponse20012Images
+      , "Containers" .= inlineResponse20012Containers
+      , "Volumes" .= inlineResponse20012Volumes
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20012' (by applying it's required fields, if any)
+mkInlineResponse20012
+  :: InlineResponse20012
+mkInlineResponse20012 =
+  InlineResponse20012
+  { inlineResponse20012LayersSize = Nothing
+  , inlineResponse20012Images = Nothing
+  , inlineResponse20012Containers = Nothing
+  , inlineResponse20012Volumes = Nothing
+  }
+
+-- ** InlineResponse20013
+-- | InlineResponse20013
+data InlineResponse20013 = InlineResponse20013
+  { inlineResponse20013Id :: !(Maybe Text) -- ^ "ID"
+  , inlineResponse20013Running :: !(Maybe Bool) -- ^ "Running"
+  , inlineResponse20013ExitCode :: !(Maybe Int) -- ^ "ExitCode"
+  , inlineResponse20013ProcessConfig :: !(Maybe ProcessConfig) -- ^ "ProcessConfig"
+  , inlineResponse20013OpenStdin :: !(Maybe Bool) -- ^ "OpenStdin"
+  , inlineResponse20013OpenStderr :: !(Maybe Bool) -- ^ "OpenStderr"
+  , inlineResponse20013OpenStdout :: !(Maybe Bool) -- ^ "OpenStdout"
+  , inlineResponse20013ContainerId :: !(Maybe Text) -- ^ "ContainerID"
+  , inlineResponse20013Pid :: !(Maybe Int) -- ^ "Pid" - The system process ID for the exec process.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20013
+instance A.FromJSON InlineResponse20013 where
+  parseJSON = A.withObject "InlineResponse20013" $ \o ->
+    InlineResponse20013
+      <$> (o .:? "ID")
+      <*> (o .:? "Running")
+      <*> (o .:? "ExitCode")
+      <*> (o .:? "ProcessConfig")
+      <*> (o .:? "OpenStdin")
+      <*> (o .:? "OpenStderr")
+      <*> (o .:? "OpenStdout")
+      <*> (o .:? "ContainerID")
+      <*> (o .:? "Pid")
+
+-- | ToJSON InlineResponse20013
+instance A.ToJSON InlineResponse20013 where
+  toJSON InlineResponse20013 {..} =
+   _omitNulls
+      [ "ID" .= inlineResponse20013Id
+      , "Running" .= inlineResponse20013Running
+      , "ExitCode" .= inlineResponse20013ExitCode
+      , "ProcessConfig" .= inlineResponse20013ProcessConfig
+      , "OpenStdin" .= inlineResponse20013OpenStdin
+      , "OpenStderr" .= inlineResponse20013OpenStderr
+      , "OpenStdout" .= inlineResponse20013OpenStdout
+      , "ContainerID" .= inlineResponse20013ContainerId
+      , "Pid" .= inlineResponse20013Pid
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20013' (by applying it's required fields, if any)
+mkInlineResponse20013
+  :: InlineResponse20013
+mkInlineResponse20013 =
+  InlineResponse20013
+  { inlineResponse20013Id = Nothing
+  , inlineResponse20013Running = Nothing
+  , inlineResponse20013ExitCode = Nothing
+  , inlineResponse20013ProcessConfig = Nothing
+  , inlineResponse20013OpenStdin = Nothing
+  , inlineResponse20013OpenStderr = Nothing
+  , inlineResponse20013OpenStdout = Nothing
+  , inlineResponse20013ContainerId = Nothing
+  , inlineResponse20013Pid = Nothing
+  }
+
+-- ** InlineResponse20014
+-- | InlineResponse20014
+data InlineResponse20014 = InlineResponse20014
+  { inlineResponse20014Volumes :: !([Volume]) -- ^ /Required/ "Volumes" - List of volumes
+  , inlineResponse20014Warnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings that occurred when fetching the list of volumes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20014
+instance A.FromJSON InlineResponse20014 where
+  parseJSON = A.withObject "InlineResponse20014" $ \o ->
+    InlineResponse20014
+      <$> (o .:  "Volumes")
+      <*> (o .:  "Warnings")
+
+-- | ToJSON InlineResponse20014
+instance A.ToJSON InlineResponse20014 where
+  toJSON InlineResponse20014 {..} =
+   _omitNulls
+      [ "Volumes" .= inlineResponse20014Volumes
+      , "Warnings" .= inlineResponse20014Warnings
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20014' (by applying it's required fields, if any)
+mkInlineResponse20014
+  :: [Volume] -- ^ 'inlineResponse20014Volumes': List of volumes
+  -> [Text] -- ^ 'inlineResponse20014Warnings': Warnings that occurred when fetching the list of volumes
+  -> InlineResponse20014
+mkInlineResponse20014 inlineResponse20014Volumes inlineResponse20014Warnings =
+  InlineResponse20014
+  { inlineResponse20014Volumes
+  , inlineResponse20014Warnings
+  }
+
+-- ** InlineResponse20015
+-- | InlineResponse20015
+data InlineResponse20015 = InlineResponse20015
+  { inlineResponse20015VolumesDeleted :: !(Maybe [Text]) -- ^ "VolumesDeleted" - Volumes that were deleted
+  , inlineResponse20015SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20015
+instance A.FromJSON InlineResponse20015 where
+  parseJSON = A.withObject "InlineResponse20015" $ \o ->
+    InlineResponse20015
+      <$> (o .:? "VolumesDeleted")
+      <*> (o .:? "SpaceReclaimed")
+
+-- | ToJSON InlineResponse20015
+instance A.ToJSON InlineResponse20015 where
+  toJSON InlineResponse20015 {..} =
+   _omitNulls
+      [ "VolumesDeleted" .= inlineResponse20015VolumesDeleted
+      , "SpaceReclaimed" .= inlineResponse20015SpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20015' (by applying it's required fields, if any)
+mkInlineResponse20015
+  :: InlineResponse20015
+mkInlineResponse20015 =
+  InlineResponse20015
+  { inlineResponse20015VolumesDeleted = Nothing
+  , inlineResponse20015SpaceReclaimed = Nothing
+  }
+
+-- ** InlineResponse20016
+-- | InlineResponse20016
+data InlineResponse20016 = InlineResponse20016
+  { inlineResponse20016NetworksDeleted :: !(Maybe [Text]) -- ^ "NetworksDeleted" - Networks that were deleted
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20016
+instance A.FromJSON InlineResponse20016 where
+  parseJSON = A.withObject "InlineResponse20016" $ \o ->
+    InlineResponse20016
+      <$> (o .:? "NetworksDeleted")
+
+-- | ToJSON InlineResponse20016
+instance A.ToJSON InlineResponse20016 where
+  toJSON InlineResponse20016 {..} =
+   _omitNulls
+      [ "NetworksDeleted" .= inlineResponse20016NetworksDeleted
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20016' (by applying it's required fields, if any)
+mkInlineResponse20016
+  :: InlineResponse20016
+mkInlineResponse20016 =
+  InlineResponse20016
+  { inlineResponse20016NetworksDeleted = Nothing
+  }
+
+-- ** InlineResponse20017
+-- | InlineResponse20017
+-- Describes a permission the user has to accept upon installing the plugin.
+data InlineResponse20017 = InlineResponse20017
+  { inlineResponse20017Name :: !(Maybe Text) -- ^ "Name"
+  , inlineResponse20017Description :: !(Maybe Text) -- ^ "Description"
+  , inlineResponse20017Value :: !(Maybe [Text]) -- ^ "Value"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20017
+instance A.FromJSON InlineResponse20017 where
+  parseJSON = A.withObject "InlineResponse20017" $ \o ->
+    InlineResponse20017
+      <$> (o .:? "Name")
+      <*> (o .:? "Description")
+      <*> (o .:? "Value")
+
+-- | ToJSON InlineResponse20017
+instance A.ToJSON InlineResponse20017 where
+  toJSON InlineResponse20017 {..} =
+   _omitNulls
+      [ "Name" .= inlineResponse20017Name
+      , "Description" .= inlineResponse20017Description
+      , "Value" .= inlineResponse20017Value
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20017' (by applying it's required fields, if any)
+mkInlineResponse20017
+  :: InlineResponse20017
+mkInlineResponse20017 =
+  InlineResponse20017
+  { inlineResponse20017Name = Nothing
+  , inlineResponse20017Description = Nothing
+  , inlineResponse20017Value = Nothing
+  }
+
+-- ** InlineResponse20018
+-- | InlineResponse20018
+data InlineResponse20018 = InlineResponse20018
+  { inlineResponse20018ClusterInfo :: !(Maybe ClusterInfo) -- ^ "ClusterInfo"
+  , inlineResponse20018JoinTokens :: !(Maybe InlineResponse20018JoinTokens) -- ^ "JoinTokens"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20018
+instance A.FromJSON InlineResponse20018 where
+  parseJSON = A.withObject "InlineResponse20018" $ \o ->
+    InlineResponse20018
+      <$> (o .:? "ClusterInfo")
+      <*> (o .:? "JoinTokens")
+
+-- | ToJSON InlineResponse20018
+instance A.ToJSON InlineResponse20018 where
+  toJSON InlineResponse20018 {..} =
+   _omitNulls
+      [ "ClusterInfo" .= inlineResponse20018ClusterInfo
+      , "JoinTokens" .= inlineResponse20018JoinTokens
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20018' (by applying it's required fields, if any)
+mkInlineResponse20018
+  :: InlineResponse20018
+mkInlineResponse20018 =
+  InlineResponse20018
+  { inlineResponse20018ClusterInfo = Nothing
+  , inlineResponse20018JoinTokens = Nothing
+  }
+
+-- ** InlineResponse20018JoinTokens
+-- | InlineResponse20018JoinTokens
+-- The tokens workers and managers need to join the swarm.
+data InlineResponse20018JoinTokens = InlineResponse20018JoinTokens
+  { inlineResponse20018JoinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm.
+  , inlineResponse20018JoinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20018JoinTokens
+instance A.FromJSON InlineResponse20018JoinTokens where
+  parseJSON = A.withObject "InlineResponse20018JoinTokens" $ \o ->
+    InlineResponse20018JoinTokens
+      <$> (o .:? "Worker")
+      <*> (o .:? "Manager")
+
+-- | ToJSON InlineResponse20018JoinTokens
+instance A.ToJSON InlineResponse20018JoinTokens where
+  toJSON InlineResponse20018JoinTokens {..} =
+   _omitNulls
+      [ "Worker" .= inlineResponse20018JoinTokensWorker
+      , "Manager" .= inlineResponse20018JoinTokensManager
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20018JoinTokens' (by applying it's required fields, if any)
+mkInlineResponse20018JoinTokens
+  :: InlineResponse20018JoinTokens
+mkInlineResponse20018JoinTokens =
+  InlineResponse20018JoinTokens
+  { inlineResponse20018JoinTokensWorker = Nothing
+  , inlineResponse20018JoinTokensManager = Nothing
+  }
+
+-- ** InlineResponse20019
+-- | InlineResponse20019
+data InlineResponse20019 = InlineResponse20019
+  { inlineResponse20019UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20019
+instance A.FromJSON InlineResponse20019 where
+  parseJSON = A.withObject "InlineResponse20019" $ \o ->
+    InlineResponse20019
+      <$> (o .:? "UnlockKey")
+
+-- | ToJSON InlineResponse20019
+instance A.ToJSON InlineResponse20019 where
+  toJSON InlineResponse20019 {..} =
+   _omitNulls
+      [ "UnlockKey" .= inlineResponse20019UnlockKey
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20019' (by applying it's required fields, if any)
+mkInlineResponse20019
+  :: InlineResponse20019
+mkInlineResponse20019 =
+  InlineResponse20019
+  { inlineResponse20019UnlockKey = Nothing
+  }
+
+-- ** InlineResponse2002
+-- | InlineResponse2002
+data InlineResponse2002 = InlineResponse2002
+  { inlineResponse2002Warnings :: !(Maybe [Text]) -- ^ "Warnings"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2002
+instance A.FromJSON InlineResponse2002 where
+  parseJSON = A.withObject "InlineResponse2002" $ \o ->
+    InlineResponse2002
+      <$> (o .:? "Warnings")
+
+-- | ToJSON InlineResponse2002
+instance A.ToJSON InlineResponse2002 where
+  toJSON InlineResponse2002 {..} =
+   _omitNulls
+      [ "Warnings" .= inlineResponse2002Warnings
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2002' (by applying it's required fields, if any)
+mkInlineResponse2002
+  :: InlineResponse2002
+mkInlineResponse2002 =
+  InlineResponse2002
+  { inlineResponse2002Warnings = Nothing
+  }
+
+-- ** InlineResponse20020
+-- | InlineResponse20020
+data InlineResponse20020 = InlineResponse20020
+  { inlineResponse20020Descriptor :: !(InlineResponse20020Descriptor) -- ^ /Required/ "Descriptor"
+  , inlineResponse20020Platforms :: !([InlineResponse20020Platforms]) -- ^ /Required/ "Platforms" - An array containing all platforms supported by the image
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20020
+instance A.FromJSON InlineResponse20020 where
+  parseJSON = A.withObject "InlineResponse20020" $ \o ->
+    InlineResponse20020
+      <$> (o .:  "Descriptor")
+      <*> (o .:  "Platforms")
+
+-- | ToJSON InlineResponse20020
+instance A.ToJSON InlineResponse20020 where
+  toJSON InlineResponse20020 {..} =
+   _omitNulls
+      [ "Descriptor" .= inlineResponse20020Descriptor
+      , "Platforms" .= inlineResponse20020Platforms
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20020' (by applying it's required fields, if any)
+mkInlineResponse20020
+  :: InlineResponse20020Descriptor -- ^ 'inlineResponse20020Descriptor' 
+  -> [InlineResponse20020Platforms] -- ^ 'inlineResponse20020Platforms': An array containing all platforms supported by the image
+  -> InlineResponse20020
+mkInlineResponse20020 inlineResponse20020Descriptor inlineResponse20020Platforms =
+  InlineResponse20020
+  { inlineResponse20020Descriptor
+  , inlineResponse20020Platforms
+  }
+
+-- ** InlineResponse20020Descriptor
+-- | InlineResponse20020Descriptor
+-- A descriptor struct containing digest, media type, and size
+data InlineResponse20020Descriptor = InlineResponse20020Descriptor
+  { inlineResponse20020DescriptorMediaType :: !(Maybe Text) -- ^ "MediaType"
+  , inlineResponse20020DescriptorSize :: !(Maybe Integer) -- ^ "Size"
+  , inlineResponse20020DescriptorDigest :: !(Maybe Text) -- ^ "Digest"
+  , inlineResponse20020DescriptorUrLs :: !(Maybe [Text]) -- ^ "URLs"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20020Descriptor
+instance A.FromJSON InlineResponse20020Descriptor where
+  parseJSON = A.withObject "InlineResponse20020Descriptor" $ \o ->
+    InlineResponse20020Descriptor
+      <$> (o .:? "MediaType")
+      <*> (o .:? "Size")
+      <*> (o .:? "Digest")
+      <*> (o .:? "URLs")
+
+-- | ToJSON InlineResponse20020Descriptor
+instance A.ToJSON InlineResponse20020Descriptor where
+  toJSON InlineResponse20020Descriptor {..} =
+   _omitNulls
+      [ "MediaType" .= inlineResponse20020DescriptorMediaType
+      , "Size" .= inlineResponse20020DescriptorSize
+      , "Digest" .= inlineResponse20020DescriptorDigest
+      , "URLs" .= inlineResponse20020DescriptorUrLs
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20020Descriptor' (by applying it's required fields, if any)
+mkInlineResponse20020Descriptor
+  :: InlineResponse20020Descriptor
+mkInlineResponse20020Descriptor =
+  InlineResponse20020Descriptor
+  { inlineResponse20020DescriptorMediaType = Nothing
+  , inlineResponse20020DescriptorSize = Nothing
+  , inlineResponse20020DescriptorDigest = Nothing
+  , inlineResponse20020DescriptorUrLs = Nothing
+  }
+
+-- ** InlineResponse20020Platforms
+-- | InlineResponse20020Platforms
+data InlineResponse20020Platforms = InlineResponse20020Platforms
+  { inlineResponse20020PlatformsArchitecture :: !(Maybe Text) -- ^ "Architecture"
+  , inlineResponse20020PlatformsOs :: !(Maybe Text) -- ^ "OS"
+  , inlineResponse20020PlatformsOsVersion :: !(Maybe Text) -- ^ "OSVersion"
+  , inlineResponse20020PlatformsOsFeatures :: !(Maybe [Text]) -- ^ "OSFeatures"
+  , inlineResponse20020PlatformsVariant :: !(Maybe Text) -- ^ "Variant"
+  , inlineResponse20020PlatformsFeatures :: !(Maybe [Text]) -- ^ "Features"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse20020Platforms
+instance A.FromJSON InlineResponse20020Platforms where
+  parseJSON = A.withObject "InlineResponse20020Platforms" $ \o ->
+    InlineResponse20020Platforms
+      <$> (o .:? "Architecture")
+      <*> (o .:? "OS")
+      <*> (o .:? "OSVersion")
+      <*> (o .:? "OSFeatures")
+      <*> (o .:? "Variant")
+      <*> (o .:? "Features")
+
+-- | ToJSON InlineResponse20020Platforms
+instance A.ToJSON InlineResponse20020Platforms where
+  toJSON InlineResponse20020Platforms {..} =
+   _omitNulls
+      [ "Architecture" .= inlineResponse20020PlatformsArchitecture
+      , "OS" .= inlineResponse20020PlatformsOs
+      , "OSVersion" .= inlineResponse20020PlatformsOsVersion
+      , "OSFeatures" .= inlineResponse20020PlatformsOsFeatures
+      , "Variant" .= inlineResponse20020PlatformsVariant
+      , "Features" .= inlineResponse20020PlatformsFeatures
+      ]
+
+
+-- | Construct a value of type 'InlineResponse20020Platforms' (by applying it's required fields, if any)
+mkInlineResponse20020Platforms
+  :: InlineResponse20020Platforms
+mkInlineResponse20020Platforms =
+  InlineResponse20020Platforms
+  { inlineResponse20020PlatformsArchitecture = Nothing
+  , inlineResponse20020PlatformsOs = Nothing
+  , inlineResponse20020PlatformsOsVersion = Nothing
+  , inlineResponse20020PlatformsOsFeatures = Nothing
+  , inlineResponse20020PlatformsVariant = Nothing
+  , inlineResponse20020PlatformsFeatures = Nothing
+  }
+
+-- ** InlineResponse2003
+-- | InlineResponse2003
+data InlineResponse2003 = InlineResponse2003
+  { inlineResponse2003StatusCode :: !(Int) -- ^ /Required/ "StatusCode" - Exit code of the container
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2003
+instance A.FromJSON InlineResponse2003 where
+  parseJSON = A.withObject "InlineResponse2003" $ \o ->
+    InlineResponse2003
+      <$> (o .:  "StatusCode")
+
+-- | ToJSON InlineResponse2003
+instance A.ToJSON InlineResponse2003 where
+  toJSON InlineResponse2003 {..} =
+   _omitNulls
+      [ "StatusCode" .= inlineResponse2003StatusCode
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2003' (by applying it's required fields, if any)
+mkInlineResponse2003
+  :: Int -- ^ 'inlineResponse2003StatusCode': Exit code of the container
+  -> InlineResponse2003
+mkInlineResponse2003 inlineResponse2003StatusCode =
+  InlineResponse2003
+  { inlineResponse2003StatusCode
+  }
+
+-- ** InlineResponse2004
+-- | InlineResponse2004
+data InlineResponse2004 = InlineResponse2004
+  { inlineResponse2004ContainersDeleted :: !(Maybe [Text]) -- ^ "ContainersDeleted" - Container IDs that were deleted
+  , inlineResponse2004SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2004
+instance A.FromJSON InlineResponse2004 where
+  parseJSON = A.withObject "InlineResponse2004" $ \o ->
+    InlineResponse2004
+      <$> (o .:? "ContainersDeleted")
+      <*> (o .:? "SpaceReclaimed")
+
+-- | ToJSON InlineResponse2004
+instance A.ToJSON InlineResponse2004 where
+  toJSON InlineResponse2004 {..} =
+   _omitNulls
+      [ "ContainersDeleted" .= inlineResponse2004ContainersDeleted
+      , "SpaceReclaimed" .= inlineResponse2004SpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2004' (by applying it's required fields, if any)
+mkInlineResponse2004
+  :: InlineResponse2004
+mkInlineResponse2004 =
+  InlineResponse2004
+  { inlineResponse2004ContainersDeleted = Nothing
+  , inlineResponse2004SpaceReclaimed = Nothing
+  }
+
+-- ** InlineResponse2005
+-- | InlineResponse2005
+data InlineResponse2005 = InlineResponse2005
+  { inlineResponse2005Id :: !(Text) -- ^ /Required/ "Id"
+  , inlineResponse2005Created :: !(Integer) -- ^ /Required/ "Created"
+  , inlineResponse2005CreatedBy :: !(Text) -- ^ /Required/ "CreatedBy"
+  , inlineResponse2005Tags :: !([Text]) -- ^ /Required/ "Tags"
+  , inlineResponse2005Size :: !(Integer) -- ^ /Required/ "Size"
+  , inlineResponse2005Comment :: !(Text) -- ^ /Required/ "Comment"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2005
+instance A.FromJSON InlineResponse2005 where
+  parseJSON = A.withObject "InlineResponse2005" $ \o ->
+    InlineResponse2005
+      <$> (o .:  "Id")
+      <*> (o .:  "Created")
+      <*> (o .:  "CreatedBy")
+      <*> (o .:  "Tags")
+      <*> (o .:  "Size")
+      <*> (o .:  "Comment")
+
+-- | ToJSON InlineResponse2005
+instance A.ToJSON InlineResponse2005 where
+  toJSON InlineResponse2005 {..} =
+   _omitNulls
+      [ "Id" .= inlineResponse2005Id
+      , "Created" .= inlineResponse2005Created
+      , "CreatedBy" .= inlineResponse2005CreatedBy
+      , "Tags" .= inlineResponse2005Tags
+      , "Size" .= inlineResponse2005Size
+      , "Comment" .= inlineResponse2005Comment
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2005' (by applying it's required fields, if any)
+mkInlineResponse2005
+  :: Text -- ^ 'inlineResponse2005Id' 
+  -> Integer -- ^ 'inlineResponse2005Created' 
+  -> Text -- ^ 'inlineResponse2005CreatedBy' 
+  -> [Text] -- ^ 'inlineResponse2005Tags' 
+  -> Integer -- ^ 'inlineResponse2005Size' 
+  -> Text -- ^ 'inlineResponse2005Comment' 
+  -> InlineResponse2005
+mkInlineResponse2005 inlineResponse2005Id inlineResponse2005Created inlineResponse2005CreatedBy inlineResponse2005Tags inlineResponse2005Size inlineResponse2005Comment =
+  InlineResponse2005
+  { inlineResponse2005Id
+  , inlineResponse2005Created
+  , inlineResponse2005CreatedBy
+  , inlineResponse2005Tags
+  , inlineResponse2005Size
+  , inlineResponse2005Comment
+  }
+
+-- ** InlineResponse2006
+-- | InlineResponse2006
+data InlineResponse2006 = InlineResponse2006
+  { inlineResponse2006Description :: !(Maybe Text) -- ^ "description"
+  , inlineResponse2006IsOfficial :: !(Maybe Bool) -- ^ "is_official"
+  , inlineResponse2006IsAutomated :: !(Maybe Bool) -- ^ "is_automated"
+  , inlineResponse2006Name :: !(Maybe Text) -- ^ "name"
+  , inlineResponse2006StarCount :: !(Maybe Int) -- ^ "star_count"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2006
+instance A.FromJSON InlineResponse2006 where
+  parseJSON = A.withObject "InlineResponse2006" $ \o ->
+    InlineResponse2006
+      <$> (o .:? "description")
+      <*> (o .:? "is_official")
+      <*> (o .:? "is_automated")
+      <*> (o .:? "name")
+      <*> (o .:? "star_count")
+
+-- | ToJSON InlineResponse2006
+instance A.ToJSON InlineResponse2006 where
+  toJSON InlineResponse2006 {..} =
+   _omitNulls
+      [ "description" .= inlineResponse2006Description
+      , "is_official" .= inlineResponse2006IsOfficial
+      , "is_automated" .= inlineResponse2006IsAutomated
+      , "name" .= inlineResponse2006Name
+      , "star_count" .= inlineResponse2006StarCount
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2006' (by applying it's required fields, if any)
+mkInlineResponse2006
+  :: InlineResponse2006
+mkInlineResponse2006 =
+  InlineResponse2006
+  { inlineResponse2006Description = Nothing
+  , inlineResponse2006IsOfficial = Nothing
+  , inlineResponse2006IsAutomated = Nothing
+  , inlineResponse2006Name = Nothing
+  , inlineResponse2006StarCount = Nothing
+  }
+
+-- ** InlineResponse2007
+-- | InlineResponse2007
+data InlineResponse2007 = InlineResponse2007
+  { inlineResponse2007ImagesDeleted :: !(Maybe [ImageDeleteResponseItem]) -- ^ "ImagesDeleted" - Images that were deleted
+  , inlineResponse2007SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2007
+instance A.FromJSON InlineResponse2007 where
+  parseJSON = A.withObject "InlineResponse2007" $ \o ->
+    InlineResponse2007
+      <$> (o .:? "ImagesDeleted")
+      <*> (o .:? "SpaceReclaimed")
+
+-- | ToJSON InlineResponse2007
+instance A.ToJSON InlineResponse2007 where
+  toJSON InlineResponse2007 {..} =
+   _omitNulls
+      [ "ImagesDeleted" .= inlineResponse2007ImagesDeleted
+      , "SpaceReclaimed" .= inlineResponse2007SpaceReclaimed
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2007' (by applying it's required fields, if any)
+mkInlineResponse2007
+  :: InlineResponse2007
+mkInlineResponse2007 =
+  InlineResponse2007
+  { inlineResponse2007ImagesDeleted = Nothing
+  , inlineResponse2007SpaceReclaimed = Nothing
+  }
+
+-- ** InlineResponse2008
+-- | InlineResponse2008
+data InlineResponse2008 = InlineResponse2008
+  { inlineResponse2008Status :: !(Text) -- ^ /Required/ "Status" - The status of the authentication
+  , inlineResponse2008IdentityToken :: !(Maybe Text) -- ^ "IdentityToken" - An opaque token used to authenticate a user after a successful login
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2008
+instance A.FromJSON InlineResponse2008 where
+  parseJSON = A.withObject "InlineResponse2008" $ \o ->
+    InlineResponse2008
+      <$> (o .:  "Status")
+      <*> (o .:? "IdentityToken")
+
+-- | ToJSON InlineResponse2008
+instance A.ToJSON InlineResponse2008 where
+  toJSON InlineResponse2008 {..} =
+   _omitNulls
+      [ "Status" .= inlineResponse2008Status
+      , "IdentityToken" .= inlineResponse2008IdentityToken
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2008' (by applying it's required fields, if any)
+mkInlineResponse2008
+  :: Text -- ^ 'inlineResponse2008Status': The status of the authentication
+  -> InlineResponse2008
+mkInlineResponse2008 inlineResponse2008Status =
+  InlineResponse2008
+  { inlineResponse2008Status
+  , inlineResponse2008IdentityToken = Nothing
+  }
+
+-- ** InlineResponse2009
+-- | InlineResponse2009
+data InlineResponse2009 = InlineResponse2009
+  { inlineResponse2009Architecture :: !(Maybe Text) -- ^ "Architecture"
+  , inlineResponse2009Containers :: !(Maybe Int) -- ^ "Containers"
+  , inlineResponse2009ContainersRunning :: !(Maybe Int) -- ^ "ContainersRunning"
+  , inlineResponse2009ContainersStopped :: !(Maybe Int) -- ^ "ContainersStopped"
+  , inlineResponse2009ContainersPaused :: !(Maybe Int) -- ^ "ContainersPaused"
+  , inlineResponse2009CpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod"
+  , inlineResponse2009CpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota"
+  , inlineResponse2009Debug :: !(Maybe Bool) -- ^ "Debug"
+  , inlineResponse2009DiscoveryBackend :: !(Maybe Text) -- ^ "DiscoveryBackend"
+  , inlineResponse2009DockerRootDir :: !(Maybe Text) -- ^ "DockerRootDir"
+  , inlineResponse2009Driver :: !(Maybe Text) -- ^ "Driver"
+  , inlineResponse2009DriverStatus :: !(Maybe [[Text]]) -- ^ "DriverStatus"
+  , inlineResponse2009SystemStatus :: !(Maybe [[Text]]) -- ^ "SystemStatus"
+  , inlineResponse2009Plugins :: !(Maybe InlineResponse2009Plugins) -- ^ "Plugins"
+  , inlineResponse2009ExperimentalBuild :: !(Maybe Bool) -- ^ "ExperimentalBuild"
+  , inlineResponse2009HttpProxy :: !(Maybe Text) -- ^ "HttpProxy"
+  , inlineResponse2009HttpsProxy :: !(Maybe Text) -- ^ "HttpsProxy"
+  , inlineResponse2009Id :: !(Maybe Text) -- ^ "ID"
+  , inlineResponse2009IPv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding"
+  , inlineResponse2009Images :: !(Maybe Int) -- ^ "Images"
+  , inlineResponse2009IndexServerAddress :: !(Maybe Text) -- ^ "IndexServerAddress"
+  , inlineResponse2009InitPath :: !(Maybe Text) -- ^ "InitPath"
+  , inlineResponse2009InitSha1 :: !(Maybe Text) -- ^ "InitSha1"
+  , inlineResponse2009KernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
+  , inlineResponse2009Labels :: !(Maybe [Text]) -- ^ "Labels"
+  , inlineResponse2009MemTotal :: !(Maybe Int) -- ^ "MemTotal"
+  , inlineResponse2009MemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit"
+  , inlineResponse2009Ncpu :: !(Maybe Int) -- ^ "NCPU"
+  , inlineResponse2009NEventsListener :: !(Maybe Int) -- ^ "NEventsListener"
+  , inlineResponse2009NFd :: !(Maybe Int) -- ^ "NFd"
+  , inlineResponse2009NGoroutines :: !(Maybe Int) -- ^ "NGoroutines"
+  , inlineResponse2009Name :: !(Maybe Text) -- ^ "Name"
+  , inlineResponse2009NoProxy :: !(Maybe Text) -- ^ "NoProxy"
+  , inlineResponse2009OomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable"
+  , inlineResponse2009OsType :: !(Maybe Text) -- ^ "OSType"
+  , inlineResponse2009OomScoreAdj :: !(Maybe Int) -- ^ "OomScoreAdj"
+  , inlineResponse2009OperatingSystem :: !(Maybe Text) -- ^ "OperatingSystem"
+  , inlineResponse2009RegistryConfig :: !(Maybe InlineResponse2009RegistryConfig) -- ^ "RegistryConfig"
+  , inlineResponse2009SwapLimit :: !(Maybe Bool) -- ^ "SwapLimit"
+  , inlineResponse2009SystemTime :: !(Maybe Text) -- ^ "SystemTime"
+  , inlineResponse2009ServerVersion :: !(Maybe Text) -- ^ "ServerVersion"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2009
+instance A.FromJSON InlineResponse2009 where
+  parseJSON = A.withObject "InlineResponse2009" $ \o ->
+    InlineResponse2009
       <$> (o .:? "Architecture")
       <*> (o .:? "Containers")
       <*> (o .:? "ContainersRunning")
@@ -2671,1150 +3420,208 @@ instance A.FromJSON InlineResponse20010 where
       <*> (o .:? "SystemTime")
       <*> (o .:? "ServerVersion")
 
--- | ToJSON InlineResponse20010
-instance A.ToJSON InlineResponse20010 where
-  toJSON InlineResponse20010 {..} =
-   _omitNulls
-      [ "Architecture" .= inlineResponse20010Architecture
-      , "Containers" .= inlineResponse20010Containers
-      , "ContainersRunning" .= inlineResponse20010ContainersRunning
-      , "ContainersStopped" .= inlineResponse20010ContainersStopped
-      , "ContainersPaused" .= inlineResponse20010ContainersPaused
-      , "CpuCfsPeriod" .= inlineResponse20010CpuCfsPeriod
-      , "CpuCfsQuota" .= inlineResponse20010CpuCfsQuota
-      , "Debug" .= inlineResponse20010Debug
-      , "DiscoveryBackend" .= inlineResponse20010DiscoveryBackend
-      , "DockerRootDir" .= inlineResponse20010DockerRootDir
-      , "Driver" .= inlineResponse20010Driver
-      , "DriverStatus" .= inlineResponse20010DriverStatus
-      , "SystemStatus" .= inlineResponse20010SystemStatus
-      , "Plugins" .= inlineResponse20010Plugins
-      , "ExperimentalBuild" .= inlineResponse20010ExperimentalBuild
-      , "HttpProxy" .= inlineResponse20010HttpProxy
-      , "HttpsProxy" .= inlineResponse20010HttpsProxy
-      , "ID" .= inlineResponse20010Id
-      , "IPv4Forwarding" .= inlineResponse20010IPv4Forwarding
-      , "Images" .= inlineResponse20010Images
-      , "IndexServerAddress" .= inlineResponse20010IndexServerAddress
-      , "InitPath" .= inlineResponse20010InitPath
-      , "InitSha1" .= inlineResponse20010InitSha1
-      , "KernelVersion" .= inlineResponse20010KernelVersion
-      , "Labels" .= inlineResponse20010Labels
-      , "MemTotal" .= inlineResponse20010MemTotal
-      , "MemoryLimit" .= inlineResponse20010MemoryLimit
-      , "NCPU" .= inlineResponse20010Ncpu
-      , "NEventsListener" .= inlineResponse20010NEventsListener
-      , "NFd" .= inlineResponse20010NFd
-      , "NGoroutines" .= inlineResponse20010NGoroutines
-      , "Name" .= inlineResponse20010Name
-      , "NoProxy" .= inlineResponse20010NoProxy
-      , "OomKillDisable" .= inlineResponse20010OomKillDisable
-      , "OSType" .= inlineResponse20010OsType
-      , "OomScoreAdj" .= inlineResponse20010OomScoreAdj
-      , "OperatingSystem" .= inlineResponse20010OperatingSystem
-      , "RegistryConfig" .= inlineResponse20010RegistryConfig
-      , "SwapLimit" .= inlineResponse20010SwapLimit
-      , "SystemTime" .= inlineResponse20010SystemTime
-      , "ServerVersion" .= inlineResponse20010ServerVersion
-      ]
-
-
--- | Construct a value of type 'InlineResponse20010' (by applying it's required fields, if any)
-mkInlineResponse20010
-  :: InlineResponse20010
-mkInlineResponse20010 =
-  InlineResponse20010
-  { inlineResponse20010Architecture = Nothing
-  , inlineResponse20010Containers = Nothing
-  , inlineResponse20010ContainersRunning = Nothing
-  , inlineResponse20010ContainersStopped = Nothing
-  , inlineResponse20010ContainersPaused = Nothing
-  , inlineResponse20010CpuCfsPeriod = Nothing
-  , inlineResponse20010CpuCfsQuota = Nothing
-  , inlineResponse20010Debug = Nothing
-  , inlineResponse20010DiscoveryBackend = Nothing
-  , inlineResponse20010DockerRootDir = Nothing
-  , inlineResponse20010Driver = Nothing
-  , inlineResponse20010DriverStatus = Nothing
-  , inlineResponse20010SystemStatus = Nothing
-  , inlineResponse20010Plugins = Nothing
-  , inlineResponse20010ExperimentalBuild = Nothing
-  , inlineResponse20010HttpProxy = Nothing
-  , inlineResponse20010HttpsProxy = Nothing
-  , inlineResponse20010Id = Nothing
-  , inlineResponse20010IPv4Forwarding = Nothing
-  , inlineResponse20010Images = Nothing
-  , inlineResponse20010IndexServerAddress = Nothing
-  , inlineResponse20010InitPath = Nothing
-  , inlineResponse20010InitSha1 = Nothing
-  , inlineResponse20010KernelVersion = Nothing
-  , inlineResponse20010Labels = Nothing
-  , inlineResponse20010MemTotal = Nothing
-  , inlineResponse20010MemoryLimit = Nothing
-  , inlineResponse20010Ncpu = Nothing
-  , inlineResponse20010NEventsListener = Nothing
-  , inlineResponse20010NFd = Nothing
-  , inlineResponse20010NGoroutines = Nothing
-  , inlineResponse20010Name = Nothing
-  , inlineResponse20010NoProxy = Nothing
-  , inlineResponse20010OomKillDisable = Nothing
-  , inlineResponse20010OsType = Nothing
-  , inlineResponse20010OomScoreAdj = Nothing
-  , inlineResponse20010OperatingSystem = Nothing
-  , inlineResponse20010RegistryConfig = Nothing
-  , inlineResponse20010SwapLimit = Nothing
-  , inlineResponse20010SystemTime = Nothing
-  , inlineResponse20010ServerVersion = Nothing
-  }
-
--- ** InlineResponse20010Plugins
--- | InlineResponse20010Plugins
-data InlineResponse20010Plugins = InlineResponse20010Plugins
-  { inlineResponse20010PluginsVolume :: !(Maybe [Text]) -- ^ "Volume"
-  , inlineResponse20010PluginsNetwork :: !(Maybe [Text]) -- ^ "Network"
-  , inlineResponse20010PluginsLog :: !(Maybe [Text]) -- ^ "Log"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20010Plugins
-instance A.FromJSON InlineResponse20010Plugins where
-  parseJSON = A.withObject "InlineResponse20010Plugins" $ \o ->
-    InlineResponse20010Plugins
-      <$> (o .:? "Volume")
-      <*> (o .:? "Network")
-      <*> (o .:? "Log")
-
--- | ToJSON InlineResponse20010Plugins
-instance A.ToJSON InlineResponse20010Plugins where
-  toJSON InlineResponse20010Plugins {..} =
-   _omitNulls
-      [ "Volume" .= inlineResponse20010PluginsVolume
-      , "Network" .= inlineResponse20010PluginsNetwork
-      , "Log" .= inlineResponse20010PluginsLog
-      ]
-
-
--- | Construct a value of type 'InlineResponse20010Plugins' (by applying it's required fields, if any)
-mkInlineResponse20010Plugins
-  :: InlineResponse20010Plugins
-mkInlineResponse20010Plugins =
-  InlineResponse20010Plugins
-  { inlineResponse20010PluginsVolume = Nothing
-  , inlineResponse20010PluginsNetwork = Nothing
-  , inlineResponse20010PluginsLog = Nothing
-  }
-
--- ** InlineResponse20010RegistryConfig
--- | InlineResponse20010RegistryConfig
-data InlineResponse20010RegistryConfig = InlineResponse20010RegistryConfig
-  { inlineResponse20010RegistryConfigIndexConfigs :: !(Maybe (Map.Map String InlineResponse20010RegistryConfigIndexConfigs)) -- ^ "IndexConfigs"
-  , inlineResponse20010RegistryConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20010RegistryConfig
-instance A.FromJSON InlineResponse20010RegistryConfig where
-  parseJSON = A.withObject "InlineResponse20010RegistryConfig" $ \o ->
-    InlineResponse20010RegistryConfig
-      <$> (o .:? "IndexConfigs")
-      <*> (o .:? "InsecureRegistryCIDRs")
-
--- | ToJSON InlineResponse20010RegistryConfig
-instance A.ToJSON InlineResponse20010RegistryConfig where
-  toJSON InlineResponse20010RegistryConfig {..} =
-   _omitNulls
-      [ "IndexConfigs" .= inlineResponse20010RegistryConfigIndexConfigs
-      , "InsecureRegistryCIDRs" .= inlineResponse20010RegistryConfigInsecureRegistryCidRs
-      ]
-
-
--- | Construct a value of type 'InlineResponse20010RegistryConfig' (by applying it's required fields, if any)
-mkInlineResponse20010RegistryConfig
-  :: InlineResponse20010RegistryConfig
-mkInlineResponse20010RegistryConfig =
-  InlineResponse20010RegistryConfig
-  { inlineResponse20010RegistryConfigIndexConfigs = Nothing
-  , inlineResponse20010RegistryConfigInsecureRegistryCidRs = Nothing
-  }
-
--- ** InlineResponse20010RegistryConfigIndexConfigs
--- | InlineResponse20010RegistryConfigIndexConfigs
-data InlineResponse20010RegistryConfigIndexConfigs = InlineResponse20010RegistryConfigIndexConfigs
-  { inlineResponse20010RegistryConfigIndexConfigsMirrors :: !(Maybe [Text]) -- ^ "Mirrors"
-  , inlineResponse20010RegistryConfigIndexConfigsName :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse20010RegistryConfigIndexConfigsOfficial :: !(Maybe Bool) -- ^ "Official"
-  , inlineResponse20010RegistryConfigIndexConfigsSecure :: !(Maybe Bool) -- ^ "Secure"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20010RegistryConfigIndexConfigs
-instance A.FromJSON InlineResponse20010RegistryConfigIndexConfigs where
-  parseJSON = A.withObject "InlineResponse20010RegistryConfigIndexConfigs" $ \o ->
-    InlineResponse20010RegistryConfigIndexConfigs
-      <$> (o .:? "Mirrors")
-      <*> (o .:? "Name")
-      <*> (o .:? "Official")
-      <*> (o .:? "Secure")
-
--- | ToJSON InlineResponse20010RegistryConfigIndexConfigs
-instance A.ToJSON InlineResponse20010RegistryConfigIndexConfigs where
-  toJSON InlineResponse20010RegistryConfigIndexConfigs {..} =
-   _omitNulls
-      [ "Mirrors" .= inlineResponse20010RegistryConfigIndexConfigsMirrors
-      , "Name" .= inlineResponse20010RegistryConfigIndexConfigsName
-      , "Official" .= inlineResponse20010RegistryConfigIndexConfigsOfficial
-      , "Secure" .= inlineResponse20010RegistryConfigIndexConfigsSecure
-      ]
-
-
--- | Construct a value of type 'InlineResponse20010RegistryConfigIndexConfigs' (by applying it's required fields, if any)
-mkInlineResponse20010RegistryConfigIndexConfigs
-  :: InlineResponse20010RegistryConfigIndexConfigs
-mkInlineResponse20010RegistryConfigIndexConfigs =
-  InlineResponse20010RegistryConfigIndexConfigs
-  { inlineResponse20010RegistryConfigIndexConfigsMirrors = Nothing
-  , inlineResponse20010RegistryConfigIndexConfigsName = Nothing
-  , inlineResponse20010RegistryConfigIndexConfigsOfficial = Nothing
-  , inlineResponse20010RegistryConfigIndexConfigsSecure = Nothing
-  }
-
--- ** InlineResponse20011
--- | InlineResponse20011
-data InlineResponse20011 = InlineResponse20011
-  { inlineResponse20011Version :: !(Maybe Text) -- ^ "Version"
-  , inlineResponse20011ApiVersion :: !(Maybe Text) -- ^ "ApiVersion"
-  , inlineResponse20011MinApiVersion :: !(Maybe Text) -- ^ "MinAPIVersion"
-  , inlineResponse20011GitCommit :: !(Maybe Text) -- ^ "GitCommit"
-  , inlineResponse20011GoVersion :: !(Maybe Text) -- ^ "GoVersion"
-  , inlineResponse20011Os :: !(Maybe Text) -- ^ "Os"
-  , inlineResponse20011Arch :: !(Maybe Text) -- ^ "Arch"
-  , inlineResponse20011KernelVersion :: !(Maybe Text) -- ^ "KernelVersion"
-  , inlineResponse20011Experimental :: !(Maybe Bool) -- ^ "Experimental"
-  , inlineResponse20011BuildTime :: !(Maybe Text) -- ^ "BuildTime"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20011
-instance A.FromJSON InlineResponse20011 where
-  parseJSON = A.withObject "InlineResponse20011" $ \o ->
-    InlineResponse20011
-      <$> (o .:? "Version")
-      <*> (o .:? "ApiVersion")
-      <*> (o .:? "MinAPIVersion")
-      <*> (o .:? "GitCommit")
-      <*> (o .:? "GoVersion")
-      <*> (o .:? "Os")
-      <*> (o .:? "Arch")
-      <*> (o .:? "KernelVersion")
-      <*> (o .:? "Experimental")
-      <*> (o .:? "BuildTime")
-
--- | ToJSON InlineResponse20011
-instance A.ToJSON InlineResponse20011 where
-  toJSON InlineResponse20011 {..} =
-   _omitNulls
-      [ "Version" .= inlineResponse20011Version
-      , "ApiVersion" .= inlineResponse20011ApiVersion
-      , "MinAPIVersion" .= inlineResponse20011MinApiVersion
-      , "GitCommit" .= inlineResponse20011GitCommit
-      , "GoVersion" .= inlineResponse20011GoVersion
-      , "Os" .= inlineResponse20011Os
-      , "Arch" .= inlineResponse20011Arch
-      , "KernelVersion" .= inlineResponse20011KernelVersion
-      , "Experimental" .= inlineResponse20011Experimental
-      , "BuildTime" .= inlineResponse20011BuildTime
-      ]
-
-
--- | Construct a value of type 'InlineResponse20011' (by applying it's required fields, if any)
-mkInlineResponse20011
-  :: InlineResponse20011
-mkInlineResponse20011 =
-  InlineResponse20011
-  { inlineResponse20011Version = Nothing
-  , inlineResponse20011ApiVersion = Nothing
-  , inlineResponse20011MinApiVersion = Nothing
-  , inlineResponse20011GitCommit = Nothing
-  , inlineResponse20011GoVersion = Nothing
-  , inlineResponse20011Os = Nothing
-  , inlineResponse20011Arch = Nothing
-  , inlineResponse20011KernelVersion = Nothing
-  , inlineResponse20011Experimental = Nothing
-  , inlineResponse20011BuildTime = Nothing
-  }
-
--- ** InlineResponse20012
--- | InlineResponse20012
-data InlineResponse20012 = InlineResponse20012
-  { inlineResponse20012Type :: !(Maybe Text) -- ^ "Type" - The type of object emitting the event
-  , inlineResponse20012Action :: !(Maybe Text) -- ^ "Action" - The type of event
-  , inlineResponse20012Actor :: !(Maybe InlineResponse20012Actor) -- ^ "Actor"
-  , inlineResponse20012Time :: !(Maybe Int) -- ^ "time" - Timestamp of event
-  , inlineResponse20012TimeNano :: !(Maybe Integer) -- ^ "timeNano" - Timestamp of event, with nanosecond accuracy
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20012
-instance A.FromJSON InlineResponse20012 where
-  parseJSON = A.withObject "InlineResponse20012" $ \o ->
-    InlineResponse20012
-      <$> (o .:? "Type")
-      <*> (o .:? "Action")
-      <*> (o .:? "Actor")
-      <*> (o .:? "time")
-      <*> (o .:? "timeNano")
-
--- | ToJSON InlineResponse20012
-instance A.ToJSON InlineResponse20012 where
-  toJSON InlineResponse20012 {..} =
-   _omitNulls
-      [ "Type" .= inlineResponse20012Type
-      , "Action" .= inlineResponse20012Action
-      , "Actor" .= inlineResponse20012Actor
-      , "time" .= inlineResponse20012Time
-      , "timeNano" .= inlineResponse20012TimeNano
-      ]
-
-
--- | Construct a value of type 'InlineResponse20012' (by applying it's required fields, if any)
-mkInlineResponse20012
-  :: InlineResponse20012
-mkInlineResponse20012 =
-  InlineResponse20012
-  { inlineResponse20012Type = Nothing
-  , inlineResponse20012Action = Nothing
-  , inlineResponse20012Actor = Nothing
-  , inlineResponse20012Time = Nothing
-  , inlineResponse20012TimeNano = Nothing
-  }
-
--- ** InlineResponse20012Actor
--- | InlineResponse20012Actor
-data InlineResponse20012Actor = InlineResponse20012Actor
-  { inlineResponse20012ActorId :: !(Maybe Text) -- ^ "ID" - The ID of the object emitting the event
-  , inlineResponse20012ActorAttributes :: !(Maybe (Map.Map String Text)) -- ^ "Attributes" - Various key/value attributes of the object, depending on its type
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20012Actor
-instance A.FromJSON InlineResponse20012Actor where
-  parseJSON = A.withObject "InlineResponse20012Actor" $ \o ->
-    InlineResponse20012Actor
-      <$> (o .:? "ID")
-      <*> (o .:? "Attributes")
-
--- | ToJSON InlineResponse20012Actor
-instance A.ToJSON InlineResponse20012Actor where
-  toJSON InlineResponse20012Actor {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse20012ActorId
-      , "Attributes" .= inlineResponse20012ActorAttributes
-      ]
-
-
--- | Construct a value of type 'InlineResponse20012Actor' (by applying it's required fields, if any)
-mkInlineResponse20012Actor
-  :: InlineResponse20012Actor
-mkInlineResponse20012Actor =
-  InlineResponse20012Actor
-  { inlineResponse20012ActorId = Nothing
-  , inlineResponse20012ActorAttributes = Nothing
-  }
-
--- ** InlineResponse20013
--- | InlineResponse20013
-data InlineResponse20013 = InlineResponse20013
-  { inlineResponse20013LayersSize :: !(Maybe Integer) -- ^ "LayersSize"
-  , inlineResponse20013Images :: !(Maybe [ImageSummary]) -- ^ "Images"
-  , inlineResponse20013Containers :: !(Maybe [ContainerSummary]) -- ^ "Containers"
-  , inlineResponse20013Volumes :: !(Maybe [Volume]) -- ^ "Volumes"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20013
-instance A.FromJSON InlineResponse20013 where
-  parseJSON = A.withObject "InlineResponse20013" $ \o ->
-    InlineResponse20013
-      <$> (o .:? "LayersSize")
-      <*> (o .:? "Images")
-      <*> (o .:? "Containers")
-      <*> (o .:? "Volumes")
-
--- | ToJSON InlineResponse20013
-instance A.ToJSON InlineResponse20013 where
-  toJSON InlineResponse20013 {..} =
-   _omitNulls
-      [ "LayersSize" .= inlineResponse20013LayersSize
-      , "Images" .= inlineResponse20013Images
-      , "Containers" .= inlineResponse20013Containers
-      , "Volumes" .= inlineResponse20013Volumes
-      ]
-
-
--- | Construct a value of type 'InlineResponse20013' (by applying it's required fields, if any)
-mkInlineResponse20013
-  :: InlineResponse20013
-mkInlineResponse20013 =
-  InlineResponse20013
-  { inlineResponse20013LayersSize = Nothing
-  , inlineResponse20013Images = Nothing
-  , inlineResponse20013Containers = Nothing
-  , inlineResponse20013Volumes = Nothing
-  }
-
--- ** InlineResponse20014
--- | InlineResponse20014
-data InlineResponse20014 = InlineResponse20014
-  { inlineResponse20014Id :: !(Maybe Text) -- ^ "ID"
-  , inlineResponse20014Running :: !(Maybe Bool) -- ^ "Running"
-  , inlineResponse20014ExitCode :: !(Maybe Int) -- ^ "ExitCode"
-  , inlineResponse20014ProcessConfig :: !(Maybe ProcessConfig) -- ^ "ProcessConfig"
-  , inlineResponse20014OpenStdin :: !(Maybe Bool) -- ^ "OpenStdin"
-  , inlineResponse20014OpenStderr :: !(Maybe Bool) -- ^ "OpenStderr"
-  , inlineResponse20014OpenStdout :: !(Maybe Bool) -- ^ "OpenStdout"
-  , inlineResponse20014ContainerId :: !(Maybe Text) -- ^ "ContainerID"
-  , inlineResponse20014Pid :: !(Maybe Int) -- ^ "Pid" - The system process ID for the exec process.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20014
-instance A.FromJSON InlineResponse20014 where
-  parseJSON = A.withObject "InlineResponse20014" $ \o ->
-    InlineResponse20014
-      <$> (o .:? "ID")
-      <*> (o .:? "Running")
-      <*> (o .:? "ExitCode")
-      <*> (o .:? "ProcessConfig")
-      <*> (o .:? "OpenStdin")
-      <*> (o .:? "OpenStderr")
-      <*> (o .:? "OpenStdout")
-      <*> (o .:? "ContainerID")
-      <*> (o .:? "Pid")
-
--- | ToJSON InlineResponse20014
-instance A.ToJSON InlineResponse20014 where
-  toJSON InlineResponse20014 {..} =
-   _omitNulls
-      [ "ID" .= inlineResponse20014Id
-      , "Running" .= inlineResponse20014Running
-      , "ExitCode" .= inlineResponse20014ExitCode
-      , "ProcessConfig" .= inlineResponse20014ProcessConfig
-      , "OpenStdin" .= inlineResponse20014OpenStdin
-      , "OpenStderr" .= inlineResponse20014OpenStderr
-      , "OpenStdout" .= inlineResponse20014OpenStdout
-      , "ContainerID" .= inlineResponse20014ContainerId
-      , "Pid" .= inlineResponse20014Pid
-      ]
-
-
--- | Construct a value of type 'InlineResponse20014' (by applying it's required fields, if any)
-mkInlineResponse20014
-  :: InlineResponse20014
-mkInlineResponse20014 =
-  InlineResponse20014
-  { inlineResponse20014Id = Nothing
-  , inlineResponse20014Running = Nothing
-  , inlineResponse20014ExitCode = Nothing
-  , inlineResponse20014ProcessConfig = Nothing
-  , inlineResponse20014OpenStdin = Nothing
-  , inlineResponse20014OpenStderr = Nothing
-  , inlineResponse20014OpenStdout = Nothing
-  , inlineResponse20014ContainerId = Nothing
-  , inlineResponse20014Pid = Nothing
-  }
-
--- ** InlineResponse20015
--- | InlineResponse20015
-data InlineResponse20015 = InlineResponse20015
-  { inlineResponse20015Volumes :: !([Volume]) -- ^ /Required/ "Volumes" - List of volumes
-  , inlineResponse20015Warnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings that occurred when fetching the list of volumes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20015
-instance A.FromJSON InlineResponse20015 where
-  parseJSON = A.withObject "InlineResponse20015" $ \o ->
-    InlineResponse20015
-      <$> (o .:  "Volumes")
-      <*> (o .:  "Warnings")
-
--- | ToJSON InlineResponse20015
-instance A.ToJSON InlineResponse20015 where
-  toJSON InlineResponse20015 {..} =
-   _omitNulls
-      [ "Volumes" .= inlineResponse20015Volumes
-      , "Warnings" .= inlineResponse20015Warnings
-      ]
-
-
--- | Construct a value of type 'InlineResponse20015' (by applying it's required fields, if any)
-mkInlineResponse20015
-  :: [Volume] -- ^ 'inlineResponse20015Volumes': List of volumes
-  -> [Text] -- ^ 'inlineResponse20015Warnings': Warnings that occurred when fetching the list of volumes
-  -> InlineResponse20015
-mkInlineResponse20015 inlineResponse20015Volumes inlineResponse20015Warnings =
-  InlineResponse20015
-  { inlineResponse20015Volumes
-  , inlineResponse20015Warnings
-  }
-
--- ** InlineResponse20016
--- | InlineResponse20016
-data InlineResponse20016 = InlineResponse20016
-  { inlineResponse20016VolumesDeleted :: !(Maybe [Text]) -- ^ "VolumesDeleted" - Volumes that were deleted
-  , inlineResponse20016SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20016
-instance A.FromJSON InlineResponse20016 where
-  parseJSON = A.withObject "InlineResponse20016" $ \o ->
-    InlineResponse20016
-      <$> (o .:? "VolumesDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse20016
-instance A.ToJSON InlineResponse20016 where
-  toJSON InlineResponse20016 {..} =
-   _omitNulls
-      [ "VolumesDeleted" .= inlineResponse20016VolumesDeleted
-      , "SpaceReclaimed" .= inlineResponse20016SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse20016' (by applying it's required fields, if any)
-mkInlineResponse20016
-  :: InlineResponse20016
-mkInlineResponse20016 =
-  InlineResponse20016
-  { inlineResponse20016VolumesDeleted = Nothing
-  , inlineResponse20016SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse20017
--- | InlineResponse20017
-data InlineResponse20017 = InlineResponse20017
-  { inlineResponse20017NetworksDeleted :: !(Maybe [Text]) -- ^ "NetworksDeleted" - Networks that were deleted
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20017
-instance A.FromJSON InlineResponse20017 where
-  parseJSON = A.withObject "InlineResponse20017" $ \o ->
-    InlineResponse20017
-      <$> (o .:? "NetworksDeleted")
-
--- | ToJSON InlineResponse20017
-instance A.ToJSON InlineResponse20017 where
-  toJSON InlineResponse20017 {..} =
-   _omitNulls
-      [ "NetworksDeleted" .= inlineResponse20017NetworksDeleted
-      ]
-
-
--- | Construct a value of type 'InlineResponse20017' (by applying it's required fields, if any)
-mkInlineResponse20017
-  :: InlineResponse20017
-mkInlineResponse20017 =
-  InlineResponse20017
-  { inlineResponse20017NetworksDeleted = Nothing
-  }
-
--- ** InlineResponse20018
--- | InlineResponse20018
--- Describes a permission the user has to accept upon installing the plugin.
-data InlineResponse20018 = InlineResponse20018
-  { inlineResponse20018Name :: !(Maybe Text) -- ^ "Name"
-  , inlineResponse20018Description :: !(Maybe Text) -- ^ "Description"
-  , inlineResponse20018Value :: !(Maybe [Text]) -- ^ "Value"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20018
-instance A.FromJSON InlineResponse20018 where
-  parseJSON = A.withObject "InlineResponse20018" $ \o ->
-    InlineResponse20018
-      <$> (o .:? "Name")
-      <*> (o .:? "Description")
-      <*> (o .:? "Value")
-
--- | ToJSON InlineResponse20018
-instance A.ToJSON InlineResponse20018 where
-  toJSON InlineResponse20018 {..} =
-   _omitNulls
-      [ "Name" .= inlineResponse20018Name
-      , "Description" .= inlineResponse20018Description
-      , "Value" .= inlineResponse20018Value
-      ]
-
-
--- | Construct a value of type 'InlineResponse20018' (by applying it's required fields, if any)
-mkInlineResponse20018
-  :: InlineResponse20018
-mkInlineResponse20018 =
-  InlineResponse20018
-  { inlineResponse20018Name = Nothing
-  , inlineResponse20018Description = Nothing
-  , inlineResponse20018Value = Nothing
-  }
-
--- ** InlineResponse20019
--- | InlineResponse20019
-data InlineResponse20019 = InlineResponse20019
-  { inlineResponse20019ClusterInfo :: !(Maybe ClusterInfo) -- ^ "ClusterInfo"
-  , inlineResponse20019JoinTokens :: !(Maybe InlineResponse20019JoinTokens) -- ^ "JoinTokens"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20019
-instance A.FromJSON InlineResponse20019 where
-  parseJSON = A.withObject "InlineResponse20019" $ \o ->
-    InlineResponse20019
-      <$> (o .:? "ClusterInfo")
-      <*> (o .:? "JoinTokens")
-
--- | ToJSON InlineResponse20019
-instance A.ToJSON InlineResponse20019 where
-  toJSON InlineResponse20019 {..} =
-   _omitNulls
-      [ "ClusterInfo" .= inlineResponse20019ClusterInfo
-      , "JoinTokens" .= inlineResponse20019JoinTokens
-      ]
-
-
--- | Construct a value of type 'InlineResponse20019' (by applying it's required fields, if any)
-mkInlineResponse20019
-  :: InlineResponse20019
-mkInlineResponse20019 =
-  InlineResponse20019
-  { inlineResponse20019ClusterInfo = Nothing
-  , inlineResponse20019JoinTokens = Nothing
-  }
-
--- ** InlineResponse20019JoinTokens
--- | InlineResponse20019JoinTokens
--- The tokens workers and managers need to join the swarm.
-data InlineResponse20019JoinTokens = InlineResponse20019JoinTokens
-  { inlineResponse20019JoinTokensWorker :: !(Maybe Text) -- ^ "Worker" - The token workers can use to join the swarm.
-  , inlineResponse20019JoinTokensManager :: !(Maybe Text) -- ^ "Manager" - The token managers can use to join the swarm.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20019JoinTokens
-instance A.FromJSON InlineResponse20019JoinTokens where
-  parseJSON = A.withObject "InlineResponse20019JoinTokens" $ \o ->
-    InlineResponse20019JoinTokens
-      <$> (o .:? "Worker")
-      <*> (o .:? "Manager")
-
--- | ToJSON InlineResponse20019JoinTokens
-instance A.ToJSON InlineResponse20019JoinTokens where
-  toJSON InlineResponse20019JoinTokens {..} =
-   _omitNulls
-      [ "Worker" .= inlineResponse20019JoinTokensWorker
-      , "Manager" .= inlineResponse20019JoinTokensManager
-      ]
-
-
--- | Construct a value of type 'InlineResponse20019JoinTokens' (by applying it's required fields, if any)
-mkInlineResponse20019JoinTokens
-  :: InlineResponse20019JoinTokens
-mkInlineResponse20019JoinTokens =
-  InlineResponse20019JoinTokens
-  { inlineResponse20019JoinTokensWorker = Nothing
-  , inlineResponse20019JoinTokensManager = Nothing
-  }
-
--- ** InlineResponse2002
--- | InlineResponse2002
-data InlineResponse2002 = InlineResponse2002
-  { inlineResponse2002Path :: !(Text) -- ^ /Required/ "Path" - Path to file that has changed
-  , inlineResponse2002Kind :: !(Int) -- ^ /Required/ "Kind" - Kind of change
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2002
-instance A.FromJSON InlineResponse2002 where
-  parseJSON = A.withObject "InlineResponse2002" $ \o ->
-    InlineResponse2002
-      <$> (o .:  "Path")
-      <*> (o .:  "Kind")
-
--- | ToJSON InlineResponse2002
-instance A.ToJSON InlineResponse2002 where
-  toJSON InlineResponse2002 {..} =
-   _omitNulls
-      [ "Path" .= inlineResponse2002Path
-      , "Kind" .= inlineResponse2002Kind
-      ]
-
-
--- | Construct a value of type 'InlineResponse2002' (by applying it's required fields, if any)
-mkInlineResponse2002
-  :: Text -- ^ 'inlineResponse2002Path': Path to file that has changed
-  -> Int -- ^ 'inlineResponse2002Kind': Kind of change
-  -> InlineResponse2002
-mkInlineResponse2002 inlineResponse2002Path inlineResponse2002Kind =
-  InlineResponse2002
-  { inlineResponse2002Path
-  , inlineResponse2002Kind
-  }
-
--- ** InlineResponse20020
--- | InlineResponse20020
-data InlineResponse20020 = InlineResponse20020
-  { inlineResponse20020UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20020
-instance A.FromJSON InlineResponse20020 where
-  parseJSON = A.withObject "InlineResponse20020" $ \o ->
-    InlineResponse20020
-      <$> (o .:? "UnlockKey")
-
--- | ToJSON InlineResponse20020
-instance A.ToJSON InlineResponse20020 where
-  toJSON InlineResponse20020 {..} =
-   _omitNulls
-      [ "UnlockKey" .= inlineResponse20020UnlockKey
-      ]
-
-
--- | Construct a value of type 'InlineResponse20020' (by applying it's required fields, if any)
-mkInlineResponse20020
-  :: InlineResponse20020
-mkInlineResponse20020 =
-  InlineResponse20020
-  { inlineResponse20020UnlockKey = Nothing
-  }
-
--- ** InlineResponse20021
--- | InlineResponse20021
-data InlineResponse20021 = InlineResponse20021
-  { inlineResponse20021Descriptor :: !(InlineResponse20021Descriptor) -- ^ /Required/ "Descriptor"
-  , inlineResponse20021Platforms :: !([InlineResponse20021Platforms]) -- ^ /Required/ "Platforms" - An array containing all platforms supported by the image
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20021
-instance A.FromJSON InlineResponse20021 where
-  parseJSON = A.withObject "InlineResponse20021" $ \o ->
-    InlineResponse20021
-      <$> (o .:  "Descriptor")
-      <*> (o .:  "Platforms")
-
--- | ToJSON InlineResponse20021
-instance A.ToJSON InlineResponse20021 where
-  toJSON InlineResponse20021 {..} =
-   _omitNulls
-      [ "Descriptor" .= inlineResponse20021Descriptor
-      , "Platforms" .= inlineResponse20021Platforms
-      ]
-
-
--- | Construct a value of type 'InlineResponse20021' (by applying it's required fields, if any)
-mkInlineResponse20021
-  :: InlineResponse20021Descriptor -- ^ 'inlineResponse20021Descriptor' 
-  -> [InlineResponse20021Platforms] -- ^ 'inlineResponse20021Platforms': An array containing all platforms supported by the image
-  -> InlineResponse20021
-mkInlineResponse20021 inlineResponse20021Descriptor inlineResponse20021Platforms =
-  InlineResponse20021
-  { inlineResponse20021Descriptor
-  , inlineResponse20021Platforms
-  }
-
--- ** InlineResponse20021Descriptor
--- | InlineResponse20021Descriptor
--- A descriptor struct containing digest, media type, and size
-data InlineResponse20021Descriptor = InlineResponse20021Descriptor
-  { inlineResponse20021DescriptorMediaType :: !(Maybe Text) -- ^ "MediaType"
-  , inlineResponse20021DescriptorSize :: !(Maybe Integer) -- ^ "Size"
-  , inlineResponse20021DescriptorDigest :: !(Maybe Text) -- ^ "Digest"
-  , inlineResponse20021DescriptorUrLs :: !(Maybe [Text]) -- ^ "URLs"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20021Descriptor
-instance A.FromJSON InlineResponse20021Descriptor where
-  parseJSON = A.withObject "InlineResponse20021Descriptor" $ \o ->
-    InlineResponse20021Descriptor
-      <$> (o .:? "MediaType")
-      <*> (o .:? "Size")
-      <*> (o .:? "Digest")
-      <*> (o .:? "URLs")
-
--- | ToJSON InlineResponse20021Descriptor
-instance A.ToJSON InlineResponse20021Descriptor where
-  toJSON InlineResponse20021Descriptor {..} =
-   _omitNulls
-      [ "MediaType" .= inlineResponse20021DescriptorMediaType
-      , "Size" .= inlineResponse20021DescriptorSize
-      , "Digest" .= inlineResponse20021DescriptorDigest
-      , "URLs" .= inlineResponse20021DescriptorUrLs
-      ]
-
-
--- | Construct a value of type 'InlineResponse20021Descriptor' (by applying it's required fields, if any)
-mkInlineResponse20021Descriptor
-  :: InlineResponse20021Descriptor
-mkInlineResponse20021Descriptor =
-  InlineResponse20021Descriptor
-  { inlineResponse20021DescriptorMediaType = Nothing
-  , inlineResponse20021DescriptorSize = Nothing
-  , inlineResponse20021DescriptorDigest = Nothing
-  , inlineResponse20021DescriptorUrLs = Nothing
-  }
-
--- ** InlineResponse20021Platforms
--- | InlineResponse20021Platforms
-data InlineResponse20021Platforms = InlineResponse20021Platforms
-  { inlineResponse20021PlatformsArchitecture :: !(Maybe Text) -- ^ "Architecture"
-  , inlineResponse20021PlatformsOs :: !(Maybe Text) -- ^ "OS"
-  , inlineResponse20021PlatformsOsVersion :: !(Maybe Text) -- ^ "OSVersion"
-  , inlineResponse20021PlatformsOsFeatures :: !(Maybe [Text]) -- ^ "OSFeatures"
-  , inlineResponse20021PlatformsVariant :: !(Maybe Text) -- ^ "Variant"
-  , inlineResponse20021PlatformsFeatures :: !(Maybe [Text]) -- ^ "Features"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse20021Platforms
-instance A.FromJSON InlineResponse20021Platforms where
-  parseJSON = A.withObject "InlineResponse20021Platforms" $ \o ->
-    InlineResponse20021Platforms
-      <$> (o .:? "Architecture")
-      <*> (o .:? "OS")
-      <*> (o .:? "OSVersion")
-      <*> (o .:? "OSFeatures")
-      <*> (o .:? "Variant")
-      <*> (o .:? "Features")
-
--- | ToJSON InlineResponse20021Platforms
-instance A.ToJSON InlineResponse20021Platforms where
-  toJSON InlineResponse20021Platforms {..} =
-   _omitNulls
-      [ "Architecture" .= inlineResponse20021PlatformsArchitecture
-      , "OS" .= inlineResponse20021PlatformsOs
-      , "OSVersion" .= inlineResponse20021PlatformsOsVersion
-      , "OSFeatures" .= inlineResponse20021PlatformsOsFeatures
-      , "Variant" .= inlineResponse20021PlatformsVariant
-      , "Features" .= inlineResponse20021PlatformsFeatures
-      ]
-
-
--- | Construct a value of type 'InlineResponse20021Platforms' (by applying it's required fields, if any)
-mkInlineResponse20021Platforms
-  :: InlineResponse20021Platforms
-mkInlineResponse20021Platforms =
-  InlineResponse20021Platforms
-  { inlineResponse20021PlatformsArchitecture = Nothing
-  , inlineResponse20021PlatformsOs = Nothing
-  , inlineResponse20021PlatformsOsVersion = Nothing
-  , inlineResponse20021PlatformsOsFeatures = Nothing
-  , inlineResponse20021PlatformsVariant = Nothing
-  , inlineResponse20021PlatformsFeatures = Nothing
-  }
-
--- ** InlineResponse2003
--- | InlineResponse2003
-data InlineResponse2003 = InlineResponse2003
-  { inlineResponse2003Warnings :: !(Maybe [Text]) -- ^ "Warnings"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2003
-instance A.FromJSON InlineResponse2003 where
-  parseJSON = A.withObject "InlineResponse2003" $ \o ->
-    InlineResponse2003
-      <$> (o .:? "Warnings")
-
--- | ToJSON InlineResponse2003
-instance A.ToJSON InlineResponse2003 where
-  toJSON InlineResponse2003 {..} =
-   _omitNulls
-      [ "Warnings" .= inlineResponse2003Warnings
-      ]
-
-
--- | Construct a value of type 'InlineResponse2003' (by applying it's required fields, if any)
-mkInlineResponse2003
-  :: InlineResponse2003
-mkInlineResponse2003 =
-  InlineResponse2003
-  { inlineResponse2003Warnings = Nothing
-  }
-
--- ** InlineResponse2004
--- | InlineResponse2004
-data InlineResponse2004 = InlineResponse2004
-  { inlineResponse2004StatusCode :: !(Int) -- ^ /Required/ "StatusCode" - Exit code of the container
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2004
-instance A.FromJSON InlineResponse2004 where
-  parseJSON = A.withObject "InlineResponse2004" $ \o ->
-    InlineResponse2004
-      <$> (o .:  "StatusCode")
-
--- | ToJSON InlineResponse2004
-instance A.ToJSON InlineResponse2004 where
-  toJSON InlineResponse2004 {..} =
-   _omitNulls
-      [ "StatusCode" .= inlineResponse2004StatusCode
-      ]
-
-
--- | Construct a value of type 'InlineResponse2004' (by applying it's required fields, if any)
-mkInlineResponse2004
-  :: Int -- ^ 'inlineResponse2004StatusCode': Exit code of the container
-  -> InlineResponse2004
-mkInlineResponse2004 inlineResponse2004StatusCode =
-  InlineResponse2004
-  { inlineResponse2004StatusCode
-  }
-
--- ** InlineResponse2005
--- | InlineResponse2005
-data InlineResponse2005 = InlineResponse2005
-  { inlineResponse2005ContainersDeleted :: !(Maybe [Text]) -- ^ "ContainersDeleted" - Container IDs that were deleted
-  , inlineResponse2005SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2005
-instance A.FromJSON InlineResponse2005 where
-  parseJSON = A.withObject "InlineResponse2005" $ \o ->
-    InlineResponse2005
-      <$> (o .:? "ContainersDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse2005
-instance A.ToJSON InlineResponse2005 where
-  toJSON InlineResponse2005 {..} =
-   _omitNulls
-      [ "ContainersDeleted" .= inlineResponse2005ContainersDeleted
-      , "SpaceReclaimed" .= inlineResponse2005SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse2005' (by applying it's required fields, if any)
-mkInlineResponse2005
-  :: InlineResponse2005
-mkInlineResponse2005 =
-  InlineResponse2005
-  { inlineResponse2005ContainersDeleted = Nothing
-  , inlineResponse2005SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse2006
--- | InlineResponse2006
-data InlineResponse2006 = InlineResponse2006
-  { inlineResponse2006Id :: !(Text) -- ^ /Required/ "Id"
-  , inlineResponse2006Created :: !(Integer) -- ^ /Required/ "Created"
-  , inlineResponse2006CreatedBy :: !(Text) -- ^ /Required/ "CreatedBy"
-  , inlineResponse2006Tags :: !([Text]) -- ^ /Required/ "Tags"
-  , inlineResponse2006Size :: !(Integer) -- ^ /Required/ "Size"
-  , inlineResponse2006Comment :: !(Text) -- ^ /Required/ "Comment"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2006
-instance A.FromJSON InlineResponse2006 where
-  parseJSON = A.withObject "InlineResponse2006" $ \o ->
-    InlineResponse2006
-      <$> (o .:  "Id")
-      <*> (o .:  "Created")
-      <*> (o .:  "CreatedBy")
-      <*> (o .:  "Tags")
-      <*> (o .:  "Size")
-      <*> (o .:  "Comment")
-
--- | ToJSON InlineResponse2006
-instance A.ToJSON InlineResponse2006 where
-  toJSON InlineResponse2006 {..} =
-   _omitNulls
-      [ "Id" .= inlineResponse2006Id
-      , "Created" .= inlineResponse2006Created
-      , "CreatedBy" .= inlineResponse2006CreatedBy
-      , "Tags" .= inlineResponse2006Tags
-      , "Size" .= inlineResponse2006Size
-      , "Comment" .= inlineResponse2006Comment
-      ]
-
-
--- | Construct a value of type 'InlineResponse2006' (by applying it's required fields, if any)
-mkInlineResponse2006
-  :: Text -- ^ 'inlineResponse2006Id' 
-  -> Integer -- ^ 'inlineResponse2006Created' 
-  -> Text -- ^ 'inlineResponse2006CreatedBy' 
-  -> [Text] -- ^ 'inlineResponse2006Tags' 
-  -> Integer -- ^ 'inlineResponse2006Size' 
-  -> Text -- ^ 'inlineResponse2006Comment' 
-  -> InlineResponse2006
-mkInlineResponse2006 inlineResponse2006Id inlineResponse2006Created inlineResponse2006CreatedBy inlineResponse2006Tags inlineResponse2006Size inlineResponse2006Comment =
-  InlineResponse2006
-  { inlineResponse2006Id
-  , inlineResponse2006Created
-  , inlineResponse2006CreatedBy
-  , inlineResponse2006Tags
-  , inlineResponse2006Size
-  , inlineResponse2006Comment
-  }
-
--- ** InlineResponse2007
--- | InlineResponse2007
-data InlineResponse2007 = InlineResponse2007
-  { inlineResponse2007Description :: !(Maybe Text) -- ^ "description"
-  , inlineResponse2007IsOfficial :: !(Maybe Bool) -- ^ "is_official"
-  , inlineResponse2007IsAutomated :: !(Maybe Bool) -- ^ "is_automated"
-  , inlineResponse2007Name :: !(Maybe Text) -- ^ "name"
-  , inlineResponse2007StarCount :: !(Maybe Int) -- ^ "star_count"
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2007
-instance A.FromJSON InlineResponse2007 where
-  parseJSON = A.withObject "InlineResponse2007" $ \o ->
-    InlineResponse2007
-      <$> (o .:? "description")
-      <*> (o .:? "is_official")
-      <*> (o .:? "is_automated")
-      <*> (o .:? "name")
-      <*> (o .:? "star_count")
-
--- | ToJSON InlineResponse2007
-instance A.ToJSON InlineResponse2007 where
-  toJSON InlineResponse2007 {..} =
-   _omitNulls
-      [ "description" .= inlineResponse2007Description
-      , "is_official" .= inlineResponse2007IsOfficial
-      , "is_automated" .= inlineResponse2007IsAutomated
-      , "name" .= inlineResponse2007Name
-      , "star_count" .= inlineResponse2007StarCount
-      ]
-
-
--- | Construct a value of type 'InlineResponse2007' (by applying it's required fields, if any)
-mkInlineResponse2007
-  :: InlineResponse2007
-mkInlineResponse2007 =
-  InlineResponse2007
-  { inlineResponse2007Description = Nothing
-  , inlineResponse2007IsOfficial = Nothing
-  , inlineResponse2007IsAutomated = Nothing
-  , inlineResponse2007Name = Nothing
-  , inlineResponse2007StarCount = Nothing
-  }
-
--- ** InlineResponse2008
--- | InlineResponse2008
-data InlineResponse2008 = InlineResponse2008
-  { inlineResponse2008ImagesDeleted :: !(Maybe [ImageDeleteResponseItem]) -- ^ "ImagesDeleted" - Images that were deleted
-  , inlineResponse2008SpaceReclaimed :: !(Maybe Integer) -- ^ "SpaceReclaimed" - Disk space reclaimed in bytes
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2008
-instance A.FromJSON InlineResponse2008 where
-  parseJSON = A.withObject "InlineResponse2008" $ \o ->
-    InlineResponse2008
-      <$> (o .:? "ImagesDeleted")
-      <*> (o .:? "SpaceReclaimed")
-
--- | ToJSON InlineResponse2008
-instance A.ToJSON InlineResponse2008 where
-  toJSON InlineResponse2008 {..} =
-   _omitNulls
-      [ "ImagesDeleted" .= inlineResponse2008ImagesDeleted
-      , "SpaceReclaimed" .= inlineResponse2008SpaceReclaimed
-      ]
-
-
--- | Construct a value of type 'InlineResponse2008' (by applying it's required fields, if any)
-mkInlineResponse2008
-  :: InlineResponse2008
-mkInlineResponse2008 =
-  InlineResponse2008
-  { inlineResponse2008ImagesDeleted = Nothing
-  , inlineResponse2008SpaceReclaimed = Nothing
-  }
-
--- ** InlineResponse2009
--- | InlineResponse2009
-data InlineResponse2009 = InlineResponse2009
-  { inlineResponse2009Status :: !(Text) -- ^ /Required/ "Status" - The status of the authentication
-  , inlineResponse2009IdentityToken :: !(Maybe Text) -- ^ "IdentityToken" - An opaque token used to authenticate a user after a successful login
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineResponse2009
-instance A.FromJSON InlineResponse2009 where
-  parseJSON = A.withObject "InlineResponse2009" $ \o ->
-    InlineResponse2009
-      <$> (o .:  "Status")
-      <*> (o .:? "IdentityToken")
-
 -- | ToJSON InlineResponse2009
 instance A.ToJSON InlineResponse2009 where
   toJSON InlineResponse2009 {..} =
    _omitNulls
-      [ "Status" .= inlineResponse2009Status
-      , "IdentityToken" .= inlineResponse2009IdentityToken
+      [ "Architecture" .= inlineResponse2009Architecture
+      , "Containers" .= inlineResponse2009Containers
+      , "ContainersRunning" .= inlineResponse2009ContainersRunning
+      , "ContainersStopped" .= inlineResponse2009ContainersStopped
+      , "ContainersPaused" .= inlineResponse2009ContainersPaused
+      , "CpuCfsPeriod" .= inlineResponse2009CpuCfsPeriod
+      , "CpuCfsQuota" .= inlineResponse2009CpuCfsQuota
+      , "Debug" .= inlineResponse2009Debug
+      , "DiscoveryBackend" .= inlineResponse2009DiscoveryBackend
+      , "DockerRootDir" .= inlineResponse2009DockerRootDir
+      , "Driver" .= inlineResponse2009Driver
+      , "DriverStatus" .= inlineResponse2009DriverStatus
+      , "SystemStatus" .= inlineResponse2009SystemStatus
+      , "Plugins" .= inlineResponse2009Plugins
+      , "ExperimentalBuild" .= inlineResponse2009ExperimentalBuild
+      , "HttpProxy" .= inlineResponse2009HttpProxy
+      , "HttpsProxy" .= inlineResponse2009HttpsProxy
+      , "ID" .= inlineResponse2009Id
+      , "IPv4Forwarding" .= inlineResponse2009IPv4Forwarding
+      , "Images" .= inlineResponse2009Images
+      , "IndexServerAddress" .= inlineResponse2009IndexServerAddress
+      , "InitPath" .= inlineResponse2009InitPath
+      , "InitSha1" .= inlineResponse2009InitSha1
+      , "KernelVersion" .= inlineResponse2009KernelVersion
+      , "Labels" .= inlineResponse2009Labels
+      , "MemTotal" .= inlineResponse2009MemTotal
+      , "MemoryLimit" .= inlineResponse2009MemoryLimit
+      , "NCPU" .= inlineResponse2009Ncpu
+      , "NEventsListener" .= inlineResponse2009NEventsListener
+      , "NFd" .= inlineResponse2009NFd
+      , "NGoroutines" .= inlineResponse2009NGoroutines
+      , "Name" .= inlineResponse2009Name
+      , "NoProxy" .= inlineResponse2009NoProxy
+      , "OomKillDisable" .= inlineResponse2009OomKillDisable
+      , "OSType" .= inlineResponse2009OsType
+      , "OomScoreAdj" .= inlineResponse2009OomScoreAdj
+      , "OperatingSystem" .= inlineResponse2009OperatingSystem
+      , "RegistryConfig" .= inlineResponse2009RegistryConfig
+      , "SwapLimit" .= inlineResponse2009SwapLimit
+      , "SystemTime" .= inlineResponse2009SystemTime
+      , "ServerVersion" .= inlineResponse2009ServerVersion
       ]
 
 
 -- | Construct a value of type 'InlineResponse2009' (by applying it's required fields, if any)
 mkInlineResponse2009
-  :: Text -- ^ 'inlineResponse2009Status': The status of the authentication
-  -> InlineResponse2009
-mkInlineResponse2009 inlineResponse2009Status =
+  :: InlineResponse2009
+mkInlineResponse2009 =
   InlineResponse2009
-  { inlineResponse2009Status
-  , inlineResponse2009IdentityToken = Nothing
+  { inlineResponse2009Architecture = Nothing
+  , inlineResponse2009Containers = Nothing
+  , inlineResponse2009ContainersRunning = Nothing
+  , inlineResponse2009ContainersStopped = Nothing
+  , inlineResponse2009ContainersPaused = Nothing
+  , inlineResponse2009CpuCfsPeriod = Nothing
+  , inlineResponse2009CpuCfsQuota = Nothing
+  , inlineResponse2009Debug = Nothing
+  , inlineResponse2009DiscoveryBackend = Nothing
+  , inlineResponse2009DockerRootDir = Nothing
+  , inlineResponse2009Driver = Nothing
+  , inlineResponse2009DriverStatus = Nothing
+  , inlineResponse2009SystemStatus = Nothing
+  , inlineResponse2009Plugins = Nothing
+  , inlineResponse2009ExperimentalBuild = Nothing
+  , inlineResponse2009HttpProxy = Nothing
+  , inlineResponse2009HttpsProxy = Nothing
+  , inlineResponse2009Id = Nothing
+  , inlineResponse2009IPv4Forwarding = Nothing
+  , inlineResponse2009Images = Nothing
+  , inlineResponse2009IndexServerAddress = Nothing
+  , inlineResponse2009InitPath = Nothing
+  , inlineResponse2009InitSha1 = Nothing
+  , inlineResponse2009KernelVersion = Nothing
+  , inlineResponse2009Labels = Nothing
+  , inlineResponse2009MemTotal = Nothing
+  , inlineResponse2009MemoryLimit = Nothing
+  , inlineResponse2009Ncpu = Nothing
+  , inlineResponse2009NEventsListener = Nothing
+  , inlineResponse2009NFd = Nothing
+  , inlineResponse2009NGoroutines = Nothing
+  , inlineResponse2009Name = Nothing
+  , inlineResponse2009NoProxy = Nothing
+  , inlineResponse2009OomKillDisable = Nothing
+  , inlineResponse2009OsType = Nothing
+  , inlineResponse2009OomScoreAdj = Nothing
+  , inlineResponse2009OperatingSystem = Nothing
+  , inlineResponse2009RegistryConfig = Nothing
+  , inlineResponse2009SwapLimit = Nothing
+  , inlineResponse2009SystemTime = Nothing
+  , inlineResponse2009ServerVersion = Nothing
   }
 
--- ** InlineResponse200State
--- | InlineResponse200State
--- The state of the container.
-data InlineResponse200State = InlineResponse200State
-  { inlineResponse200StateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;. 
-  , inlineResponse200StateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;. 
-  , inlineResponse200StatePaused :: !(Maybe Bool) -- ^ "Paused" - Whether this container is paused.
-  , inlineResponse200StateRestarting :: !(Maybe Bool) -- ^ "Restarting" - Whether this container is restarting.
-  , inlineResponse200StateOomKilled :: !(Maybe Bool) -- ^ "OOMKilled" - Whether this container has been killed because it ran out of memory.
-  , inlineResponse200StateDead :: !(Maybe Bool) -- ^ "Dead"
-  , inlineResponse200StatePid :: !(Maybe Int) -- ^ "Pid" - The process ID of this container
-  , inlineResponse200StateExitCode :: !(Maybe Int) -- ^ "ExitCode" - The last exit code of this container
-  , inlineResponse200StateError :: !(Maybe Text) -- ^ "Error"
-  , inlineResponse200StateStartedAt :: !(Maybe Text) -- ^ "StartedAt" - The time when this container was last started.
-  , inlineResponse200StateFinishedAt :: !(Maybe Text) -- ^ "FinishedAt" - The time when this container last exited.
+-- ** InlineResponse2009Plugins
+-- | InlineResponse2009Plugins
+data InlineResponse2009Plugins = InlineResponse2009Plugins
+  { inlineResponse2009PluginsVolume :: !(Maybe [Text]) -- ^ "Volume"
+  , inlineResponse2009PluginsNetwork :: !(Maybe [Text]) -- ^ "Network"
+  , inlineResponse2009PluginsLog :: !(Maybe [Text]) -- ^ "Log"
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON InlineResponse200State
-instance A.FromJSON InlineResponse200State where
-  parseJSON = A.withObject "InlineResponse200State" $ \o ->
-    InlineResponse200State
-      <$> (o .:? "Status")
-      <*> (o .:? "Running")
-      <*> (o .:? "Paused")
-      <*> (o .:? "Restarting")
-      <*> (o .:? "OOMKilled")
-      <*> (o .:? "Dead")
-      <*> (o .:? "Pid")
-      <*> (o .:? "ExitCode")
-      <*> (o .:? "Error")
-      <*> (o .:? "StartedAt")
-      <*> (o .:? "FinishedAt")
+-- | FromJSON InlineResponse2009Plugins
+instance A.FromJSON InlineResponse2009Plugins where
+  parseJSON = A.withObject "InlineResponse2009Plugins" $ \o ->
+    InlineResponse2009Plugins
+      <$> (o .:? "Volume")
+      <*> (o .:? "Network")
+      <*> (o .:? "Log")
 
--- | ToJSON InlineResponse200State
-instance A.ToJSON InlineResponse200State where
-  toJSON InlineResponse200State {..} =
+-- | ToJSON InlineResponse2009Plugins
+instance A.ToJSON InlineResponse2009Plugins where
+  toJSON InlineResponse2009Plugins {..} =
    _omitNulls
-      [ "Status" .= inlineResponse200StateStatus
-      , "Running" .= inlineResponse200StateRunning
-      , "Paused" .= inlineResponse200StatePaused
-      , "Restarting" .= inlineResponse200StateRestarting
-      , "OOMKilled" .= inlineResponse200StateOomKilled
-      , "Dead" .= inlineResponse200StateDead
-      , "Pid" .= inlineResponse200StatePid
-      , "ExitCode" .= inlineResponse200StateExitCode
-      , "Error" .= inlineResponse200StateError
-      , "StartedAt" .= inlineResponse200StateStartedAt
-      , "FinishedAt" .= inlineResponse200StateFinishedAt
+      [ "Volume" .= inlineResponse2009PluginsVolume
+      , "Network" .= inlineResponse2009PluginsNetwork
+      , "Log" .= inlineResponse2009PluginsLog
       ]
 
 
--- | Construct a value of type 'InlineResponse200State' (by applying it's required fields, if any)
-mkInlineResponse200State
-  :: InlineResponse200State
-mkInlineResponse200State =
-  InlineResponse200State
-  { inlineResponse200StateStatus = Nothing
-  , inlineResponse200StateRunning = Nothing
-  , inlineResponse200StatePaused = Nothing
-  , inlineResponse200StateRestarting = Nothing
-  , inlineResponse200StateOomKilled = Nothing
-  , inlineResponse200StateDead = Nothing
-  , inlineResponse200StatePid = Nothing
-  , inlineResponse200StateExitCode = Nothing
-  , inlineResponse200StateError = Nothing
-  , inlineResponse200StateStartedAt = Nothing
-  , inlineResponse200StateFinishedAt = Nothing
+-- | Construct a value of type 'InlineResponse2009Plugins' (by applying it's required fields, if any)
+mkInlineResponse2009Plugins
+  :: InlineResponse2009Plugins
+mkInlineResponse2009Plugins =
+  InlineResponse2009Plugins
+  { inlineResponse2009PluginsVolume = Nothing
+  , inlineResponse2009PluginsNetwork = Nothing
+  , inlineResponse2009PluginsLog = Nothing
+  }
+
+-- ** InlineResponse2009RegistryConfig
+-- | InlineResponse2009RegistryConfig
+data InlineResponse2009RegistryConfig = InlineResponse2009RegistryConfig
+  { inlineResponse2009RegistryConfigIndexConfigs :: !(Maybe (Map.Map String InlineResponse2009RegistryConfigIndexConfigs)) -- ^ "IndexConfigs"
+  , inlineResponse2009RegistryConfigInsecureRegistryCidRs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2009RegistryConfig
+instance A.FromJSON InlineResponse2009RegistryConfig where
+  parseJSON = A.withObject "InlineResponse2009RegistryConfig" $ \o ->
+    InlineResponse2009RegistryConfig
+      <$> (o .:? "IndexConfigs")
+      <*> (o .:? "InsecureRegistryCIDRs")
+
+-- | ToJSON InlineResponse2009RegistryConfig
+instance A.ToJSON InlineResponse2009RegistryConfig where
+  toJSON InlineResponse2009RegistryConfig {..} =
+   _omitNulls
+      [ "IndexConfigs" .= inlineResponse2009RegistryConfigIndexConfigs
+      , "InsecureRegistryCIDRs" .= inlineResponse2009RegistryConfigInsecureRegistryCidRs
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2009RegistryConfig' (by applying it's required fields, if any)
+mkInlineResponse2009RegistryConfig
+  :: InlineResponse2009RegistryConfig
+mkInlineResponse2009RegistryConfig =
+  InlineResponse2009RegistryConfig
+  { inlineResponse2009RegistryConfigIndexConfigs = Nothing
+  , inlineResponse2009RegistryConfigInsecureRegistryCidRs = Nothing
+  }
+
+-- ** InlineResponse2009RegistryConfigIndexConfigs
+-- | InlineResponse2009RegistryConfigIndexConfigs
+data InlineResponse2009RegistryConfigIndexConfigs = InlineResponse2009RegistryConfigIndexConfigs
+  { inlineResponse2009RegistryConfigIndexConfigsMirrors :: !(Maybe [Text]) -- ^ "Mirrors"
+  , inlineResponse2009RegistryConfigIndexConfigsName :: !(Maybe Text) -- ^ "Name"
+  , inlineResponse2009RegistryConfigIndexConfigsOfficial :: !(Maybe Bool) -- ^ "Official"
+  , inlineResponse2009RegistryConfigIndexConfigsSecure :: !(Maybe Bool) -- ^ "Secure"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InlineResponse2009RegistryConfigIndexConfigs
+instance A.FromJSON InlineResponse2009RegistryConfigIndexConfigs where
+  parseJSON = A.withObject "InlineResponse2009RegistryConfigIndexConfigs" $ \o ->
+    InlineResponse2009RegistryConfigIndexConfigs
+      <$> (o .:? "Mirrors")
+      <*> (o .:? "Name")
+      <*> (o .:? "Official")
+      <*> (o .:? "Secure")
+
+-- | ToJSON InlineResponse2009RegistryConfigIndexConfigs
+instance A.ToJSON InlineResponse2009RegistryConfigIndexConfigs where
+  toJSON InlineResponse2009RegistryConfigIndexConfigs {..} =
+   _omitNulls
+      [ "Mirrors" .= inlineResponse2009RegistryConfigIndexConfigsMirrors
+      , "Name" .= inlineResponse2009RegistryConfigIndexConfigsName
+      , "Official" .= inlineResponse2009RegistryConfigIndexConfigsOfficial
+      , "Secure" .= inlineResponse2009RegistryConfigIndexConfigsSecure
+      ]
+
+
+-- | Construct a value of type 'InlineResponse2009RegistryConfigIndexConfigs' (by applying it's required fields, if any)
+mkInlineResponse2009RegistryConfigIndexConfigs
+  :: InlineResponse2009RegistryConfigIndexConfigs
+mkInlineResponse2009RegistryConfigIndexConfigs =
+  InlineResponse2009RegistryConfigIndexConfigs
+  { inlineResponse2009RegistryConfigIndexConfigsMirrors = Nothing
+  , inlineResponse2009RegistryConfigIndexConfigsName = Nothing
+  , inlineResponse2009RegistryConfigIndexConfigsOfficial = Nothing
+  , inlineResponse2009RegistryConfigIndexConfigsSecure = Nothing
   }
 
 -- ** InlineResponse201
@@ -4001,6 +3808,199 @@ mkInlineResponse400 =
   InlineResponse400
   { inlineResponse400ErrorResponse = Nothing
   , inlineResponse400Message = Nothing
+  }
+
+-- ** InspectResponse
+-- | InspectResponse
+data InspectResponse = InspectResponse
+  { inspectResponseId :: !(Maybe Text) -- ^ "Id" - The ID of the container
+  , inspectResponseCreated :: !(Maybe Text) -- ^ "Created" - The time the container was created
+  , inspectResponsePath :: !(Maybe Text) -- ^ "Path" - The path to the command being run
+  , inspectResponseArgs :: !(Maybe [Text]) -- ^ "Args" - The arguments to the command being run
+  , inspectResponseState :: !(Maybe InspectResponseState) -- ^ "State"
+  , inspectResponseImage :: !(Maybe Text) -- ^ "Image" - The container&#39;s image
+  , inspectResponseResolvConfPath :: !(Maybe Text) -- ^ "ResolvConfPath"
+  , inspectResponseHostnamePath :: !(Maybe Text) -- ^ "HostnamePath"
+  , inspectResponseHostsPath :: !(Maybe Text) -- ^ "HostsPath"
+  , inspectResponseLogPath :: !(Maybe Text) -- ^ "LogPath"
+  , inspectResponseNode :: !(Maybe A.Value) -- ^ "Node" - TODO
+  , inspectResponseName :: !(Maybe Text) -- ^ "Name"
+  , inspectResponseRestartCount :: !(Maybe Int) -- ^ "RestartCount"
+  , inspectResponseDriver :: !(Maybe Text) -- ^ "Driver"
+  , inspectResponseMountLabel :: !(Maybe Text) -- ^ "MountLabel"
+  , inspectResponseProcessLabel :: !(Maybe Text) -- ^ "ProcessLabel"
+  , inspectResponseAppArmorProfile :: !(Maybe Text) -- ^ "AppArmorProfile"
+  , inspectResponseExecIDs :: !(Maybe Text) -- ^ "ExecIDs"
+  , inspectResponseHostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
+  , inspectResponseGraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
+  , inspectResponseSizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container.
+  , inspectResponseSizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container.
+  , inspectResponseMounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
+  , inspectResponseConfig :: !(Maybe ContainerConfig) -- ^ "Config"
+  , inspectResponseNetworkSettings :: !(Maybe NetworkConfig) -- ^ "NetworkSettings"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InspectResponse
+instance A.FromJSON InspectResponse where
+  parseJSON = A.withObject "InspectResponse" $ \o ->
+    InspectResponse
+      <$> (o .:? "Id")
+      <*> (o .:? "Created")
+      <*> (o .:? "Path")
+      <*> (o .:? "Args")
+      <*> (o .:? "State")
+      <*> (o .:? "Image")
+      <*> (o .:? "ResolvConfPath")
+      <*> (o .:? "HostnamePath")
+      <*> (o .:? "HostsPath")
+      <*> (o .:? "LogPath")
+      <*> (o .:? "Node")
+      <*> (o .:? "Name")
+      <*> (o .:? "RestartCount")
+      <*> (o .:? "Driver")
+      <*> (o .:? "MountLabel")
+      <*> (o .:? "ProcessLabel")
+      <*> (o .:? "AppArmorProfile")
+      <*> (o .:? "ExecIDs")
+      <*> (o .:? "HostConfig")
+      <*> (o .:? "GraphDriver")
+      <*> (o .:? "SizeRw")
+      <*> (o .:? "SizeRootFs")
+      <*> (o .:? "Mounts")
+      <*> (o .:? "Config")
+      <*> (o .:? "NetworkSettings")
+
+-- | ToJSON InspectResponse
+instance A.ToJSON InspectResponse where
+  toJSON InspectResponse {..} =
+   _omitNulls
+      [ "Id" .= inspectResponseId
+      , "Created" .= inspectResponseCreated
+      , "Path" .= inspectResponsePath
+      , "Args" .= inspectResponseArgs
+      , "State" .= inspectResponseState
+      , "Image" .= inspectResponseImage
+      , "ResolvConfPath" .= inspectResponseResolvConfPath
+      , "HostnamePath" .= inspectResponseHostnamePath
+      , "HostsPath" .= inspectResponseHostsPath
+      , "LogPath" .= inspectResponseLogPath
+      , "Node" .= inspectResponseNode
+      , "Name" .= inspectResponseName
+      , "RestartCount" .= inspectResponseRestartCount
+      , "Driver" .= inspectResponseDriver
+      , "MountLabel" .= inspectResponseMountLabel
+      , "ProcessLabel" .= inspectResponseProcessLabel
+      , "AppArmorProfile" .= inspectResponseAppArmorProfile
+      , "ExecIDs" .= inspectResponseExecIDs
+      , "HostConfig" .= inspectResponseHostConfig
+      , "GraphDriver" .= inspectResponseGraphDriver
+      , "SizeRw" .= inspectResponseSizeRw
+      , "SizeRootFs" .= inspectResponseSizeRootFs
+      , "Mounts" .= inspectResponseMounts
+      , "Config" .= inspectResponseConfig
+      , "NetworkSettings" .= inspectResponseNetworkSettings
+      ]
+
+
+-- | Construct a value of type 'InspectResponse' (by applying it's required fields, if any)
+mkInspectResponse
+  :: InspectResponse
+mkInspectResponse =
+  InspectResponse
+  { inspectResponseId = Nothing
+  , inspectResponseCreated = Nothing
+  , inspectResponsePath = Nothing
+  , inspectResponseArgs = Nothing
+  , inspectResponseState = Nothing
+  , inspectResponseImage = Nothing
+  , inspectResponseResolvConfPath = Nothing
+  , inspectResponseHostnamePath = Nothing
+  , inspectResponseHostsPath = Nothing
+  , inspectResponseLogPath = Nothing
+  , inspectResponseNode = Nothing
+  , inspectResponseName = Nothing
+  , inspectResponseRestartCount = Nothing
+  , inspectResponseDriver = Nothing
+  , inspectResponseMountLabel = Nothing
+  , inspectResponseProcessLabel = Nothing
+  , inspectResponseAppArmorProfile = Nothing
+  , inspectResponseExecIDs = Nothing
+  , inspectResponseHostConfig = Nothing
+  , inspectResponseGraphDriver = Nothing
+  , inspectResponseSizeRw = Nothing
+  , inspectResponseSizeRootFs = Nothing
+  , inspectResponseMounts = Nothing
+  , inspectResponseConfig = Nothing
+  , inspectResponseNetworkSettings = Nothing
+  }
+
+-- ** InspectResponseState
+-- | InspectResponseState
+-- The state of the container.
+data InspectResponseState = InspectResponseState
+  { inspectResponseStateStatus :: !(Maybe E'Status) -- ^ "Status" - The status of the container. For example, &#x60;\&quot;running\&quot;&#x60; or &#x60;\&quot;exited\&quot;&#x60;. 
+  , inspectResponseStateRunning :: !(Maybe Bool) -- ^ "Running" - Whether this container is running.  Note that a running container can be _paused_. The &#x60;Running&#x60; and &#x60;Paused&#x60; booleans are not mutually exclusive:  When pausing a container (on Linux), the cgroups freezer is used to suspend all processes in the container. Freezing the process requires the process to be running. As a result, paused containers are both &#x60;Running&#x60; _and_ &#x60;Paused&#x60;.  Use the &#x60;Status&#x60; field instead to determine if a container&#39;s state is \&quot;running\&quot;. 
+  , inspectResponseStatePaused :: !(Maybe Bool) -- ^ "Paused" - Whether this container is paused.
+  , inspectResponseStateRestarting :: !(Maybe Bool) -- ^ "Restarting" - Whether this container is restarting.
+  , inspectResponseStateOomKilled :: !(Maybe Bool) -- ^ "OOMKilled" - Whether this container has been killed because it ran out of memory.
+  , inspectResponseStateDead :: !(Maybe Bool) -- ^ "Dead"
+  , inspectResponseStatePid :: !(Maybe Int) -- ^ "Pid" - The process ID of this container
+  , inspectResponseStateExitCode :: !(Maybe Int) -- ^ "ExitCode" - The last exit code of this container
+  , inspectResponseStateError :: !(Maybe Text) -- ^ "Error"
+  , inspectResponseStateStartedAt :: !(Maybe Text) -- ^ "StartedAt" - The time when this container was last started.
+  , inspectResponseStateFinishedAt :: !(Maybe Text) -- ^ "FinishedAt" - The time when this container last exited.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON InspectResponseState
+instance A.FromJSON InspectResponseState where
+  parseJSON = A.withObject "InspectResponseState" $ \o ->
+    InspectResponseState
+      <$> (o .:? "Status")
+      <*> (o .:? "Running")
+      <*> (o .:? "Paused")
+      <*> (o .:? "Restarting")
+      <*> (o .:? "OOMKilled")
+      <*> (o .:? "Dead")
+      <*> (o .:? "Pid")
+      <*> (o .:? "ExitCode")
+      <*> (o .:? "Error")
+      <*> (o .:? "StartedAt")
+      <*> (o .:? "FinishedAt")
+
+-- | ToJSON InspectResponseState
+instance A.ToJSON InspectResponseState where
+  toJSON InspectResponseState {..} =
+   _omitNulls
+      [ "Status" .= inspectResponseStateStatus
+      , "Running" .= inspectResponseStateRunning
+      , "Paused" .= inspectResponseStatePaused
+      , "Restarting" .= inspectResponseStateRestarting
+      , "OOMKilled" .= inspectResponseStateOomKilled
+      , "Dead" .= inspectResponseStateDead
+      , "Pid" .= inspectResponseStatePid
+      , "ExitCode" .= inspectResponseStateExitCode
+      , "Error" .= inspectResponseStateError
+      , "StartedAt" .= inspectResponseStateStartedAt
+      , "FinishedAt" .= inspectResponseStateFinishedAt
+      ]
+
+
+-- | Construct a value of type 'InspectResponseState' (by applying it's required fields, if any)
+mkInspectResponseState
+  :: InspectResponseState
+mkInspectResponseState =
+  InspectResponseState
+  { inspectResponseStateStatus = Nothing
+  , inspectResponseStateRunning = Nothing
+  , inspectResponseStatePaused = Nothing
+  , inspectResponseStateRestarting = Nothing
+  , inspectResponseStateOomKilled = Nothing
+  , inspectResponseStateDead = Nothing
+  , inspectResponseStatePid = Nothing
+  , inspectResponseStateExitCode = Nothing
+  , inspectResponseStateError = Nothing
+  , inspectResponseStateStartedAt = Nothing
+  , inspectResponseStateFinishedAt = Nothing
   }
 
 -- ** Mount

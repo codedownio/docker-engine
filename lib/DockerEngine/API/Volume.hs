@@ -134,7 +134,7 @@ instance Produces VolumeInspect MimeJSON
 -- List volumes
 -- 
 volumeList 
-  :: DockerEngineRequest VolumeList MimeNoContent InlineResponse20015 MimeJSON
+  :: DockerEngineRequest VolumeList MimeNoContent InlineResponse20014 MimeJSON
 volumeList =
   _mkRequest "GET" ["/volumes"]
 
@@ -155,7 +155,7 @@ instance Produces VolumeList MimeJSON
 -- Delete unused volumes
 -- 
 volumePrune 
-  :: DockerEngineRequest VolumePrune MimeNoContent InlineResponse20016 MimeJSON
+  :: DockerEngineRequest VolumePrune MimeNoContent InlineResponse20015 MimeJSON
 volumePrune =
   _mkRequest "POST" ["/volumes/prune"]
 

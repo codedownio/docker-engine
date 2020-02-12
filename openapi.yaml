@@ -569,7 +569,7 @@ paths:
                   RW: false
                   Propagation: ""
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/InspectResponse'
           description: no error
         "404":
           content:
@@ -638,10 +638,10 @@ paths:
                   - 00:00:00
                   - sleep 10
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200'
             text/plain:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200'
           description: no error
         "404":
           content:
@@ -794,7 +794,7 @@ paths:
                 Kind: 1
               schema:
                 items:
-                  $ref: '#/components/schemas/inline_response_200_2'
+                  $ref: '#/components/schemas/inline_response_200_1'
                 type: array
           description: The list of changes
         "404":
@@ -1254,7 +1254,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/inline_response_200_2'
           description: The container has been updated.
         "404":
           content:
@@ -1673,7 +1673,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                $ref: '#/components/schemas/inline_response_200_3'
           description: The container has exit.
         "404":
           content:
@@ -1975,7 +1975,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                $ref: '#/components/schemas/inline_response_200_4'
           description: No error
         "500":
           content:
@@ -2488,7 +2488,7 @@ paths:
                 Comment: Imported from -
               schema:
                 items:
-                  $ref: '#/components/schemas/inline_response_200_6'
+                  $ref: '#/components/schemas/inline_response_200_5'
                 type: array
           description: List of image layers
         "404":
@@ -2734,7 +2734,7 @@ paths:
                 star_count: 0
               schema:
                 items:
-                  $ref: '#/components/schemas/inline_response_200_7'
+                  $ref: '#/components/schemas/inline_response_200_6'
                 type: array
           description: No error
         "500":
@@ -2767,7 +2767,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                $ref: '#/components/schemas/inline_response_200_7'
           description: No error
         "500":
           content:
@@ -2798,7 +2798,7 @@ paths:
                 Status: Login Succeeded
                 IdentityToken: 9cbaf023786cd7...
               schema:
-                $ref: '#/components/schemas/inline_response_200_9'
+                $ref: '#/components/schemas/inline_response_200_8'
           description: An identity token was generated successfully.
         "204":
           content: {}
@@ -2892,7 +2892,7 @@ paths:
                   - Healthy
                 SystemTime: 2015-03-10T11:11:23.730591467-07:00
               schema:
-                $ref: '#/components/schemas/inline_response_200_10'
+                $ref: '#/components/schemas/inline_response_200_9'
           description: No error
         "500":
           content:
@@ -2924,7 +2924,7 @@ paths:
                 BuildTime: 2016-06-14T07:09:13.444803460+00:00
                 Experimental: true
               schema:
-                $ref: '#/components/schemas/inline_response_200_11'
+                $ref: '#/components/schemas/inline_response_200_10'
           description: no error
         "500":
           content:
@@ -3103,7 +3103,7 @@ paths:
                     name: my-container
                 time: 1461943101
               schema:
-                $ref: '#/components/schemas/inline_response_200_12'
+                $ref: '#/components/schemas/inline_response_200_11'
           description: no error
         "400":
           content:
@@ -3128,10 +3128,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_13'
+                $ref: '#/components/schemas/inline_response_200_12'
             text/plain:
               schema:
-                $ref: '#/components/schemas/inline_response_200_13'
+                $ref: '#/components/schemas/inline_response_200_12'
           description: no error
         "500":
           content:
@@ -3491,7 +3491,7 @@ paths:
                 Running: false
                 Pid: 42000
               schema:
-                $ref: '#/components/schemas/inline_response_200_14'
+                $ref: '#/components/schemas/inline_response_200_13'
           description: No error
         "404":
           content:
@@ -3548,7 +3548,7 @@ paths:
                     type: tmpfs
                 Warnings: []
               schema:
-                $ref: '#/components/schemas/inline_response_200_15'
+                $ref: '#/components/schemas/inline_response_200_14'
           description: Summary volume data that matches the query
         "500":
           content:
@@ -3715,7 +3715,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_16'
+                $ref: '#/components/schemas/inline_response_200_15'
           description: No error
         "500":
           content:
@@ -4152,7 +4152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_17'
+                $ref: '#/components/schemas/inline_response_200_16'
           description: No error
         "500":
           content:
@@ -4225,7 +4225,7 @@ paths:
                   Value:
                   - /dev/cpu_dma_latency
                 items:
-                  $ref: '#/components/schemas/inline_response_200_18'
+                  $ref: '#/components/schemas/inline_response_200_17'
                 type: array
             text/plain:
               schema:
@@ -4243,7 +4243,7 @@ paths:
                   Value:
                   - /dev/cpu_dma_latency
                 items:
-                  $ref: '#/components/schemas/inline_response_200_18'
+                  $ref: '#/components/schemas/inline_response_200_17'
                 type: array
           description: no error
         "500":
@@ -4973,10 +4973,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_19'
+                $ref: '#/components/schemas/inline_response_200_18'
             text/plain:
               schema:
-                $ref: '#/components/schemas/inline_response_200_19'
+                $ref: '#/components/schemas/inline_response_200_18'
           description: no error
         "404":
           content:
@@ -5392,10 +5392,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_20'
+                $ref: '#/components/schemas/inline_response_200_19'
             text/plain:
               schema:
-                $ref: '#/components/schemas/inline_response_200_20'
+                $ref: '#/components/schemas/inline_response_200_19'
           description: no error
         "500":
           content:
@@ -6783,7 +6783,7 @@ paths:
                   Features:
                   - ""
               schema:
-                $ref: '#/components/schemas/inline_response_200_21'
+                $ref: '#/components/schemas/inline_response_200_20'
           description: descriptor and platform information
         "401":
           content:
@@ -8927,195 +8927,7 @@ components:
             $ref: '#/components/schemas/Mount'
           type: array
       type: object
-    SecretSpec:
-      example:
-        Labels:
-          key: Labels
-        Data:
-        - Data
-        - Data
-        Name: Name
-      properties:
-        Name:
-          description: User-defined name of the secret.
-          type: string
-        Labels:
-          additionalProperties:
-            type: string
-          description: User-defined key/value metadata.
-          type: object
-        Data:
-          description: Base64-url-safe-encoded secret data
-          items:
-            type: string
-          type: array
-      type: object
-    Secret:
-      example:
-        Version:
-          Index: 0
-        CreatedAt: CreatedAt
-        ID: ID
-        Spec:
-          Labels:
-            key: Labels
-          Data:
-          - Data
-          - Data
-          Name: Name
-        UpdatedAt: UpdatedAt
-      properties:
-        ID:
-          type: string
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          format: dateTime
-          type: string
-        UpdatedAt:
-          format: dateTime
-          type: string
-        Spec:
-          $ref: '#/components/schemas/SecretSpec'
-      type: object
-    ConfigSpec:
-      example:
-        Labels:
-          key: Labels
-        Data:
-        - Data
-        - Data
-        Name: Name
-      properties:
-        Name:
-          description: User-defined name of the config.
-          type: string
-        Labels:
-          additionalProperties:
-            type: string
-          description: User-defined key/value metadata.
-          type: object
-        Data:
-          description: Base64-url-safe-encoded config data
-          items:
-            type: string
-          type: array
-      type: object
-    Config:
-      example:
-        Version:
-          Index: 0
-        CreatedAt: CreatedAt
-        ID: ID
-        Spec:
-          Labels:
-            key: Labels
-          Data:
-          - Data
-          - Data
-          Name: Name
-        UpdatedAt: UpdatedAt
-      properties:
-        ID:
-          type: string
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          format: dateTime
-          type: string
-        UpdatedAt:
-          format: dateTime
-          type: string
-        Spec:
-          $ref: '#/components/schemas/ConfigSpec'
-      type: object
-    inline_response_201:
-      example:
-        Id: Id
-        Warnings:
-        - Warnings
-        - Warnings
-      properties:
-        Id:
-          description: The ID of the created container
-          nullable: false
-          type: string
-        Warnings:
-          description: Warnings encountered when creating the container
-          items:
-            type: string
-          nullable: false
-          type: array
-      required:
-      - Id
-      - Warnings
-    inline_response_200_State:
-      description: The state of the container.
-      example:
-        Status: created
-        Restarting: true
-        Dead: true
-        ExitCode: 6
-        Running: true
-        Error: Error
-        FinishedAt: FinishedAt
-        OOMKilled: true
-        Pid: 0
-        StartedAt: StartedAt
-        Paused: true
-      properties:
-        Status:
-          description: |
-            The status of the container. For example, `"running"` or `"exited"`.
-          enum:
-          - created
-          - running
-          - paused
-          - restarting
-          - removing
-          - exited
-          - dead
-          type: string
-        Running:
-          description: |
-            Whether this container is running.
-
-            Note that a running container can be _paused_. The `Running` and `Paused`
-            booleans are not mutually exclusive:
-
-            When pausing a container (on Linux), the cgroups freezer is used to suspend
-            all processes in the container. Freezing the process requires the process to
-            be running. As a result, paused containers are both `Running` _and_ `Paused`.
-
-            Use the `Status` field instead to determine if a container's state is "running".
-          type: boolean
-        Paused:
-          description: Whether this container is paused.
-          type: boolean
-        Restarting:
-          description: Whether this container is restarting.
-          type: boolean
-        OOMKilled:
-          description: Whether this container has been killed because it ran out of
-            memory.
-          type: boolean
-        Dead:
-          type: boolean
-        Pid:
-          description: The process ID of this container
-          type: integer
-        ExitCode:
-          description: The last exit code of this container
-          type: integer
-        Error:
-          type: string
-        StartedAt:
-          description: The time when this container was last started.
-          type: string
-        FinishedAt:
-          description: The time when this container last exited.
-          type: string
-    inline_response_200:
+    InspectResponse:
       example:
         Config:
           StopSignal: SIGTERM
@@ -9241,7 +9053,7 @@ components:
             type: string
           type: array
         State:
-          $ref: '#/components/schemas/inline_response_200_State'
+          $ref: '#/components/schemas/InspectResponse_State'
         Image:
           description: The container's image
           type: string
@@ -9292,7 +9104,130 @@ components:
           $ref: '#/components/schemas/ContainerConfig'
         NetworkSettings:
           $ref: '#/components/schemas/NetworkConfig'
-    inline_response_200_1:
+      type: object
+    SecretSpec:
+      example:
+        Labels:
+          key: Labels
+        Data:
+        - Data
+        - Data
+        Name: Name
+      properties:
+        Name:
+          description: User-defined name of the secret.
+          type: string
+        Labels:
+          additionalProperties:
+            type: string
+          description: User-defined key/value metadata.
+          type: object
+        Data:
+          description: Base64-url-safe-encoded secret data
+          items:
+            type: string
+          type: array
+      type: object
+    Secret:
+      example:
+        Version:
+          Index: 0
+        CreatedAt: CreatedAt
+        ID: ID
+        Spec:
+          Labels:
+            key: Labels
+          Data:
+          - Data
+          - Data
+          Name: Name
+        UpdatedAt: UpdatedAt
+      properties:
+        ID:
+          type: string
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          format: dateTime
+          type: string
+        UpdatedAt:
+          format: dateTime
+          type: string
+        Spec:
+          $ref: '#/components/schemas/SecretSpec'
+      type: object
+    ConfigSpec:
+      example:
+        Labels:
+          key: Labels
+        Data:
+        - Data
+        - Data
+        Name: Name
+      properties:
+        Name:
+          description: User-defined name of the config.
+          type: string
+        Labels:
+          additionalProperties:
+            type: string
+          description: User-defined key/value metadata.
+          type: object
+        Data:
+          description: Base64-url-safe-encoded config data
+          items:
+            type: string
+          type: array
+      type: object
+    Config:
+      example:
+        Version:
+          Index: 0
+        CreatedAt: CreatedAt
+        ID: ID
+        Spec:
+          Labels:
+            key: Labels
+          Data:
+          - Data
+          - Data
+          Name: Name
+        UpdatedAt: UpdatedAt
+      properties:
+        ID:
+          type: string
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          format: dateTime
+          type: string
+        UpdatedAt:
+          format: dateTime
+          type: string
+        Spec:
+          $ref: '#/components/schemas/ConfigSpec'
+      type: object
+    inline_response_201:
+      example:
+        Id: Id
+        Warnings:
+        - Warnings
+        - Warnings
+      properties:
+        Id:
+          description: The ID of the created container
+          nullable: false
+          type: string
+        Warnings:
+          description: Warnings encountered when creating the container
+          items:
+            type: string
+          nullable: false
+          type: array
+      required:
+      - Id
+      - Warnings
+    inline_response_200:
       example:
         Processes:
         - - Processes
@@ -9316,7 +9251,7 @@ components:
               type: string
             type: array
           type: array
-    inline_response_200_2:
+    inline_response_200_1:
       example:
         Path: Path
         Kind: 0
@@ -9333,7 +9268,7 @@ components:
       required:
       - Kind
       - Path
-    inline_response_200_3:
+    inline_response_200_2:
       example:
         Warnings:
         - Warnings
@@ -9343,7 +9278,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_4:
+    inline_response_200_3:
       example:
         StatusCode: 0
       properties:
@@ -9363,7 +9298,7 @@ components:
             but exists as a file).
           nullable: false
           type: string
-    inline_response_200_5:
+    inline_response_200_4:
       example:
         SpaceReclaimed: 0
         ContainersDeleted:
@@ -9379,7 +9314,7 @@ components:
           description: Disk space reclaimed in bytes
           format: int64
           type: integer
-    inline_response_200_6:
+    inline_response_200_5:
       example:
         Comment: Comment
         CreatedBy: CreatedBy
@@ -9418,7 +9353,7 @@ components:
       - Id
       - Size
       - Tags
-    inline_response_200_7:
+    inline_response_200_6:
       example:
         is_official: true
         is_automated: true
@@ -9436,7 +9371,7 @@ components:
           type: string
         star_count:
           type: integer
-    inline_response_200_8:
+    inline_response_200_7:
       example:
         SpaceReclaimed: 0
         ImagesDeleted:
@@ -9454,7 +9389,7 @@ components:
           description: Disk space reclaimed in bytes
           format: int64
           type: integer
-    inline_response_200_9:
+    inline_response_200_8:
       example:
         Status: Status
         IdentityToken: IdentityToken
@@ -9470,7 +9405,7 @@ components:
           type: string
       required:
       - Status
-    inline_response_200_10_Plugins:
+    inline_response_200_9_Plugins:
       example:
         Volume:
         - Volume
@@ -9494,7 +9429,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_10_RegistryConfig_IndexConfigs:
+    inline_response_200_9_RegistryConfig_IndexConfigs:
       example:
         Official: true
         Secure: true
@@ -9513,7 +9448,7 @@ components:
           type: boolean
         Secure:
           type: boolean
-    inline_response_200_10_RegistryConfig:
+    inline_response_200_9_RegistryConfig:
       example:
         InsecureRegistryCIDRs:
         - InsecureRegistryCIDRs
@@ -9529,13 +9464,13 @@ components:
       properties:
         IndexConfigs:
           additionalProperties:
-            $ref: '#/components/schemas/inline_response_200_10_RegistryConfig_IndexConfigs'
+            $ref: '#/components/schemas/inline_response_200_9_RegistryConfig_IndexConfigs'
           type: object
         InsecureRegistryCIDRs:
           items:
             type: string
           type: array
-    inline_response_200_10:
+    inline_response_200_9:
       example:
         OperatingSystem: OperatingSystem
         RegistryConfig:
@@ -9644,7 +9579,7 @@ components:
             type: array
           type: array
         Plugins:
-          $ref: '#/components/schemas/inline_response_200_10_Plugins'
+          $ref: '#/components/schemas/inline_response_200_9_Plugins'
         ExperimentalBuild:
           type: boolean
         HttpProxy:
@@ -9694,14 +9629,14 @@ components:
         OperatingSystem:
           type: string
         RegistryConfig:
-          $ref: '#/components/schemas/inline_response_200_10_RegistryConfig'
+          $ref: '#/components/schemas/inline_response_200_9_RegistryConfig'
         SwapLimit:
           type: boolean
         SystemTime:
           type: string
         ServerVersion:
           type: string
-    inline_response_200_11:
+    inline_response_200_10:
       example:
         KernelVersion: KernelVersion
         ApiVersion: ApiVersion
@@ -9734,7 +9669,7 @@ components:
           type: boolean
         BuildTime:
           type: string
-    inline_response_200_12_Actor:
+    inline_response_200_11_Actor:
       example:
         Attributes:
           key: Attributes
@@ -9749,7 +9684,7 @@ components:
           description: Various key/value attributes of the object, depending on its
             type
           type: object
-    inline_response_200_12:
+    inline_response_200_11:
       example:
         Type: Type
         Action: Action
@@ -9767,7 +9702,7 @@ components:
           description: The type of event
           type: string
         Actor:
-          $ref: '#/components/schemas/inline_response_200_12_Actor'
+          $ref: '#/components/schemas/inline_response_200_11_Actor'
         time:
           description: Timestamp of event
           type: integer
@@ -9775,7 +9710,7 @@ components:
           description: Timestamp of event, with nanosecond accuracy
           format: int64
           type: integer
-    inline_response_200_13:
+    inline_response_200_12:
       example: '{LayersSize=1092588, Images=[{Id=sha256:2b8fd9751c4c0f5dd266fcae00707e67a2545ef34f9a29354585f93dac906749,
         ParentId=, RepoTags=[busybox:latest], RepoDigests=[busybox@sha256:a59906e33509d14c036c8678d687bd4eec81ed7c4b8ce907b888c607f6a1e0e6],
         Created=1466724217, Size=1092588, SharedSize=0, VirtualSize=1092588, Labels={},
@@ -9867,7 +9802,7 @@ components:
           description: Allocate a pseudo-TTY.
           type: boolean
       type: object
-    inline_response_200_14:
+    inline_response_200_13:
       example:
         ProcessConfig:
           privileged: true
@@ -9905,7 +9840,7 @@ components:
         Pid:
           description: The system process ID for the exec process.
           type: integer
-    inline_response_200_15:
+    inline_response_200_14:
       example:
         Volumes:
         - Name: tardis
@@ -9975,7 +9910,7 @@ components:
           description: User-defined key/value metadata.
           type: object
       type: object
-    inline_response_200_16:
+    inline_response_200_15:
       example:
         SpaceReclaimed: 0
         VolumesDeleted:
@@ -10097,7 +10032,7 @@ components:
           description: Force the container to disconnect from the network.
           type: boolean
       type: object
-    inline_response_200_17:
+    inline_response_200_16:
       example:
         NetworksDeleted:
         - NetworksDeleted
@@ -10108,7 +10043,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_18:
+    inline_response_200_17:
       description: Describes a permission the user has to accept upon installing the
         plugin.
       properties:
@@ -10138,7 +10073,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_19_JoinTokens:
+    inline_response_200_18_JoinTokens:
       description: The tokens workers and managers need to join the swarm.
       properties:
         Worker:
@@ -10147,7 +10082,7 @@ components:
         Manager:
           description: The token managers can use to join the swarm.
           type: string
-    inline_response_200_19:
+    inline_response_200_18:
       example: |-
         {CreatedAt=2016-08-15T16:00:20.349727406Z, Spec={Dispatcher={HeartbeatPeriod=5000000000}, Orchestration={TaskHistoryRetentionLimit=10}, CAConfig={NodeCertExpiry=7776000000000000}, Raft={LogEntriesForSlowFollowers=500, HeartbeatTick=1, SnapshotInterval=10000, ElectionTick=3}, TaskDefaults={}, EncryptionConfig={AutoLockManagers=false}, Name=default}, JoinTokens={Worker=SWMTKN-1-1h8aps2yszaiqmz2l3oc5392pgk8e49qhx2aj3nyv0ui0hez2a-6qmn92w6bu3jdvnglku58u11a, Manager=SWMTKN-1-1h8aps2yszaiqmz2l3oc5392pgk8e49qhx2aj3nyv0ui0hez2a-8llk83c4wm9lwioey2s316r9l}, ID=70ilmkj2f6sp2137c753w2nmt, UpdatedAt=2016-08-15T16:32:09.623207604Z, Version={Index=51}, RootRotationInProgress=false, TLSInfo={TrustRoot=-----BEGIN CERTIFICATE-----
         MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
@@ -10164,7 +10099,7 @@ components:
         ClusterInfo:
           $ref: '#/components/schemas/ClusterInfo'
         JoinTokens:
-          $ref: '#/components/schemas/inline_response_200_19_JoinTokens'
+          $ref: '#/components/schemas/inline_response_200_18_JoinTokens'
     inline_object_6:
       example:
         ListenAddr: 0.0.0.0:2377
@@ -10247,7 +10182,7 @@ components:
           description: Secret token for joining this swarm.
           type: string
       type: object
-    inline_response_200_20:
+    inline_response_200_19:
       example: '{UnlockKey=SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8}'
       properties:
         UnlockKey:
@@ -10283,7 +10218,7 @@ components:
         ID:
           description: The ID of the created config.
           type: string
-    inline_response_200_21_Descriptor:
+    inline_response_200_20_Descriptor:
       description: A descriptor struct containing digest, media type, and size
       example:
         URLs:
@@ -10304,7 +10239,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_21_Platforms:
+    inline_response_200_20_Platforms:
       example:
         OSFeatures:
         - OSFeatures
@@ -10333,7 +10268,7 @@ components:
           items:
             type: string
           type: array
-    inline_response_200_21:
+    inline_response_200_20:
       example:
         Platforms:
         - OSFeatures:
@@ -10365,11 +10300,11 @@ components:
           MediaType: MediaType
       properties:
         Descriptor:
-          $ref: '#/components/schemas/inline_response_200_21_Descriptor'
+          $ref: '#/components/schemas/inline_response_200_20_Descriptor'
         Platforms:
           description: An array containing all platforms supported by the image
           items:
-            $ref: '#/components/schemas/inline_response_200_21_Platforms'
+            $ref: '#/components/schemas/inline_response_200_20_Platforms'
           type: array
       required:
       - Descriptor
@@ -11730,3 +11665,69 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/EndpointSettings'
           type: object
+    InspectResponse_State:
+      description: The state of the container.
+      example:
+        Status: created
+        Restarting: true
+        Dead: true
+        ExitCode: 6
+        Running: true
+        Error: Error
+        FinishedAt: FinishedAt
+        OOMKilled: true
+        Pid: 0
+        StartedAt: StartedAt
+        Paused: true
+      properties:
+        Status:
+          description: |
+            The status of the container. For example, `"running"` or `"exited"`.
+          enum:
+          - created
+          - running
+          - paused
+          - restarting
+          - removing
+          - exited
+          - dead
+          type: string
+        Running:
+          description: |
+            Whether this container is running.
+
+            Note that a running container can be _paused_. The `Running` and `Paused`
+            booleans are not mutually exclusive:
+
+            When pausing a container (on Linux), the cgroups freezer is used to suspend
+            all processes in the container. Freezing the process requires the process to
+            be running. As a result, paused containers are both `Running` _and_ `Paused`.
+
+            Use the `Status` field instead to determine if a container's state is "running".
+          type: boolean
+        Paused:
+          description: Whether this container is paused.
+          type: boolean
+        Restarting:
+          description: Whether this container is restarting.
+          type: boolean
+        OOMKilled:
+          description: Whether this container has been killed because it ran out of
+            memory.
+          type: boolean
+        Dead:
+          type: boolean
+        Pid:
+          description: The process ID of this container
+          type: integer
+        ExitCode:
+          description: The last exit code of this container
+          type: integer
+        Error:
+          type: string
+        StartedAt:
+          description: The time when this container was last started.
+          type: string
+        FinishedAt:
+          description: The time when this container last exited.
+          type: string

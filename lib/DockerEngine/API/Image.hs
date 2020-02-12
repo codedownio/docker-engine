@@ -394,7 +394,7 @@ instance Produces ImageGetAll MimeXTar
 -- 
 imageHistory 
   :: Name -- ^ "name" -  Image name or ID
-  -> DockerEngineRequest ImageHistory MimeNoContent [InlineResponse2006] MimeJSON
+  -> DockerEngineRequest ImageHistory MimeNoContent [InlineResponse2005] MimeJSON
 imageHistory (Name name) =
   _mkRequest "GET" ["/images/",toPath name,"/history"]
 
@@ -495,7 +495,7 @@ instance Produces ImageLoad MimeJSON
 -- Delete unused images
 -- 
 imagePrune 
-  :: DockerEngineRequest ImagePrune MimeNoContent InlineResponse2008 MimeJSON
+  :: DockerEngineRequest ImagePrune MimeNoContent InlineResponse2007 MimeJSON
 imagePrune =
   _mkRequest "POST" ["/images/prune"]
 
@@ -550,7 +550,7 @@ instance Produces ImagePush MimePlainText
 -- 
 imageSearch 
   :: Term -- ^ "term" -  Term to search
-  -> DockerEngineRequest ImageSearch MimeNoContent [InlineResponse2007] MimeJSON
+  -> DockerEngineRequest ImageSearch MimeNoContent [InlineResponse2006] MimeJSON
 imageSearch (Term term) =
   _mkRequest "GET" ["/images/search"]
     `setQuery` toQuery ("term", Just term)

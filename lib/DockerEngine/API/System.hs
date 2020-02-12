@@ -67,7 +67,7 @@ import qualified Prelude as P
 -- 
 systemAuth 
   :: (Consumes SystemAuth MimeJSON)
-  => DockerEngineRequest SystemAuth MimeJSON InlineResponse2009 MimeJSON
+  => DockerEngineRequest SystemAuth MimeJSON InlineResponse2008 MimeJSON
 systemAuth =
   _mkRequest "POST" ["/auth"]
 
@@ -91,7 +91,7 @@ instance Produces SystemAuth MimeJSON
 -- 
 systemDataUsage 
   :: Accept accept -- ^ request accept ('MimeType')
-  -> DockerEngineRequest SystemDataUsage MimeNoContent InlineResponse20013 accept
+  -> DockerEngineRequest SystemDataUsage MimeNoContent InlineResponse20012 accept
 systemDataUsage  _ =
   _mkRequest "GET" ["/system/df"]
 
@@ -111,7 +111,7 @@ instance Produces SystemDataUsage MimePlainText
 -- Stream real-time events from the server.  Various objects within Docker report events when something happens to them.  Containers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, and `update`  Images report these events: `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, and `untag`  Volumes report these events: `create`, `mount`, `unmount`, and `destroy`  Networks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, and `remove`  The Docker daemon reports these events: `reload`  Services report these events: `create`, `update`, and `remove`  Nodes report these events: `create`, `update`, and `remove`  Secrets report these events: `create`, `update`, and `remove` 
 -- 
 systemEvents 
-  :: DockerEngineRequest SystemEvents MimeNoContent InlineResponse20012 MimeJSON
+  :: DockerEngineRequest SystemEvents MimeNoContent InlineResponse20011 MimeJSON
 systemEvents =
   _mkRequest "GET" ["/events"]
 
@@ -142,7 +142,7 @@ instance Produces SystemEvents MimeJSON
 -- Get system information
 -- 
 systemInfo 
-  :: DockerEngineRequest SystemInfo MimeNoContent InlineResponse20010 MimeJSON
+  :: DockerEngineRequest SystemInfo MimeNoContent InlineResponse2009 MimeJSON
 systemInfo =
   _mkRequest "GET" ["/info"]
 
@@ -178,7 +178,7 @@ instance Produces SystemPing MimePlainText
 -- Returns the version of Docker that is running and various information about the system that Docker is running on.
 -- 
 systemVersion 
-  :: DockerEngineRequest SystemVersion MimeNoContent InlineResponse20011 MimeJSON
+  :: DockerEngineRequest SystemVersion MimeNoContent InlineResponse20010 MimeJSON
 systemVersion =
   _mkRequest "GET" ["/version"]
 

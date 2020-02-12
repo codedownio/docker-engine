@@ -225,7 +225,7 @@ instance Produces ContainerAttachWebsocket MimePlainText
 -- 
 containerChanges 
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerChanges MimeNoContent [InlineResponse2002] MimeJSON
+  -> DockerEngineRequest ContainerChanges MimeNoContent [InlineResponse2001] MimeJSON
 containerChanges (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/changes"]
 
@@ -339,7 +339,7 @@ instance Produces ContainerExport MimeJSON
 -- 
 containerInspect 
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerInspect MimeNoContent InlineResponse200 MimeJSON
+  -> DockerEngineRequest ContainerInspect MimeNoContent InspectResponse MimeJSON
 containerInspect (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/json"]
 
@@ -389,7 +389,7 @@ instance Produces ContainerKill MimePlainText
 -- List containers
 -- 
 containerList 
-  :: DockerEngineRequest ContainerList MimeNoContent [A.Value] MimeJSON
+  :: DockerEngineRequest ContainerList MimeNoContent ContainerSummary MimeJSON
 containerList =
   _mkRequest "GET" ["/containers/json"]
 
@@ -501,7 +501,7 @@ instance Produces ContainerPause MimePlainText
 -- Delete stopped containers
 -- 
 containerPrune 
-  :: DockerEngineRequest ContainerPrune MimeNoContent InlineResponse2005 MimeJSON
+  :: DockerEngineRequest ContainerPrune MimeNoContent InlineResponse2004 MimeJSON
 containerPrune =
   _mkRequest "POST" ["/containers/prune"]
 
@@ -689,7 +689,7 @@ instance Produces ContainerStop MimePlainText
 containerTop 
   :: Accept accept -- ^ request accept ('MimeType')
   -> Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerTop MimeNoContent InlineResponse2001 accept
+  -> DockerEngineRequest ContainerTop MimeNoContent InlineResponse200 accept
 containerTop  _ (Id id) =
   _mkRequest "GET" ["/containers/",toPath id,"/top"]
 
@@ -741,7 +741,7 @@ containerUpdate
   :: (Consumes ContainerUpdate MimeJSON, MimeRender MimeJSON Resources)
   => Resources -- ^ "update"
   -> Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerUpdate MimeJSON InlineResponse2003 MimeJSON
+  -> DockerEngineRequest ContainerUpdate MimeJSON InlineResponse2002 MimeJSON
 containerUpdate update (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/update"]
     `setBodyParam` update
@@ -766,7 +766,7 @@ instance Produces ContainerUpdate MimeJSON
 -- 
 containerWait 
   :: Id -- ^ "id" -  ID or name of the container
-  -> DockerEngineRequest ContainerWait MimeNoContent InlineResponse2004 MimeJSON
+  -> DockerEngineRequest ContainerWait MimeNoContent InlineResponse2003 MimeJSON
 containerWait (Id id) =
   _mkRequest "POST" ["/containers/",toPath id,"/wait"]
 

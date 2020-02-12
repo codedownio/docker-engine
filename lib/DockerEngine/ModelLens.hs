@@ -1594,941 +1594,753 @@ inlineObject8UnlockKeyL f InlineObject8{..} = (\inlineObject8UnlockKey -> Inline
 
 -- * InlineResponse200
 
--- | 'inlineResponse200Id' Lens
-inlineResponse200IdL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200IdL f InlineResponse200{..} = (\inlineResponse200Id -> InlineResponse200 { inlineResponse200Id, ..} ) <$> f inlineResponse200Id
-{-# INLINE inlineResponse200IdL #-}
+-- | 'inlineResponse200Titles' Lens
+inlineResponse200TitlesL :: Lens_' InlineResponse200 (Maybe [Text])
+inlineResponse200TitlesL f InlineResponse200{..} = (\inlineResponse200Titles -> InlineResponse200 { inlineResponse200Titles, ..} ) <$> f inlineResponse200Titles
+{-# INLINE inlineResponse200TitlesL #-}
 
--- | 'inlineResponse200Created' Lens
-inlineResponse200CreatedL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200CreatedL f InlineResponse200{..} = (\inlineResponse200Created -> InlineResponse200 { inlineResponse200Created, ..} ) <$> f inlineResponse200Created
-{-# INLINE inlineResponse200CreatedL #-}
-
--- | 'inlineResponse200Path' Lens
-inlineResponse200PathL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200PathL f InlineResponse200{..} = (\inlineResponse200Path -> InlineResponse200 { inlineResponse200Path, ..} ) <$> f inlineResponse200Path
-{-# INLINE inlineResponse200PathL #-}
-
--- | 'inlineResponse200Args' Lens
-inlineResponse200ArgsL :: Lens_' InlineResponse200 (Maybe [Text])
-inlineResponse200ArgsL f InlineResponse200{..} = (\inlineResponse200Args -> InlineResponse200 { inlineResponse200Args, ..} ) <$> f inlineResponse200Args
-{-# INLINE inlineResponse200ArgsL #-}
-
--- | 'inlineResponse200State' Lens
-inlineResponse200StateL :: Lens_' InlineResponse200 (Maybe InlineResponse200State)
-inlineResponse200StateL f InlineResponse200{..} = (\inlineResponse200State -> InlineResponse200 { inlineResponse200State, ..} ) <$> f inlineResponse200State
-{-# INLINE inlineResponse200StateL #-}
-
--- | 'inlineResponse200Image' Lens
-inlineResponse200ImageL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200ImageL f InlineResponse200{..} = (\inlineResponse200Image -> InlineResponse200 { inlineResponse200Image, ..} ) <$> f inlineResponse200Image
-{-# INLINE inlineResponse200ImageL #-}
-
--- | 'inlineResponse200ResolvConfPath' Lens
-inlineResponse200ResolvConfPathL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200ResolvConfPathL f InlineResponse200{..} = (\inlineResponse200ResolvConfPath -> InlineResponse200 { inlineResponse200ResolvConfPath, ..} ) <$> f inlineResponse200ResolvConfPath
-{-# INLINE inlineResponse200ResolvConfPathL #-}
-
--- | 'inlineResponse200HostnamePath' Lens
-inlineResponse200HostnamePathL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200HostnamePathL f InlineResponse200{..} = (\inlineResponse200HostnamePath -> InlineResponse200 { inlineResponse200HostnamePath, ..} ) <$> f inlineResponse200HostnamePath
-{-# INLINE inlineResponse200HostnamePathL #-}
-
--- | 'inlineResponse200HostsPath' Lens
-inlineResponse200HostsPathL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200HostsPathL f InlineResponse200{..} = (\inlineResponse200HostsPath -> InlineResponse200 { inlineResponse200HostsPath, ..} ) <$> f inlineResponse200HostsPath
-{-# INLINE inlineResponse200HostsPathL #-}
-
--- | 'inlineResponse200LogPath' Lens
-inlineResponse200LogPathL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200LogPathL f InlineResponse200{..} = (\inlineResponse200LogPath -> InlineResponse200 { inlineResponse200LogPath, ..} ) <$> f inlineResponse200LogPath
-{-# INLINE inlineResponse200LogPathL #-}
-
--- | 'inlineResponse200Node' Lens
-inlineResponse200NodeL :: Lens_' InlineResponse200 (Maybe A.Value)
-inlineResponse200NodeL f InlineResponse200{..} = (\inlineResponse200Node -> InlineResponse200 { inlineResponse200Node, ..} ) <$> f inlineResponse200Node
-{-# INLINE inlineResponse200NodeL #-}
-
--- | 'inlineResponse200Name' Lens
-inlineResponse200NameL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200NameL f InlineResponse200{..} = (\inlineResponse200Name -> InlineResponse200 { inlineResponse200Name, ..} ) <$> f inlineResponse200Name
-{-# INLINE inlineResponse200NameL #-}
-
--- | 'inlineResponse200RestartCount' Lens
-inlineResponse200RestartCountL :: Lens_' InlineResponse200 (Maybe Int)
-inlineResponse200RestartCountL f InlineResponse200{..} = (\inlineResponse200RestartCount -> InlineResponse200 { inlineResponse200RestartCount, ..} ) <$> f inlineResponse200RestartCount
-{-# INLINE inlineResponse200RestartCountL #-}
-
--- | 'inlineResponse200Driver' Lens
-inlineResponse200DriverL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200DriverL f InlineResponse200{..} = (\inlineResponse200Driver -> InlineResponse200 { inlineResponse200Driver, ..} ) <$> f inlineResponse200Driver
-{-# INLINE inlineResponse200DriverL #-}
-
--- | 'inlineResponse200MountLabel' Lens
-inlineResponse200MountLabelL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200MountLabelL f InlineResponse200{..} = (\inlineResponse200MountLabel -> InlineResponse200 { inlineResponse200MountLabel, ..} ) <$> f inlineResponse200MountLabel
-{-# INLINE inlineResponse200MountLabelL #-}
-
--- | 'inlineResponse200ProcessLabel' Lens
-inlineResponse200ProcessLabelL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200ProcessLabelL f InlineResponse200{..} = (\inlineResponse200ProcessLabel -> InlineResponse200 { inlineResponse200ProcessLabel, ..} ) <$> f inlineResponse200ProcessLabel
-{-# INLINE inlineResponse200ProcessLabelL #-}
-
--- | 'inlineResponse200AppArmorProfile' Lens
-inlineResponse200AppArmorProfileL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200AppArmorProfileL f InlineResponse200{..} = (\inlineResponse200AppArmorProfile -> InlineResponse200 { inlineResponse200AppArmorProfile, ..} ) <$> f inlineResponse200AppArmorProfile
-{-# INLINE inlineResponse200AppArmorProfileL #-}
-
--- | 'inlineResponse200ExecIDs' Lens
-inlineResponse200ExecIDsL :: Lens_' InlineResponse200 (Maybe Text)
-inlineResponse200ExecIDsL f InlineResponse200{..} = (\inlineResponse200ExecIDs -> InlineResponse200 { inlineResponse200ExecIDs, ..} ) <$> f inlineResponse200ExecIDs
-{-# INLINE inlineResponse200ExecIDsL #-}
-
--- | 'inlineResponse200HostConfig' Lens
-inlineResponse200HostConfigL :: Lens_' InlineResponse200 (Maybe HostConfig)
-inlineResponse200HostConfigL f InlineResponse200{..} = (\inlineResponse200HostConfig -> InlineResponse200 { inlineResponse200HostConfig, ..} ) <$> f inlineResponse200HostConfig
-{-# INLINE inlineResponse200HostConfigL #-}
-
--- | 'inlineResponse200GraphDriver' Lens
-inlineResponse200GraphDriverL :: Lens_' InlineResponse200 (Maybe GraphDriverData)
-inlineResponse200GraphDriverL f InlineResponse200{..} = (\inlineResponse200GraphDriver -> InlineResponse200 { inlineResponse200GraphDriver, ..} ) <$> f inlineResponse200GraphDriver
-{-# INLINE inlineResponse200GraphDriverL #-}
-
--- | 'inlineResponse200SizeRw' Lens
-inlineResponse200SizeRwL :: Lens_' InlineResponse200 (Maybe Integer)
-inlineResponse200SizeRwL f InlineResponse200{..} = (\inlineResponse200SizeRw -> InlineResponse200 { inlineResponse200SizeRw, ..} ) <$> f inlineResponse200SizeRw
-{-# INLINE inlineResponse200SizeRwL #-}
-
--- | 'inlineResponse200SizeRootFs' Lens
-inlineResponse200SizeRootFsL :: Lens_' InlineResponse200 (Maybe Integer)
-inlineResponse200SizeRootFsL f InlineResponse200{..} = (\inlineResponse200SizeRootFs -> InlineResponse200 { inlineResponse200SizeRootFs, ..} ) <$> f inlineResponse200SizeRootFs
-{-# INLINE inlineResponse200SizeRootFsL #-}
-
--- | 'inlineResponse200Mounts' Lens
-inlineResponse200MountsL :: Lens_' InlineResponse200 (Maybe [MountPoint])
-inlineResponse200MountsL f InlineResponse200{..} = (\inlineResponse200Mounts -> InlineResponse200 { inlineResponse200Mounts, ..} ) <$> f inlineResponse200Mounts
-{-# INLINE inlineResponse200MountsL #-}
-
--- | 'inlineResponse200Config' Lens
-inlineResponse200ConfigL :: Lens_' InlineResponse200 (Maybe ContainerConfig)
-inlineResponse200ConfigL f InlineResponse200{..} = (\inlineResponse200Config -> InlineResponse200 { inlineResponse200Config, ..} ) <$> f inlineResponse200Config
-{-# INLINE inlineResponse200ConfigL #-}
-
--- | 'inlineResponse200NetworkSettings' Lens
-inlineResponse200NetworkSettingsL :: Lens_' InlineResponse200 (Maybe NetworkConfig)
-inlineResponse200NetworkSettingsL f InlineResponse200{..} = (\inlineResponse200NetworkSettings -> InlineResponse200 { inlineResponse200NetworkSettings, ..} ) <$> f inlineResponse200NetworkSettings
-{-# INLINE inlineResponse200NetworkSettingsL #-}
+-- | 'inlineResponse200Processes' Lens
+inlineResponse200ProcessesL :: Lens_' InlineResponse200 (Maybe [[Text]])
+inlineResponse200ProcessesL f InlineResponse200{..} = (\inlineResponse200Processes -> InlineResponse200 { inlineResponse200Processes, ..} ) <$> f inlineResponse200Processes
+{-# INLINE inlineResponse200ProcessesL #-}
 
 
 
 -- * InlineResponse2001
 
--- | 'inlineResponse2001Titles' Lens
-inlineResponse2001TitlesL :: Lens_' InlineResponse2001 (Maybe [Text])
-inlineResponse2001TitlesL f InlineResponse2001{..} = (\inlineResponse2001Titles -> InlineResponse2001 { inlineResponse2001Titles, ..} ) <$> f inlineResponse2001Titles
-{-# INLINE inlineResponse2001TitlesL #-}
+-- | 'inlineResponse2001Path' Lens
+inlineResponse2001PathL :: Lens_' InlineResponse2001 (Text)
+inlineResponse2001PathL f InlineResponse2001{..} = (\inlineResponse2001Path -> InlineResponse2001 { inlineResponse2001Path, ..} ) <$> f inlineResponse2001Path
+{-# INLINE inlineResponse2001PathL #-}
 
--- | 'inlineResponse2001Processes' Lens
-inlineResponse2001ProcessesL :: Lens_' InlineResponse2001 (Maybe [[Text]])
-inlineResponse2001ProcessesL f InlineResponse2001{..} = (\inlineResponse2001Processes -> InlineResponse2001 { inlineResponse2001Processes, ..} ) <$> f inlineResponse2001Processes
-{-# INLINE inlineResponse2001ProcessesL #-}
+-- | 'inlineResponse2001Kind' Lens
+inlineResponse2001KindL :: Lens_' InlineResponse2001 (Int)
+inlineResponse2001KindL f InlineResponse2001{..} = (\inlineResponse2001Kind -> InlineResponse2001 { inlineResponse2001Kind, ..} ) <$> f inlineResponse2001Kind
+{-# INLINE inlineResponse2001KindL #-}
 
 
 
 -- * InlineResponse20010
 
--- | 'inlineResponse20010Architecture' Lens
-inlineResponse20010ArchitectureL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010ArchitectureL f InlineResponse20010{..} = (\inlineResponse20010Architecture -> InlineResponse20010 { inlineResponse20010Architecture, ..} ) <$> f inlineResponse20010Architecture
-{-# INLINE inlineResponse20010ArchitectureL #-}
+-- | 'inlineResponse20010Version' Lens
+inlineResponse20010VersionL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010VersionL f InlineResponse20010{..} = (\inlineResponse20010Version -> InlineResponse20010 { inlineResponse20010Version, ..} ) <$> f inlineResponse20010Version
+{-# INLINE inlineResponse20010VersionL #-}
 
--- | 'inlineResponse20010Containers' Lens
-inlineResponse20010ContainersL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010ContainersL f InlineResponse20010{..} = (\inlineResponse20010Containers -> InlineResponse20010 { inlineResponse20010Containers, ..} ) <$> f inlineResponse20010Containers
-{-# INLINE inlineResponse20010ContainersL #-}
+-- | 'inlineResponse20010ApiVersion' Lens
+inlineResponse20010ApiVersionL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010ApiVersionL f InlineResponse20010{..} = (\inlineResponse20010ApiVersion -> InlineResponse20010 { inlineResponse20010ApiVersion, ..} ) <$> f inlineResponse20010ApiVersion
+{-# INLINE inlineResponse20010ApiVersionL #-}
 
--- | 'inlineResponse20010ContainersRunning' Lens
-inlineResponse20010ContainersRunningL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010ContainersRunningL f InlineResponse20010{..} = (\inlineResponse20010ContainersRunning -> InlineResponse20010 { inlineResponse20010ContainersRunning, ..} ) <$> f inlineResponse20010ContainersRunning
-{-# INLINE inlineResponse20010ContainersRunningL #-}
+-- | 'inlineResponse20010MinApiVersion' Lens
+inlineResponse20010MinApiVersionL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010MinApiVersionL f InlineResponse20010{..} = (\inlineResponse20010MinApiVersion -> InlineResponse20010 { inlineResponse20010MinApiVersion, ..} ) <$> f inlineResponse20010MinApiVersion
+{-# INLINE inlineResponse20010MinApiVersionL #-}
 
--- | 'inlineResponse20010ContainersStopped' Lens
-inlineResponse20010ContainersStoppedL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010ContainersStoppedL f InlineResponse20010{..} = (\inlineResponse20010ContainersStopped -> InlineResponse20010 { inlineResponse20010ContainersStopped, ..} ) <$> f inlineResponse20010ContainersStopped
-{-# INLINE inlineResponse20010ContainersStoppedL #-}
+-- | 'inlineResponse20010GitCommit' Lens
+inlineResponse20010GitCommitL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010GitCommitL f InlineResponse20010{..} = (\inlineResponse20010GitCommit -> InlineResponse20010 { inlineResponse20010GitCommit, ..} ) <$> f inlineResponse20010GitCommit
+{-# INLINE inlineResponse20010GitCommitL #-}
 
--- | 'inlineResponse20010ContainersPaused' Lens
-inlineResponse20010ContainersPausedL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010ContainersPausedL f InlineResponse20010{..} = (\inlineResponse20010ContainersPaused -> InlineResponse20010 { inlineResponse20010ContainersPaused, ..} ) <$> f inlineResponse20010ContainersPaused
-{-# INLINE inlineResponse20010ContainersPausedL #-}
+-- | 'inlineResponse20010GoVersion' Lens
+inlineResponse20010GoVersionL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010GoVersionL f InlineResponse20010{..} = (\inlineResponse20010GoVersion -> InlineResponse20010 { inlineResponse20010GoVersion, ..} ) <$> f inlineResponse20010GoVersion
+{-# INLINE inlineResponse20010GoVersionL #-}
 
--- | 'inlineResponse20010CpuCfsPeriod' Lens
-inlineResponse20010CpuCfsPeriodL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010CpuCfsPeriodL f InlineResponse20010{..} = (\inlineResponse20010CpuCfsPeriod -> InlineResponse20010 { inlineResponse20010CpuCfsPeriod, ..} ) <$> f inlineResponse20010CpuCfsPeriod
-{-# INLINE inlineResponse20010CpuCfsPeriodL #-}
+-- | 'inlineResponse20010Os' Lens
+inlineResponse20010OsL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010OsL f InlineResponse20010{..} = (\inlineResponse20010Os -> InlineResponse20010 { inlineResponse20010Os, ..} ) <$> f inlineResponse20010Os
+{-# INLINE inlineResponse20010OsL #-}
 
--- | 'inlineResponse20010CpuCfsQuota' Lens
-inlineResponse20010CpuCfsQuotaL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010CpuCfsQuotaL f InlineResponse20010{..} = (\inlineResponse20010CpuCfsQuota -> InlineResponse20010 { inlineResponse20010CpuCfsQuota, ..} ) <$> f inlineResponse20010CpuCfsQuota
-{-# INLINE inlineResponse20010CpuCfsQuotaL #-}
-
--- | 'inlineResponse20010Debug' Lens
-inlineResponse20010DebugL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010DebugL f InlineResponse20010{..} = (\inlineResponse20010Debug -> InlineResponse20010 { inlineResponse20010Debug, ..} ) <$> f inlineResponse20010Debug
-{-# INLINE inlineResponse20010DebugL #-}
-
--- | 'inlineResponse20010DiscoveryBackend' Lens
-inlineResponse20010DiscoveryBackendL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010DiscoveryBackendL f InlineResponse20010{..} = (\inlineResponse20010DiscoveryBackend -> InlineResponse20010 { inlineResponse20010DiscoveryBackend, ..} ) <$> f inlineResponse20010DiscoveryBackend
-{-# INLINE inlineResponse20010DiscoveryBackendL #-}
-
--- | 'inlineResponse20010DockerRootDir' Lens
-inlineResponse20010DockerRootDirL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010DockerRootDirL f InlineResponse20010{..} = (\inlineResponse20010DockerRootDir -> InlineResponse20010 { inlineResponse20010DockerRootDir, ..} ) <$> f inlineResponse20010DockerRootDir
-{-# INLINE inlineResponse20010DockerRootDirL #-}
-
--- | 'inlineResponse20010Driver' Lens
-inlineResponse20010DriverL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010DriverL f InlineResponse20010{..} = (\inlineResponse20010Driver -> InlineResponse20010 { inlineResponse20010Driver, ..} ) <$> f inlineResponse20010Driver
-{-# INLINE inlineResponse20010DriverL #-}
-
--- | 'inlineResponse20010DriverStatus' Lens
-inlineResponse20010DriverStatusL :: Lens_' InlineResponse20010 (Maybe [[Text]])
-inlineResponse20010DriverStatusL f InlineResponse20010{..} = (\inlineResponse20010DriverStatus -> InlineResponse20010 { inlineResponse20010DriverStatus, ..} ) <$> f inlineResponse20010DriverStatus
-{-# INLINE inlineResponse20010DriverStatusL #-}
-
--- | 'inlineResponse20010SystemStatus' Lens
-inlineResponse20010SystemStatusL :: Lens_' InlineResponse20010 (Maybe [[Text]])
-inlineResponse20010SystemStatusL f InlineResponse20010{..} = (\inlineResponse20010SystemStatus -> InlineResponse20010 { inlineResponse20010SystemStatus, ..} ) <$> f inlineResponse20010SystemStatus
-{-# INLINE inlineResponse20010SystemStatusL #-}
-
--- | 'inlineResponse20010Plugins' Lens
-inlineResponse20010PluginsL :: Lens_' InlineResponse20010 (Maybe InlineResponse20010Plugins)
-inlineResponse20010PluginsL f InlineResponse20010{..} = (\inlineResponse20010Plugins -> InlineResponse20010 { inlineResponse20010Plugins, ..} ) <$> f inlineResponse20010Plugins
-{-# INLINE inlineResponse20010PluginsL #-}
-
--- | 'inlineResponse20010ExperimentalBuild' Lens
-inlineResponse20010ExperimentalBuildL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010ExperimentalBuildL f InlineResponse20010{..} = (\inlineResponse20010ExperimentalBuild -> InlineResponse20010 { inlineResponse20010ExperimentalBuild, ..} ) <$> f inlineResponse20010ExperimentalBuild
-{-# INLINE inlineResponse20010ExperimentalBuildL #-}
-
--- | 'inlineResponse20010HttpProxy' Lens
-inlineResponse20010HttpProxyL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010HttpProxyL f InlineResponse20010{..} = (\inlineResponse20010HttpProxy -> InlineResponse20010 { inlineResponse20010HttpProxy, ..} ) <$> f inlineResponse20010HttpProxy
-{-# INLINE inlineResponse20010HttpProxyL #-}
-
--- | 'inlineResponse20010HttpsProxy' Lens
-inlineResponse20010HttpsProxyL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010HttpsProxyL f InlineResponse20010{..} = (\inlineResponse20010HttpsProxy -> InlineResponse20010 { inlineResponse20010HttpsProxy, ..} ) <$> f inlineResponse20010HttpsProxy
-{-# INLINE inlineResponse20010HttpsProxyL #-}
-
--- | 'inlineResponse20010Id' Lens
-inlineResponse20010IdL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010IdL f InlineResponse20010{..} = (\inlineResponse20010Id -> InlineResponse20010 { inlineResponse20010Id, ..} ) <$> f inlineResponse20010Id
-{-# INLINE inlineResponse20010IdL #-}
-
--- | 'inlineResponse20010IPv4Forwarding' Lens
-inlineResponse20010IPv4ForwardingL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010IPv4ForwardingL f InlineResponse20010{..} = (\inlineResponse20010IPv4Forwarding -> InlineResponse20010 { inlineResponse20010IPv4Forwarding, ..} ) <$> f inlineResponse20010IPv4Forwarding
-{-# INLINE inlineResponse20010IPv4ForwardingL #-}
-
--- | 'inlineResponse20010Images' Lens
-inlineResponse20010ImagesL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010ImagesL f InlineResponse20010{..} = (\inlineResponse20010Images -> InlineResponse20010 { inlineResponse20010Images, ..} ) <$> f inlineResponse20010Images
-{-# INLINE inlineResponse20010ImagesL #-}
-
--- | 'inlineResponse20010IndexServerAddress' Lens
-inlineResponse20010IndexServerAddressL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010IndexServerAddressL f InlineResponse20010{..} = (\inlineResponse20010IndexServerAddress -> InlineResponse20010 { inlineResponse20010IndexServerAddress, ..} ) <$> f inlineResponse20010IndexServerAddress
-{-# INLINE inlineResponse20010IndexServerAddressL #-}
-
--- | 'inlineResponse20010InitPath' Lens
-inlineResponse20010InitPathL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010InitPathL f InlineResponse20010{..} = (\inlineResponse20010InitPath -> InlineResponse20010 { inlineResponse20010InitPath, ..} ) <$> f inlineResponse20010InitPath
-{-# INLINE inlineResponse20010InitPathL #-}
-
--- | 'inlineResponse20010InitSha1' Lens
-inlineResponse20010InitSha1L :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010InitSha1L f InlineResponse20010{..} = (\inlineResponse20010InitSha1 -> InlineResponse20010 { inlineResponse20010InitSha1, ..} ) <$> f inlineResponse20010InitSha1
-{-# INLINE inlineResponse20010InitSha1L #-}
+-- | 'inlineResponse20010Arch' Lens
+inlineResponse20010ArchL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010ArchL f InlineResponse20010{..} = (\inlineResponse20010Arch -> InlineResponse20010 { inlineResponse20010Arch, ..} ) <$> f inlineResponse20010Arch
+{-# INLINE inlineResponse20010ArchL #-}
 
 -- | 'inlineResponse20010KernelVersion' Lens
 inlineResponse20010KernelVersionL :: Lens_' InlineResponse20010 (Maybe Text)
 inlineResponse20010KernelVersionL f InlineResponse20010{..} = (\inlineResponse20010KernelVersion -> InlineResponse20010 { inlineResponse20010KernelVersion, ..} ) <$> f inlineResponse20010KernelVersion
 {-# INLINE inlineResponse20010KernelVersionL #-}
 
--- | 'inlineResponse20010Labels' Lens
-inlineResponse20010LabelsL :: Lens_' InlineResponse20010 (Maybe [Text])
-inlineResponse20010LabelsL f InlineResponse20010{..} = (\inlineResponse20010Labels -> InlineResponse20010 { inlineResponse20010Labels, ..} ) <$> f inlineResponse20010Labels
-{-# INLINE inlineResponse20010LabelsL #-}
+-- | 'inlineResponse20010Experimental' Lens
+inlineResponse20010ExperimentalL :: Lens_' InlineResponse20010 (Maybe Bool)
+inlineResponse20010ExperimentalL f InlineResponse20010{..} = (\inlineResponse20010Experimental -> InlineResponse20010 { inlineResponse20010Experimental, ..} ) <$> f inlineResponse20010Experimental
+{-# INLINE inlineResponse20010ExperimentalL #-}
 
--- | 'inlineResponse20010MemTotal' Lens
-inlineResponse20010MemTotalL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010MemTotalL f InlineResponse20010{..} = (\inlineResponse20010MemTotal -> InlineResponse20010 { inlineResponse20010MemTotal, ..} ) <$> f inlineResponse20010MemTotal
-{-# INLINE inlineResponse20010MemTotalL #-}
-
--- | 'inlineResponse20010MemoryLimit' Lens
-inlineResponse20010MemoryLimitL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010MemoryLimitL f InlineResponse20010{..} = (\inlineResponse20010MemoryLimit -> InlineResponse20010 { inlineResponse20010MemoryLimit, ..} ) <$> f inlineResponse20010MemoryLimit
-{-# INLINE inlineResponse20010MemoryLimitL #-}
-
--- | 'inlineResponse20010Ncpu' Lens
-inlineResponse20010NcpuL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010NcpuL f InlineResponse20010{..} = (\inlineResponse20010Ncpu -> InlineResponse20010 { inlineResponse20010Ncpu, ..} ) <$> f inlineResponse20010Ncpu
-{-# INLINE inlineResponse20010NcpuL #-}
-
--- | 'inlineResponse20010NEventsListener' Lens
-inlineResponse20010NEventsListenerL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010NEventsListenerL f InlineResponse20010{..} = (\inlineResponse20010NEventsListener -> InlineResponse20010 { inlineResponse20010NEventsListener, ..} ) <$> f inlineResponse20010NEventsListener
-{-# INLINE inlineResponse20010NEventsListenerL #-}
-
--- | 'inlineResponse20010NFd' Lens
-inlineResponse20010NFdL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010NFdL f InlineResponse20010{..} = (\inlineResponse20010NFd -> InlineResponse20010 { inlineResponse20010NFd, ..} ) <$> f inlineResponse20010NFd
-{-# INLINE inlineResponse20010NFdL #-}
-
--- | 'inlineResponse20010NGoroutines' Lens
-inlineResponse20010NGoroutinesL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010NGoroutinesL f InlineResponse20010{..} = (\inlineResponse20010NGoroutines -> InlineResponse20010 { inlineResponse20010NGoroutines, ..} ) <$> f inlineResponse20010NGoroutines
-{-# INLINE inlineResponse20010NGoroutinesL #-}
-
--- | 'inlineResponse20010Name' Lens
-inlineResponse20010NameL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010NameL f InlineResponse20010{..} = (\inlineResponse20010Name -> InlineResponse20010 { inlineResponse20010Name, ..} ) <$> f inlineResponse20010Name
-{-# INLINE inlineResponse20010NameL #-}
-
--- | 'inlineResponse20010NoProxy' Lens
-inlineResponse20010NoProxyL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010NoProxyL f InlineResponse20010{..} = (\inlineResponse20010NoProxy -> InlineResponse20010 { inlineResponse20010NoProxy, ..} ) <$> f inlineResponse20010NoProxy
-{-# INLINE inlineResponse20010NoProxyL #-}
-
--- | 'inlineResponse20010OomKillDisable' Lens
-inlineResponse20010OomKillDisableL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010OomKillDisableL f InlineResponse20010{..} = (\inlineResponse20010OomKillDisable -> InlineResponse20010 { inlineResponse20010OomKillDisable, ..} ) <$> f inlineResponse20010OomKillDisable
-{-# INLINE inlineResponse20010OomKillDisableL #-}
-
--- | 'inlineResponse20010OsType' Lens
-inlineResponse20010OsTypeL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010OsTypeL f InlineResponse20010{..} = (\inlineResponse20010OsType -> InlineResponse20010 { inlineResponse20010OsType, ..} ) <$> f inlineResponse20010OsType
-{-# INLINE inlineResponse20010OsTypeL #-}
-
--- | 'inlineResponse20010OomScoreAdj' Lens
-inlineResponse20010OomScoreAdjL :: Lens_' InlineResponse20010 (Maybe Int)
-inlineResponse20010OomScoreAdjL f InlineResponse20010{..} = (\inlineResponse20010OomScoreAdj -> InlineResponse20010 { inlineResponse20010OomScoreAdj, ..} ) <$> f inlineResponse20010OomScoreAdj
-{-# INLINE inlineResponse20010OomScoreAdjL #-}
-
--- | 'inlineResponse20010OperatingSystem' Lens
-inlineResponse20010OperatingSystemL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010OperatingSystemL f InlineResponse20010{..} = (\inlineResponse20010OperatingSystem -> InlineResponse20010 { inlineResponse20010OperatingSystem, ..} ) <$> f inlineResponse20010OperatingSystem
-{-# INLINE inlineResponse20010OperatingSystemL #-}
-
--- | 'inlineResponse20010RegistryConfig' Lens
-inlineResponse20010RegistryConfigL :: Lens_' InlineResponse20010 (Maybe InlineResponse20010RegistryConfig)
-inlineResponse20010RegistryConfigL f InlineResponse20010{..} = (\inlineResponse20010RegistryConfig -> InlineResponse20010 { inlineResponse20010RegistryConfig, ..} ) <$> f inlineResponse20010RegistryConfig
-{-# INLINE inlineResponse20010RegistryConfigL #-}
-
--- | 'inlineResponse20010SwapLimit' Lens
-inlineResponse20010SwapLimitL :: Lens_' InlineResponse20010 (Maybe Bool)
-inlineResponse20010SwapLimitL f InlineResponse20010{..} = (\inlineResponse20010SwapLimit -> InlineResponse20010 { inlineResponse20010SwapLimit, ..} ) <$> f inlineResponse20010SwapLimit
-{-# INLINE inlineResponse20010SwapLimitL #-}
-
--- | 'inlineResponse20010SystemTime' Lens
-inlineResponse20010SystemTimeL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010SystemTimeL f InlineResponse20010{..} = (\inlineResponse20010SystemTime -> InlineResponse20010 { inlineResponse20010SystemTime, ..} ) <$> f inlineResponse20010SystemTime
-{-# INLINE inlineResponse20010SystemTimeL #-}
-
--- | 'inlineResponse20010ServerVersion' Lens
-inlineResponse20010ServerVersionL :: Lens_' InlineResponse20010 (Maybe Text)
-inlineResponse20010ServerVersionL f InlineResponse20010{..} = (\inlineResponse20010ServerVersion -> InlineResponse20010 { inlineResponse20010ServerVersion, ..} ) <$> f inlineResponse20010ServerVersion
-{-# INLINE inlineResponse20010ServerVersionL #-}
-
-
-
--- * InlineResponse20010Plugins
-
--- | 'inlineResponse20010PluginsVolume' Lens
-inlineResponse20010PluginsVolumeL :: Lens_' InlineResponse20010Plugins (Maybe [Text])
-inlineResponse20010PluginsVolumeL f InlineResponse20010Plugins{..} = (\inlineResponse20010PluginsVolume -> InlineResponse20010Plugins { inlineResponse20010PluginsVolume, ..} ) <$> f inlineResponse20010PluginsVolume
-{-# INLINE inlineResponse20010PluginsVolumeL #-}
-
--- | 'inlineResponse20010PluginsNetwork' Lens
-inlineResponse20010PluginsNetworkL :: Lens_' InlineResponse20010Plugins (Maybe [Text])
-inlineResponse20010PluginsNetworkL f InlineResponse20010Plugins{..} = (\inlineResponse20010PluginsNetwork -> InlineResponse20010Plugins { inlineResponse20010PluginsNetwork, ..} ) <$> f inlineResponse20010PluginsNetwork
-{-# INLINE inlineResponse20010PluginsNetworkL #-}
-
--- | 'inlineResponse20010PluginsLog' Lens
-inlineResponse20010PluginsLogL :: Lens_' InlineResponse20010Plugins (Maybe [Text])
-inlineResponse20010PluginsLogL f InlineResponse20010Plugins{..} = (\inlineResponse20010PluginsLog -> InlineResponse20010Plugins { inlineResponse20010PluginsLog, ..} ) <$> f inlineResponse20010PluginsLog
-{-# INLINE inlineResponse20010PluginsLogL #-}
-
-
-
--- * InlineResponse20010RegistryConfig
-
--- | 'inlineResponse20010RegistryConfigIndexConfigs' Lens
-inlineResponse20010RegistryConfigIndexConfigsL :: Lens_' InlineResponse20010RegistryConfig (Maybe (Map.Map String InlineResponse20010RegistryConfigIndexConfigs))
-inlineResponse20010RegistryConfigIndexConfigsL f InlineResponse20010RegistryConfig{..} = (\inlineResponse20010RegistryConfigIndexConfigs -> InlineResponse20010RegistryConfig { inlineResponse20010RegistryConfigIndexConfigs, ..} ) <$> f inlineResponse20010RegistryConfigIndexConfigs
-{-# INLINE inlineResponse20010RegistryConfigIndexConfigsL #-}
-
--- | 'inlineResponse20010RegistryConfigInsecureRegistryCidRs' Lens
-inlineResponse20010RegistryConfigInsecureRegistryCidRsL :: Lens_' InlineResponse20010RegistryConfig (Maybe [Text])
-inlineResponse20010RegistryConfigInsecureRegistryCidRsL f InlineResponse20010RegistryConfig{..} = (\inlineResponse20010RegistryConfigInsecureRegistryCidRs -> InlineResponse20010RegistryConfig { inlineResponse20010RegistryConfigInsecureRegistryCidRs, ..} ) <$> f inlineResponse20010RegistryConfigInsecureRegistryCidRs
-{-# INLINE inlineResponse20010RegistryConfigInsecureRegistryCidRsL #-}
-
-
-
--- * InlineResponse20010RegistryConfigIndexConfigs
-
--- | 'inlineResponse20010RegistryConfigIndexConfigsMirrors' Lens
-inlineResponse20010RegistryConfigIndexConfigsMirrorsL :: Lens_' InlineResponse20010RegistryConfigIndexConfigs (Maybe [Text])
-inlineResponse20010RegistryConfigIndexConfigsMirrorsL f InlineResponse20010RegistryConfigIndexConfigs{..} = (\inlineResponse20010RegistryConfigIndexConfigsMirrors -> InlineResponse20010RegistryConfigIndexConfigs { inlineResponse20010RegistryConfigIndexConfigsMirrors, ..} ) <$> f inlineResponse20010RegistryConfigIndexConfigsMirrors
-{-# INLINE inlineResponse20010RegistryConfigIndexConfigsMirrorsL #-}
-
--- | 'inlineResponse20010RegistryConfigIndexConfigsName' Lens
-inlineResponse20010RegistryConfigIndexConfigsNameL :: Lens_' InlineResponse20010RegistryConfigIndexConfigs (Maybe Text)
-inlineResponse20010RegistryConfigIndexConfigsNameL f InlineResponse20010RegistryConfigIndexConfigs{..} = (\inlineResponse20010RegistryConfigIndexConfigsName -> InlineResponse20010RegistryConfigIndexConfigs { inlineResponse20010RegistryConfigIndexConfigsName, ..} ) <$> f inlineResponse20010RegistryConfigIndexConfigsName
-{-# INLINE inlineResponse20010RegistryConfigIndexConfigsNameL #-}
-
--- | 'inlineResponse20010RegistryConfigIndexConfigsOfficial' Lens
-inlineResponse20010RegistryConfigIndexConfigsOfficialL :: Lens_' InlineResponse20010RegistryConfigIndexConfigs (Maybe Bool)
-inlineResponse20010RegistryConfigIndexConfigsOfficialL f InlineResponse20010RegistryConfigIndexConfigs{..} = (\inlineResponse20010RegistryConfigIndexConfigsOfficial -> InlineResponse20010RegistryConfigIndexConfigs { inlineResponse20010RegistryConfigIndexConfigsOfficial, ..} ) <$> f inlineResponse20010RegistryConfigIndexConfigsOfficial
-{-# INLINE inlineResponse20010RegistryConfigIndexConfigsOfficialL #-}
-
--- | 'inlineResponse20010RegistryConfigIndexConfigsSecure' Lens
-inlineResponse20010RegistryConfigIndexConfigsSecureL :: Lens_' InlineResponse20010RegistryConfigIndexConfigs (Maybe Bool)
-inlineResponse20010RegistryConfigIndexConfigsSecureL f InlineResponse20010RegistryConfigIndexConfigs{..} = (\inlineResponse20010RegistryConfigIndexConfigsSecure -> InlineResponse20010RegistryConfigIndexConfigs { inlineResponse20010RegistryConfigIndexConfigsSecure, ..} ) <$> f inlineResponse20010RegistryConfigIndexConfigsSecure
-{-# INLINE inlineResponse20010RegistryConfigIndexConfigsSecureL #-}
+-- | 'inlineResponse20010BuildTime' Lens
+inlineResponse20010BuildTimeL :: Lens_' InlineResponse20010 (Maybe Text)
+inlineResponse20010BuildTimeL f InlineResponse20010{..} = (\inlineResponse20010BuildTime -> InlineResponse20010 { inlineResponse20010BuildTime, ..} ) <$> f inlineResponse20010BuildTime
+{-# INLINE inlineResponse20010BuildTimeL #-}
 
 
 
 -- * InlineResponse20011
 
--- | 'inlineResponse20011Version' Lens
-inlineResponse20011VersionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011VersionL f InlineResponse20011{..} = (\inlineResponse20011Version -> InlineResponse20011 { inlineResponse20011Version, ..} ) <$> f inlineResponse20011Version
-{-# INLINE inlineResponse20011VersionL #-}
+-- | 'inlineResponse20011Type' Lens
+inlineResponse20011TypeL :: Lens_' InlineResponse20011 (Maybe Text)
+inlineResponse20011TypeL f InlineResponse20011{..} = (\inlineResponse20011Type -> InlineResponse20011 { inlineResponse20011Type, ..} ) <$> f inlineResponse20011Type
+{-# INLINE inlineResponse20011TypeL #-}
 
--- | 'inlineResponse20011ApiVersion' Lens
-inlineResponse20011ApiVersionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011ApiVersionL f InlineResponse20011{..} = (\inlineResponse20011ApiVersion -> InlineResponse20011 { inlineResponse20011ApiVersion, ..} ) <$> f inlineResponse20011ApiVersion
-{-# INLINE inlineResponse20011ApiVersionL #-}
+-- | 'inlineResponse20011Action' Lens
+inlineResponse20011ActionL :: Lens_' InlineResponse20011 (Maybe Text)
+inlineResponse20011ActionL f InlineResponse20011{..} = (\inlineResponse20011Action -> InlineResponse20011 { inlineResponse20011Action, ..} ) <$> f inlineResponse20011Action
+{-# INLINE inlineResponse20011ActionL #-}
 
--- | 'inlineResponse20011MinApiVersion' Lens
-inlineResponse20011MinApiVersionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011MinApiVersionL f InlineResponse20011{..} = (\inlineResponse20011MinApiVersion -> InlineResponse20011 { inlineResponse20011MinApiVersion, ..} ) <$> f inlineResponse20011MinApiVersion
-{-# INLINE inlineResponse20011MinApiVersionL #-}
+-- | 'inlineResponse20011Actor' Lens
+inlineResponse20011ActorL :: Lens_' InlineResponse20011 (Maybe InlineResponse20011Actor)
+inlineResponse20011ActorL f InlineResponse20011{..} = (\inlineResponse20011Actor -> InlineResponse20011 { inlineResponse20011Actor, ..} ) <$> f inlineResponse20011Actor
+{-# INLINE inlineResponse20011ActorL #-}
 
--- | 'inlineResponse20011GitCommit' Lens
-inlineResponse20011GitCommitL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011GitCommitL f InlineResponse20011{..} = (\inlineResponse20011GitCommit -> InlineResponse20011 { inlineResponse20011GitCommit, ..} ) <$> f inlineResponse20011GitCommit
-{-# INLINE inlineResponse20011GitCommitL #-}
+-- | 'inlineResponse20011Time' Lens
+inlineResponse20011TimeL :: Lens_' InlineResponse20011 (Maybe Int)
+inlineResponse20011TimeL f InlineResponse20011{..} = (\inlineResponse20011Time -> InlineResponse20011 { inlineResponse20011Time, ..} ) <$> f inlineResponse20011Time
+{-# INLINE inlineResponse20011TimeL #-}
 
--- | 'inlineResponse20011GoVersion' Lens
-inlineResponse20011GoVersionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011GoVersionL f InlineResponse20011{..} = (\inlineResponse20011GoVersion -> InlineResponse20011 { inlineResponse20011GoVersion, ..} ) <$> f inlineResponse20011GoVersion
-{-# INLINE inlineResponse20011GoVersionL #-}
+-- | 'inlineResponse20011TimeNano' Lens
+inlineResponse20011TimeNanoL :: Lens_' InlineResponse20011 (Maybe Integer)
+inlineResponse20011TimeNanoL f InlineResponse20011{..} = (\inlineResponse20011TimeNano -> InlineResponse20011 { inlineResponse20011TimeNano, ..} ) <$> f inlineResponse20011TimeNano
+{-# INLINE inlineResponse20011TimeNanoL #-}
 
--- | 'inlineResponse20011Os' Lens
-inlineResponse20011OsL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011OsL f InlineResponse20011{..} = (\inlineResponse20011Os -> InlineResponse20011 { inlineResponse20011Os, ..} ) <$> f inlineResponse20011Os
-{-# INLINE inlineResponse20011OsL #-}
 
--- | 'inlineResponse20011Arch' Lens
-inlineResponse20011ArchL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011ArchL f InlineResponse20011{..} = (\inlineResponse20011Arch -> InlineResponse20011 { inlineResponse20011Arch, ..} ) <$> f inlineResponse20011Arch
-{-# INLINE inlineResponse20011ArchL #-}
 
--- | 'inlineResponse20011KernelVersion' Lens
-inlineResponse20011KernelVersionL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011KernelVersionL f InlineResponse20011{..} = (\inlineResponse20011KernelVersion -> InlineResponse20011 { inlineResponse20011KernelVersion, ..} ) <$> f inlineResponse20011KernelVersion
-{-# INLINE inlineResponse20011KernelVersionL #-}
+-- * InlineResponse20011Actor
 
--- | 'inlineResponse20011Experimental' Lens
-inlineResponse20011ExperimentalL :: Lens_' InlineResponse20011 (Maybe Bool)
-inlineResponse20011ExperimentalL f InlineResponse20011{..} = (\inlineResponse20011Experimental -> InlineResponse20011 { inlineResponse20011Experimental, ..} ) <$> f inlineResponse20011Experimental
-{-# INLINE inlineResponse20011ExperimentalL #-}
+-- | 'inlineResponse20011ActorId' Lens
+inlineResponse20011ActorIdL :: Lens_' InlineResponse20011Actor (Maybe Text)
+inlineResponse20011ActorIdL f InlineResponse20011Actor{..} = (\inlineResponse20011ActorId -> InlineResponse20011Actor { inlineResponse20011ActorId, ..} ) <$> f inlineResponse20011ActorId
+{-# INLINE inlineResponse20011ActorIdL #-}
 
--- | 'inlineResponse20011BuildTime' Lens
-inlineResponse20011BuildTimeL :: Lens_' InlineResponse20011 (Maybe Text)
-inlineResponse20011BuildTimeL f InlineResponse20011{..} = (\inlineResponse20011BuildTime -> InlineResponse20011 { inlineResponse20011BuildTime, ..} ) <$> f inlineResponse20011BuildTime
-{-# INLINE inlineResponse20011BuildTimeL #-}
+-- | 'inlineResponse20011ActorAttributes' Lens
+inlineResponse20011ActorAttributesL :: Lens_' InlineResponse20011Actor (Maybe (Map.Map String Text))
+inlineResponse20011ActorAttributesL f InlineResponse20011Actor{..} = (\inlineResponse20011ActorAttributes -> InlineResponse20011Actor { inlineResponse20011ActorAttributes, ..} ) <$> f inlineResponse20011ActorAttributes
+{-# INLINE inlineResponse20011ActorAttributesL #-}
 
 
 
 -- * InlineResponse20012
 
--- | 'inlineResponse20012Type' Lens
-inlineResponse20012TypeL :: Lens_' InlineResponse20012 (Maybe Text)
-inlineResponse20012TypeL f InlineResponse20012{..} = (\inlineResponse20012Type -> InlineResponse20012 { inlineResponse20012Type, ..} ) <$> f inlineResponse20012Type
-{-# INLINE inlineResponse20012TypeL #-}
+-- | 'inlineResponse20012LayersSize' Lens
+inlineResponse20012LayersSizeL :: Lens_' InlineResponse20012 (Maybe Integer)
+inlineResponse20012LayersSizeL f InlineResponse20012{..} = (\inlineResponse20012LayersSize -> InlineResponse20012 { inlineResponse20012LayersSize, ..} ) <$> f inlineResponse20012LayersSize
+{-# INLINE inlineResponse20012LayersSizeL #-}
 
--- | 'inlineResponse20012Action' Lens
-inlineResponse20012ActionL :: Lens_' InlineResponse20012 (Maybe Text)
-inlineResponse20012ActionL f InlineResponse20012{..} = (\inlineResponse20012Action -> InlineResponse20012 { inlineResponse20012Action, ..} ) <$> f inlineResponse20012Action
-{-# INLINE inlineResponse20012ActionL #-}
+-- | 'inlineResponse20012Images' Lens
+inlineResponse20012ImagesL :: Lens_' InlineResponse20012 (Maybe [ImageSummary])
+inlineResponse20012ImagesL f InlineResponse20012{..} = (\inlineResponse20012Images -> InlineResponse20012 { inlineResponse20012Images, ..} ) <$> f inlineResponse20012Images
+{-# INLINE inlineResponse20012ImagesL #-}
 
--- | 'inlineResponse20012Actor' Lens
-inlineResponse20012ActorL :: Lens_' InlineResponse20012 (Maybe InlineResponse20012Actor)
-inlineResponse20012ActorL f InlineResponse20012{..} = (\inlineResponse20012Actor -> InlineResponse20012 { inlineResponse20012Actor, ..} ) <$> f inlineResponse20012Actor
-{-# INLINE inlineResponse20012ActorL #-}
+-- | 'inlineResponse20012Containers' Lens
+inlineResponse20012ContainersL :: Lens_' InlineResponse20012 (Maybe [ContainerSummary])
+inlineResponse20012ContainersL f InlineResponse20012{..} = (\inlineResponse20012Containers -> InlineResponse20012 { inlineResponse20012Containers, ..} ) <$> f inlineResponse20012Containers
+{-# INLINE inlineResponse20012ContainersL #-}
 
--- | 'inlineResponse20012Time' Lens
-inlineResponse20012TimeL :: Lens_' InlineResponse20012 (Maybe Int)
-inlineResponse20012TimeL f InlineResponse20012{..} = (\inlineResponse20012Time -> InlineResponse20012 { inlineResponse20012Time, ..} ) <$> f inlineResponse20012Time
-{-# INLINE inlineResponse20012TimeL #-}
-
--- | 'inlineResponse20012TimeNano' Lens
-inlineResponse20012TimeNanoL :: Lens_' InlineResponse20012 (Maybe Integer)
-inlineResponse20012TimeNanoL f InlineResponse20012{..} = (\inlineResponse20012TimeNano -> InlineResponse20012 { inlineResponse20012TimeNano, ..} ) <$> f inlineResponse20012TimeNano
-{-# INLINE inlineResponse20012TimeNanoL #-}
-
-
-
--- * InlineResponse20012Actor
-
--- | 'inlineResponse20012ActorId' Lens
-inlineResponse20012ActorIdL :: Lens_' InlineResponse20012Actor (Maybe Text)
-inlineResponse20012ActorIdL f InlineResponse20012Actor{..} = (\inlineResponse20012ActorId -> InlineResponse20012Actor { inlineResponse20012ActorId, ..} ) <$> f inlineResponse20012ActorId
-{-# INLINE inlineResponse20012ActorIdL #-}
-
--- | 'inlineResponse20012ActorAttributes' Lens
-inlineResponse20012ActorAttributesL :: Lens_' InlineResponse20012Actor (Maybe (Map.Map String Text))
-inlineResponse20012ActorAttributesL f InlineResponse20012Actor{..} = (\inlineResponse20012ActorAttributes -> InlineResponse20012Actor { inlineResponse20012ActorAttributes, ..} ) <$> f inlineResponse20012ActorAttributes
-{-# INLINE inlineResponse20012ActorAttributesL #-}
+-- | 'inlineResponse20012Volumes' Lens
+inlineResponse20012VolumesL :: Lens_' InlineResponse20012 (Maybe [Volume])
+inlineResponse20012VolumesL f InlineResponse20012{..} = (\inlineResponse20012Volumes -> InlineResponse20012 { inlineResponse20012Volumes, ..} ) <$> f inlineResponse20012Volumes
+{-# INLINE inlineResponse20012VolumesL #-}
 
 
 
 -- * InlineResponse20013
 
--- | 'inlineResponse20013LayersSize' Lens
-inlineResponse20013LayersSizeL :: Lens_' InlineResponse20013 (Maybe Integer)
-inlineResponse20013LayersSizeL f InlineResponse20013{..} = (\inlineResponse20013LayersSize -> InlineResponse20013 { inlineResponse20013LayersSize, ..} ) <$> f inlineResponse20013LayersSize
-{-# INLINE inlineResponse20013LayersSizeL #-}
+-- | 'inlineResponse20013Id' Lens
+inlineResponse20013IdL :: Lens_' InlineResponse20013 (Maybe Text)
+inlineResponse20013IdL f InlineResponse20013{..} = (\inlineResponse20013Id -> InlineResponse20013 { inlineResponse20013Id, ..} ) <$> f inlineResponse20013Id
+{-# INLINE inlineResponse20013IdL #-}
 
--- | 'inlineResponse20013Images' Lens
-inlineResponse20013ImagesL :: Lens_' InlineResponse20013 (Maybe [ImageSummary])
-inlineResponse20013ImagesL f InlineResponse20013{..} = (\inlineResponse20013Images -> InlineResponse20013 { inlineResponse20013Images, ..} ) <$> f inlineResponse20013Images
-{-# INLINE inlineResponse20013ImagesL #-}
+-- | 'inlineResponse20013Running' Lens
+inlineResponse20013RunningL :: Lens_' InlineResponse20013 (Maybe Bool)
+inlineResponse20013RunningL f InlineResponse20013{..} = (\inlineResponse20013Running -> InlineResponse20013 { inlineResponse20013Running, ..} ) <$> f inlineResponse20013Running
+{-# INLINE inlineResponse20013RunningL #-}
 
--- | 'inlineResponse20013Containers' Lens
-inlineResponse20013ContainersL :: Lens_' InlineResponse20013 (Maybe [ContainerSummary])
-inlineResponse20013ContainersL f InlineResponse20013{..} = (\inlineResponse20013Containers -> InlineResponse20013 { inlineResponse20013Containers, ..} ) <$> f inlineResponse20013Containers
-{-# INLINE inlineResponse20013ContainersL #-}
+-- | 'inlineResponse20013ExitCode' Lens
+inlineResponse20013ExitCodeL :: Lens_' InlineResponse20013 (Maybe Int)
+inlineResponse20013ExitCodeL f InlineResponse20013{..} = (\inlineResponse20013ExitCode -> InlineResponse20013 { inlineResponse20013ExitCode, ..} ) <$> f inlineResponse20013ExitCode
+{-# INLINE inlineResponse20013ExitCodeL #-}
 
--- | 'inlineResponse20013Volumes' Lens
-inlineResponse20013VolumesL :: Lens_' InlineResponse20013 (Maybe [Volume])
-inlineResponse20013VolumesL f InlineResponse20013{..} = (\inlineResponse20013Volumes -> InlineResponse20013 { inlineResponse20013Volumes, ..} ) <$> f inlineResponse20013Volumes
-{-# INLINE inlineResponse20013VolumesL #-}
+-- | 'inlineResponse20013ProcessConfig' Lens
+inlineResponse20013ProcessConfigL :: Lens_' InlineResponse20013 (Maybe ProcessConfig)
+inlineResponse20013ProcessConfigL f InlineResponse20013{..} = (\inlineResponse20013ProcessConfig -> InlineResponse20013 { inlineResponse20013ProcessConfig, ..} ) <$> f inlineResponse20013ProcessConfig
+{-# INLINE inlineResponse20013ProcessConfigL #-}
+
+-- | 'inlineResponse20013OpenStdin' Lens
+inlineResponse20013OpenStdinL :: Lens_' InlineResponse20013 (Maybe Bool)
+inlineResponse20013OpenStdinL f InlineResponse20013{..} = (\inlineResponse20013OpenStdin -> InlineResponse20013 { inlineResponse20013OpenStdin, ..} ) <$> f inlineResponse20013OpenStdin
+{-# INLINE inlineResponse20013OpenStdinL #-}
+
+-- | 'inlineResponse20013OpenStderr' Lens
+inlineResponse20013OpenStderrL :: Lens_' InlineResponse20013 (Maybe Bool)
+inlineResponse20013OpenStderrL f InlineResponse20013{..} = (\inlineResponse20013OpenStderr -> InlineResponse20013 { inlineResponse20013OpenStderr, ..} ) <$> f inlineResponse20013OpenStderr
+{-# INLINE inlineResponse20013OpenStderrL #-}
+
+-- | 'inlineResponse20013OpenStdout' Lens
+inlineResponse20013OpenStdoutL :: Lens_' InlineResponse20013 (Maybe Bool)
+inlineResponse20013OpenStdoutL f InlineResponse20013{..} = (\inlineResponse20013OpenStdout -> InlineResponse20013 { inlineResponse20013OpenStdout, ..} ) <$> f inlineResponse20013OpenStdout
+{-# INLINE inlineResponse20013OpenStdoutL #-}
+
+-- | 'inlineResponse20013ContainerId' Lens
+inlineResponse20013ContainerIdL :: Lens_' InlineResponse20013 (Maybe Text)
+inlineResponse20013ContainerIdL f InlineResponse20013{..} = (\inlineResponse20013ContainerId -> InlineResponse20013 { inlineResponse20013ContainerId, ..} ) <$> f inlineResponse20013ContainerId
+{-# INLINE inlineResponse20013ContainerIdL #-}
+
+-- | 'inlineResponse20013Pid' Lens
+inlineResponse20013PidL :: Lens_' InlineResponse20013 (Maybe Int)
+inlineResponse20013PidL f InlineResponse20013{..} = (\inlineResponse20013Pid -> InlineResponse20013 { inlineResponse20013Pid, ..} ) <$> f inlineResponse20013Pid
+{-# INLINE inlineResponse20013PidL #-}
 
 
 
 -- * InlineResponse20014
 
--- | 'inlineResponse20014Id' Lens
-inlineResponse20014IdL :: Lens_' InlineResponse20014 (Maybe Text)
-inlineResponse20014IdL f InlineResponse20014{..} = (\inlineResponse20014Id -> InlineResponse20014 { inlineResponse20014Id, ..} ) <$> f inlineResponse20014Id
-{-# INLINE inlineResponse20014IdL #-}
+-- | 'inlineResponse20014Volumes' Lens
+inlineResponse20014VolumesL :: Lens_' InlineResponse20014 ([Volume])
+inlineResponse20014VolumesL f InlineResponse20014{..} = (\inlineResponse20014Volumes -> InlineResponse20014 { inlineResponse20014Volumes, ..} ) <$> f inlineResponse20014Volumes
+{-# INLINE inlineResponse20014VolumesL #-}
 
--- | 'inlineResponse20014Running' Lens
-inlineResponse20014RunningL :: Lens_' InlineResponse20014 (Maybe Bool)
-inlineResponse20014RunningL f InlineResponse20014{..} = (\inlineResponse20014Running -> InlineResponse20014 { inlineResponse20014Running, ..} ) <$> f inlineResponse20014Running
-{-# INLINE inlineResponse20014RunningL #-}
-
--- | 'inlineResponse20014ExitCode' Lens
-inlineResponse20014ExitCodeL :: Lens_' InlineResponse20014 (Maybe Int)
-inlineResponse20014ExitCodeL f InlineResponse20014{..} = (\inlineResponse20014ExitCode -> InlineResponse20014 { inlineResponse20014ExitCode, ..} ) <$> f inlineResponse20014ExitCode
-{-# INLINE inlineResponse20014ExitCodeL #-}
-
--- | 'inlineResponse20014ProcessConfig' Lens
-inlineResponse20014ProcessConfigL :: Lens_' InlineResponse20014 (Maybe ProcessConfig)
-inlineResponse20014ProcessConfigL f InlineResponse20014{..} = (\inlineResponse20014ProcessConfig -> InlineResponse20014 { inlineResponse20014ProcessConfig, ..} ) <$> f inlineResponse20014ProcessConfig
-{-# INLINE inlineResponse20014ProcessConfigL #-}
-
--- | 'inlineResponse20014OpenStdin' Lens
-inlineResponse20014OpenStdinL :: Lens_' InlineResponse20014 (Maybe Bool)
-inlineResponse20014OpenStdinL f InlineResponse20014{..} = (\inlineResponse20014OpenStdin -> InlineResponse20014 { inlineResponse20014OpenStdin, ..} ) <$> f inlineResponse20014OpenStdin
-{-# INLINE inlineResponse20014OpenStdinL #-}
-
--- | 'inlineResponse20014OpenStderr' Lens
-inlineResponse20014OpenStderrL :: Lens_' InlineResponse20014 (Maybe Bool)
-inlineResponse20014OpenStderrL f InlineResponse20014{..} = (\inlineResponse20014OpenStderr -> InlineResponse20014 { inlineResponse20014OpenStderr, ..} ) <$> f inlineResponse20014OpenStderr
-{-# INLINE inlineResponse20014OpenStderrL #-}
-
--- | 'inlineResponse20014OpenStdout' Lens
-inlineResponse20014OpenStdoutL :: Lens_' InlineResponse20014 (Maybe Bool)
-inlineResponse20014OpenStdoutL f InlineResponse20014{..} = (\inlineResponse20014OpenStdout -> InlineResponse20014 { inlineResponse20014OpenStdout, ..} ) <$> f inlineResponse20014OpenStdout
-{-# INLINE inlineResponse20014OpenStdoutL #-}
-
--- | 'inlineResponse20014ContainerId' Lens
-inlineResponse20014ContainerIdL :: Lens_' InlineResponse20014 (Maybe Text)
-inlineResponse20014ContainerIdL f InlineResponse20014{..} = (\inlineResponse20014ContainerId -> InlineResponse20014 { inlineResponse20014ContainerId, ..} ) <$> f inlineResponse20014ContainerId
-{-# INLINE inlineResponse20014ContainerIdL #-}
-
--- | 'inlineResponse20014Pid' Lens
-inlineResponse20014PidL :: Lens_' InlineResponse20014 (Maybe Int)
-inlineResponse20014PidL f InlineResponse20014{..} = (\inlineResponse20014Pid -> InlineResponse20014 { inlineResponse20014Pid, ..} ) <$> f inlineResponse20014Pid
-{-# INLINE inlineResponse20014PidL #-}
+-- | 'inlineResponse20014Warnings' Lens
+inlineResponse20014WarningsL :: Lens_' InlineResponse20014 ([Text])
+inlineResponse20014WarningsL f InlineResponse20014{..} = (\inlineResponse20014Warnings -> InlineResponse20014 { inlineResponse20014Warnings, ..} ) <$> f inlineResponse20014Warnings
+{-# INLINE inlineResponse20014WarningsL #-}
 
 
 
 -- * InlineResponse20015
 
--- | 'inlineResponse20015Volumes' Lens
-inlineResponse20015VolumesL :: Lens_' InlineResponse20015 ([Volume])
-inlineResponse20015VolumesL f InlineResponse20015{..} = (\inlineResponse20015Volumes -> InlineResponse20015 { inlineResponse20015Volumes, ..} ) <$> f inlineResponse20015Volumes
-{-# INLINE inlineResponse20015VolumesL #-}
+-- | 'inlineResponse20015VolumesDeleted' Lens
+inlineResponse20015VolumesDeletedL :: Lens_' InlineResponse20015 (Maybe [Text])
+inlineResponse20015VolumesDeletedL f InlineResponse20015{..} = (\inlineResponse20015VolumesDeleted -> InlineResponse20015 { inlineResponse20015VolumesDeleted, ..} ) <$> f inlineResponse20015VolumesDeleted
+{-# INLINE inlineResponse20015VolumesDeletedL #-}
 
--- | 'inlineResponse20015Warnings' Lens
-inlineResponse20015WarningsL :: Lens_' InlineResponse20015 ([Text])
-inlineResponse20015WarningsL f InlineResponse20015{..} = (\inlineResponse20015Warnings -> InlineResponse20015 { inlineResponse20015Warnings, ..} ) <$> f inlineResponse20015Warnings
-{-# INLINE inlineResponse20015WarningsL #-}
+-- | 'inlineResponse20015SpaceReclaimed' Lens
+inlineResponse20015SpaceReclaimedL :: Lens_' InlineResponse20015 (Maybe Integer)
+inlineResponse20015SpaceReclaimedL f InlineResponse20015{..} = (\inlineResponse20015SpaceReclaimed -> InlineResponse20015 { inlineResponse20015SpaceReclaimed, ..} ) <$> f inlineResponse20015SpaceReclaimed
+{-# INLINE inlineResponse20015SpaceReclaimedL #-}
 
 
 
 -- * InlineResponse20016
 
--- | 'inlineResponse20016VolumesDeleted' Lens
-inlineResponse20016VolumesDeletedL :: Lens_' InlineResponse20016 (Maybe [Text])
-inlineResponse20016VolumesDeletedL f InlineResponse20016{..} = (\inlineResponse20016VolumesDeleted -> InlineResponse20016 { inlineResponse20016VolumesDeleted, ..} ) <$> f inlineResponse20016VolumesDeleted
-{-# INLINE inlineResponse20016VolumesDeletedL #-}
-
--- | 'inlineResponse20016SpaceReclaimed' Lens
-inlineResponse20016SpaceReclaimedL :: Lens_' InlineResponse20016 (Maybe Integer)
-inlineResponse20016SpaceReclaimedL f InlineResponse20016{..} = (\inlineResponse20016SpaceReclaimed -> InlineResponse20016 { inlineResponse20016SpaceReclaimed, ..} ) <$> f inlineResponse20016SpaceReclaimed
-{-# INLINE inlineResponse20016SpaceReclaimedL #-}
+-- | 'inlineResponse20016NetworksDeleted' Lens
+inlineResponse20016NetworksDeletedL :: Lens_' InlineResponse20016 (Maybe [Text])
+inlineResponse20016NetworksDeletedL f InlineResponse20016{..} = (\inlineResponse20016NetworksDeleted -> InlineResponse20016 { inlineResponse20016NetworksDeleted, ..} ) <$> f inlineResponse20016NetworksDeleted
+{-# INLINE inlineResponse20016NetworksDeletedL #-}
 
 
 
 -- * InlineResponse20017
 
--- | 'inlineResponse20017NetworksDeleted' Lens
-inlineResponse20017NetworksDeletedL :: Lens_' InlineResponse20017 (Maybe [Text])
-inlineResponse20017NetworksDeletedL f InlineResponse20017{..} = (\inlineResponse20017NetworksDeleted -> InlineResponse20017 { inlineResponse20017NetworksDeleted, ..} ) <$> f inlineResponse20017NetworksDeleted
-{-# INLINE inlineResponse20017NetworksDeletedL #-}
+-- | 'inlineResponse20017Name' Lens
+inlineResponse20017NameL :: Lens_' InlineResponse20017 (Maybe Text)
+inlineResponse20017NameL f InlineResponse20017{..} = (\inlineResponse20017Name -> InlineResponse20017 { inlineResponse20017Name, ..} ) <$> f inlineResponse20017Name
+{-# INLINE inlineResponse20017NameL #-}
+
+-- | 'inlineResponse20017Description' Lens
+inlineResponse20017DescriptionL :: Lens_' InlineResponse20017 (Maybe Text)
+inlineResponse20017DescriptionL f InlineResponse20017{..} = (\inlineResponse20017Description -> InlineResponse20017 { inlineResponse20017Description, ..} ) <$> f inlineResponse20017Description
+{-# INLINE inlineResponse20017DescriptionL #-}
+
+-- | 'inlineResponse20017Value' Lens
+inlineResponse20017ValueL :: Lens_' InlineResponse20017 (Maybe [Text])
+inlineResponse20017ValueL f InlineResponse20017{..} = (\inlineResponse20017Value -> InlineResponse20017 { inlineResponse20017Value, ..} ) <$> f inlineResponse20017Value
+{-# INLINE inlineResponse20017ValueL #-}
 
 
 
 -- * InlineResponse20018
 
--- | 'inlineResponse20018Name' Lens
-inlineResponse20018NameL :: Lens_' InlineResponse20018 (Maybe Text)
-inlineResponse20018NameL f InlineResponse20018{..} = (\inlineResponse20018Name -> InlineResponse20018 { inlineResponse20018Name, ..} ) <$> f inlineResponse20018Name
-{-# INLINE inlineResponse20018NameL #-}
+-- | 'inlineResponse20018ClusterInfo' Lens
+inlineResponse20018ClusterInfoL :: Lens_' InlineResponse20018 (Maybe ClusterInfo)
+inlineResponse20018ClusterInfoL f InlineResponse20018{..} = (\inlineResponse20018ClusterInfo -> InlineResponse20018 { inlineResponse20018ClusterInfo, ..} ) <$> f inlineResponse20018ClusterInfo
+{-# INLINE inlineResponse20018ClusterInfoL #-}
 
--- | 'inlineResponse20018Description' Lens
-inlineResponse20018DescriptionL :: Lens_' InlineResponse20018 (Maybe Text)
-inlineResponse20018DescriptionL f InlineResponse20018{..} = (\inlineResponse20018Description -> InlineResponse20018 { inlineResponse20018Description, ..} ) <$> f inlineResponse20018Description
-{-# INLINE inlineResponse20018DescriptionL #-}
+-- | 'inlineResponse20018JoinTokens' Lens
+inlineResponse20018JoinTokensL :: Lens_' InlineResponse20018 (Maybe InlineResponse20018JoinTokens)
+inlineResponse20018JoinTokensL f InlineResponse20018{..} = (\inlineResponse20018JoinTokens -> InlineResponse20018 { inlineResponse20018JoinTokens, ..} ) <$> f inlineResponse20018JoinTokens
+{-# INLINE inlineResponse20018JoinTokensL #-}
 
--- | 'inlineResponse20018Value' Lens
-inlineResponse20018ValueL :: Lens_' InlineResponse20018 (Maybe [Text])
-inlineResponse20018ValueL f InlineResponse20018{..} = (\inlineResponse20018Value -> InlineResponse20018 { inlineResponse20018Value, ..} ) <$> f inlineResponse20018Value
-{-# INLINE inlineResponse20018ValueL #-}
+
+
+-- * InlineResponse20018JoinTokens
+
+-- | 'inlineResponse20018JoinTokensWorker' Lens
+inlineResponse20018JoinTokensWorkerL :: Lens_' InlineResponse20018JoinTokens (Maybe Text)
+inlineResponse20018JoinTokensWorkerL f InlineResponse20018JoinTokens{..} = (\inlineResponse20018JoinTokensWorker -> InlineResponse20018JoinTokens { inlineResponse20018JoinTokensWorker, ..} ) <$> f inlineResponse20018JoinTokensWorker
+{-# INLINE inlineResponse20018JoinTokensWorkerL #-}
+
+-- | 'inlineResponse20018JoinTokensManager' Lens
+inlineResponse20018JoinTokensManagerL :: Lens_' InlineResponse20018JoinTokens (Maybe Text)
+inlineResponse20018JoinTokensManagerL f InlineResponse20018JoinTokens{..} = (\inlineResponse20018JoinTokensManager -> InlineResponse20018JoinTokens { inlineResponse20018JoinTokensManager, ..} ) <$> f inlineResponse20018JoinTokensManager
+{-# INLINE inlineResponse20018JoinTokensManagerL #-}
 
 
 
 -- * InlineResponse20019
 
--- | 'inlineResponse20019ClusterInfo' Lens
-inlineResponse20019ClusterInfoL :: Lens_' InlineResponse20019 (Maybe ClusterInfo)
-inlineResponse20019ClusterInfoL f InlineResponse20019{..} = (\inlineResponse20019ClusterInfo -> InlineResponse20019 { inlineResponse20019ClusterInfo, ..} ) <$> f inlineResponse20019ClusterInfo
-{-# INLINE inlineResponse20019ClusterInfoL #-}
-
--- | 'inlineResponse20019JoinTokens' Lens
-inlineResponse20019JoinTokensL :: Lens_' InlineResponse20019 (Maybe InlineResponse20019JoinTokens)
-inlineResponse20019JoinTokensL f InlineResponse20019{..} = (\inlineResponse20019JoinTokens -> InlineResponse20019 { inlineResponse20019JoinTokens, ..} ) <$> f inlineResponse20019JoinTokens
-{-# INLINE inlineResponse20019JoinTokensL #-}
-
-
-
--- * InlineResponse20019JoinTokens
-
--- | 'inlineResponse20019JoinTokensWorker' Lens
-inlineResponse20019JoinTokensWorkerL :: Lens_' InlineResponse20019JoinTokens (Maybe Text)
-inlineResponse20019JoinTokensWorkerL f InlineResponse20019JoinTokens{..} = (\inlineResponse20019JoinTokensWorker -> InlineResponse20019JoinTokens { inlineResponse20019JoinTokensWorker, ..} ) <$> f inlineResponse20019JoinTokensWorker
-{-# INLINE inlineResponse20019JoinTokensWorkerL #-}
-
--- | 'inlineResponse20019JoinTokensManager' Lens
-inlineResponse20019JoinTokensManagerL :: Lens_' InlineResponse20019JoinTokens (Maybe Text)
-inlineResponse20019JoinTokensManagerL f InlineResponse20019JoinTokens{..} = (\inlineResponse20019JoinTokensManager -> InlineResponse20019JoinTokens { inlineResponse20019JoinTokensManager, ..} ) <$> f inlineResponse20019JoinTokensManager
-{-# INLINE inlineResponse20019JoinTokensManagerL #-}
+-- | 'inlineResponse20019UnlockKey' Lens
+inlineResponse20019UnlockKeyL :: Lens_' InlineResponse20019 (Maybe Text)
+inlineResponse20019UnlockKeyL f InlineResponse20019{..} = (\inlineResponse20019UnlockKey -> InlineResponse20019 { inlineResponse20019UnlockKey, ..} ) <$> f inlineResponse20019UnlockKey
+{-# INLINE inlineResponse20019UnlockKeyL #-}
 
 
 
 -- * InlineResponse2002
 
--- | 'inlineResponse2002Path' Lens
-inlineResponse2002PathL :: Lens_' InlineResponse2002 (Text)
-inlineResponse2002PathL f InlineResponse2002{..} = (\inlineResponse2002Path -> InlineResponse2002 { inlineResponse2002Path, ..} ) <$> f inlineResponse2002Path
-{-# INLINE inlineResponse2002PathL #-}
-
--- | 'inlineResponse2002Kind' Lens
-inlineResponse2002KindL :: Lens_' InlineResponse2002 (Int)
-inlineResponse2002KindL f InlineResponse2002{..} = (\inlineResponse2002Kind -> InlineResponse2002 { inlineResponse2002Kind, ..} ) <$> f inlineResponse2002Kind
-{-# INLINE inlineResponse2002KindL #-}
+-- | 'inlineResponse2002Warnings' Lens
+inlineResponse2002WarningsL :: Lens_' InlineResponse2002 (Maybe [Text])
+inlineResponse2002WarningsL f InlineResponse2002{..} = (\inlineResponse2002Warnings -> InlineResponse2002 { inlineResponse2002Warnings, ..} ) <$> f inlineResponse2002Warnings
+{-# INLINE inlineResponse2002WarningsL #-}
 
 
 
 -- * InlineResponse20020
 
--- | 'inlineResponse20020UnlockKey' Lens
-inlineResponse20020UnlockKeyL :: Lens_' InlineResponse20020 (Maybe Text)
-inlineResponse20020UnlockKeyL f InlineResponse20020{..} = (\inlineResponse20020UnlockKey -> InlineResponse20020 { inlineResponse20020UnlockKey, ..} ) <$> f inlineResponse20020UnlockKey
-{-# INLINE inlineResponse20020UnlockKeyL #-}
+-- | 'inlineResponse20020Descriptor' Lens
+inlineResponse20020DescriptorL :: Lens_' InlineResponse20020 (InlineResponse20020Descriptor)
+inlineResponse20020DescriptorL f InlineResponse20020{..} = (\inlineResponse20020Descriptor -> InlineResponse20020 { inlineResponse20020Descriptor, ..} ) <$> f inlineResponse20020Descriptor
+{-# INLINE inlineResponse20020DescriptorL #-}
+
+-- | 'inlineResponse20020Platforms' Lens
+inlineResponse20020PlatformsL :: Lens_' InlineResponse20020 ([InlineResponse20020Platforms])
+inlineResponse20020PlatformsL f InlineResponse20020{..} = (\inlineResponse20020Platforms -> InlineResponse20020 { inlineResponse20020Platforms, ..} ) <$> f inlineResponse20020Platforms
+{-# INLINE inlineResponse20020PlatformsL #-}
 
 
 
--- * InlineResponse20021
+-- * InlineResponse20020Descriptor
 
--- | 'inlineResponse20021Descriptor' Lens
-inlineResponse20021DescriptorL :: Lens_' InlineResponse20021 (InlineResponse20021Descriptor)
-inlineResponse20021DescriptorL f InlineResponse20021{..} = (\inlineResponse20021Descriptor -> InlineResponse20021 { inlineResponse20021Descriptor, ..} ) <$> f inlineResponse20021Descriptor
-{-# INLINE inlineResponse20021DescriptorL #-}
+-- | 'inlineResponse20020DescriptorMediaType' Lens
+inlineResponse20020DescriptorMediaTypeL :: Lens_' InlineResponse20020Descriptor (Maybe Text)
+inlineResponse20020DescriptorMediaTypeL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorMediaType -> InlineResponse20020Descriptor { inlineResponse20020DescriptorMediaType, ..} ) <$> f inlineResponse20020DescriptorMediaType
+{-# INLINE inlineResponse20020DescriptorMediaTypeL #-}
 
--- | 'inlineResponse20021Platforms' Lens
-inlineResponse20021PlatformsL :: Lens_' InlineResponse20021 ([InlineResponse20021Platforms])
-inlineResponse20021PlatformsL f InlineResponse20021{..} = (\inlineResponse20021Platforms -> InlineResponse20021 { inlineResponse20021Platforms, ..} ) <$> f inlineResponse20021Platforms
-{-# INLINE inlineResponse20021PlatformsL #-}
+-- | 'inlineResponse20020DescriptorSize' Lens
+inlineResponse20020DescriptorSizeL :: Lens_' InlineResponse20020Descriptor (Maybe Integer)
+inlineResponse20020DescriptorSizeL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorSize -> InlineResponse20020Descriptor { inlineResponse20020DescriptorSize, ..} ) <$> f inlineResponse20020DescriptorSize
+{-# INLINE inlineResponse20020DescriptorSizeL #-}
 
+-- | 'inlineResponse20020DescriptorDigest' Lens
+inlineResponse20020DescriptorDigestL :: Lens_' InlineResponse20020Descriptor (Maybe Text)
+inlineResponse20020DescriptorDigestL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorDigest -> InlineResponse20020Descriptor { inlineResponse20020DescriptorDigest, ..} ) <$> f inlineResponse20020DescriptorDigest
+{-# INLINE inlineResponse20020DescriptorDigestL #-}
 
-
--- * InlineResponse20021Descriptor
-
--- | 'inlineResponse20021DescriptorMediaType' Lens
-inlineResponse20021DescriptorMediaTypeL :: Lens_' InlineResponse20021Descriptor (Maybe Text)
-inlineResponse20021DescriptorMediaTypeL f InlineResponse20021Descriptor{..} = (\inlineResponse20021DescriptorMediaType -> InlineResponse20021Descriptor { inlineResponse20021DescriptorMediaType, ..} ) <$> f inlineResponse20021DescriptorMediaType
-{-# INLINE inlineResponse20021DescriptorMediaTypeL #-}
-
--- | 'inlineResponse20021DescriptorSize' Lens
-inlineResponse20021DescriptorSizeL :: Lens_' InlineResponse20021Descriptor (Maybe Integer)
-inlineResponse20021DescriptorSizeL f InlineResponse20021Descriptor{..} = (\inlineResponse20021DescriptorSize -> InlineResponse20021Descriptor { inlineResponse20021DescriptorSize, ..} ) <$> f inlineResponse20021DescriptorSize
-{-# INLINE inlineResponse20021DescriptorSizeL #-}
-
--- | 'inlineResponse20021DescriptorDigest' Lens
-inlineResponse20021DescriptorDigestL :: Lens_' InlineResponse20021Descriptor (Maybe Text)
-inlineResponse20021DescriptorDigestL f InlineResponse20021Descriptor{..} = (\inlineResponse20021DescriptorDigest -> InlineResponse20021Descriptor { inlineResponse20021DescriptorDigest, ..} ) <$> f inlineResponse20021DescriptorDigest
-{-# INLINE inlineResponse20021DescriptorDigestL #-}
-
--- | 'inlineResponse20021DescriptorUrLs' Lens
-inlineResponse20021DescriptorUrLsL :: Lens_' InlineResponse20021Descriptor (Maybe [Text])
-inlineResponse20021DescriptorUrLsL f InlineResponse20021Descriptor{..} = (\inlineResponse20021DescriptorUrLs -> InlineResponse20021Descriptor { inlineResponse20021DescriptorUrLs, ..} ) <$> f inlineResponse20021DescriptorUrLs
-{-# INLINE inlineResponse20021DescriptorUrLsL #-}
+-- | 'inlineResponse20020DescriptorUrLs' Lens
+inlineResponse20020DescriptorUrLsL :: Lens_' InlineResponse20020Descriptor (Maybe [Text])
+inlineResponse20020DescriptorUrLsL f InlineResponse20020Descriptor{..} = (\inlineResponse20020DescriptorUrLs -> InlineResponse20020Descriptor { inlineResponse20020DescriptorUrLs, ..} ) <$> f inlineResponse20020DescriptorUrLs
+{-# INLINE inlineResponse20020DescriptorUrLsL #-}
 
 
 
--- * InlineResponse20021Platforms
+-- * InlineResponse20020Platforms
 
--- | 'inlineResponse20021PlatformsArchitecture' Lens
-inlineResponse20021PlatformsArchitectureL :: Lens_' InlineResponse20021Platforms (Maybe Text)
-inlineResponse20021PlatformsArchitectureL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsArchitecture -> InlineResponse20021Platforms { inlineResponse20021PlatformsArchitecture, ..} ) <$> f inlineResponse20021PlatformsArchitecture
-{-# INLINE inlineResponse20021PlatformsArchitectureL #-}
+-- | 'inlineResponse20020PlatformsArchitecture' Lens
+inlineResponse20020PlatformsArchitectureL :: Lens_' InlineResponse20020Platforms (Maybe Text)
+inlineResponse20020PlatformsArchitectureL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsArchitecture -> InlineResponse20020Platforms { inlineResponse20020PlatformsArchitecture, ..} ) <$> f inlineResponse20020PlatformsArchitecture
+{-# INLINE inlineResponse20020PlatformsArchitectureL #-}
 
--- | 'inlineResponse20021PlatformsOs' Lens
-inlineResponse20021PlatformsOsL :: Lens_' InlineResponse20021Platforms (Maybe Text)
-inlineResponse20021PlatformsOsL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsOs -> InlineResponse20021Platforms { inlineResponse20021PlatformsOs, ..} ) <$> f inlineResponse20021PlatformsOs
-{-# INLINE inlineResponse20021PlatformsOsL #-}
+-- | 'inlineResponse20020PlatformsOs' Lens
+inlineResponse20020PlatformsOsL :: Lens_' InlineResponse20020Platforms (Maybe Text)
+inlineResponse20020PlatformsOsL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOs -> InlineResponse20020Platforms { inlineResponse20020PlatformsOs, ..} ) <$> f inlineResponse20020PlatformsOs
+{-# INLINE inlineResponse20020PlatformsOsL #-}
 
--- | 'inlineResponse20021PlatformsOsVersion' Lens
-inlineResponse20021PlatformsOsVersionL :: Lens_' InlineResponse20021Platforms (Maybe Text)
-inlineResponse20021PlatformsOsVersionL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsOsVersion -> InlineResponse20021Platforms { inlineResponse20021PlatformsOsVersion, ..} ) <$> f inlineResponse20021PlatformsOsVersion
-{-# INLINE inlineResponse20021PlatformsOsVersionL #-}
+-- | 'inlineResponse20020PlatformsOsVersion' Lens
+inlineResponse20020PlatformsOsVersionL :: Lens_' InlineResponse20020Platforms (Maybe Text)
+inlineResponse20020PlatformsOsVersionL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOsVersion -> InlineResponse20020Platforms { inlineResponse20020PlatformsOsVersion, ..} ) <$> f inlineResponse20020PlatformsOsVersion
+{-# INLINE inlineResponse20020PlatformsOsVersionL #-}
 
--- | 'inlineResponse20021PlatformsOsFeatures' Lens
-inlineResponse20021PlatformsOsFeaturesL :: Lens_' InlineResponse20021Platforms (Maybe [Text])
-inlineResponse20021PlatformsOsFeaturesL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsOsFeatures -> InlineResponse20021Platforms { inlineResponse20021PlatformsOsFeatures, ..} ) <$> f inlineResponse20021PlatformsOsFeatures
-{-# INLINE inlineResponse20021PlatformsOsFeaturesL #-}
+-- | 'inlineResponse20020PlatformsOsFeatures' Lens
+inlineResponse20020PlatformsOsFeaturesL :: Lens_' InlineResponse20020Platforms (Maybe [Text])
+inlineResponse20020PlatformsOsFeaturesL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsOsFeatures -> InlineResponse20020Platforms { inlineResponse20020PlatformsOsFeatures, ..} ) <$> f inlineResponse20020PlatformsOsFeatures
+{-# INLINE inlineResponse20020PlatformsOsFeaturesL #-}
 
--- | 'inlineResponse20021PlatformsVariant' Lens
-inlineResponse20021PlatformsVariantL :: Lens_' InlineResponse20021Platforms (Maybe Text)
-inlineResponse20021PlatformsVariantL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsVariant -> InlineResponse20021Platforms { inlineResponse20021PlatformsVariant, ..} ) <$> f inlineResponse20021PlatformsVariant
-{-# INLINE inlineResponse20021PlatformsVariantL #-}
+-- | 'inlineResponse20020PlatformsVariant' Lens
+inlineResponse20020PlatformsVariantL :: Lens_' InlineResponse20020Platforms (Maybe Text)
+inlineResponse20020PlatformsVariantL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsVariant -> InlineResponse20020Platforms { inlineResponse20020PlatformsVariant, ..} ) <$> f inlineResponse20020PlatformsVariant
+{-# INLINE inlineResponse20020PlatformsVariantL #-}
 
--- | 'inlineResponse20021PlatformsFeatures' Lens
-inlineResponse20021PlatformsFeaturesL :: Lens_' InlineResponse20021Platforms (Maybe [Text])
-inlineResponse20021PlatformsFeaturesL f InlineResponse20021Platforms{..} = (\inlineResponse20021PlatformsFeatures -> InlineResponse20021Platforms { inlineResponse20021PlatformsFeatures, ..} ) <$> f inlineResponse20021PlatformsFeatures
-{-# INLINE inlineResponse20021PlatformsFeaturesL #-}
+-- | 'inlineResponse20020PlatformsFeatures' Lens
+inlineResponse20020PlatformsFeaturesL :: Lens_' InlineResponse20020Platforms (Maybe [Text])
+inlineResponse20020PlatformsFeaturesL f InlineResponse20020Platforms{..} = (\inlineResponse20020PlatformsFeatures -> InlineResponse20020Platforms { inlineResponse20020PlatformsFeatures, ..} ) <$> f inlineResponse20020PlatformsFeatures
+{-# INLINE inlineResponse20020PlatformsFeaturesL #-}
 
 
 
 -- * InlineResponse2003
 
--- | 'inlineResponse2003Warnings' Lens
-inlineResponse2003WarningsL :: Lens_' InlineResponse2003 (Maybe [Text])
-inlineResponse2003WarningsL f InlineResponse2003{..} = (\inlineResponse2003Warnings -> InlineResponse2003 { inlineResponse2003Warnings, ..} ) <$> f inlineResponse2003Warnings
-{-# INLINE inlineResponse2003WarningsL #-}
+-- | 'inlineResponse2003StatusCode' Lens
+inlineResponse2003StatusCodeL :: Lens_' InlineResponse2003 (Int)
+inlineResponse2003StatusCodeL f InlineResponse2003{..} = (\inlineResponse2003StatusCode -> InlineResponse2003 { inlineResponse2003StatusCode, ..} ) <$> f inlineResponse2003StatusCode
+{-# INLINE inlineResponse2003StatusCodeL #-}
 
 
 
 -- * InlineResponse2004
 
--- | 'inlineResponse2004StatusCode' Lens
-inlineResponse2004StatusCodeL :: Lens_' InlineResponse2004 (Int)
-inlineResponse2004StatusCodeL f InlineResponse2004{..} = (\inlineResponse2004StatusCode -> InlineResponse2004 { inlineResponse2004StatusCode, ..} ) <$> f inlineResponse2004StatusCode
-{-# INLINE inlineResponse2004StatusCodeL #-}
+-- | 'inlineResponse2004ContainersDeleted' Lens
+inlineResponse2004ContainersDeletedL :: Lens_' InlineResponse2004 (Maybe [Text])
+inlineResponse2004ContainersDeletedL f InlineResponse2004{..} = (\inlineResponse2004ContainersDeleted -> InlineResponse2004 { inlineResponse2004ContainersDeleted, ..} ) <$> f inlineResponse2004ContainersDeleted
+{-# INLINE inlineResponse2004ContainersDeletedL #-}
+
+-- | 'inlineResponse2004SpaceReclaimed' Lens
+inlineResponse2004SpaceReclaimedL :: Lens_' InlineResponse2004 (Maybe Integer)
+inlineResponse2004SpaceReclaimedL f InlineResponse2004{..} = (\inlineResponse2004SpaceReclaimed -> InlineResponse2004 { inlineResponse2004SpaceReclaimed, ..} ) <$> f inlineResponse2004SpaceReclaimed
+{-# INLINE inlineResponse2004SpaceReclaimedL #-}
 
 
 
 -- * InlineResponse2005
 
--- | 'inlineResponse2005ContainersDeleted' Lens
-inlineResponse2005ContainersDeletedL :: Lens_' InlineResponse2005 (Maybe [Text])
-inlineResponse2005ContainersDeletedL f InlineResponse2005{..} = (\inlineResponse2005ContainersDeleted -> InlineResponse2005 { inlineResponse2005ContainersDeleted, ..} ) <$> f inlineResponse2005ContainersDeleted
-{-# INLINE inlineResponse2005ContainersDeletedL #-}
+-- | 'inlineResponse2005Id' Lens
+inlineResponse2005IdL :: Lens_' InlineResponse2005 (Text)
+inlineResponse2005IdL f InlineResponse2005{..} = (\inlineResponse2005Id -> InlineResponse2005 { inlineResponse2005Id, ..} ) <$> f inlineResponse2005Id
+{-# INLINE inlineResponse2005IdL #-}
 
--- | 'inlineResponse2005SpaceReclaimed' Lens
-inlineResponse2005SpaceReclaimedL :: Lens_' InlineResponse2005 (Maybe Integer)
-inlineResponse2005SpaceReclaimedL f InlineResponse2005{..} = (\inlineResponse2005SpaceReclaimed -> InlineResponse2005 { inlineResponse2005SpaceReclaimed, ..} ) <$> f inlineResponse2005SpaceReclaimed
-{-# INLINE inlineResponse2005SpaceReclaimedL #-}
+-- | 'inlineResponse2005Created' Lens
+inlineResponse2005CreatedL :: Lens_' InlineResponse2005 (Integer)
+inlineResponse2005CreatedL f InlineResponse2005{..} = (\inlineResponse2005Created -> InlineResponse2005 { inlineResponse2005Created, ..} ) <$> f inlineResponse2005Created
+{-# INLINE inlineResponse2005CreatedL #-}
+
+-- | 'inlineResponse2005CreatedBy' Lens
+inlineResponse2005CreatedByL :: Lens_' InlineResponse2005 (Text)
+inlineResponse2005CreatedByL f InlineResponse2005{..} = (\inlineResponse2005CreatedBy -> InlineResponse2005 { inlineResponse2005CreatedBy, ..} ) <$> f inlineResponse2005CreatedBy
+{-# INLINE inlineResponse2005CreatedByL #-}
+
+-- | 'inlineResponse2005Tags' Lens
+inlineResponse2005TagsL :: Lens_' InlineResponse2005 ([Text])
+inlineResponse2005TagsL f InlineResponse2005{..} = (\inlineResponse2005Tags -> InlineResponse2005 { inlineResponse2005Tags, ..} ) <$> f inlineResponse2005Tags
+{-# INLINE inlineResponse2005TagsL #-}
+
+-- | 'inlineResponse2005Size' Lens
+inlineResponse2005SizeL :: Lens_' InlineResponse2005 (Integer)
+inlineResponse2005SizeL f InlineResponse2005{..} = (\inlineResponse2005Size -> InlineResponse2005 { inlineResponse2005Size, ..} ) <$> f inlineResponse2005Size
+{-# INLINE inlineResponse2005SizeL #-}
+
+-- | 'inlineResponse2005Comment' Lens
+inlineResponse2005CommentL :: Lens_' InlineResponse2005 (Text)
+inlineResponse2005CommentL f InlineResponse2005{..} = (\inlineResponse2005Comment -> InlineResponse2005 { inlineResponse2005Comment, ..} ) <$> f inlineResponse2005Comment
+{-# INLINE inlineResponse2005CommentL #-}
 
 
 
 -- * InlineResponse2006
 
--- | 'inlineResponse2006Id' Lens
-inlineResponse2006IdL :: Lens_' InlineResponse2006 (Text)
-inlineResponse2006IdL f InlineResponse2006{..} = (\inlineResponse2006Id -> InlineResponse2006 { inlineResponse2006Id, ..} ) <$> f inlineResponse2006Id
-{-# INLINE inlineResponse2006IdL #-}
+-- | 'inlineResponse2006Description' Lens
+inlineResponse2006DescriptionL :: Lens_' InlineResponse2006 (Maybe Text)
+inlineResponse2006DescriptionL f InlineResponse2006{..} = (\inlineResponse2006Description -> InlineResponse2006 { inlineResponse2006Description, ..} ) <$> f inlineResponse2006Description
+{-# INLINE inlineResponse2006DescriptionL #-}
 
--- | 'inlineResponse2006Created' Lens
-inlineResponse2006CreatedL :: Lens_' InlineResponse2006 (Integer)
-inlineResponse2006CreatedL f InlineResponse2006{..} = (\inlineResponse2006Created -> InlineResponse2006 { inlineResponse2006Created, ..} ) <$> f inlineResponse2006Created
-{-# INLINE inlineResponse2006CreatedL #-}
+-- | 'inlineResponse2006IsOfficial' Lens
+inlineResponse2006IsOfficialL :: Lens_' InlineResponse2006 (Maybe Bool)
+inlineResponse2006IsOfficialL f InlineResponse2006{..} = (\inlineResponse2006IsOfficial -> InlineResponse2006 { inlineResponse2006IsOfficial, ..} ) <$> f inlineResponse2006IsOfficial
+{-# INLINE inlineResponse2006IsOfficialL #-}
 
--- | 'inlineResponse2006CreatedBy' Lens
-inlineResponse2006CreatedByL :: Lens_' InlineResponse2006 (Text)
-inlineResponse2006CreatedByL f InlineResponse2006{..} = (\inlineResponse2006CreatedBy -> InlineResponse2006 { inlineResponse2006CreatedBy, ..} ) <$> f inlineResponse2006CreatedBy
-{-# INLINE inlineResponse2006CreatedByL #-}
+-- | 'inlineResponse2006IsAutomated' Lens
+inlineResponse2006IsAutomatedL :: Lens_' InlineResponse2006 (Maybe Bool)
+inlineResponse2006IsAutomatedL f InlineResponse2006{..} = (\inlineResponse2006IsAutomated -> InlineResponse2006 { inlineResponse2006IsAutomated, ..} ) <$> f inlineResponse2006IsAutomated
+{-# INLINE inlineResponse2006IsAutomatedL #-}
 
--- | 'inlineResponse2006Tags' Lens
-inlineResponse2006TagsL :: Lens_' InlineResponse2006 ([Text])
-inlineResponse2006TagsL f InlineResponse2006{..} = (\inlineResponse2006Tags -> InlineResponse2006 { inlineResponse2006Tags, ..} ) <$> f inlineResponse2006Tags
-{-# INLINE inlineResponse2006TagsL #-}
+-- | 'inlineResponse2006Name' Lens
+inlineResponse2006NameL :: Lens_' InlineResponse2006 (Maybe Text)
+inlineResponse2006NameL f InlineResponse2006{..} = (\inlineResponse2006Name -> InlineResponse2006 { inlineResponse2006Name, ..} ) <$> f inlineResponse2006Name
+{-# INLINE inlineResponse2006NameL #-}
 
--- | 'inlineResponse2006Size' Lens
-inlineResponse2006SizeL :: Lens_' InlineResponse2006 (Integer)
-inlineResponse2006SizeL f InlineResponse2006{..} = (\inlineResponse2006Size -> InlineResponse2006 { inlineResponse2006Size, ..} ) <$> f inlineResponse2006Size
-{-# INLINE inlineResponse2006SizeL #-}
-
--- | 'inlineResponse2006Comment' Lens
-inlineResponse2006CommentL :: Lens_' InlineResponse2006 (Text)
-inlineResponse2006CommentL f InlineResponse2006{..} = (\inlineResponse2006Comment -> InlineResponse2006 { inlineResponse2006Comment, ..} ) <$> f inlineResponse2006Comment
-{-# INLINE inlineResponse2006CommentL #-}
+-- | 'inlineResponse2006StarCount' Lens
+inlineResponse2006StarCountL :: Lens_' InlineResponse2006 (Maybe Int)
+inlineResponse2006StarCountL f InlineResponse2006{..} = (\inlineResponse2006StarCount -> InlineResponse2006 { inlineResponse2006StarCount, ..} ) <$> f inlineResponse2006StarCount
+{-# INLINE inlineResponse2006StarCountL #-}
 
 
 
 -- * InlineResponse2007
 
--- | 'inlineResponse2007Description' Lens
-inlineResponse2007DescriptionL :: Lens_' InlineResponse2007 (Maybe Text)
-inlineResponse2007DescriptionL f InlineResponse2007{..} = (\inlineResponse2007Description -> InlineResponse2007 { inlineResponse2007Description, ..} ) <$> f inlineResponse2007Description
-{-# INLINE inlineResponse2007DescriptionL #-}
+-- | 'inlineResponse2007ImagesDeleted' Lens
+inlineResponse2007ImagesDeletedL :: Lens_' InlineResponse2007 (Maybe [ImageDeleteResponseItem])
+inlineResponse2007ImagesDeletedL f InlineResponse2007{..} = (\inlineResponse2007ImagesDeleted -> InlineResponse2007 { inlineResponse2007ImagesDeleted, ..} ) <$> f inlineResponse2007ImagesDeleted
+{-# INLINE inlineResponse2007ImagesDeletedL #-}
 
--- | 'inlineResponse2007IsOfficial' Lens
-inlineResponse2007IsOfficialL :: Lens_' InlineResponse2007 (Maybe Bool)
-inlineResponse2007IsOfficialL f InlineResponse2007{..} = (\inlineResponse2007IsOfficial -> InlineResponse2007 { inlineResponse2007IsOfficial, ..} ) <$> f inlineResponse2007IsOfficial
-{-# INLINE inlineResponse2007IsOfficialL #-}
-
--- | 'inlineResponse2007IsAutomated' Lens
-inlineResponse2007IsAutomatedL :: Lens_' InlineResponse2007 (Maybe Bool)
-inlineResponse2007IsAutomatedL f InlineResponse2007{..} = (\inlineResponse2007IsAutomated -> InlineResponse2007 { inlineResponse2007IsAutomated, ..} ) <$> f inlineResponse2007IsAutomated
-{-# INLINE inlineResponse2007IsAutomatedL #-}
-
--- | 'inlineResponse2007Name' Lens
-inlineResponse2007NameL :: Lens_' InlineResponse2007 (Maybe Text)
-inlineResponse2007NameL f InlineResponse2007{..} = (\inlineResponse2007Name -> InlineResponse2007 { inlineResponse2007Name, ..} ) <$> f inlineResponse2007Name
-{-# INLINE inlineResponse2007NameL #-}
-
--- | 'inlineResponse2007StarCount' Lens
-inlineResponse2007StarCountL :: Lens_' InlineResponse2007 (Maybe Int)
-inlineResponse2007StarCountL f InlineResponse2007{..} = (\inlineResponse2007StarCount -> InlineResponse2007 { inlineResponse2007StarCount, ..} ) <$> f inlineResponse2007StarCount
-{-# INLINE inlineResponse2007StarCountL #-}
+-- | 'inlineResponse2007SpaceReclaimed' Lens
+inlineResponse2007SpaceReclaimedL :: Lens_' InlineResponse2007 (Maybe Integer)
+inlineResponse2007SpaceReclaimedL f InlineResponse2007{..} = (\inlineResponse2007SpaceReclaimed -> InlineResponse2007 { inlineResponse2007SpaceReclaimed, ..} ) <$> f inlineResponse2007SpaceReclaimed
+{-# INLINE inlineResponse2007SpaceReclaimedL #-}
 
 
 
 -- * InlineResponse2008
 
--- | 'inlineResponse2008ImagesDeleted' Lens
-inlineResponse2008ImagesDeletedL :: Lens_' InlineResponse2008 (Maybe [ImageDeleteResponseItem])
-inlineResponse2008ImagesDeletedL f InlineResponse2008{..} = (\inlineResponse2008ImagesDeleted -> InlineResponse2008 { inlineResponse2008ImagesDeleted, ..} ) <$> f inlineResponse2008ImagesDeleted
-{-# INLINE inlineResponse2008ImagesDeletedL #-}
+-- | 'inlineResponse2008Status' Lens
+inlineResponse2008StatusL :: Lens_' InlineResponse2008 (Text)
+inlineResponse2008StatusL f InlineResponse2008{..} = (\inlineResponse2008Status -> InlineResponse2008 { inlineResponse2008Status, ..} ) <$> f inlineResponse2008Status
+{-# INLINE inlineResponse2008StatusL #-}
 
--- | 'inlineResponse2008SpaceReclaimed' Lens
-inlineResponse2008SpaceReclaimedL :: Lens_' InlineResponse2008 (Maybe Integer)
-inlineResponse2008SpaceReclaimedL f InlineResponse2008{..} = (\inlineResponse2008SpaceReclaimed -> InlineResponse2008 { inlineResponse2008SpaceReclaimed, ..} ) <$> f inlineResponse2008SpaceReclaimed
-{-# INLINE inlineResponse2008SpaceReclaimedL #-}
+-- | 'inlineResponse2008IdentityToken' Lens
+inlineResponse2008IdentityTokenL :: Lens_' InlineResponse2008 (Maybe Text)
+inlineResponse2008IdentityTokenL f InlineResponse2008{..} = (\inlineResponse2008IdentityToken -> InlineResponse2008 { inlineResponse2008IdentityToken, ..} ) <$> f inlineResponse2008IdentityToken
+{-# INLINE inlineResponse2008IdentityTokenL #-}
 
 
 
 -- * InlineResponse2009
 
--- | 'inlineResponse2009Status' Lens
-inlineResponse2009StatusL :: Lens_' InlineResponse2009 (Text)
-inlineResponse2009StatusL f InlineResponse2009{..} = (\inlineResponse2009Status -> InlineResponse2009 { inlineResponse2009Status, ..} ) <$> f inlineResponse2009Status
-{-# INLINE inlineResponse2009StatusL #-}
+-- | 'inlineResponse2009Architecture' Lens
+inlineResponse2009ArchitectureL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009ArchitectureL f InlineResponse2009{..} = (\inlineResponse2009Architecture -> InlineResponse2009 { inlineResponse2009Architecture, ..} ) <$> f inlineResponse2009Architecture
+{-# INLINE inlineResponse2009ArchitectureL #-}
 
--- | 'inlineResponse2009IdentityToken' Lens
-inlineResponse2009IdentityTokenL :: Lens_' InlineResponse2009 (Maybe Text)
-inlineResponse2009IdentityTokenL f InlineResponse2009{..} = (\inlineResponse2009IdentityToken -> InlineResponse2009 { inlineResponse2009IdentityToken, ..} ) <$> f inlineResponse2009IdentityToken
-{-# INLINE inlineResponse2009IdentityTokenL #-}
+-- | 'inlineResponse2009Containers' Lens
+inlineResponse2009ContainersL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009ContainersL f InlineResponse2009{..} = (\inlineResponse2009Containers -> InlineResponse2009 { inlineResponse2009Containers, ..} ) <$> f inlineResponse2009Containers
+{-# INLINE inlineResponse2009ContainersL #-}
+
+-- | 'inlineResponse2009ContainersRunning' Lens
+inlineResponse2009ContainersRunningL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009ContainersRunningL f InlineResponse2009{..} = (\inlineResponse2009ContainersRunning -> InlineResponse2009 { inlineResponse2009ContainersRunning, ..} ) <$> f inlineResponse2009ContainersRunning
+{-# INLINE inlineResponse2009ContainersRunningL #-}
+
+-- | 'inlineResponse2009ContainersStopped' Lens
+inlineResponse2009ContainersStoppedL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009ContainersStoppedL f InlineResponse2009{..} = (\inlineResponse2009ContainersStopped -> InlineResponse2009 { inlineResponse2009ContainersStopped, ..} ) <$> f inlineResponse2009ContainersStopped
+{-# INLINE inlineResponse2009ContainersStoppedL #-}
+
+-- | 'inlineResponse2009ContainersPaused' Lens
+inlineResponse2009ContainersPausedL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009ContainersPausedL f InlineResponse2009{..} = (\inlineResponse2009ContainersPaused -> InlineResponse2009 { inlineResponse2009ContainersPaused, ..} ) <$> f inlineResponse2009ContainersPaused
+{-# INLINE inlineResponse2009ContainersPausedL #-}
+
+-- | 'inlineResponse2009CpuCfsPeriod' Lens
+inlineResponse2009CpuCfsPeriodL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009CpuCfsPeriodL f InlineResponse2009{..} = (\inlineResponse2009CpuCfsPeriod -> InlineResponse2009 { inlineResponse2009CpuCfsPeriod, ..} ) <$> f inlineResponse2009CpuCfsPeriod
+{-# INLINE inlineResponse2009CpuCfsPeriodL #-}
+
+-- | 'inlineResponse2009CpuCfsQuota' Lens
+inlineResponse2009CpuCfsQuotaL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009CpuCfsQuotaL f InlineResponse2009{..} = (\inlineResponse2009CpuCfsQuota -> InlineResponse2009 { inlineResponse2009CpuCfsQuota, ..} ) <$> f inlineResponse2009CpuCfsQuota
+{-# INLINE inlineResponse2009CpuCfsQuotaL #-}
+
+-- | 'inlineResponse2009Debug' Lens
+inlineResponse2009DebugL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009DebugL f InlineResponse2009{..} = (\inlineResponse2009Debug -> InlineResponse2009 { inlineResponse2009Debug, ..} ) <$> f inlineResponse2009Debug
+{-# INLINE inlineResponse2009DebugL #-}
+
+-- | 'inlineResponse2009DiscoveryBackend' Lens
+inlineResponse2009DiscoveryBackendL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009DiscoveryBackendL f InlineResponse2009{..} = (\inlineResponse2009DiscoveryBackend -> InlineResponse2009 { inlineResponse2009DiscoveryBackend, ..} ) <$> f inlineResponse2009DiscoveryBackend
+{-# INLINE inlineResponse2009DiscoveryBackendL #-}
+
+-- | 'inlineResponse2009DockerRootDir' Lens
+inlineResponse2009DockerRootDirL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009DockerRootDirL f InlineResponse2009{..} = (\inlineResponse2009DockerRootDir -> InlineResponse2009 { inlineResponse2009DockerRootDir, ..} ) <$> f inlineResponse2009DockerRootDir
+{-# INLINE inlineResponse2009DockerRootDirL #-}
+
+-- | 'inlineResponse2009Driver' Lens
+inlineResponse2009DriverL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009DriverL f InlineResponse2009{..} = (\inlineResponse2009Driver -> InlineResponse2009 { inlineResponse2009Driver, ..} ) <$> f inlineResponse2009Driver
+{-# INLINE inlineResponse2009DriverL #-}
+
+-- | 'inlineResponse2009DriverStatus' Lens
+inlineResponse2009DriverStatusL :: Lens_' InlineResponse2009 (Maybe [[Text]])
+inlineResponse2009DriverStatusL f InlineResponse2009{..} = (\inlineResponse2009DriverStatus -> InlineResponse2009 { inlineResponse2009DriverStatus, ..} ) <$> f inlineResponse2009DriverStatus
+{-# INLINE inlineResponse2009DriverStatusL #-}
+
+-- | 'inlineResponse2009SystemStatus' Lens
+inlineResponse2009SystemStatusL :: Lens_' InlineResponse2009 (Maybe [[Text]])
+inlineResponse2009SystemStatusL f InlineResponse2009{..} = (\inlineResponse2009SystemStatus -> InlineResponse2009 { inlineResponse2009SystemStatus, ..} ) <$> f inlineResponse2009SystemStatus
+{-# INLINE inlineResponse2009SystemStatusL #-}
+
+-- | 'inlineResponse2009Plugins' Lens
+inlineResponse2009PluginsL :: Lens_' InlineResponse2009 (Maybe InlineResponse2009Plugins)
+inlineResponse2009PluginsL f InlineResponse2009{..} = (\inlineResponse2009Plugins -> InlineResponse2009 { inlineResponse2009Plugins, ..} ) <$> f inlineResponse2009Plugins
+{-# INLINE inlineResponse2009PluginsL #-}
+
+-- | 'inlineResponse2009ExperimentalBuild' Lens
+inlineResponse2009ExperimentalBuildL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009ExperimentalBuildL f InlineResponse2009{..} = (\inlineResponse2009ExperimentalBuild -> InlineResponse2009 { inlineResponse2009ExperimentalBuild, ..} ) <$> f inlineResponse2009ExperimentalBuild
+{-# INLINE inlineResponse2009ExperimentalBuildL #-}
+
+-- | 'inlineResponse2009HttpProxy' Lens
+inlineResponse2009HttpProxyL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009HttpProxyL f InlineResponse2009{..} = (\inlineResponse2009HttpProxy -> InlineResponse2009 { inlineResponse2009HttpProxy, ..} ) <$> f inlineResponse2009HttpProxy
+{-# INLINE inlineResponse2009HttpProxyL #-}
+
+-- | 'inlineResponse2009HttpsProxy' Lens
+inlineResponse2009HttpsProxyL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009HttpsProxyL f InlineResponse2009{..} = (\inlineResponse2009HttpsProxy -> InlineResponse2009 { inlineResponse2009HttpsProxy, ..} ) <$> f inlineResponse2009HttpsProxy
+{-# INLINE inlineResponse2009HttpsProxyL #-}
+
+-- | 'inlineResponse2009Id' Lens
+inlineResponse2009IdL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009IdL f InlineResponse2009{..} = (\inlineResponse2009Id -> InlineResponse2009 { inlineResponse2009Id, ..} ) <$> f inlineResponse2009Id
+{-# INLINE inlineResponse2009IdL #-}
+
+-- | 'inlineResponse2009IPv4Forwarding' Lens
+inlineResponse2009IPv4ForwardingL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009IPv4ForwardingL f InlineResponse2009{..} = (\inlineResponse2009IPv4Forwarding -> InlineResponse2009 { inlineResponse2009IPv4Forwarding, ..} ) <$> f inlineResponse2009IPv4Forwarding
+{-# INLINE inlineResponse2009IPv4ForwardingL #-}
+
+-- | 'inlineResponse2009Images' Lens
+inlineResponse2009ImagesL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009ImagesL f InlineResponse2009{..} = (\inlineResponse2009Images -> InlineResponse2009 { inlineResponse2009Images, ..} ) <$> f inlineResponse2009Images
+{-# INLINE inlineResponse2009ImagesL #-}
+
+-- | 'inlineResponse2009IndexServerAddress' Lens
+inlineResponse2009IndexServerAddressL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009IndexServerAddressL f InlineResponse2009{..} = (\inlineResponse2009IndexServerAddress -> InlineResponse2009 { inlineResponse2009IndexServerAddress, ..} ) <$> f inlineResponse2009IndexServerAddress
+{-# INLINE inlineResponse2009IndexServerAddressL #-}
+
+-- | 'inlineResponse2009InitPath' Lens
+inlineResponse2009InitPathL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009InitPathL f InlineResponse2009{..} = (\inlineResponse2009InitPath -> InlineResponse2009 { inlineResponse2009InitPath, ..} ) <$> f inlineResponse2009InitPath
+{-# INLINE inlineResponse2009InitPathL #-}
+
+-- | 'inlineResponse2009InitSha1' Lens
+inlineResponse2009InitSha1L :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009InitSha1L f InlineResponse2009{..} = (\inlineResponse2009InitSha1 -> InlineResponse2009 { inlineResponse2009InitSha1, ..} ) <$> f inlineResponse2009InitSha1
+{-# INLINE inlineResponse2009InitSha1L #-}
+
+-- | 'inlineResponse2009KernelVersion' Lens
+inlineResponse2009KernelVersionL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009KernelVersionL f InlineResponse2009{..} = (\inlineResponse2009KernelVersion -> InlineResponse2009 { inlineResponse2009KernelVersion, ..} ) <$> f inlineResponse2009KernelVersion
+{-# INLINE inlineResponse2009KernelVersionL #-}
+
+-- | 'inlineResponse2009Labels' Lens
+inlineResponse2009LabelsL :: Lens_' InlineResponse2009 (Maybe [Text])
+inlineResponse2009LabelsL f InlineResponse2009{..} = (\inlineResponse2009Labels -> InlineResponse2009 { inlineResponse2009Labels, ..} ) <$> f inlineResponse2009Labels
+{-# INLINE inlineResponse2009LabelsL #-}
+
+-- | 'inlineResponse2009MemTotal' Lens
+inlineResponse2009MemTotalL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009MemTotalL f InlineResponse2009{..} = (\inlineResponse2009MemTotal -> InlineResponse2009 { inlineResponse2009MemTotal, ..} ) <$> f inlineResponse2009MemTotal
+{-# INLINE inlineResponse2009MemTotalL #-}
+
+-- | 'inlineResponse2009MemoryLimit' Lens
+inlineResponse2009MemoryLimitL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009MemoryLimitL f InlineResponse2009{..} = (\inlineResponse2009MemoryLimit -> InlineResponse2009 { inlineResponse2009MemoryLimit, ..} ) <$> f inlineResponse2009MemoryLimit
+{-# INLINE inlineResponse2009MemoryLimitL #-}
+
+-- | 'inlineResponse2009Ncpu' Lens
+inlineResponse2009NcpuL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009NcpuL f InlineResponse2009{..} = (\inlineResponse2009Ncpu -> InlineResponse2009 { inlineResponse2009Ncpu, ..} ) <$> f inlineResponse2009Ncpu
+{-# INLINE inlineResponse2009NcpuL #-}
+
+-- | 'inlineResponse2009NEventsListener' Lens
+inlineResponse2009NEventsListenerL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009NEventsListenerL f InlineResponse2009{..} = (\inlineResponse2009NEventsListener -> InlineResponse2009 { inlineResponse2009NEventsListener, ..} ) <$> f inlineResponse2009NEventsListener
+{-# INLINE inlineResponse2009NEventsListenerL #-}
+
+-- | 'inlineResponse2009NFd' Lens
+inlineResponse2009NFdL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009NFdL f InlineResponse2009{..} = (\inlineResponse2009NFd -> InlineResponse2009 { inlineResponse2009NFd, ..} ) <$> f inlineResponse2009NFd
+{-# INLINE inlineResponse2009NFdL #-}
+
+-- | 'inlineResponse2009NGoroutines' Lens
+inlineResponse2009NGoroutinesL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009NGoroutinesL f InlineResponse2009{..} = (\inlineResponse2009NGoroutines -> InlineResponse2009 { inlineResponse2009NGoroutines, ..} ) <$> f inlineResponse2009NGoroutines
+{-# INLINE inlineResponse2009NGoroutinesL #-}
+
+-- | 'inlineResponse2009Name' Lens
+inlineResponse2009NameL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009NameL f InlineResponse2009{..} = (\inlineResponse2009Name -> InlineResponse2009 { inlineResponse2009Name, ..} ) <$> f inlineResponse2009Name
+{-# INLINE inlineResponse2009NameL #-}
+
+-- | 'inlineResponse2009NoProxy' Lens
+inlineResponse2009NoProxyL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009NoProxyL f InlineResponse2009{..} = (\inlineResponse2009NoProxy -> InlineResponse2009 { inlineResponse2009NoProxy, ..} ) <$> f inlineResponse2009NoProxy
+{-# INLINE inlineResponse2009NoProxyL #-}
+
+-- | 'inlineResponse2009OomKillDisable' Lens
+inlineResponse2009OomKillDisableL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009OomKillDisableL f InlineResponse2009{..} = (\inlineResponse2009OomKillDisable -> InlineResponse2009 { inlineResponse2009OomKillDisable, ..} ) <$> f inlineResponse2009OomKillDisable
+{-# INLINE inlineResponse2009OomKillDisableL #-}
+
+-- | 'inlineResponse2009OsType' Lens
+inlineResponse2009OsTypeL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009OsTypeL f InlineResponse2009{..} = (\inlineResponse2009OsType -> InlineResponse2009 { inlineResponse2009OsType, ..} ) <$> f inlineResponse2009OsType
+{-# INLINE inlineResponse2009OsTypeL #-}
+
+-- | 'inlineResponse2009OomScoreAdj' Lens
+inlineResponse2009OomScoreAdjL :: Lens_' InlineResponse2009 (Maybe Int)
+inlineResponse2009OomScoreAdjL f InlineResponse2009{..} = (\inlineResponse2009OomScoreAdj -> InlineResponse2009 { inlineResponse2009OomScoreAdj, ..} ) <$> f inlineResponse2009OomScoreAdj
+{-# INLINE inlineResponse2009OomScoreAdjL #-}
+
+-- | 'inlineResponse2009OperatingSystem' Lens
+inlineResponse2009OperatingSystemL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009OperatingSystemL f InlineResponse2009{..} = (\inlineResponse2009OperatingSystem -> InlineResponse2009 { inlineResponse2009OperatingSystem, ..} ) <$> f inlineResponse2009OperatingSystem
+{-# INLINE inlineResponse2009OperatingSystemL #-}
+
+-- | 'inlineResponse2009RegistryConfig' Lens
+inlineResponse2009RegistryConfigL :: Lens_' InlineResponse2009 (Maybe InlineResponse2009RegistryConfig)
+inlineResponse2009RegistryConfigL f InlineResponse2009{..} = (\inlineResponse2009RegistryConfig -> InlineResponse2009 { inlineResponse2009RegistryConfig, ..} ) <$> f inlineResponse2009RegistryConfig
+{-# INLINE inlineResponse2009RegistryConfigL #-}
+
+-- | 'inlineResponse2009SwapLimit' Lens
+inlineResponse2009SwapLimitL :: Lens_' InlineResponse2009 (Maybe Bool)
+inlineResponse2009SwapLimitL f InlineResponse2009{..} = (\inlineResponse2009SwapLimit -> InlineResponse2009 { inlineResponse2009SwapLimit, ..} ) <$> f inlineResponse2009SwapLimit
+{-# INLINE inlineResponse2009SwapLimitL #-}
+
+-- | 'inlineResponse2009SystemTime' Lens
+inlineResponse2009SystemTimeL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009SystemTimeL f InlineResponse2009{..} = (\inlineResponse2009SystemTime -> InlineResponse2009 { inlineResponse2009SystemTime, ..} ) <$> f inlineResponse2009SystemTime
+{-# INLINE inlineResponse2009SystemTimeL #-}
+
+-- | 'inlineResponse2009ServerVersion' Lens
+inlineResponse2009ServerVersionL :: Lens_' InlineResponse2009 (Maybe Text)
+inlineResponse2009ServerVersionL f InlineResponse2009{..} = (\inlineResponse2009ServerVersion -> InlineResponse2009 { inlineResponse2009ServerVersion, ..} ) <$> f inlineResponse2009ServerVersion
+{-# INLINE inlineResponse2009ServerVersionL #-}
 
 
 
--- * InlineResponse200State
+-- * InlineResponse2009Plugins
 
--- | 'inlineResponse200StateStatus' Lens
-inlineResponse200StateStatusL :: Lens_' InlineResponse200State (Maybe E'Status)
-inlineResponse200StateStatusL f InlineResponse200State{..} = (\inlineResponse200StateStatus -> InlineResponse200State { inlineResponse200StateStatus, ..} ) <$> f inlineResponse200StateStatus
-{-# INLINE inlineResponse200StateStatusL #-}
+-- | 'inlineResponse2009PluginsVolume' Lens
+inlineResponse2009PluginsVolumeL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
+inlineResponse2009PluginsVolumeL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsVolume -> InlineResponse2009Plugins { inlineResponse2009PluginsVolume, ..} ) <$> f inlineResponse2009PluginsVolume
+{-# INLINE inlineResponse2009PluginsVolumeL #-}
 
--- | 'inlineResponse200StateRunning' Lens
-inlineResponse200StateRunningL :: Lens_' InlineResponse200State (Maybe Bool)
-inlineResponse200StateRunningL f InlineResponse200State{..} = (\inlineResponse200StateRunning -> InlineResponse200State { inlineResponse200StateRunning, ..} ) <$> f inlineResponse200StateRunning
-{-# INLINE inlineResponse200StateRunningL #-}
+-- | 'inlineResponse2009PluginsNetwork' Lens
+inlineResponse2009PluginsNetworkL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
+inlineResponse2009PluginsNetworkL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsNetwork -> InlineResponse2009Plugins { inlineResponse2009PluginsNetwork, ..} ) <$> f inlineResponse2009PluginsNetwork
+{-# INLINE inlineResponse2009PluginsNetworkL #-}
 
--- | 'inlineResponse200StatePaused' Lens
-inlineResponse200StatePausedL :: Lens_' InlineResponse200State (Maybe Bool)
-inlineResponse200StatePausedL f InlineResponse200State{..} = (\inlineResponse200StatePaused -> InlineResponse200State { inlineResponse200StatePaused, ..} ) <$> f inlineResponse200StatePaused
-{-# INLINE inlineResponse200StatePausedL #-}
+-- | 'inlineResponse2009PluginsLog' Lens
+inlineResponse2009PluginsLogL :: Lens_' InlineResponse2009Plugins (Maybe [Text])
+inlineResponse2009PluginsLogL f InlineResponse2009Plugins{..} = (\inlineResponse2009PluginsLog -> InlineResponse2009Plugins { inlineResponse2009PluginsLog, ..} ) <$> f inlineResponse2009PluginsLog
+{-# INLINE inlineResponse2009PluginsLogL #-}
 
--- | 'inlineResponse200StateRestarting' Lens
-inlineResponse200StateRestartingL :: Lens_' InlineResponse200State (Maybe Bool)
-inlineResponse200StateRestartingL f InlineResponse200State{..} = (\inlineResponse200StateRestarting -> InlineResponse200State { inlineResponse200StateRestarting, ..} ) <$> f inlineResponse200StateRestarting
-{-# INLINE inlineResponse200StateRestartingL #-}
 
--- | 'inlineResponse200StateOomKilled' Lens
-inlineResponse200StateOomKilledL :: Lens_' InlineResponse200State (Maybe Bool)
-inlineResponse200StateOomKilledL f InlineResponse200State{..} = (\inlineResponse200StateOomKilled -> InlineResponse200State { inlineResponse200StateOomKilled, ..} ) <$> f inlineResponse200StateOomKilled
-{-# INLINE inlineResponse200StateOomKilledL #-}
 
--- | 'inlineResponse200StateDead' Lens
-inlineResponse200StateDeadL :: Lens_' InlineResponse200State (Maybe Bool)
-inlineResponse200StateDeadL f InlineResponse200State{..} = (\inlineResponse200StateDead -> InlineResponse200State { inlineResponse200StateDead, ..} ) <$> f inlineResponse200StateDead
-{-# INLINE inlineResponse200StateDeadL #-}
+-- * InlineResponse2009RegistryConfig
 
--- | 'inlineResponse200StatePid' Lens
-inlineResponse200StatePidL :: Lens_' InlineResponse200State (Maybe Int)
-inlineResponse200StatePidL f InlineResponse200State{..} = (\inlineResponse200StatePid -> InlineResponse200State { inlineResponse200StatePid, ..} ) <$> f inlineResponse200StatePid
-{-# INLINE inlineResponse200StatePidL #-}
+-- | 'inlineResponse2009RegistryConfigIndexConfigs' Lens
+inlineResponse2009RegistryConfigIndexConfigsL :: Lens_' InlineResponse2009RegistryConfig (Maybe (Map.Map String InlineResponse2009RegistryConfigIndexConfigs))
+inlineResponse2009RegistryConfigIndexConfigsL f InlineResponse2009RegistryConfig{..} = (\inlineResponse2009RegistryConfigIndexConfigs -> InlineResponse2009RegistryConfig { inlineResponse2009RegistryConfigIndexConfigs, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigs
+{-# INLINE inlineResponse2009RegistryConfigIndexConfigsL #-}
 
--- | 'inlineResponse200StateExitCode' Lens
-inlineResponse200StateExitCodeL :: Lens_' InlineResponse200State (Maybe Int)
-inlineResponse200StateExitCodeL f InlineResponse200State{..} = (\inlineResponse200StateExitCode -> InlineResponse200State { inlineResponse200StateExitCode, ..} ) <$> f inlineResponse200StateExitCode
-{-# INLINE inlineResponse200StateExitCodeL #-}
+-- | 'inlineResponse2009RegistryConfigInsecureRegistryCidRs' Lens
+inlineResponse2009RegistryConfigInsecureRegistryCidRsL :: Lens_' InlineResponse2009RegistryConfig (Maybe [Text])
+inlineResponse2009RegistryConfigInsecureRegistryCidRsL f InlineResponse2009RegistryConfig{..} = (\inlineResponse2009RegistryConfigInsecureRegistryCidRs -> InlineResponse2009RegistryConfig { inlineResponse2009RegistryConfigInsecureRegistryCidRs, ..} ) <$> f inlineResponse2009RegistryConfigInsecureRegistryCidRs
+{-# INLINE inlineResponse2009RegistryConfigInsecureRegistryCidRsL #-}
 
--- | 'inlineResponse200StateError' Lens
-inlineResponse200StateErrorL :: Lens_' InlineResponse200State (Maybe Text)
-inlineResponse200StateErrorL f InlineResponse200State{..} = (\inlineResponse200StateError -> InlineResponse200State { inlineResponse200StateError, ..} ) <$> f inlineResponse200StateError
-{-# INLINE inlineResponse200StateErrorL #-}
 
--- | 'inlineResponse200StateStartedAt' Lens
-inlineResponse200StateStartedAtL :: Lens_' InlineResponse200State (Maybe Text)
-inlineResponse200StateStartedAtL f InlineResponse200State{..} = (\inlineResponse200StateStartedAt -> InlineResponse200State { inlineResponse200StateStartedAt, ..} ) <$> f inlineResponse200StateStartedAt
-{-# INLINE inlineResponse200StateStartedAtL #-}
 
--- | 'inlineResponse200StateFinishedAt' Lens
-inlineResponse200StateFinishedAtL :: Lens_' InlineResponse200State (Maybe Text)
-inlineResponse200StateFinishedAtL f InlineResponse200State{..} = (\inlineResponse200StateFinishedAt -> InlineResponse200State { inlineResponse200StateFinishedAt, ..} ) <$> f inlineResponse200StateFinishedAt
-{-# INLINE inlineResponse200StateFinishedAtL #-}
+-- * InlineResponse2009RegistryConfigIndexConfigs
+
+-- | 'inlineResponse2009RegistryConfigIndexConfigsMirrors' Lens
+inlineResponse2009RegistryConfigIndexConfigsMirrorsL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe [Text])
+inlineResponse2009RegistryConfigIndexConfigsMirrorsL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsMirrors -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsMirrors, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsMirrors
+{-# INLINE inlineResponse2009RegistryConfigIndexConfigsMirrorsL #-}
+
+-- | 'inlineResponse2009RegistryConfigIndexConfigsName' Lens
+inlineResponse2009RegistryConfigIndexConfigsNameL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Text)
+inlineResponse2009RegistryConfigIndexConfigsNameL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsName -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsName, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsName
+{-# INLINE inlineResponse2009RegistryConfigIndexConfigsNameL #-}
+
+-- | 'inlineResponse2009RegistryConfigIndexConfigsOfficial' Lens
+inlineResponse2009RegistryConfigIndexConfigsOfficialL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Bool)
+inlineResponse2009RegistryConfigIndexConfigsOfficialL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsOfficial -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsOfficial, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsOfficial
+{-# INLINE inlineResponse2009RegistryConfigIndexConfigsOfficialL #-}
+
+-- | 'inlineResponse2009RegistryConfigIndexConfigsSecure' Lens
+inlineResponse2009RegistryConfigIndexConfigsSecureL :: Lens_' InlineResponse2009RegistryConfigIndexConfigs (Maybe Bool)
+inlineResponse2009RegistryConfigIndexConfigsSecureL f InlineResponse2009RegistryConfigIndexConfigs{..} = (\inlineResponse2009RegistryConfigIndexConfigsSecure -> InlineResponse2009RegistryConfigIndexConfigs { inlineResponse2009RegistryConfigIndexConfigsSecure, ..} ) <$> f inlineResponse2009RegistryConfigIndexConfigsSecure
+{-# INLINE inlineResponse2009RegistryConfigIndexConfigsSecureL #-}
 
 
 
@@ -2603,6 +2415,194 @@ inlineResponse400ErrorResponseL f InlineResponse400{..} = (\inlineResponse400Err
 inlineResponse400MessageL :: Lens_' InlineResponse400 (Maybe Text)
 inlineResponse400MessageL f InlineResponse400{..} = (\inlineResponse400Message -> InlineResponse400 { inlineResponse400Message, ..} ) <$> f inlineResponse400Message
 {-# INLINE inlineResponse400MessageL #-}
+
+
+
+-- * InspectResponse
+
+-- | 'inspectResponseId' Lens
+inspectResponseIdL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseIdL f InspectResponse{..} = (\inspectResponseId -> InspectResponse { inspectResponseId, ..} ) <$> f inspectResponseId
+{-# INLINE inspectResponseIdL #-}
+
+-- | 'inspectResponseCreated' Lens
+inspectResponseCreatedL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseCreatedL f InspectResponse{..} = (\inspectResponseCreated -> InspectResponse { inspectResponseCreated, ..} ) <$> f inspectResponseCreated
+{-# INLINE inspectResponseCreatedL #-}
+
+-- | 'inspectResponsePath' Lens
+inspectResponsePathL :: Lens_' InspectResponse (Maybe Text)
+inspectResponsePathL f InspectResponse{..} = (\inspectResponsePath -> InspectResponse { inspectResponsePath, ..} ) <$> f inspectResponsePath
+{-# INLINE inspectResponsePathL #-}
+
+-- | 'inspectResponseArgs' Lens
+inspectResponseArgsL :: Lens_' InspectResponse (Maybe [Text])
+inspectResponseArgsL f InspectResponse{..} = (\inspectResponseArgs -> InspectResponse { inspectResponseArgs, ..} ) <$> f inspectResponseArgs
+{-# INLINE inspectResponseArgsL #-}
+
+-- | 'inspectResponseState' Lens
+inspectResponseStateL :: Lens_' InspectResponse (Maybe InspectResponseState)
+inspectResponseStateL f InspectResponse{..} = (\inspectResponseState -> InspectResponse { inspectResponseState, ..} ) <$> f inspectResponseState
+{-# INLINE inspectResponseStateL #-}
+
+-- | 'inspectResponseImage' Lens
+inspectResponseImageL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseImageL f InspectResponse{..} = (\inspectResponseImage -> InspectResponse { inspectResponseImage, ..} ) <$> f inspectResponseImage
+{-# INLINE inspectResponseImageL #-}
+
+-- | 'inspectResponseResolvConfPath' Lens
+inspectResponseResolvConfPathL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseResolvConfPathL f InspectResponse{..} = (\inspectResponseResolvConfPath -> InspectResponse { inspectResponseResolvConfPath, ..} ) <$> f inspectResponseResolvConfPath
+{-# INLINE inspectResponseResolvConfPathL #-}
+
+-- | 'inspectResponseHostnamePath' Lens
+inspectResponseHostnamePathL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseHostnamePathL f InspectResponse{..} = (\inspectResponseHostnamePath -> InspectResponse { inspectResponseHostnamePath, ..} ) <$> f inspectResponseHostnamePath
+{-# INLINE inspectResponseHostnamePathL #-}
+
+-- | 'inspectResponseHostsPath' Lens
+inspectResponseHostsPathL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseHostsPathL f InspectResponse{..} = (\inspectResponseHostsPath -> InspectResponse { inspectResponseHostsPath, ..} ) <$> f inspectResponseHostsPath
+{-# INLINE inspectResponseHostsPathL #-}
+
+-- | 'inspectResponseLogPath' Lens
+inspectResponseLogPathL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseLogPathL f InspectResponse{..} = (\inspectResponseLogPath -> InspectResponse { inspectResponseLogPath, ..} ) <$> f inspectResponseLogPath
+{-# INLINE inspectResponseLogPathL #-}
+
+-- | 'inspectResponseNode' Lens
+inspectResponseNodeL :: Lens_' InspectResponse (Maybe A.Value)
+inspectResponseNodeL f InspectResponse{..} = (\inspectResponseNode -> InspectResponse { inspectResponseNode, ..} ) <$> f inspectResponseNode
+{-# INLINE inspectResponseNodeL #-}
+
+-- | 'inspectResponseName' Lens
+inspectResponseNameL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseNameL f InspectResponse{..} = (\inspectResponseName -> InspectResponse { inspectResponseName, ..} ) <$> f inspectResponseName
+{-# INLINE inspectResponseNameL #-}
+
+-- | 'inspectResponseRestartCount' Lens
+inspectResponseRestartCountL :: Lens_' InspectResponse (Maybe Int)
+inspectResponseRestartCountL f InspectResponse{..} = (\inspectResponseRestartCount -> InspectResponse { inspectResponseRestartCount, ..} ) <$> f inspectResponseRestartCount
+{-# INLINE inspectResponseRestartCountL #-}
+
+-- | 'inspectResponseDriver' Lens
+inspectResponseDriverL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseDriverL f InspectResponse{..} = (\inspectResponseDriver -> InspectResponse { inspectResponseDriver, ..} ) <$> f inspectResponseDriver
+{-# INLINE inspectResponseDriverL #-}
+
+-- | 'inspectResponseMountLabel' Lens
+inspectResponseMountLabelL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseMountLabelL f InspectResponse{..} = (\inspectResponseMountLabel -> InspectResponse { inspectResponseMountLabel, ..} ) <$> f inspectResponseMountLabel
+{-# INLINE inspectResponseMountLabelL #-}
+
+-- | 'inspectResponseProcessLabel' Lens
+inspectResponseProcessLabelL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseProcessLabelL f InspectResponse{..} = (\inspectResponseProcessLabel -> InspectResponse { inspectResponseProcessLabel, ..} ) <$> f inspectResponseProcessLabel
+{-# INLINE inspectResponseProcessLabelL #-}
+
+-- | 'inspectResponseAppArmorProfile' Lens
+inspectResponseAppArmorProfileL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseAppArmorProfileL f InspectResponse{..} = (\inspectResponseAppArmorProfile -> InspectResponse { inspectResponseAppArmorProfile, ..} ) <$> f inspectResponseAppArmorProfile
+{-# INLINE inspectResponseAppArmorProfileL #-}
+
+-- | 'inspectResponseExecIDs' Lens
+inspectResponseExecIDsL :: Lens_' InspectResponse (Maybe Text)
+inspectResponseExecIDsL f InspectResponse{..} = (\inspectResponseExecIDs -> InspectResponse { inspectResponseExecIDs, ..} ) <$> f inspectResponseExecIDs
+{-# INLINE inspectResponseExecIDsL #-}
+
+-- | 'inspectResponseHostConfig' Lens
+inspectResponseHostConfigL :: Lens_' InspectResponse (Maybe HostConfig)
+inspectResponseHostConfigL f InspectResponse{..} = (\inspectResponseHostConfig -> InspectResponse { inspectResponseHostConfig, ..} ) <$> f inspectResponseHostConfig
+{-# INLINE inspectResponseHostConfigL #-}
+
+-- | 'inspectResponseGraphDriver' Lens
+inspectResponseGraphDriverL :: Lens_' InspectResponse (Maybe GraphDriverData)
+inspectResponseGraphDriverL f InspectResponse{..} = (\inspectResponseGraphDriver -> InspectResponse { inspectResponseGraphDriver, ..} ) <$> f inspectResponseGraphDriver
+{-# INLINE inspectResponseGraphDriverL #-}
+
+-- | 'inspectResponseSizeRw' Lens
+inspectResponseSizeRwL :: Lens_' InspectResponse (Maybe Integer)
+inspectResponseSizeRwL f InspectResponse{..} = (\inspectResponseSizeRw -> InspectResponse { inspectResponseSizeRw, ..} ) <$> f inspectResponseSizeRw
+{-# INLINE inspectResponseSizeRwL #-}
+
+-- | 'inspectResponseSizeRootFs' Lens
+inspectResponseSizeRootFsL :: Lens_' InspectResponse (Maybe Integer)
+inspectResponseSizeRootFsL f InspectResponse{..} = (\inspectResponseSizeRootFs -> InspectResponse { inspectResponseSizeRootFs, ..} ) <$> f inspectResponseSizeRootFs
+{-# INLINE inspectResponseSizeRootFsL #-}
+
+-- | 'inspectResponseMounts' Lens
+inspectResponseMountsL :: Lens_' InspectResponse (Maybe [MountPoint])
+inspectResponseMountsL f InspectResponse{..} = (\inspectResponseMounts -> InspectResponse { inspectResponseMounts, ..} ) <$> f inspectResponseMounts
+{-# INLINE inspectResponseMountsL #-}
+
+-- | 'inspectResponseConfig' Lens
+inspectResponseConfigL :: Lens_' InspectResponse (Maybe ContainerConfig)
+inspectResponseConfigL f InspectResponse{..} = (\inspectResponseConfig -> InspectResponse { inspectResponseConfig, ..} ) <$> f inspectResponseConfig
+{-# INLINE inspectResponseConfigL #-}
+
+-- | 'inspectResponseNetworkSettings' Lens
+inspectResponseNetworkSettingsL :: Lens_' InspectResponse (Maybe NetworkConfig)
+inspectResponseNetworkSettingsL f InspectResponse{..} = (\inspectResponseNetworkSettings -> InspectResponse { inspectResponseNetworkSettings, ..} ) <$> f inspectResponseNetworkSettings
+{-# INLINE inspectResponseNetworkSettingsL #-}
+
+
+
+-- * InspectResponseState
+
+-- | 'inspectResponseStateStatus' Lens
+inspectResponseStateStatusL :: Lens_' InspectResponseState (Maybe E'Status)
+inspectResponseStateStatusL f InspectResponseState{..} = (\inspectResponseStateStatus -> InspectResponseState { inspectResponseStateStatus, ..} ) <$> f inspectResponseStateStatus
+{-# INLINE inspectResponseStateStatusL #-}
+
+-- | 'inspectResponseStateRunning' Lens
+inspectResponseStateRunningL :: Lens_' InspectResponseState (Maybe Bool)
+inspectResponseStateRunningL f InspectResponseState{..} = (\inspectResponseStateRunning -> InspectResponseState { inspectResponseStateRunning, ..} ) <$> f inspectResponseStateRunning
+{-# INLINE inspectResponseStateRunningL #-}
+
+-- | 'inspectResponseStatePaused' Lens
+inspectResponseStatePausedL :: Lens_' InspectResponseState (Maybe Bool)
+inspectResponseStatePausedL f InspectResponseState{..} = (\inspectResponseStatePaused -> InspectResponseState { inspectResponseStatePaused, ..} ) <$> f inspectResponseStatePaused
+{-# INLINE inspectResponseStatePausedL #-}
+
+-- | 'inspectResponseStateRestarting' Lens
+inspectResponseStateRestartingL :: Lens_' InspectResponseState (Maybe Bool)
+inspectResponseStateRestartingL f InspectResponseState{..} = (\inspectResponseStateRestarting -> InspectResponseState { inspectResponseStateRestarting, ..} ) <$> f inspectResponseStateRestarting
+{-# INLINE inspectResponseStateRestartingL #-}
+
+-- | 'inspectResponseStateOomKilled' Lens
+inspectResponseStateOomKilledL :: Lens_' InspectResponseState (Maybe Bool)
+inspectResponseStateOomKilledL f InspectResponseState{..} = (\inspectResponseStateOomKilled -> InspectResponseState { inspectResponseStateOomKilled, ..} ) <$> f inspectResponseStateOomKilled
+{-# INLINE inspectResponseStateOomKilledL #-}
+
+-- | 'inspectResponseStateDead' Lens
+inspectResponseStateDeadL :: Lens_' InspectResponseState (Maybe Bool)
+inspectResponseStateDeadL f InspectResponseState{..} = (\inspectResponseStateDead -> InspectResponseState { inspectResponseStateDead, ..} ) <$> f inspectResponseStateDead
+{-# INLINE inspectResponseStateDeadL #-}
+
+-- | 'inspectResponseStatePid' Lens
+inspectResponseStatePidL :: Lens_' InspectResponseState (Maybe Int)
+inspectResponseStatePidL f InspectResponseState{..} = (\inspectResponseStatePid -> InspectResponseState { inspectResponseStatePid, ..} ) <$> f inspectResponseStatePid
+{-# INLINE inspectResponseStatePidL #-}
+
+-- | 'inspectResponseStateExitCode' Lens
+inspectResponseStateExitCodeL :: Lens_' InspectResponseState (Maybe Int)
+inspectResponseStateExitCodeL f InspectResponseState{..} = (\inspectResponseStateExitCode -> InspectResponseState { inspectResponseStateExitCode, ..} ) <$> f inspectResponseStateExitCode
+{-# INLINE inspectResponseStateExitCodeL #-}
+
+-- | 'inspectResponseStateError' Lens
+inspectResponseStateErrorL :: Lens_' InspectResponseState (Maybe Text)
+inspectResponseStateErrorL f InspectResponseState{..} = (\inspectResponseStateError -> InspectResponseState { inspectResponseStateError, ..} ) <$> f inspectResponseStateError
+{-# INLINE inspectResponseStateErrorL #-}
+
+-- | 'inspectResponseStateStartedAt' Lens
+inspectResponseStateStartedAtL :: Lens_' InspectResponseState (Maybe Text)
+inspectResponseStateStartedAtL f InspectResponseState{..} = (\inspectResponseStateStartedAt -> InspectResponseState { inspectResponseStateStartedAt, ..} ) <$> f inspectResponseStateStartedAt
+{-# INLINE inspectResponseStateStartedAtL #-}
+
+-- | 'inspectResponseStateFinishedAt' Lens
+inspectResponseStateFinishedAtL :: Lens_' InspectResponseState (Maybe Text)
+inspectResponseStateFinishedAtL f InspectResponseState{..} = (\inspectResponseStateFinishedAt -> InspectResponseState { inspectResponseStateFinishedAt, ..} ) <$> f inspectResponseStateFinishedAt
+{-# INLINE inspectResponseStateFinishedAtL #-}
 
 
 

@@ -95,7 +95,7 @@ instance Produces SwarmInit MimePlainText
 -- 
 swarmInspect 
   :: Accept accept -- ^ request accept ('MimeType')
-  -> DockerEngineRequest SwarmInspect MimeNoContent InlineResponse20019 accept
+  -> DockerEngineRequest SwarmInspect MimeNoContent InlineResponse20018 accept
 swarmInspect  _ =
   _mkRequest "GET" ["/swarm"]
 
@@ -198,7 +198,7 @@ instance Produces SwarmUnlock MimeJSON
 -- 
 swarmUnlockkey 
   :: Accept accept -- ^ request accept ('MimeType')
-  -> DockerEngineRequest SwarmUnlockkey MimeNoContent InlineResponse20020 accept
+  -> DockerEngineRequest SwarmUnlockkey MimeNoContent InlineResponse20019 accept
 swarmUnlockkey  _ =
   _mkRequest "GET" ["/swarm/unlockkey"]
 

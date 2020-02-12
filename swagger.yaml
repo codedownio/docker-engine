@@ -2752,6 +2752,120 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Mount"
+
+  InspectResponse:
+    type: "object"
+    properties:
+      Id:
+        description: "The ID of the container"
+        type: "string"
+      Created:
+        description: "The time the container was created"
+        type: "string"
+      Path:
+        description: "The path to the command being run"
+        type: "string"
+      Args:
+        description: "The arguments to the command being run"
+        type: "array"
+        items:
+          type: "string"
+      State:
+        description: "The state of the container."
+        type: "object"
+        properties:
+          Status:
+            description: |
+              The status of the container. For example, `"running"` or `"exited"`.
+            type: "string"
+            enum: ["created", "running", "paused", "restarting", "removing", "exited", "dead"]
+          Running:
+            description: |
+              Whether this container is running.
+
+              Note that a running container can be _paused_. The `Running` and `Paused`
+              booleans are not mutually exclusive:
+
+              When pausing a container (on Linux), the cgroups freezer is used to suspend
+              all processes in the container. Freezing the process requires the process to
+              be running. As a result, paused containers are both `Running` _and_ `Paused`.
+
+              Use the `Status` field instead to determine if a container's state is "running".
+            type: "boolean"
+          Paused:
+            description: "Whether this container is paused."
+            type: "boolean"
+          Restarting:
+            description: "Whether this container is restarting."
+            type: "boolean"
+          OOMKilled:
+            description: "Whether this container has been killed because it ran out of memory."
+            type: "boolean"
+          Dead:
+            type: "boolean"
+          Pid:
+            description: "The process ID of this container"
+            type: "integer"
+          ExitCode:
+            description: "The last exit code of this container"
+            type: "integer"
+          Error:
+            type: "string"
+          StartedAt:
+            description: "The time when this container was last started."
+            type: "string"
+          FinishedAt:
+            description: "The time when this container last exited."
+            type: "string"
+      Image:
+        description: "The container's image"
+        type: "string"
+      ResolvConfPath:
+        type: "string"
+      HostnamePath:
+        type: "string"
+      HostsPath:
+        type: "string"
+      LogPath:
+        type: "string"
+      Node:
+        description: "TODO"
+        type: "object"
+      Name:
+        type: "string"
+      RestartCount:
+        type: "integer"
+      Driver:
+        type: "string"
+      MountLabel:
+        type: "string"
+      ProcessLabel:
+        type: "string"
+      AppArmorProfile:
+        type: "string"
+      ExecIDs:
+        type: "string"
+      HostConfig:
+        $ref: "#/definitions/HostConfig"
+      GraphDriver:
+        $ref: "#/definitions/GraphDriverData"
+      SizeRw:
+        description: "The size of files that have been created or changed by this container."
+        type: "integer"
+        format: "int64"
+      SizeRootFs:
+        description: "The total size of all the files in this container."
+        type: "integer"
+        format: "int64"
+      Mounts:
+        type: "array"
+        items:
+          $ref: "#/definitions/MountPoint"
+      Config:
+        $ref: "#/definitions/ContainerConfig"
+      NetworkSettings:
+        $ref: "#/definitions/NetworkConfig"
+
   SecretSpec:
     type: "object"
     properties:
@@ -3209,117 +3323,7 @@ paths:
         200:
           description: "no error"
           schema:
-            type: "object"
-            properties:
-              Id:
-                description: "The ID of the container"
-                type: "string"
-              Created:
-                description: "The time the container was created"
-                type: "string"
-              Path:
-                description: "The path to the command being run"
-                type: "string"
-              Args:
-                description: "The arguments to the command being run"
-                type: "array"
-                items:
-                  type: "string"
-              State:
-                description: "The state of the container."
-                type: "object"
-                properties:
-                  Status:
-                    description: |
-                      The status of the container. For example, `"running"` or `"exited"`.
-                    type: "string"
-                    enum: ["created", "running", "paused", "restarting", "removing", "exited", "dead"]
-                  Running:
-                    description: |
-                      Whether this container is running.
-
-                      Note that a running container can be _paused_. The `Running` and `Paused`
-                      booleans are not mutually exclusive:
-
-                      When pausing a container (on Linux), the cgroups freezer is used to suspend
-                      all processes in the container. Freezing the process requires the process to
-                      be running. As a result, paused containers are both `Running` _and_ `Paused`.
-
-                      Use the `Status` field instead to determine if a container's state is "running".
-                    type: "boolean"
-                  Paused:
-                    description: "Whether this container is paused."
-                    type: "boolean"
-                  Restarting:
-                    description: "Whether this container is restarting."
-                    type: "boolean"
-                  OOMKilled:
-                    description: "Whether this container has been killed because it ran out of memory."
-                    type: "boolean"
-                  Dead:
-                    type: "boolean"
-                  Pid:
-                    description: "The process ID of this container"
-                    type: "integer"
-                  ExitCode:
-                    description: "The last exit code of this container"
-                    type: "integer"
-                  Error:
-                    type: "string"
-                  StartedAt:
-                    description: "The time when this container was last started."
-                    type: "string"
-                  FinishedAt:
-                    description: "The time when this container last exited."
-                    type: "string"
-              Image:
-                description: "The container's image"
-                type: "string"
-              ResolvConfPath:
-                type: "string"
-              HostnamePath:
-                type: "string"
-              HostsPath:
-                type: "string"
-              LogPath:
-                type: "string"
-              Node:
-                description: "TODO"
-                type: "object"
-              Name:
-                type: "string"
-              RestartCount:
-                type: "integer"
-              Driver:
-                type: "string"
-              MountLabel:
-                type: "string"
-              ProcessLabel:
-                type: "string"
-              AppArmorProfile:
-                type: "string"
-              ExecIDs:
-                type: "string"
-              HostConfig:
-                $ref: "#/definitions/HostConfig"
-              GraphDriver:
-                $ref: "#/definitions/GraphDriverData"
-              SizeRw:
-                description: "The size of files that have been created or changed by this container."
-                type: "integer"
-                format: "int64"
-              SizeRootFs:
-                description: "The total size of all the files in this container."
-                type: "integer"
-                format: "int64"
-              Mounts:
-                type: "array"
-                items:
-                  $ref: "#/definitions/MountPoint"
-              Config:
-                $ref: "#/definitions/ContainerConfig"
-              NetworkSettings:
-                $ref: "#/definitions/NetworkConfig"
+            $ref: "#/definitions/InspectResponse"
           examples:
             application/json:
               AppArmorProfile: ""

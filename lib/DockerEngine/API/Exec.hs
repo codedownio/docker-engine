@@ -94,7 +94,7 @@ instance Produces ContainerExec MimeJSON
 -- 
 execInspect 
   :: Id -- ^ "id" -  Exec instance ID
-  -> DockerEngineRequest ExecInspect MimeNoContent InlineResponse20014 MimeJSON
+  -> DockerEngineRequest ExecInspect MimeNoContent InlineResponse20013 MimeJSON
 execInspect (Id id) =
   _mkRequest "GET" ["/exec/",toPath id,"/json"]
 

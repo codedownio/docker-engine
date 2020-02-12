@@ -67,7 +67,7 @@ import qualified Prelude as P
 -- 
 distributionInspect 
   :: Name -- ^ "name" -  Image name or id
-  -> DockerEngineRequest DistributionInspect MimeNoContent InlineResponse20021 MimeJSON
+  -> DockerEngineRequest DistributionInspect MimeNoContent InlineResponse20020 MimeJSON
 distributionInspect (Name name) =
   _mkRequest "GET" ["/distribution/",toPath name,"/json"]
 
