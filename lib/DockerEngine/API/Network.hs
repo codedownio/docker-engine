@@ -94,15 +94,15 @@ instance Produces NetworkConnect MimePlainText
 -- Create a network
 -- 
 networkCreate 
-  :: (Consumes NetworkCreate MimeJSON, MimeRender MimeJSON InlineObject1)
-  => InlineObject1 -- ^ "networkConfig"
+  :: (Consumes NetworkCreate MimeJSON, MimeRender MimeJSON NetworkConfig)
+  => NetworkConfig -- ^ "networkConfig"
   -> DockerEngineRequest NetworkCreate MimeJSON NetworkCreateResponse MimeJSON
 networkCreate networkConfig =
   _mkRequest "POST" ["/networks/create"]
     `setBodyParam` networkConfig
 
 data NetworkCreate 
-instance HasBodyParam NetworkCreate InlineObject1 
+instance HasBodyParam NetworkCreate NetworkConfig 
 
 -- | @application/json@
 instance Consumes NetworkCreate MimeJSON

@@ -8019,6 +8019,7 @@ paths:
           description: "Network configuration"
           required: true
           schema:
+            title: "NetworkConfig"
             type: "object"
             required: ["Name"]
             properties:

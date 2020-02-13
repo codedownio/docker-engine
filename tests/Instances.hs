@@ -963,16 +963,11 @@ instance Arbitrary InlineObject1 where
 genInlineObject1 :: Int -> Gen InlineObject1
 genInlineObject1 n =
   InlineObject1
-    <$> arbitrary -- inlineObject1Name :: Text
-    <*> arbitraryReducedMaybe n -- inlineObject1CheckDuplicate :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Driver :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject1Internal :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Attachable :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Ingress :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Ipam :: Maybe IPAM
-    <*> arbitraryReducedMaybe n -- inlineObject1EnableIPv6 :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Options :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- inlineObject1Labels :: Maybe (Map.Map String Text)
+    <$> arbitraryReducedMaybe n -- inlineObject1ListenAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject1AdvertiseAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject1DataPathAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject1ForceNewCluster :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject1Spec :: Maybe SwarmSpec
   
 instance Arbitrary InlineObject2 where
   arbitrary = sized genInlineObject2
@@ -983,8 +978,8 @@ genInlineObject2 n =
     <$> arbitraryReducedMaybe n -- inlineObject2ListenAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject2AdvertiseAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject2DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2ForceNewCluster :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Spec :: Maybe SwarmSpec
+    <*> arbitraryReducedMaybe n -- inlineObject2RemoteAddrs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject2JoinToken :: Maybe Text
   
 instance Arbitrary InlineObject3 where
   arbitrary = sized genInlineObject3
@@ -992,19 +987,7 @@ instance Arbitrary InlineObject3 where
 genInlineObject3 :: Int -> Gen InlineObject3
 genInlineObject3 n =
   InlineObject3
-    <$> arbitraryReducedMaybe n -- inlineObject3ListenAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3AdvertiseAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3RemoteAddrs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3JoinToken :: Maybe Text
-  
-instance Arbitrary InlineObject4 where
-  arbitrary = sized genInlineObject4
-
-genInlineObject4 :: Int -> Gen InlineObject4
-genInlineObject4 n =
-  InlineObject4
-    <$> arbitraryReducedMaybe n -- inlineObject4UnlockKey :: Maybe Text
+    <$> arbitraryReducedMaybe n -- inlineObject3UnlockKey :: Maybe Text
   
 instance Arbitrary InlineResponse400 where
   arbitrary = sized genInlineResponse400
@@ -1167,6 +1150,23 @@ genNetwork n =
     <*> arbitraryReducedMaybe n -- networkContainers :: Maybe (Map.Map String NetworkContainer)
     <*> arbitraryReducedMaybe n -- networkOptions :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- networkLabels :: Maybe (Map.Map String Text)
+  
+instance Arbitrary NetworkConfig where
+  arbitrary = sized genNetworkConfig
+
+genNetworkConfig :: Int -> Gen NetworkConfig
+genNetworkConfig n =
+  NetworkConfig
+    <$> arbitrary -- networkConfigName :: Text
+    <*> arbitraryReducedMaybe n -- networkConfigCheckDuplicate :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkConfigDriver :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkConfigInternal :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkConfigAttachable :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkConfigIngress :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkConfigIpam :: Maybe IPAM
+    <*> arbitraryReducedMaybe n -- networkConfigEnableIPv6 :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- networkConfigOptions :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- networkConfigLabels :: Maybe (Map.Map String Text)
   
 instance Arbitrary NetworkConnectConfig where
   arbitrary = sized genNetworkConnectConfig

@@ -3851,7 +3851,7 @@ paths:
     post:
       operationId: NetworkCreate
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
+        $ref: '#/components/requestBodies/NetworkConfig'
         content:
           application/json:
             schema:
@@ -3928,6 +3928,7 @@ paths:
                   type: object
               required:
               - Name
+              title: NetworkConfig
               type: object
         description: Network configuration
         required: true
@@ -4968,7 +4969,7 @@ paths:
     post:
       operationId: SwarmInit
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_2'
+        $ref: '#/components/requestBodies/inline_object_1'
         content:
           application/json:
             schema:
@@ -5112,7 +5113,7 @@ paths:
     post:
       operationId: SwarmJoin
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_3'
+        $ref: '#/components/requestBodies/inline_object_2'
         content:
           application/json:
             schema:
@@ -5378,7 +5379,7 @@ paths:
     post:
       operationId: SwarmUnlock
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_4'
+        $ref: '#/components/requestBodies/inline_object_3'
         content:
           application/json:
             schema:
@@ -6846,6 +6847,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/inline_object_1'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+      required: true
+    NetworkConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NetworkConfig'
       required: true
     inline_object:
       content:
@@ -6859,12 +6869,6 @@ components:
           schema:
             $ref: '#/components/schemas/NetworkDisconnectConfig'
       required: true
-    inline_object_4:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_4'
-      required: true
     NetworkConnectConfig:
       content:
         application/json:
@@ -6874,9 +6878,6 @@ components:
     inline_object_3:
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_3'
-        text/plain:
           schema:
             $ref: '#/components/schemas/inline_object_3'
       required: true
@@ -12604,7 +12605,7 @@ components:
           description: Disk space reclaimed in bytes
           format: int64
           type: integer
-    inline_object_1:
+    NetworkConfig:
       example:
         Name: isolated_nw
         CheckDuplicate: false
@@ -12677,6 +12678,7 @@ components:
           type: object
       required:
       - Name
+      title: NetworkConfig
       type: object
     NetworkCreateResponse:
       example: '{Id=22be93d5babb089c5aab8dbc369042fad48ff791584ca2da2100db837a1c7c30,
@@ -12756,7 +12758,7 @@ components:
           items:
             type: string
           type: array
-    inline_object_2:
+    inline_object_1:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12800,7 +12802,7 @@ components:
         Spec:
           $ref: '#/components/schemas/SwarmSpec'
       type: object
-    inline_object_3:
+    inline_object_2:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12844,7 +12846,7 @@ components:
         UnlockKey:
           description: The swarm's unlock key.
           type: string
-    inline_object_4:
+    inline_object_3:
       example:
         UnlockKey: SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8
       properties:

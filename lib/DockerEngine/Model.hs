@@ -3573,76 +3573,55 @@ mkInlineObject =
 -- ** InlineObject1
 -- | InlineObject1
 data InlineObject1 = InlineObject1
-  { inlineObject1Name :: !(Text) -- ^ /Required/ "Name" - The network&#39;s name.
-  , inlineObject1CheckDuplicate :: !(Maybe Bool) -- ^ "CheckDuplicate" - Check for networks with duplicate names. Since Network is primarily keyed based on a random ID and not on the name, and network name is strictly a user-friendly alias to the network which is uniquely identified using ID, there is no guaranteed way to check for duplicates. CheckDuplicate is there to provide a best effort checking of any networks which has the same name but it is not guaranteed to catch all name collisions.
-  , inlineObject1Driver :: !(Maybe Text) -- ^ "Driver" - Name of the network driver plugin to use.
-  , inlineObject1Internal :: !(Maybe Bool) -- ^ "Internal" - Restrict external access to the network.
-  , inlineObject1Attachable :: !(Maybe Bool) -- ^ "Attachable" - Globally scoped network is manually attachable by regular containers from workers in swarm mode.
-  , inlineObject1Ingress :: !(Maybe Bool) -- ^ "Ingress" - Ingress network is the network which provides the routing-mesh in swarm mode.
-  , inlineObject1Ipam :: !(Maybe IPAM) -- ^ "IPAM"
-  , inlineObject1EnableIPv6 :: !(Maybe Bool) -- ^ "EnableIPv6" - Enable IPv6 on the network.
-  , inlineObject1Options :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Network specific options to be used by the drivers.
-  , inlineObject1Labels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
+  { inlineObject1ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
+  , inlineObject1AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
+  , inlineObject1DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
+  , inlineObject1ForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
+  , inlineObject1Spec :: !(Maybe SwarmSpec) -- ^ "Spec"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject1
 instance A.FromJSON InlineObject1 where
   parseJSON = A.withObject "InlineObject1" $ \o ->
     InlineObject1
-      <$> (o .:  "Name")
-      <*> (o .:? "CheckDuplicate")
-      <*> (o .:? "Driver")
-      <*> (o .:? "Internal")
-      <*> (o .:? "Attachable")
-      <*> (o .:? "Ingress")
-      <*> (o .:? "IPAM")
-      <*> (o .:? "EnableIPv6")
-      <*> (o .:? "Options")
-      <*> (o .:? "Labels")
+      <$> (o .:? "ListenAddr")
+      <*> (o .:? "AdvertiseAddr")
+      <*> (o .:? "DataPathAddr")
+      <*> (o .:? "ForceNewCluster")
+      <*> (o .:? "Spec")
 
 -- | ToJSON InlineObject1
 instance A.ToJSON InlineObject1 where
   toJSON InlineObject1 {..} =
    _omitNulls
-      [ "Name" .= inlineObject1Name
-      , "CheckDuplicate" .= inlineObject1CheckDuplicate
-      , "Driver" .= inlineObject1Driver
-      , "Internal" .= inlineObject1Internal
-      , "Attachable" .= inlineObject1Attachable
-      , "Ingress" .= inlineObject1Ingress
-      , "IPAM" .= inlineObject1Ipam
-      , "EnableIPv6" .= inlineObject1EnableIPv6
-      , "Options" .= inlineObject1Options
-      , "Labels" .= inlineObject1Labels
+      [ "ListenAddr" .= inlineObject1ListenAddr
+      , "AdvertiseAddr" .= inlineObject1AdvertiseAddr
+      , "DataPathAddr" .= inlineObject1DataPathAddr
+      , "ForceNewCluster" .= inlineObject1ForceNewCluster
+      , "Spec" .= inlineObject1Spec
       ]
 
 
 -- | Construct a value of type 'InlineObject1' (by applying it's required fields, if any)
 mkInlineObject1
-  :: Text -- ^ 'inlineObject1Name': The network's name.
-  -> InlineObject1
-mkInlineObject1 inlineObject1Name =
+  :: InlineObject1
+mkInlineObject1 =
   InlineObject1
-  { inlineObject1Name
-  , inlineObject1CheckDuplicate = Nothing
-  , inlineObject1Driver = Nothing
-  , inlineObject1Internal = Nothing
-  , inlineObject1Attachable = Nothing
-  , inlineObject1Ingress = Nothing
-  , inlineObject1Ipam = Nothing
-  , inlineObject1EnableIPv6 = Nothing
-  , inlineObject1Options = Nothing
-  , inlineObject1Labels = Nothing
+  { inlineObject1ListenAddr = Nothing
+  , inlineObject1AdvertiseAddr = Nothing
+  , inlineObject1DataPathAddr = Nothing
+  , inlineObject1ForceNewCluster = Nothing
+  , inlineObject1Spec = Nothing
   }
 
 -- ** InlineObject2
 -- | InlineObject2
 data InlineObject2 = InlineObject2
-  { inlineObject2ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
+  { inlineObject2ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
   , inlineObject2AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
   , inlineObject2DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
-  , inlineObject2ForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
-  , inlineObject2Spec :: !(Maybe SwarmSpec) -- ^ "Spec"
+  , inlineObject2RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
+  , inlineObject2JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject2
@@ -3652,8 +3631,8 @@ instance A.FromJSON InlineObject2 where
       <$> (o .:? "ListenAddr")
       <*> (o .:? "AdvertiseAddr")
       <*> (o .:? "DataPathAddr")
-      <*> (o .:? "ForceNewCluster")
-      <*> (o .:? "Spec")
+      <*> (o .:? "RemoteAddrs")
+      <*> (o .:? "JoinToken")
 
 -- | ToJSON InlineObject2
 instance A.ToJSON InlineObject2 where
@@ -3662,8 +3641,8 @@ instance A.ToJSON InlineObject2 where
       [ "ListenAddr" .= inlineObject2ListenAddr
       , "AdvertiseAddr" .= inlineObject2AdvertiseAddr
       , "DataPathAddr" .= inlineObject2DataPathAddr
-      , "ForceNewCluster" .= inlineObject2ForceNewCluster
-      , "Spec" .= inlineObject2Spec
+      , "RemoteAddrs" .= inlineObject2RemoteAddrs
+      , "JoinToken" .= inlineObject2JoinToken
       ]
 
 
@@ -3675,39 +3654,27 @@ mkInlineObject2 =
   { inlineObject2ListenAddr = Nothing
   , inlineObject2AdvertiseAddr = Nothing
   , inlineObject2DataPathAddr = Nothing
-  , inlineObject2ForceNewCluster = Nothing
-  , inlineObject2Spec = Nothing
+  , inlineObject2RemoteAddrs = Nothing
+  , inlineObject2JoinToken = Nothing
   }
 
 -- ** InlineObject3
 -- | InlineObject3
 data InlineObject3 = InlineObject3
-  { inlineObject3ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
-  , inlineObject3AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject3DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
-  , inlineObject3RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
-  , inlineObject3JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
+  { inlineObject3UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject3
 instance A.FromJSON InlineObject3 where
   parseJSON = A.withObject "InlineObject3" $ \o ->
     InlineObject3
-      <$> (o .:? "ListenAddr")
-      <*> (o .:? "AdvertiseAddr")
-      <*> (o .:? "DataPathAddr")
-      <*> (o .:? "RemoteAddrs")
-      <*> (o .:? "JoinToken")
+      <$> (o .:? "UnlockKey")
 
 -- | ToJSON InlineObject3
 instance A.ToJSON InlineObject3 where
   toJSON InlineObject3 {..} =
    _omitNulls
-      [ "ListenAddr" .= inlineObject3ListenAddr
-      , "AdvertiseAddr" .= inlineObject3AdvertiseAddr
-      , "DataPathAddr" .= inlineObject3DataPathAddr
-      , "RemoteAddrs" .= inlineObject3RemoteAddrs
-      , "JoinToken" .= inlineObject3JoinToken
+      [ "UnlockKey" .= inlineObject3UnlockKey
       ]
 
 
@@ -3716,39 +3683,7 @@ mkInlineObject3
   :: InlineObject3
 mkInlineObject3 =
   InlineObject3
-  { inlineObject3ListenAddr = Nothing
-  , inlineObject3AdvertiseAddr = Nothing
-  , inlineObject3DataPathAddr = Nothing
-  , inlineObject3RemoteAddrs = Nothing
-  , inlineObject3JoinToken = Nothing
-  }
-
--- ** InlineObject4
--- | InlineObject4
-data InlineObject4 = InlineObject4
-  { inlineObject4UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineObject4
-instance A.FromJSON InlineObject4 where
-  parseJSON = A.withObject "InlineObject4" $ \o ->
-    InlineObject4
-      <$> (o .:? "UnlockKey")
-
--- | ToJSON InlineObject4
-instance A.ToJSON InlineObject4 where
-  toJSON InlineObject4 {..} =
-   _omitNulls
-      [ "UnlockKey" .= inlineObject4UnlockKey
-      ]
-
-
--- | Construct a value of type 'InlineObject4' (by applying it's required fields, if any)
-mkInlineObject4
-  :: InlineObject4
-mkInlineObject4 =
-  InlineObject4
-  { inlineObject4UnlockKey = Nothing
+  { inlineObject3UnlockKey = Nothing
   }
 
 -- ** InlineResponse400
@@ -4357,6 +4292,73 @@ mkNetwork =
   , networkContainers = Nothing
   , networkOptions = Nothing
   , networkLabels = Nothing
+  }
+
+-- ** NetworkConfig
+-- | NetworkConfig
+-- NetworkConfig
+-- 
+data NetworkConfig = NetworkConfig
+  { networkConfigName :: !(Text) -- ^ /Required/ "Name" - The network&#39;s name.
+  , networkConfigCheckDuplicate :: !(Maybe Bool) -- ^ "CheckDuplicate" - Check for networks with duplicate names. Since Network is primarily keyed based on a random ID and not on the name, and network name is strictly a user-friendly alias to the network which is uniquely identified using ID, there is no guaranteed way to check for duplicates. CheckDuplicate is there to provide a best effort checking of any networks which has the same name but it is not guaranteed to catch all name collisions.
+  , networkConfigDriver :: !(Maybe Text) -- ^ "Driver" - Name of the network driver plugin to use.
+  , networkConfigInternal :: !(Maybe Bool) -- ^ "Internal" - Restrict external access to the network.
+  , networkConfigAttachable :: !(Maybe Bool) -- ^ "Attachable" - Globally scoped network is manually attachable by regular containers from workers in swarm mode.
+  , networkConfigIngress :: !(Maybe Bool) -- ^ "Ingress" - Ingress network is the network which provides the routing-mesh in swarm mode.
+  , networkConfigIpam :: !(Maybe IPAM) -- ^ "IPAM"
+  , networkConfigEnableIPv6 :: !(Maybe Bool) -- ^ "EnableIPv6" - Enable IPv6 on the network.
+  , networkConfigOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Network specific options to be used by the drivers.
+  , networkConfigLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON NetworkConfig
+instance A.FromJSON NetworkConfig where
+  parseJSON = A.withObject "NetworkConfig" $ \o ->
+    NetworkConfig
+      <$> (o .:  "Name")
+      <*> (o .:? "CheckDuplicate")
+      <*> (o .:? "Driver")
+      <*> (o .:? "Internal")
+      <*> (o .:? "Attachable")
+      <*> (o .:? "Ingress")
+      <*> (o .:? "IPAM")
+      <*> (o .:? "EnableIPv6")
+      <*> (o .:? "Options")
+      <*> (o .:? "Labels")
+
+-- | ToJSON NetworkConfig
+instance A.ToJSON NetworkConfig where
+  toJSON NetworkConfig {..} =
+   _omitNulls
+      [ "Name" .= networkConfigName
+      , "CheckDuplicate" .= networkConfigCheckDuplicate
+      , "Driver" .= networkConfigDriver
+      , "Internal" .= networkConfigInternal
+      , "Attachable" .= networkConfigAttachable
+      , "Ingress" .= networkConfigIngress
+      , "IPAM" .= networkConfigIpam
+      , "EnableIPv6" .= networkConfigEnableIPv6
+      , "Options" .= networkConfigOptions
+      , "Labels" .= networkConfigLabels
+      ]
+
+
+-- | Construct a value of type 'NetworkConfig' (by applying it's required fields, if any)
+mkNetworkConfig
+  :: Text -- ^ 'networkConfigName': The network's name.
+  -> NetworkConfig
+mkNetworkConfig networkConfigName =
+  NetworkConfig
+  { networkConfigName
+  , networkConfigCheckDuplicate = Nothing
+  , networkConfigDriver = Nothing
+  , networkConfigInternal = Nothing
+  , networkConfigAttachable = Nothing
+  , networkConfigIngress = Nothing
+  , networkConfigIpam = Nothing
+  , networkConfigEnableIPv6 = Nothing
+  , networkConfigOptions = Nothing
+  , networkConfigLabels = Nothing
   }
 
 -- ** NetworkConnectConfig
