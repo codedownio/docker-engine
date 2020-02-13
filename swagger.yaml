@@ -7422,6 +7422,7 @@ paths:
           in: "body"
           description: "Exec configuration"
           schema:
+            title: "ExecConfig"
             type: "object"
             properties:
               AttachStdin:

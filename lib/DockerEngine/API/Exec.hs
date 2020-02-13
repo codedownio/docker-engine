@@ -66,8 +66,8 @@ import qualified Prelude as P
 -- Run a command inside a running container.
 -- 
 containerExec 
-  :: (Consumes ContainerExec MimeJSON, MimeRender MimeJSON InlineObject)
-  => InlineObject -- ^ "execConfig"
+  :: (Consumes ContainerExec MimeJSON, MimeRender MimeJSON ExecConfig)
+  => ExecConfig -- ^ "execConfig"
   -> Id -- ^ "id" -  ID or name of container
   -> DockerEngineRequest ContainerExec MimeJSON IdResponse MimeJSON
 containerExec execConfig (Id id) =
@@ -75,7 +75,7 @@ containerExec execConfig (Id id) =
     `setBodyParam` execConfig
 
 data ContainerExec 
-instance HasBodyParam ContainerExec InlineObject 
+instance HasBodyParam ContainerExec ExecConfig 
 
 -- | @application/json@
 instance Consumes ContainerExec MimeJSON
@@ -155,7 +155,7 @@ execStart (Id id) =
   _mkRequest "POST" ["/exec/",toPath id,"/start"]
 
 data ExecStart 
-instance HasBodyParam ExecStart InlineObject1 
+instance HasBodyParam ExecStart InlineObject 
 
 -- | @application/json@
 instance Consumes ExecStart MimeJSON
