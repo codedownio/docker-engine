@@ -7250,6 +7250,7 @@ components:
           - always
           - unless-stopped
           - on-failure
+          - "no"
           type: string
         MaximumRetryCount:
           description: If `on-failure` is used, the number of times to retry before

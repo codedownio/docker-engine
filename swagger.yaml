@@ -467,6 +467,7 @@ definitions:
           - "always"
           - "unless-stopped"
           - "on-failure"
+          - "no"
       MaximumRetryCount:
         type: "integer"
         description: "If `on-failure` is used, the number of times to retry before giving up"

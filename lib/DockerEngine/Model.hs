@@ -9222,6 +9222,7 @@ data E'Name
   | E'Name'Always -- ^ @"always"@
   | E'Name'Unless_stopped -- ^ @"unless-stopped"@
   | E'Name'On_failure -- ^ @"on-failure"@
+  | E'Name'No -- ^ @"no"@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Name where toJSON = A.toJSON . fromE'Name
@@ -9237,6 +9238,7 @@ fromE'Name = \case
   E'Name'Always -> "always"
   E'Name'Unless_stopped -> "unless-stopped"
   E'Name'On_failure -> "on-failure"
+  E'Name'No -> "no"
 
 -- | parse 'E'Name' enum
 toE'Name :: Text -> P.Either String E'Name
@@ -9245,6 +9247,7 @@ toE'Name = \case
   "always" -> P.Right E'Name'Always
   "unless-stopped" -> P.Right E'Name'Unless_stopped
   "on-failure" -> P.Right E'Name'On_failure
+  "no" -> P.Right E'Name'No
   s -> P.Left $ "toE'Name: enum parse failure: " P.++ P.show s
 
 
