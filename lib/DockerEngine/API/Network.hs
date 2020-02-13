@@ -66,9 +66,9 @@ import qualified Prelude as P
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 networkConnect 
-  :: (Consumes NetworkConnect MimeJSON, MimeRender MimeJSON InlineObject3)
+  :: (Consumes NetworkConnect MimeJSON, MimeRender MimeJSON InlineObject2)
   => Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject3 -- ^ "container"
+  -> InlineObject2 -- ^ "container"
   -> Id -- ^ "id" -  Network ID or name
   -> DockerEngineRequest NetworkConnect MimeJSON res accept
 networkConnect  _ container (Id id) =
@@ -76,7 +76,7 @@ networkConnect  _ container (Id id) =
     `setBodyParam` container
 
 data NetworkConnect 
-instance HasBodyParam NetworkConnect InlineObject3 
+instance HasBodyParam NetworkConnect InlineObject2 
 
 -- | @application/json@
 instance Consumes NetworkConnect MimeJSON
@@ -94,15 +94,15 @@ instance Produces NetworkConnect MimePlainText
 -- Create a network
 -- 
 networkCreate 
-  :: (Consumes NetworkCreate MimeJSON, MimeRender MimeJSON InlineObject2)
-  => InlineObject2 -- ^ "networkConfig"
+  :: (Consumes NetworkCreate MimeJSON, MimeRender MimeJSON InlineObject1)
+  => InlineObject1 -- ^ "networkConfig"
   -> DockerEngineRequest NetworkCreate MimeJSON NetworkCreateResponse MimeJSON
 networkCreate networkConfig =
   _mkRequest "POST" ["/networks/create"]
     `setBodyParam` networkConfig
 
 data NetworkCreate 
-instance HasBodyParam NetworkCreate InlineObject2 
+instance HasBodyParam NetworkCreate InlineObject1 
 
 -- | @application/json@
 instance Consumes NetworkCreate MimeJSON
@@ -142,9 +142,9 @@ instance Produces NetworkDelete MimePlainText
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 networkDisconnect 
-  :: (Consumes NetworkDisconnect MimeJSON, MimeRender MimeJSON InlineObject4)
+  :: (Consumes NetworkDisconnect MimeJSON, MimeRender MimeJSON InlineObject3)
   => Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject4 -- ^ "container"
+  -> InlineObject3 -- ^ "container"
   -> Id -- ^ "id" -  Network ID or name
   -> DockerEngineRequest NetworkDisconnect MimeJSON res accept
 networkDisconnect  _ container (Id id) =
@@ -152,7 +152,7 @@ networkDisconnect  _ container (Id id) =
     `setBodyParam` container
 
 data NetworkDisconnect 
-instance HasBodyParam NetworkDisconnect InlineObject4 
+instance HasBodyParam NetworkDisconnect InlineObject3 
 
 -- | @application/json@
 instance Consumes NetworkDisconnect MimeJSON

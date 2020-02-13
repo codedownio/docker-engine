@@ -963,9 +963,15 @@ instance Arbitrary InlineObject1 where
 genInlineObject1 :: Int -> Gen InlineObject1
 genInlineObject1 n =
   InlineObject1
-    <$> arbitraryReducedMaybe n -- inlineObject1Name :: Maybe Text
+    <$> arbitrary -- inlineObject1Name :: Text
+    <*> arbitraryReducedMaybe n -- inlineObject1CheckDuplicate :: Maybe Bool
     <*> arbitraryReducedMaybe n -- inlineObject1Driver :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject1DriverOpts :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- inlineObject1Internal :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject1Attachable :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject1Ingress :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject1Ipam :: Maybe IPAM
+    <*> arbitraryReducedMaybe n -- inlineObject1EnableIPv6 :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject1Options :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- inlineObject1Labels :: Maybe (Map.Map String Text)
   
 instance Arbitrary InlineObject2 where
@@ -974,16 +980,8 @@ instance Arbitrary InlineObject2 where
 genInlineObject2 :: Int -> Gen InlineObject2
 genInlineObject2 n =
   InlineObject2
-    <$> arbitrary -- inlineObject2Name :: Text
-    <*> arbitraryReducedMaybe n -- inlineObject2CheckDuplicate :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Driver :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2Internal :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Attachable :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Ingress :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Ipam :: Maybe IPAM
-    <*> arbitraryReducedMaybe n -- inlineObject2EnableIPv6 :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject2Options :: Maybe (Map.Map String Text)
-    <*> arbitraryReducedMaybe n -- inlineObject2Labels :: Maybe (Map.Map String Text)
+    <$> arbitraryReducedMaybe n -- inlineObject2Container :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject2EndpointConfig :: Maybe EndpointSettings
   
 instance Arbitrary InlineObject3 where
   arbitrary = sized genInlineObject3
@@ -992,7 +990,7 @@ genInlineObject3 :: Int -> Gen InlineObject3
 genInlineObject3 n =
   InlineObject3
     <$> arbitraryReducedMaybe n -- inlineObject3Container :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3EndpointConfig :: Maybe EndpointSettings
+    <*> arbitraryReducedMaybe n -- inlineObject3Force :: Maybe Bool
   
 instance Arbitrary InlineObject4 where
   arbitrary = sized genInlineObject4
@@ -1000,8 +998,11 @@ instance Arbitrary InlineObject4 where
 genInlineObject4 :: Int -> Gen InlineObject4
 genInlineObject4 n =
   InlineObject4
-    <$> arbitraryReducedMaybe n -- inlineObject4Container :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject4Force :: Maybe Bool
+    <$> arbitraryReducedMaybe n -- inlineObject4ListenAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject4AdvertiseAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject4DataPathAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject4ForceNewCluster :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject4Spec :: Maybe SwarmSpec
   
 instance Arbitrary InlineObject5 where
   arbitrary = sized genInlineObject5
@@ -1012,8 +1013,8 @@ genInlineObject5 n =
     <$> arbitraryReducedMaybe n -- inlineObject5ListenAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject5AdvertiseAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject5DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject5ForceNewCluster :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject5Spec :: Maybe SwarmSpec
+    <*> arbitraryReducedMaybe n -- inlineObject5RemoteAddrs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject5JoinToken :: Maybe Text
   
 instance Arbitrary InlineObject6 where
   arbitrary = sized genInlineObject6
@@ -1021,19 +1022,7 @@ instance Arbitrary InlineObject6 where
 genInlineObject6 :: Int -> Gen InlineObject6
 genInlineObject6 n =
   InlineObject6
-    <$> arbitraryReducedMaybe n -- inlineObject6ListenAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject6AdvertiseAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject6DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject6RemoteAddrs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject6JoinToken :: Maybe Text
-  
-instance Arbitrary InlineObject7 where
-  arbitrary = sized genInlineObject7
-
-genInlineObject7 :: Int -> Gen InlineObject7
-genInlineObject7 n =
-  InlineObject7
-    <$> arbitraryReducedMaybe n -- inlineObject7UnlockKey :: Maybe Text
+    <$> arbitraryReducedMaybe n -- inlineObject6UnlockKey :: Maybe Text
   
 instance Arbitrary InlineResponse400 where
   arbitrary = sized genInlineResponse400
@@ -2347,6 +2336,17 @@ genVolume n =
     <*> arbitrary -- volumeScope :: E'Scope
     <*> arbitrary -- volumeOptions :: (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- volumeUsageData :: Maybe VolumeUsageData
+  
+instance Arbitrary VolumeConfig where
+  arbitrary = sized genVolumeConfig
+
+genVolumeConfig :: Int -> Gen VolumeConfig
+genVolumeConfig n =
+  VolumeConfig
+    <$> arbitraryReducedMaybe n -- volumeConfigName :: Maybe Text
+    <*> arbitraryReducedMaybe n -- volumeConfigDriver :: Maybe Text
+    <*> arbitraryReducedMaybe n -- volumeConfigDriverOpts :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- volumeConfigLabels :: Maybe (Map.Map String Text)
   
 instance Arbitrary VolumeListResponse where
   arbitrary = sized genVolumeListResponse

@@ -64,15 +64,15 @@ import qualified Prelude as P
 -- Create a volume
 -- 
 volumeCreate 
-  :: (Consumes VolumeCreate MimeJSON, MimeRender MimeJSON InlineObject1)
-  => InlineObject1 -- ^ "volumeConfig"
+  :: (Consumes VolumeCreate MimeJSON, MimeRender MimeJSON VolumeConfig)
+  => VolumeConfig -- ^ "volumeConfig"
   -> DockerEngineRequest VolumeCreate MimeJSON Volume MimeJSON
 volumeCreate volumeConfig =
   _mkRequest "POST" ["/volumes/create"]
     `setBodyParam` volumeConfig
 
 data VolumeCreate 
-instance HasBodyParam VolumeCreate InlineObject1 
+instance HasBodyParam VolumeCreate VolumeConfig 
 
 -- | @application/json@
 instance Consumes VolumeCreate MimeJSON

@@ -64,17 +64,17 @@ import qualified Prelude as P
 -- Initialize a new swarm
 -- 
 swarmInit 
-  :: (Consumes SwarmInit contentType, MimeRender contentType InlineObject5)
+  :: (Consumes SwarmInit contentType, MimeRender contentType InlineObject4)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject5 -- ^ "body"
+  -> InlineObject4 -- ^ "body"
   -> DockerEngineRequest SwarmInit contentType Text accept
 swarmInit _  _ body =
   _mkRequest "POST" ["/swarm/init"]
     `setBodyParam` body
 
 data SwarmInit 
-instance HasBodyParam SwarmInit InlineObject5 
+instance HasBodyParam SwarmInit InlineObject4 
 
 -- | @application/json@
 instance Consumes SwarmInit MimeJSON
@@ -115,17 +115,17 @@ instance Produces SwarmInspect MimePlainText
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 swarmJoin 
-  :: (Consumes SwarmJoin contentType, MimeRender contentType InlineObject6)
+  :: (Consumes SwarmJoin contentType, MimeRender contentType InlineObject5)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject6 -- ^ "body"
+  -> InlineObject5 -- ^ "body"
   -> DockerEngineRequest SwarmJoin contentType res accept
 swarmJoin _  _ body =
   _mkRequest "POST" ["/swarm/join"]
     `setBodyParam` body
 
 data SwarmJoin 
-instance HasBodyParam SwarmJoin InlineObject6 
+instance HasBodyParam SwarmJoin InlineObject5 
 
 -- | @application/json@
 instance Consumes SwarmJoin MimeJSON
@@ -173,15 +173,15 @@ instance Produces SwarmLeave MimePlainText
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 swarmUnlock 
-  :: (Consumes SwarmUnlock MimeJSON, MimeRender MimeJSON InlineObject7)
-  => InlineObject7 -- ^ "body"
+  :: (Consumes SwarmUnlock MimeJSON, MimeRender MimeJSON InlineObject6)
+  => InlineObject6 -- ^ "body"
   -> DockerEngineRequest SwarmUnlock MimeJSON res MimeJSON
 swarmUnlock body =
   _mkRequest "POST" ["/swarm/unlock"]
     `setBodyParam` body
 
 data SwarmUnlock 
-instance HasBodyParam SwarmUnlock InlineObject7 
+instance HasBodyParam SwarmUnlock InlineObject6 
 
 -- | @application/json@
 instance Consumes SwarmUnlock MimeJSON

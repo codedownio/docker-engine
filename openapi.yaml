@@ -3508,7 +3508,7 @@ paths:
     post:
       operationId: VolumeCreate
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
+        $ref: '#/components/requestBodies/VolumeConfig'
         content:
           application/json:
             schema:
@@ -3540,6 +3540,7 @@ paths:
                     type: string
                   description: User-defined key/value metadata.
                   type: object
+              title: VolumeConfig
               type: object
         description: Volume configuration
         required: true
@@ -3850,7 +3851,7 @@ paths:
     post:
       operationId: NetworkCreate
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_2'
+        $ref: '#/components/requestBodies/inline_object_1'
         content:
           application/json:
             schema:
@@ -3970,7 +3971,7 @@ paths:
         schema:
           type: string
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_3'
+        $ref: '#/components/requestBodies/inline_object_2'
         content:
           application/json:
             schema:
@@ -4034,7 +4035,7 @@ paths:
         schema:
           type: string
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_4'
+        $ref: '#/components/requestBodies/inline_object_3'
         content:
           application/json:
             schema:
@@ -4962,7 +4963,7 @@ paths:
     post:
       operationId: SwarmInit
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_5'
+        $ref: '#/components/requestBodies/inline_object_4'
         content:
           application/json:
             schema:
@@ -5106,7 +5107,7 @@ paths:
     post:
       operationId: SwarmJoin
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_6'
+        $ref: '#/components/requestBodies/inline_object_5'
         content:
           application/json:
             schema:
@@ -5372,7 +5373,7 @@ paths:
     post:
       operationId: SwarmUnlock
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_7'
+        $ref: '#/components/requestBodies/inline_object_6'
         content:
           application/json:
             schema:
@@ -6847,18 +6848,9 @@ components:
           schema:
             $ref: '#/components/schemas/inline_object'
       required: false
-    inline_object_7:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_7'
-      required: true
     inline_object_6:
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_6'
-        text/plain:
           schema:
             $ref: '#/components/schemas/inline_object_6'
       required: true
@@ -6876,12 +6868,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/inline_object_4'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/inline_object_4'
       required: true
     inline_object_3:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/inline_object_3'
+      required: true
+    VolumeConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VolumeConfig'
       required: true
     inline_object_2:
       content:
@@ -12551,7 +12552,7 @@ components:
       required:
       - Volumes
       - Warnings
-    inline_object_1:
+    VolumeConfig:
       example:
         Name: tardis
         Labels:
@@ -12580,6 +12581,7 @@ components:
             type: string
           description: User-defined key/value metadata.
           type: object
+      title: VolumeConfig
       type: object
     VolumePruneResponse:
       example:
@@ -12597,7 +12599,7 @@ components:
           description: Disk space reclaimed in bytes
           format: int64
           type: integer
-    inline_object_2:
+    inline_object_1:
       example:
         Name: isolated_nw
         CheckDuplicate: false
@@ -12680,7 +12682,7 @@ components:
           type: string
         Warning:
           type: string
-    inline_object_3:
+    inline_object_2:
       example:
         Container: 3613f73ba0e4
         EndpointConfig:
@@ -12694,7 +12696,7 @@ components:
         EndpointConfig:
           $ref: '#/components/schemas/EndpointSettings'
       type: object
-    inline_object_4:
+    inline_object_3:
       properties:
         Container:
           description: The ID or name of the container to disconnect from the network.
@@ -12744,7 +12746,7 @@ components:
           items:
             type: string
           type: array
-    inline_object_5:
+    inline_object_4:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12788,7 +12790,7 @@ components:
         Spec:
           $ref: '#/components/schemas/SwarmSpec'
       type: object
-    inline_object_6:
+    inline_object_5:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12832,7 +12834,7 @@ components:
         UnlockKey:
           description: The swarm's unlock key.
           type: string
-    inline_object_7:
+    inline_object_6:
       example:
         UnlockKey: SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8
       properties:

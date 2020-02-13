@@ -2351,19 +2351,49 @@ inlineObjectValueL f InlineObject{..} = (\inlineObjectValue -> InlineObject { in
 -- * InlineObject1
 
 -- | 'inlineObject1Name' Lens
-inlineObject1NameL :: Lens_' InlineObject1 (Maybe Text)
+inlineObject1NameL :: Lens_' InlineObject1 (Text)
 inlineObject1NameL f InlineObject1{..} = (\inlineObject1Name -> InlineObject1 { inlineObject1Name, ..} ) <$> f inlineObject1Name
 {-# INLINE inlineObject1NameL #-}
+
+-- | 'inlineObject1CheckDuplicate' Lens
+inlineObject1CheckDuplicateL :: Lens_' InlineObject1 (Maybe Bool)
+inlineObject1CheckDuplicateL f InlineObject1{..} = (\inlineObject1CheckDuplicate -> InlineObject1 { inlineObject1CheckDuplicate, ..} ) <$> f inlineObject1CheckDuplicate
+{-# INLINE inlineObject1CheckDuplicateL #-}
 
 -- | 'inlineObject1Driver' Lens
 inlineObject1DriverL :: Lens_' InlineObject1 (Maybe Text)
 inlineObject1DriverL f InlineObject1{..} = (\inlineObject1Driver -> InlineObject1 { inlineObject1Driver, ..} ) <$> f inlineObject1Driver
 {-# INLINE inlineObject1DriverL #-}
 
--- | 'inlineObject1DriverOpts' Lens
-inlineObject1DriverOptsL :: Lens_' InlineObject1 (Maybe (Map.Map String Text))
-inlineObject1DriverOptsL f InlineObject1{..} = (\inlineObject1DriverOpts -> InlineObject1 { inlineObject1DriverOpts, ..} ) <$> f inlineObject1DriverOpts
-{-# INLINE inlineObject1DriverOptsL #-}
+-- | 'inlineObject1Internal' Lens
+inlineObject1InternalL :: Lens_' InlineObject1 (Maybe Bool)
+inlineObject1InternalL f InlineObject1{..} = (\inlineObject1Internal -> InlineObject1 { inlineObject1Internal, ..} ) <$> f inlineObject1Internal
+{-# INLINE inlineObject1InternalL #-}
+
+-- | 'inlineObject1Attachable' Lens
+inlineObject1AttachableL :: Lens_' InlineObject1 (Maybe Bool)
+inlineObject1AttachableL f InlineObject1{..} = (\inlineObject1Attachable -> InlineObject1 { inlineObject1Attachable, ..} ) <$> f inlineObject1Attachable
+{-# INLINE inlineObject1AttachableL #-}
+
+-- | 'inlineObject1Ingress' Lens
+inlineObject1IngressL :: Lens_' InlineObject1 (Maybe Bool)
+inlineObject1IngressL f InlineObject1{..} = (\inlineObject1Ingress -> InlineObject1 { inlineObject1Ingress, ..} ) <$> f inlineObject1Ingress
+{-# INLINE inlineObject1IngressL #-}
+
+-- | 'inlineObject1Ipam' Lens
+inlineObject1IpamL :: Lens_' InlineObject1 (Maybe IPAM)
+inlineObject1IpamL f InlineObject1{..} = (\inlineObject1Ipam -> InlineObject1 { inlineObject1Ipam, ..} ) <$> f inlineObject1Ipam
+{-# INLINE inlineObject1IpamL #-}
+
+-- | 'inlineObject1EnableIPv6' Lens
+inlineObject1EnableIPv6L :: Lens_' InlineObject1 (Maybe Bool)
+inlineObject1EnableIPv6L f InlineObject1{..} = (\inlineObject1EnableIPv6 -> InlineObject1 { inlineObject1EnableIPv6, ..} ) <$> f inlineObject1EnableIPv6
+{-# INLINE inlineObject1EnableIPv6L #-}
+
+-- | 'inlineObject1Options' Lens
+inlineObject1OptionsL :: Lens_' InlineObject1 (Maybe (Map.Map String Text))
+inlineObject1OptionsL f InlineObject1{..} = (\inlineObject1Options -> InlineObject1 { inlineObject1Options, ..} ) <$> f inlineObject1Options
+{-# INLINE inlineObject1OptionsL #-}
 
 -- | 'inlineObject1Labels' Lens
 inlineObject1LabelsL :: Lens_' InlineObject1 (Maybe (Map.Map String Text))
@@ -2374,55 +2404,15 @@ inlineObject1LabelsL f InlineObject1{..} = (\inlineObject1Labels -> InlineObject
 
 -- * InlineObject2
 
--- | 'inlineObject2Name' Lens
-inlineObject2NameL :: Lens_' InlineObject2 (Text)
-inlineObject2NameL f InlineObject2{..} = (\inlineObject2Name -> InlineObject2 { inlineObject2Name, ..} ) <$> f inlineObject2Name
-{-# INLINE inlineObject2NameL #-}
+-- | 'inlineObject2Container' Lens
+inlineObject2ContainerL :: Lens_' InlineObject2 (Maybe Text)
+inlineObject2ContainerL f InlineObject2{..} = (\inlineObject2Container -> InlineObject2 { inlineObject2Container, ..} ) <$> f inlineObject2Container
+{-# INLINE inlineObject2ContainerL #-}
 
--- | 'inlineObject2CheckDuplicate' Lens
-inlineObject2CheckDuplicateL :: Lens_' InlineObject2 (Maybe Bool)
-inlineObject2CheckDuplicateL f InlineObject2{..} = (\inlineObject2CheckDuplicate -> InlineObject2 { inlineObject2CheckDuplicate, ..} ) <$> f inlineObject2CheckDuplicate
-{-# INLINE inlineObject2CheckDuplicateL #-}
-
--- | 'inlineObject2Driver' Lens
-inlineObject2DriverL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2DriverL f InlineObject2{..} = (\inlineObject2Driver -> InlineObject2 { inlineObject2Driver, ..} ) <$> f inlineObject2Driver
-{-# INLINE inlineObject2DriverL #-}
-
--- | 'inlineObject2Internal' Lens
-inlineObject2InternalL :: Lens_' InlineObject2 (Maybe Bool)
-inlineObject2InternalL f InlineObject2{..} = (\inlineObject2Internal -> InlineObject2 { inlineObject2Internal, ..} ) <$> f inlineObject2Internal
-{-# INLINE inlineObject2InternalL #-}
-
--- | 'inlineObject2Attachable' Lens
-inlineObject2AttachableL :: Lens_' InlineObject2 (Maybe Bool)
-inlineObject2AttachableL f InlineObject2{..} = (\inlineObject2Attachable -> InlineObject2 { inlineObject2Attachable, ..} ) <$> f inlineObject2Attachable
-{-# INLINE inlineObject2AttachableL #-}
-
--- | 'inlineObject2Ingress' Lens
-inlineObject2IngressL :: Lens_' InlineObject2 (Maybe Bool)
-inlineObject2IngressL f InlineObject2{..} = (\inlineObject2Ingress -> InlineObject2 { inlineObject2Ingress, ..} ) <$> f inlineObject2Ingress
-{-# INLINE inlineObject2IngressL #-}
-
--- | 'inlineObject2Ipam' Lens
-inlineObject2IpamL :: Lens_' InlineObject2 (Maybe IPAM)
-inlineObject2IpamL f InlineObject2{..} = (\inlineObject2Ipam -> InlineObject2 { inlineObject2Ipam, ..} ) <$> f inlineObject2Ipam
-{-# INLINE inlineObject2IpamL #-}
-
--- | 'inlineObject2EnableIPv6' Lens
-inlineObject2EnableIPv6L :: Lens_' InlineObject2 (Maybe Bool)
-inlineObject2EnableIPv6L f InlineObject2{..} = (\inlineObject2EnableIPv6 -> InlineObject2 { inlineObject2EnableIPv6, ..} ) <$> f inlineObject2EnableIPv6
-{-# INLINE inlineObject2EnableIPv6L #-}
-
--- | 'inlineObject2Options' Lens
-inlineObject2OptionsL :: Lens_' InlineObject2 (Maybe (Map.Map String Text))
-inlineObject2OptionsL f InlineObject2{..} = (\inlineObject2Options -> InlineObject2 { inlineObject2Options, ..} ) <$> f inlineObject2Options
-{-# INLINE inlineObject2OptionsL #-}
-
--- | 'inlineObject2Labels' Lens
-inlineObject2LabelsL :: Lens_' InlineObject2 (Maybe (Map.Map String Text))
-inlineObject2LabelsL f InlineObject2{..} = (\inlineObject2Labels -> InlineObject2 { inlineObject2Labels, ..} ) <$> f inlineObject2Labels
-{-# INLINE inlineObject2LabelsL #-}
+-- | 'inlineObject2EndpointConfig' Lens
+inlineObject2EndpointConfigL :: Lens_' InlineObject2 (Maybe EndpointSettings)
+inlineObject2EndpointConfigL f InlineObject2{..} = (\inlineObject2EndpointConfig -> InlineObject2 { inlineObject2EndpointConfig, ..} ) <$> f inlineObject2EndpointConfig
+{-# INLINE inlineObject2EndpointConfigL #-}
 
 
 
@@ -2433,24 +2423,39 @@ inlineObject3ContainerL :: Lens_' InlineObject3 (Maybe Text)
 inlineObject3ContainerL f InlineObject3{..} = (\inlineObject3Container -> InlineObject3 { inlineObject3Container, ..} ) <$> f inlineObject3Container
 {-# INLINE inlineObject3ContainerL #-}
 
--- | 'inlineObject3EndpointConfig' Lens
-inlineObject3EndpointConfigL :: Lens_' InlineObject3 (Maybe EndpointSettings)
-inlineObject3EndpointConfigL f InlineObject3{..} = (\inlineObject3EndpointConfig -> InlineObject3 { inlineObject3EndpointConfig, ..} ) <$> f inlineObject3EndpointConfig
-{-# INLINE inlineObject3EndpointConfigL #-}
+-- | 'inlineObject3Force' Lens
+inlineObject3ForceL :: Lens_' InlineObject3 (Maybe Bool)
+inlineObject3ForceL f InlineObject3{..} = (\inlineObject3Force -> InlineObject3 { inlineObject3Force, ..} ) <$> f inlineObject3Force
+{-# INLINE inlineObject3ForceL #-}
 
 
 
 -- * InlineObject4
 
--- | 'inlineObject4Container' Lens
-inlineObject4ContainerL :: Lens_' InlineObject4 (Maybe Text)
-inlineObject4ContainerL f InlineObject4{..} = (\inlineObject4Container -> InlineObject4 { inlineObject4Container, ..} ) <$> f inlineObject4Container
-{-# INLINE inlineObject4ContainerL #-}
+-- | 'inlineObject4ListenAddr' Lens
+inlineObject4ListenAddrL :: Lens_' InlineObject4 (Maybe Text)
+inlineObject4ListenAddrL f InlineObject4{..} = (\inlineObject4ListenAddr -> InlineObject4 { inlineObject4ListenAddr, ..} ) <$> f inlineObject4ListenAddr
+{-# INLINE inlineObject4ListenAddrL #-}
 
--- | 'inlineObject4Force' Lens
-inlineObject4ForceL :: Lens_' InlineObject4 (Maybe Bool)
-inlineObject4ForceL f InlineObject4{..} = (\inlineObject4Force -> InlineObject4 { inlineObject4Force, ..} ) <$> f inlineObject4Force
-{-# INLINE inlineObject4ForceL #-}
+-- | 'inlineObject4AdvertiseAddr' Lens
+inlineObject4AdvertiseAddrL :: Lens_' InlineObject4 (Maybe Text)
+inlineObject4AdvertiseAddrL f InlineObject4{..} = (\inlineObject4AdvertiseAddr -> InlineObject4 { inlineObject4AdvertiseAddr, ..} ) <$> f inlineObject4AdvertiseAddr
+{-# INLINE inlineObject4AdvertiseAddrL #-}
+
+-- | 'inlineObject4DataPathAddr' Lens
+inlineObject4DataPathAddrL :: Lens_' InlineObject4 (Maybe Text)
+inlineObject4DataPathAddrL f InlineObject4{..} = (\inlineObject4DataPathAddr -> InlineObject4 { inlineObject4DataPathAddr, ..} ) <$> f inlineObject4DataPathAddr
+{-# INLINE inlineObject4DataPathAddrL #-}
+
+-- | 'inlineObject4ForceNewCluster' Lens
+inlineObject4ForceNewClusterL :: Lens_' InlineObject4 (Maybe Bool)
+inlineObject4ForceNewClusterL f InlineObject4{..} = (\inlineObject4ForceNewCluster -> InlineObject4 { inlineObject4ForceNewCluster, ..} ) <$> f inlineObject4ForceNewCluster
+{-# INLINE inlineObject4ForceNewClusterL #-}
+
+-- | 'inlineObject4Spec' Lens
+inlineObject4SpecL :: Lens_' InlineObject4 (Maybe SwarmSpec)
+inlineObject4SpecL f InlineObject4{..} = (\inlineObject4Spec -> InlineObject4 { inlineObject4Spec, ..} ) <$> f inlineObject4Spec
+{-# INLINE inlineObject4SpecL #-}
 
 
 
@@ -2471,53 +2476,24 @@ inlineObject5DataPathAddrL :: Lens_' InlineObject5 (Maybe Text)
 inlineObject5DataPathAddrL f InlineObject5{..} = (\inlineObject5DataPathAddr -> InlineObject5 { inlineObject5DataPathAddr, ..} ) <$> f inlineObject5DataPathAddr
 {-# INLINE inlineObject5DataPathAddrL #-}
 
--- | 'inlineObject5ForceNewCluster' Lens
-inlineObject5ForceNewClusterL :: Lens_' InlineObject5 (Maybe Bool)
-inlineObject5ForceNewClusterL f InlineObject5{..} = (\inlineObject5ForceNewCluster -> InlineObject5 { inlineObject5ForceNewCluster, ..} ) <$> f inlineObject5ForceNewCluster
-{-# INLINE inlineObject5ForceNewClusterL #-}
+-- | 'inlineObject5RemoteAddrs' Lens
+inlineObject5RemoteAddrsL :: Lens_' InlineObject5 (Maybe Text)
+inlineObject5RemoteAddrsL f InlineObject5{..} = (\inlineObject5RemoteAddrs -> InlineObject5 { inlineObject5RemoteAddrs, ..} ) <$> f inlineObject5RemoteAddrs
+{-# INLINE inlineObject5RemoteAddrsL #-}
 
--- | 'inlineObject5Spec' Lens
-inlineObject5SpecL :: Lens_' InlineObject5 (Maybe SwarmSpec)
-inlineObject5SpecL f InlineObject5{..} = (\inlineObject5Spec -> InlineObject5 { inlineObject5Spec, ..} ) <$> f inlineObject5Spec
-{-# INLINE inlineObject5SpecL #-}
+-- | 'inlineObject5JoinToken' Lens
+inlineObject5JoinTokenL :: Lens_' InlineObject5 (Maybe Text)
+inlineObject5JoinTokenL f InlineObject5{..} = (\inlineObject5JoinToken -> InlineObject5 { inlineObject5JoinToken, ..} ) <$> f inlineObject5JoinToken
+{-# INLINE inlineObject5JoinTokenL #-}
 
 
 
 -- * InlineObject6
 
--- | 'inlineObject6ListenAddr' Lens
-inlineObject6ListenAddrL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6ListenAddrL f InlineObject6{..} = (\inlineObject6ListenAddr -> InlineObject6 { inlineObject6ListenAddr, ..} ) <$> f inlineObject6ListenAddr
-{-# INLINE inlineObject6ListenAddrL #-}
-
--- | 'inlineObject6AdvertiseAddr' Lens
-inlineObject6AdvertiseAddrL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6AdvertiseAddrL f InlineObject6{..} = (\inlineObject6AdvertiseAddr -> InlineObject6 { inlineObject6AdvertiseAddr, ..} ) <$> f inlineObject6AdvertiseAddr
-{-# INLINE inlineObject6AdvertiseAddrL #-}
-
--- | 'inlineObject6DataPathAddr' Lens
-inlineObject6DataPathAddrL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6DataPathAddrL f InlineObject6{..} = (\inlineObject6DataPathAddr -> InlineObject6 { inlineObject6DataPathAddr, ..} ) <$> f inlineObject6DataPathAddr
-{-# INLINE inlineObject6DataPathAddrL #-}
-
--- | 'inlineObject6RemoteAddrs' Lens
-inlineObject6RemoteAddrsL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6RemoteAddrsL f InlineObject6{..} = (\inlineObject6RemoteAddrs -> InlineObject6 { inlineObject6RemoteAddrs, ..} ) <$> f inlineObject6RemoteAddrs
-{-# INLINE inlineObject6RemoteAddrsL #-}
-
--- | 'inlineObject6JoinToken' Lens
-inlineObject6JoinTokenL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6JoinTokenL f InlineObject6{..} = (\inlineObject6JoinToken -> InlineObject6 { inlineObject6JoinToken, ..} ) <$> f inlineObject6JoinToken
-{-# INLINE inlineObject6JoinTokenL #-}
-
-
-
--- * InlineObject7
-
--- | 'inlineObject7UnlockKey' Lens
-inlineObject7UnlockKeyL :: Lens_' InlineObject7 (Maybe Text)
-inlineObject7UnlockKeyL f InlineObject7{..} = (\inlineObject7UnlockKey -> InlineObject7 { inlineObject7UnlockKey, ..} ) <$> f inlineObject7UnlockKey
-{-# INLINE inlineObject7UnlockKeyL #-}
+-- | 'inlineObject6UnlockKey' Lens
+inlineObject6UnlockKeyL :: Lens_' InlineObject6 (Maybe Text)
+inlineObject6UnlockKeyL f InlineObject6{..} = (\inlineObject6UnlockKey -> InlineObject6 { inlineObject6UnlockKey, ..} ) <$> f inlineObject6UnlockKey
+{-# INLINE inlineObject6UnlockKeyL #-}
 
 
 
@@ -5751,6 +5727,30 @@ volumeOptionsL f Volume{..} = (\volumeOptions -> Volume { volumeOptions, ..} ) <
 volumeUsageDataL :: Lens_' Volume (Maybe VolumeUsageData)
 volumeUsageDataL f Volume{..} = (\volumeUsageData -> Volume { volumeUsageData, ..} ) <$> f volumeUsageData
 {-# INLINE volumeUsageDataL #-}
+
+
+
+-- * VolumeConfig
+
+-- | 'volumeConfigName' Lens
+volumeConfigNameL :: Lens_' VolumeConfig (Maybe Text)
+volumeConfigNameL f VolumeConfig{..} = (\volumeConfigName -> VolumeConfig { volumeConfigName, ..} ) <$> f volumeConfigName
+{-# INLINE volumeConfigNameL #-}
+
+-- | 'volumeConfigDriver' Lens
+volumeConfigDriverL :: Lens_' VolumeConfig (Maybe Text)
+volumeConfigDriverL f VolumeConfig{..} = (\volumeConfigDriver -> VolumeConfig { volumeConfigDriver, ..} ) <$> f volumeConfigDriver
+{-# INLINE volumeConfigDriverL #-}
+
+-- | 'volumeConfigDriverOpts' Lens
+volumeConfigDriverOptsL :: Lens_' VolumeConfig (Maybe (Map.Map String Text))
+volumeConfigDriverOptsL f VolumeConfig{..} = (\volumeConfigDriverOpts -> VolumeConfig { volumeConfigDriverOpts, ..} ) <$> f volumeConfigDriverOpts
+{-# INLINE volumeConfigDriverOptsL #-}
+
+-- | 'volumeConfigLabels' Lens
+volumeConfigLabelsL :: Lens_' VolumeConfig (Maybe (Map.Map String Text))
+volumeConfigLabelsL f VolumeConfig{..} = (\volumeConfigLabels -> VolumeConfig { volumeConfigLabels, ..} ) <$> f volumeConfigLabels
+{-# INLINE volumeConfigLabelsL #-}
 
 
 
