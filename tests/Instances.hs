@@ -980,8 +980,11 @@ instance Arbitrary InlineObject2 where
 genInlineObject2 :: Int -> Gen InlineObject2
 genInlineObject2 n =
   InlineObject2
-    <$> arbitraryReducedMaybe n -- inlineObject2Container :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2EndpointConfig :: Maybe EndpointSettings
+    <$> arbitraryReducedMaybe n -- inlineObject2ListenAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject2AdvertiseAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject2DataPathAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject2ForceNewCluster :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObject2Spec :: Maybe SwarmSpec
   
 instance Arbitrary InlineObject3 where
   arbitrary = sized genInlineObject3
@@ -989,8 +992,11 @@ instance Arbitrary InlineObject3 where
 genInlineObject3 :: Int -> Gen InlineObject3
 genInlineObject3 n =
   InlineObject3
-    <$> arbitraryReducedMaybe n -- inlineObject3Container :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject3Force :: Maybe Bool
+    <$> arbitraryReducedMaybe n -- inlineObject3ListenAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject3AdvertiseAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject3DataPathAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject3RemoteAddrs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject3JoinToken :: Maybe Text
   
 instance Arbitrary InlineObject4 where
   arbitrary = sized genInlineObject4
@@ -998,31 +1004,7 @@ instance Arbitrary InlineObject4 where
 genInlineObject4 :: Int -> Gen InlineObject4
 genInlineObject4 n =
   InlineObject4
-    <$> arbitraryReducedMaybe n -- inlineObject4ListenAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject4AdvertiseAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject4DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject4ForceNewCluster :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject4Spec :: Maybe SwarmSpec
-  
-instance Arbitrary InlineObject5 where
-  arbitrary = sized genInlineObject5
-
-genInlineObject5 :: Int -> Gen InlineObject5
-genInlineObject5 n =
-  InlineObject5
-    <$> arbitraryReducedMaybe n -- inlineObject5ListenAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject5AdvertiseAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject5DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject5RemoteAddrs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject5JoinToken :: Maybe Text
-  
-instance Arbitrary InlineObject6 where
-  arbitrary = sized genInlineObject6
-
-genInlineObject6 :: Int -> Gen InlineObject6
-genInlineObject6 n =
-  InlineObject6
-    <$> arbitraryReducedMaybe n -- inlineObject6UnlockKey :: Maybe Text
+    <$> arbitraryReducedMaybe n -- inlineObject4UnlockKey :: Maybe Text
   
 instance Arbitrary InlineResponse400 where
   arbitrary = sized genInlineResponse400
@@ -1186,6 +1168,15 @@ genNetwork n =
     <*> arbitraryReducedMaybe n -- networkOptions :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- networkLabels :: Maybe (Map.Map String Text)
   
+instance Arbitrary NetworkConnectConfig where
+  arbitrary = sized genNetworkConnectConfig
+
+genNetworkConnectConfig :: Int -> Gen NetworkConnectConfig
+genNetworkConnectConfig n =
+  NetworkConnectConfig
+    <$> arbitraryReducedMaybe n -- networkConnectConfigContainer :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkConnectConfigEndpointConfig :: Maybe EndpointSettings
+  
 instance Arbitrary NetworkContainer where
   arbitrary = sized genNetworkContainer
 
@@ -1206,6 +1197,15 @@ genNetworkCreateResponse n =
   NetworkCreateResponse
     <$> arbitraryReducedMaybe n -- networkCreateResponseId :: Maybe Text
     <*> arbitraryReducedMaybe n -- networkCreateResponseWarning :: Maybe Text
+  
+instance Arbitrary NetworkDisconnectConfig where
+  arbitrary = sized genNetworkDisconnectConfig
+
+genNetworkDisconnectConfig :: Int -> Gen NetworkDisconnectConfig
+genNetworkDisconnectConfig n =
+  NetworkDisconnectConfig
+    <$> arbitraryReducedMaybe n -- networkDisconnectConfigContainer :: Maybe Text
+    <*> arbitraryReducedMaybe n -- networkDisconnectConfigForce :: Maybe Bool
   
 instance Arbitrary NetworkPruneResponse where
   arbitrary = sized genNetworkPruneResponse

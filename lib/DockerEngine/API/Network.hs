@@ -66,9 +66,9 @@ import qualified Prelude as P
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 networkConnect 
-  :: (Consumes NetworkConnect MimeJSON, MimeRender MimeJSON InlineObject2)
+  :: (Consumes NetworkConnect MimeJSON, MimeRender MimeJSON NetworkConnectConfig)
   => Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject2 -- ^ "container"
+  -> NetworkConnectConfig -- ^ "container"
   -> Id -- ^ "id" -  Network ID or name
   -> DockerEngineRequest NetworkConnect MimeJSON res accept
 networkConnect  _ container (Id id) =
@@ -76,7 +76,7 @@ networkConnect  _ container (Id id) =
     `setBodyParam` container
 
 data NetworkConnect 
-instance HasBodyParam NetworkConnect InlineObject2 
+instance HasBodyParam NetworkConnect NetworkConnectConfig 
 
 -- | @application/json@
 instance Consumes NetworkConnect MimeJSON
@@ -142,9 +142,9 @@ instance Produces NetworkDelete MimePlainText
 -- Note: Has 'Produces' instances, but no response schema
 -- 
 networkDisconnect 
-  :: (Consumes NetworkDisconnect MimeJSON, MimeRender MimeJSON InlineObject3)
+  :: (Consumes NetworkDisconnect MimeJSON, MimeRender MimeJSON NetworkDisconnectConfig)
   => Accept accept -- ^ request accept ('MimeType')
-  -> InlineObject3 -- ^ "container"
+  -> NetworkDisconnectConfig -- ^ "container"
   -> Id -- ^ "id" -  Network ID or name
   -> DockerEngineRequest NetworkDisconnect MimeJSON res accept
 networkDisconnect  _ container (Id id) =
@@ -152,7 +152,7 @@ networkDisconnect  _ container (Id id) =
     `setBodyParam` container
 
 data NetworkDisconnect 
-instance HasBodyParam NetworkDisconnect InlineObject3 
+instance HasBodyParam NetworkDisconnect NetworkDisconnectConfig 
 
 -- | @application/json@
 instance Consumes NetworkDisconnect MimeJSON

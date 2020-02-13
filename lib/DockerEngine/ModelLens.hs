@@ -2404,96 +2404,68 @@ inlineObject1LabelsL f InlineObject1{..} = (\inlineObject1Labels -> InlineObject
 
 -- * InlineObject2
 
--- | 'inlineObject2Container' Lens
-inlineObject2ContainerL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2ContainerL f InlineObject2{..} = (\inlineObject2Container -> InlineObject2 { inlineObject2Container, ..} ) <$> f inlineObject2Container
-{-# INLINE inlineObject2ContainerL #-}
+-- | 'inlineObject2ListenAddr' Lens
+inlineObject2ListenAddrL :: Lens_' InlineObject2 (Maybe Text)
+inlineObject2ListenAddrL f InlineObject2{..} = (\inlineObject2ListenAddr -> InlineObject2 { inlineObject2ListenAddr, ..} ) <$> f inlineObject2ListenAddr
+{-# INLINE inlineObject2ListenAddrL #-}
 
--- | 'inlineObject2EndpointConfig' Lens
-inlineObject2EndpointConfigL :: Lens_' InlineObject2 (Maybe EndpointSettings)
-inlineObject2EndpointConfigL f InlineObject2{..} = (\inlineObject2EndpointConfig -> InlineObject2 { inlineObject2EndpointConfig, ..} ) <$> f inlineObject2EndpointConfig
-{-# INLINE inlineObject2EndpointConfigL #-}
+-- | 'inlineObject2AdvertiseAddr' Lens
+inlineObject2AdvertiseAddrL :: Lens_' InlineObject2 (Maybe Text)
+inlineObject2AdvertiseAddrL f InlineObject2{..} = (\inlineObject2AdvertiseAddr -> InlineObject2 { inlineObject2AdvertiseAddr, ..} ) <$> f inlineObject2AdvertiseAddr
+{-# INLINE inlineObject2AdvertiseAddrL #-}
+
+-- | 'inlineObject2DataPathAddr' Lens
+inlineObject2DataPathAddrL :: Lens_' InlineObject2 (Maybe Text)
+inlineObject2DataPathAddrL f InlineObject2{..} = (\inlineObject2DataPathAddr -> InlineObject2 { inlineObject2DataPathAddr, ..} ) <$> f inlineObject2DataPathAddr
+{-# INLINE inlineObject2DataPathAddrL #-}
+
+-- | 'inlineObject2ForceNewCluster' Lens
+inlineObject2ForceNewClusterL :: Lens_' InlineObject2 (Maybe Bool)
+inlineObject2ForceNewClusterL f InlineObject2{..} = (\inlineObject2ForceNewCluster -> InlineObject2 { inlineObject2ForceNewCluster, ..} ) <$> f inlineObject2ForceNewCluster
+{-# INLINE inlineObject2ForceNewClusterL #-}
+
+-- | 'inlineObject2Spec' Lens
+inlineObject2SpecL :: Lens_' InlineObject2 (Maybe SwarmSpec)
+inlineObject2SpecL f InlineObject2{..} = (\inlineObject2Spec -> InlineObject2 { inlineObject2Spec, ..} ) <$> f inlineObject2Spec
+{-# INLINE inlineObject2SpecL #-}
 
 
 
 -- * InlineObject3
 
--- | 'inlineObject3Container' Lens
-inlineObject3ContainerL :: Lens_' InlineObject3 (Maybe Text)
-inlineObject3ContainerL f InlineObject3{..} = (\inlineObject3Container -> InlineObject3 { inlineObject3Container, ..} ) <$> f inlineObject3Container
-{-# INLINE inlineObject3ContainerL #-}
+-- | 'inlineObject3ListenAddr' Lens
+inlineObject3ListenAddrL :: Lens_' InlineObject3 (Maybe Text)
+inlineObject3ListenAddrL f InlineObject3{..} = (\inlineObject3ListenAddr -> InlineObject3 { inlineObject3ListenAddr, ..} ) <$> f inlineObject3ListenAddr
+{-# INLINE inlineObject3ListenAddrL #-}
 
--- | 'inlineObject3Force' Lens
-inlineObject3ForceL :: Lens_' InlineObject3 (Maybe Bool)
-inlineObject3ForceL f InlineObject3{..} = (\inlineObject3Force -> InlineObject3 { inlineObject3Force, ..} ) <$> f inlineObject3Force
-{-# INLINE inlineObject3ForceL #-}
+-- | 'inlineObject3AdvertiseAddr' Lens
+inlineObject3AdvertiseAddrL :: Lens_' InlineObject3 (Maybe Text)
+inlineObject3AdvertiseAddrL f InlineObject3{..} = (\inlineObject3AdvertiseAddr -> InlineObject3 { inlineObject3AdvertiseAddr, ..} ) <$> f inlineObject3AdvertiseAddr
+{-# INLINE inlineObject3AdvertiseAddrL #-}
+
+-- | 'inlineObject3DataPathAddr' Lens
+inlineObject3DataPathAddrL :: Lens_' InlineObject3 (Maybe Text)
+inlineObject3DataPathAddrL f InlineObject3{..} = (\inlineObject3DataPathAddr -> InlineObject3 { inlineObject3DataPathAddr, ..} ) <$> f inlineObject3DataPathAddr
+{-# INLINE inlineObject3DataPathAddrL #-}
+
+-- | 'inlineObject3RemoteAddrs' Lens
+inlineObject3RemoteAddrsL :: Lens_' InlineObject3 (Maybe Text)
+inlineObject3RemoteAddrsL f InlineObject3{..} = (\inlineObject3RemoteAddrs -> InlineObject3 { inlineObject3RemoteAddrs, ..} ) <$> f inlineObject3RemoteAddrs
+{-# INLINE inlineObject3RemoteAddrsL #-}
+
+-- | 'inlineObject3JoinToken' Lens
+inlineObject3JoinTokenL :: Lens_' InlineObject3 (Maybe Text)
+inlineObject3JoinTokenL f InlineObject3{..} = (\inlineObject3JoinToken -> InlineObject3 { inlineObject3JoinToken, ..} ) <$> f inlineObject3JoinToken
+{-# INLINE inlineObject3JoinTokenL #-}
 
 
 
 -- * InlineObject4
 
--- | 'inlineObject4ListenAddr' Lens
-inlineObject4ListenAddrL :: Lens_' InlineObject4 (Maybe Text)
-inlineObject4ListenAddrL f InlineObject4{..} = (\inlineObject4ListenAddr -> InlineObject4 { inlineObject4ListenAddr, ..} ) <$> f inlineObject4ListenAddr
-{-# INLINE inlineObject4ListenAddrL #-}
-
--- | 'inlineObject4AdvertiseAddr' Lens
-inlineObject4AdvertiseAddrL :: Lens_' InlineObject4 (Maybe Text)
-inlineObject4AdvertiseAddrL f InlineObject4{..} = (\inlineObject4AdvertiseAddr -> InlineObject4 { inlineObject4AdvertiseAddr, ..} ) <$> f inlineObject4AdvertiseAddr
-{-# INLINE inlineObject4AdvertiseAddrL #-}
-
--- | 'inlineObject4DataPathAddr' Lens
-inlineObject4DataPathAddrL :: Lens_' InlineObject4 (Maybe Text)
-inlineObject4DataPathAddrL f InlineObject4{..} = (\inlineObject4DataPathAddr -> InlineObject4 { inlineObject4DataPathAddr, ..} ) <$> f inlineObject4DataPathAddr
-{-# INLINE inlineObject4DataPathAddrL #-}
-
--- | 'inlineObject4ForceNewCluster' Lens
-inlineObject4ForceNewClusterL :: Lens_' InlineObject4 (Maybe Bool)
-inlineObject4ForceNewClusterL f InlineObject4{..} = (\inlineObject4ForceNewCluster -> InlineObject4 { inlineObject4ForceNewCluster, ..} ) <$> f inlineObject4ForceNewCluster
-{-# INLINE inlineObject4ForceNewClusterL #-}
-
--- | 'inlineObject4Spec' Lens
-inlineObject4SpecL :: Lens_' InlineObject4 (Maybe SwarmSpec)
-inlineObject4SpecL f InlineObject4{..} = (\inlineObject4Spec -> InlineObject4 { inlineObject4Spec, ..} ) <$> f inlineObject4Spec
-{-# INLINE inlineObject4SpecL #-}
-
-
-
--- * InlineObject5
-
--- | 'inlineObject5ListenAddr' Lens
-inlineObject5ListenAddrL :: Lens_' InlineObject5 (Maybe Text)
-inlineObject5ListenAddrL f InlineObject5{..} = (\inlineObject5ListenAddr -> InlineObject5 { inlineObject5ListenAddr, ..} ) <$> f inlineObject5ListenAddr
-{-# INLINE inlineObject5ListenAddrL #-}
-
--- | 'inlineObject5AdvertiseAddr' Lens
-inlineObject5AdvertiseAddrL :: Lens_' InlineObject5 (Maybe Text)
-inlineObject5AdvertiseAddrL f InlineObject5{..} = (\inlineObject5AdvertiseAddr -> InlineObject5 { inlineObject5AdvertiseAddr, ..} ) <$> f inlineObject5AdvertiseAddr
-{-# INLINE inlineObject5AdvertiseAddrL #-}
-
--- | 'inlineObject5DataPathAddr' Lens
-inlineObject5DataPathAddrL :: Lens_' InlineObject5 (Maybe Text)
-inlineObject5DataPathAddrL f InlineObject5{..} = (\inlineObject5DataPathAddr -> InlineObject5 { inlineObject5DataPathAddr, ..} ) <$> f inlineObject5DataPathAddr
-{-# INLINE inlineObject5DataPathAddrL #-}
-
--- | 'inlineObject5RemoteAddrs' Lens
-inlineObject5RemoteAddrsL :: Lens_' InlineObject5 (Maybe Text)
-inlineObject5RemoteAddrsL f InlineObject5{..} = (\inlineObject5RemoteAddrs -> InlineObject5 { inlineObject5RemoteAddrs, ..} ) <$> f inlineObject5RemoteAddrs
-{-# INLINE inlineObject5RemoteAddrsL #-}
-
--- | 'inlineObject5JoinToken' Lens
-inlineObject5JoinTokenL :: Lens_' InlineObject5 (Maybe Text)
-inlineObject5JoinTokenL f InlineObject5{..} = (\inlineObject5JoinToken -> InlineObject5 { inlineObject5JoinToken, ..} ) <$> f inlineObject5JoinToken
-{-# INLINE inlineObject5JoinTokenL #-}
-
-
-
--- * InlineObject6
-
--- | 'inlineObject6UnlockKey' Lens
-inlineObject6UnlockKeyL :: Lens_' InlineObject6 (Maybe Text)
-inlineObject6UnlockKeyL f InlineObject6{..} = (\inlineObject6UnlockKey -> InlineObject6 { inlineObject6UnlockKey, ..} ) <$> f inlineObject6UnlockKey
-{-# INLINE inlineObject6UnlockKeyL #-}
+-- | 'inlineObject4UnlockKey' Lens
+inlineObject4UnlockKeyL :: Lens_' InlineObject4 (Maybe Text)
+inlineObject4UnlockKeyL f InlineObject4{..} = (\inlineObject4UnlockKey -> InlineObject4 { inlineObject4UnlockKey, ..} ) <$> f inlineObject4UnlockKey
+{-# INLINE inlineObject4UnlockKeyL #-}
 
 
 
@@ -2939,6 +2911,20 @@ networkLabelsL f Network{..} = (\networkLabels -> Network { networkLabels, ..} )
 
 
 
+-- * NetworkConnectConfig
+
+-- | 'networkConnectConfigContainer' Lens
+networkConnectConfigContainerL :: Lens_' NetworkConnectConfig (Maybe Text)
+networkConnectConfigContainerL f NetworkConnectConfig{..} = (\networkConnectConfigContainer -> NetworkConnectConfig { networkConnectConfigContainer, ..} ) <$> f networkConnectConfigContainer
+{-# INLINE networkConnectConfigContainerL #-}
+
+-- | 'networkConnectConfigEndpointConfig' Lens
+networkConnectConfigEndpointConfigL :: Lens_' NetworkConnectConfig (Maybe EndpointSettings)
+networkConnectConfigEndpointConfigL f NetworkConnectConfig{..} = (\networkConnectConfigEndpointConfig -> NetworkConnectConfig { networkConnectConfigEndpointConfig, ..} ) <$> f networkConnectConfigEndpointConfig
+{-# INLINE networkConnectConfigEndpointConfigL #-}
+
+
+
 -- * NetworkContainer
 
 -- | 'networkContainerName' Lens
@@ -2979,6 +2965,20 @@ networkCreateResponseIdL f NetworkCreateResponse{..} = (\networkCreateResponseId
 networkCreateResponseWarningL :: Lens_' NetworkCreateResponse (Maybe Text)
 networkCreateResponseWarningL f NetworkCreateResponse{..} = (\networkCreateResponseWarning -> NetworkCreateResponse { networkCreateResponseWarning, ..} ) <$> f networkCreateResponseWarning
 {-# INLINE networkCreateResponseWarningL #-}
+
+
+
+-- * NetworkDisconnectConfig
+
+-- | 'networkDisconnectConfigContainer' Lens
+networkDisconnectConfigContainerL :: Lens_' NetworkDisconnectConfig (Maybe Text)
+networkDisconnectConfigContainerL f NetworkDisconnectConfig{..} = (\networkDisconnectConfigContainer -> NetworkDisconnectConfig { networkDisconnectConfigContainer, ..} ) <$> f networkDisconnectConfigContainer
+{-# INLINE networkDisconnectConfigContainerL #-}
+
+-- | 'networkDisconnectConfigForce' Lens
+networkDisconnectConfigForceL :: Lens_' NetworkDisconnectConfig (Maybe Bool)
+networkDisconnectConfigForceL f NetworkDisconnectConfig{..} = (\networkDisconnectConfigForce -> NetworkDisconnectConfig { networkDisconnectConfigForce, ..} ) <$> f networkDisconnectConfigForce
+{-# INLINE networkDisconnectConfigForceL #-}
 
 
 
