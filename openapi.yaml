@@ -330,40 +330,10 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-              - $ref: '#/components/schemas/ContainerConfig'
-              - properties:
-                  HostConfig:
-                    $ref: '#/components/schemas/HostConfig'
-                  NetworkingConfig:
-                    description: This container's networking configuration.
-                    properties:
-                      EndpointsConfig:
-                        additionalProperties:
-                          $ref: '#/components/schemas/EndpointSettings'
-                        description: A mapping of network name to endpoint configuration
-                          for that network.
-                        type: object
-                    type: object
-                type: object
+              $ref: '#/components/schemas/ContainerConfigExtra'
           application/octet-stream:
             schema:
-              allOf:
-              - $ref: '#/components/schemas/ContainerConfig'
-              - properties:
-                  HostConfig:
-                    $ref: '#/components/schemas/HostConfig'
-                  NetworkingConfig:
-                    description: This container's networking configuration.
-                    properties:
-                      EndpointsConfig:
-                        additionalProperties:
-                          $ref: '#/components/schemas/EndpointSettings'
-                        description: A mapping of network name to endpoint configuration
-                          for that network.
-                        type: object
-                    type: object
-                type: object
+              $ref: '#/components/schemas/ContainerConfigExtra'
         description: Container to create
         required: true
       responses:
@@ -7530,10 +7500,10 @@ components:
         Test:
         - Test
         - Test
-        Timeout: 7
-        Retries: 9
-        Interval: 2
-        StartPeriod: 3
+        Timeout: 6
+        Retries: 1
+        Interval: 0
+        StartPeriod: 5
       properties:
         Test:
           description: |
@@ -7570,8 +7540,9 @@ components:
       - $ref: '#/components/schemas/HostConfig_allOf'
       description: Container configuration that depends on the host we are running
         on
-    ContainerConfig:
-      description: Configuration for a container that is portable between hosts
+    ContainerConfigExtra:
+      description: Same as ContainerConfig, but with HostConfig and NetworkingConfig
+        added. Needed since allOf not working properly in ContainerCreate endpoint.
       example:
         User: User
         OpenStdin: false
@@ -7592,11 +7563,38 @@ components:
         Cmd:
         - Cmd
         - Cmd
-        StopTimeout: 2
+        StopTimeout: 5
         StopSignal: SIGTERM
         Entrypoint:
         - Entrypoint
         - Entrypoint
+        NetworkingConfig:
+          EndpointsConfig:
+            key:
+              GlobalIPv6Address: 2001:db8::5689
+              IPPrefixLen: 16
+              GlobalIPv6PrefixLen: 64
+              Aliases:
+              - server_x
+              - server_y
+              NetworkID: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+              MacAddress: 02:42:ac:11:00:04
+              IPAMConfig:
+                LinkLocalIPs:
+                - 169.254.34.68
+                - fe80::3468
+                IPv6Address: 2001:db8:abcd::3033
+                IPv4Address: 172.20.30.33
+              DriverOpts:
+                com.example.some-label: some-value
+                com.example.some-other-label: some-other-value
+              Gateway: 172.17.0.1
+              EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+              Links:
+              - container_1
+              - container_2
+              IPv6Gateway: 2001:db8:2::100
+              IPAddress: 172.17.0.4
         AttachStderr: true
         ArgsEscaped: true
         Hostname: Hostname
@@ -7606,10 +7604,10 @@ components:
           Test:
           - Test
           - Test
-          Timeout: 7
-          Retries: 9
-          Interval: 2
-          StartPeriod: 3
+          Timeout: 6
+          Retries: 1
+          Interval: 0
+          StartPeriod: 5
         NetworkDisabled: true
         MacAddress: MacAddress
         ExposedPorts:
@@ -7683,7 +7681,165 @@ components:
           description: The name of the image to use when creating the container
           type: string
         Volumes:
-          $ref: '#/components/schemas/ContainerConfig_Volumes'
+          $ref: '#/components/schemas/ContainerConfigExtra_Volumes'
+        WorkingDir:
+          description: The working directory for commands to run in.
+          type: string
+        Entrypoint:
+          description: |
+            The entry point for the container as a string or an array of strings.
+
+            If the array consists of exactly one empty string (`[""]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+          items:
+            type: string
+          type: array
+        NetworkDisabled:
+          description: Disable networking for the container.
+          type: boolean
+        MacAddress:
+          description: MAC address of the container.
+          type: string
+        OnBuild:
+          description: '`ONBUILD` metadata that were defined in the image''s `Dockerfile`.'
+          items:
+            type: string
+          type: array
+        Labels:
+          additionalProperties:
+            type: string
+          description: User-defined key/value metadata.
+          type: object
+        StopSignal:
+          default: SIGTERM
+          description: Signal to stop a container as a string or unsigned integer.
+          type: string
+        StopTimeout:
+          description: Timeout to stop a container in seconds.
+          type: integer
+        Shell:
+          description: Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
+          items:
+            type: string
+          type: array
+        HostConfig:
+          $ref: '#/components/schemas/HostConfig'
+        NetworkingConfig:
+          $ref: '#/components/schemas/ContainerConfigExtra_NetworkingConfig'
+      type: object
+    ContainerConfig:
+      description: Configuration for a container that is portable between hosts
+      example:
+        User: User
+        OpenStdin: false
+        Env:
+        - Env
+        - Env
+        Image: Image
+        StdinOnce: false
+        AttachStdout: true
+        Shell:
+        - Shell
+        - Shell
+        Volumes:
+          additionalProperties: '{}'
+        Domainname: Domainname
+        AttachStdin: false
+        Tty: false
+        Cmd:
+        - Cmd
+        - Cmd
+        StopTimeout: 2
+        StopSignal: SIGTERM
+        Entrypoint:
+        - Entrypoint
+        - Entrypoint
+        AttachStderr: true
+        ArgsEscaped: true
+        Hostname: Hostname
+        Labels:
+          key: Labels
+        Healthcheck:
+          Test:
+          - Test
+          - Test
+          Timeout: 6
+          Retries: 1
+          Interval: 0
+          StartPeriod: 5
+        NetworkDisabled: true
+        MacAddress: MacAddress
+        ExposedPorts:
+          key: '{}'
+        WorkingDir: WorkingDir
+        OnBuild:
+        - OnBuild
+        - OnBuild
+      properties:
+        Hostname:
+          description: The hostname to use for the container, as a valid RFC 1123
+            hostname.
+          type: string
+        Domainname:
+          description: The domain name to use for the container.
+          type: string
+        User:
+          description: The user that commands are run as inside the container.
+          type: string
+        AttachStdin:
+          default: false
+          description: Whether to attach to `stdin`.
+          type: boolean
+        AttachStdout:
+          default: true
+          description: Whether to attach to `stdout`.
+          type: boolean
+        AttachStderr:
+          default: true
+          description: Whether to attach to `stderr`.
+          type: boolean
+        ExposedPorts:
+          additionalProperties:
+            properties: {}
+            type: object
+          description: |
+            An object mapping ports to an empty object in the form:
+
+            `{"<port>/<tcp|udp>": {}}`
+          type: object
+        Tty:
+          default: false
+          description: Attach standard streams to a TTY, including `stdin` if it is
+            not closed.
+          type: boolean
+        OpenStdin:
+          default: false
+          description: Open `stdin`
+          type: boolean
+        StdinOnce:
+          default: false
+          description: Close `stdin` after one attached client disconnects
+          type: boolean
+        Env:
+          description: |
+            A list of environment variables to set inside the container in the form `["VAR=value", ...]`. A variable without `=` is removed from the environment, rather than to have an empty value.
+          items:
+            type: string
+          type: array
+        Cmd:
+          description: Command to run specified as a string or an array of strings.
+          items:
+            type: string
+          type: array
+        Healthcheck:
+          $ref: '#/components/schemas/HealthConfig'
+        ArgsEscaped:
+          description: Command is already escaped (Windows only)
+          type: boolean
+        Image:
+          description: The name of the image to use when creating the container
+          type: string
+        Volumes:
+          $ref: '#/components/schemas/ContainerConfigExtra_Volumes'
         WorkingDir:
           description: The working directory for commands to run in.
           type: string
@@ -7780,15 +7936,15 @@ components:
         Gateway: 172.17.0.1
         EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
         SecondaryIPv6Addresses:
-        - PrefixLen: 4
+        - PrefixLen: 7
           Addr: Addr
-        - PrefixLen: 4
+        - PrefixLen: 7
           Addr: Addr
         IPv6Gateway: 2001:db8:2::100
         SecondaryIPAddresses:
-        - PrefixLen: 4
+        - PrefixLen: 7
           Addr: Addr
-        - PrefixLen: 4
+        - PrefixLen: 7
           Addr: Addr
         IPAddress: 172.17.0.4
         Bridge: docker0
@@ -7972,7 +8128,7 @@ components:
     Address:
       description: Address represents an IPv4 or IPv6 IP address.
       example:
-        PrefixLen: 4
+        PrefixLen: 7
         Addr: Addr
       properties:
         Addr:
@@ -8088,10 +8244,10 @@ components:
             Test:
             - Test
             - Test
-            Timeout: 7
-            Retries: 9
-            Interval: 2
-            StartPeriod: 3
+            Timeout: 6
+            Retries: 1
+            Interval: 0
+            StartPeriod: 5
           NetworkDisabled: true
           MacAddress: MacAddress
           ExposedPorts:
@@ -8143,10 +8299,10 @@ components:
             Test:
             - Test
             - Test
-            Timeout: 7
-            Retries: 9
-            Interval: 2
-            StartPeriod: 3
+            Timeout: 6
+            Retries: 1
+            Interval: 0
+            StartPeriod: 5
           NetworkDisabled: true
           MacAddress: MacAddress
           ExposedPorts:
@@ -11694,10 +11850,10 @@ components:
             Test:
             - Test
             - Test
-            Timeout: 7
-            Retries: 9
-            Interval: 2
-            StartPeriod: 3
+            Timeout: 6
+            Retries: 1
+            Interval: 0
+            StartPeriod: 5
           NetworkDisabled: true
           MacAddress: MacAddress
           ExposedPorts:
@@ -11798,15 +11954,15 @@ components:
           Gateway: 172.17.0.1
           EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
           SecondaryIPv6Addresses:
-          - PrefixLen: 4
+          - PrefixLen: 7
             Addr: Addr
-          - PrefixLen: 4
+          - PrefixLen: 7
             Addr: Addr
           IPv6Gateway: 2001:db8:2::100
           SecondaryIPAddresses:
-          - PrefixLen: 4
+          - PrefixLen: 7
             Addr: Addr
-          - PrefixLen: 4
+          - PrefixLen: 7
             Addr: Addr
           IPAddress: 172.17.0.4
           Bridge: docker0
@@ -13227,7 +13383,7 @@ components:
           - hyperv
           - ""
           type: string
-    ContainerConfig_Volumes:
+    ContainerConfigExtra_Volumes:
       description: An object mapping mount point paths inside the container to empty
         objects.
       example:
@@ -13235,6 +13391,42 @@ components:
       properties:
         additionalProperties:
           properties: {}
+          type: object
+    ContainerConfigExtra_NetworkingConfig:
+      description: This container's networking configuration.
+      example:
+        EndpointsConfig:
+          key:
+            GlobalIPv6Address: 2001:db8::5689
+            IPPrefixLen: 16
+            GlobalIPv6PrefixLen: 64
+            Aliases:
+            - server_x
+            - server_y
+            NetworkID: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+            MacAddress: 02:42:ac:11:00:04
+            IPAMConfig:
+              LinkLocalIPs:
+              - 169.254.34.68
+              - fe80::3468
+              IPv6Address: 2001:db8:abcd::3033
+              IPv4Address: 172.20.30.33
+            DriverOpts:
+              com.example.some-label: some-value
+              com.example.some-other-label: some-other-value
+            Gateway: 172.17.0.1
+            EndpointID: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+            Links:
+            - container_1
+            - container_2
+            IPv6Gateway: 2001:db8:2::100
+            IPAddress: 172.17.0.4
+      properties:
+        EndpointsConfig:
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointSettings'
+          description: A mapping of network name to endpoint configuration for that
+            network.
           type: object
     Image_RootFS:
       example:

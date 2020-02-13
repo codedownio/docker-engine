@@ -254,7 +254,7 @@ genContainerConfig n =
     <*> arbitraryReducedMaybe n -- containerConfigHealthcheck :: Maybe HealthConfig
     <*> arbitraryReducedMaybe n -- containerConfigArgsEscaped :: Maybe Bool
     <*> arbitraryReducedMaybe n -- containerConfigImage :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerConfigVolumes :: Maybe ContainerConfigVolumes
+    <*> arbitraryReducedMaybe n -- containerConfigVolumes :: Maybe ContainerConfigExtraVolumes
     <*> arbitraryReducedMaybe n -- containerConfigWorkingDir :: Maybe Text
     <*> arbitraryReducedMaybe n -- containerConfigEntrypoint :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerConfigNetworkDisabled :: Maybe Bool
@@ -265,13 +265,55 @@ genContainerConfig n =
     <*> arbitraryReducedMaybe n -- containerConfigStopTimeout :: Maybe Int
     <*> arbitraryReducedMaybe n -- containerConfigShell :: Maybe [Text]
   
-instance Arbitrary ContainerConfigVolumes where
-  arbitrary = sized genContainerConfigVolumes
+instance Arbitrary ContainerConfigExtra where
+  arbitrary = sized genContainerConfigExtra
 
-genContainerConfigVolumes :: Int -> Gen ContainerConfigVolumes
-genContainerConfigVolumes n =
-  ContainerConfigVolumes
-    <$> arbitraryReducedMaybeValue n -- containerConfigVolumesAdditionalProperties :: Maybe A.Value
+genContainerConfigExtra :: Int -> Gen ContainerConfigExtra
+genContainerConfigExtra n =
+  ContainerConfigExtra
+    <$> arbitraryReducedMaybe n -- containerConfigExtraHostname :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraDomainname :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraUser :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraAttachStdin :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraAttachStdout :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraAttachStderr :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraExposedPorts :: Maybe (Map.Map String A.Value)
+    <*> arbitraryReducedMaybe n -- containerConfigExtraTty :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraOpenStdin :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraStdinOnce :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraEnv :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigExtraCmd :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigExtraHealthcheck :: Maybe HealthConfig
+    <*> arbitraryReducedMaybe n -- containerConfigExtraArgsEscaped :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraImage :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraVolumes :: Maybe ContainerConfigExtraVolumes
+    <*> arbitraryReducedMaybe n -- containerConfigExtraWorkingDir :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraEntrypoint :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigExtraNetworkDisabled :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- containerConfigExtraMacAddress :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraOnBuild :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigExtraLabels :: Maybe (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- containerConfigExtraStopSignal :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerConfigExtraStopTimeout :: Maybe Int
+    <*> arbitraryReducedMaybe n -- containerConfigExtraShell :: Maybe [Text]
+    <*> arbitraryReducedMaybe n -- containerConfigExtraHostConfig :: Maybe HostConfig
+    <*> arbitraryReducedMaybe n -- containerConfigExtraNetworkingConfig :: Maybe ContainerConfigExtraNetworkingConfig
+  
+instance Arbitrary ContainerConfigExtraNetworkingConfig where
+  arbitrary = sized genContainerConfigExtraNetworkingConfig
+
+genContainerConfigExtraNetworkingConfig :: Int -> Gen ContainerConfigExtraNetworkingConfig
+genContainerConfigExtraNetworkingConfig n =
+  ContainerConfigExtraNetworkingConfig
+    <$> arbitraryReducedMaybe n -- containerConfigExtraNetworkingConfigEndpointsConfig :: Maybe (Map.Map String EndpointSettings)
+  
+instance Arbitrary ContainerConfigExtraVolumes where
+  arbitrary = sized genContainerConfigExtraVolumes
+
+genContainerConfigExtraVolumes :: Int -> Gen ContainerConfigExtraVolumes
+genContainerConfigExtraVolumes n =
+  ContainerConfigExtraVolumes
+    <$> arbitraryReducedMaybeValue n -- containerConfigExtraVolumesAdditionalProperties :: Maybe A.Value
   
 instance Arbitrary ContainerCreateResponse where
   arbitrary = sized genContainerCreateResponse

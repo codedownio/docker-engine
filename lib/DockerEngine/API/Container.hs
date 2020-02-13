@@ -241,9 +241,9 @@ instance Produces ContainerChanges MimeJSON
 -- Create a container
 --
 containerCreate
-  :: (Consumes ContainerCreate contentType, MimeRender contentType ContainerConfig)
+  :: (Consumes ContainerCreate contentType, MimeRender contentType ContainerConfigExtra)
   => ContentType contentType -- ^ request content-type ('MimeType')
-  -> ContainerConfig -- ^ "body" -  Container to create
+  -> ContainerConfigExtra -- ^ "body" -  Container to create
   -> DockerEngineRequest ContainerCreate contentType ContainerCreateResponse MimeJSON
 containerCreate _ body =
   _mkRequest "POST" ["/containers/create"]
@@ -252,7 +252,7 @@ containerCreate _ body =
 data ContainerCreate
 
 -- | /Body Param/ "body" - Container to create
-instance HasBodyParam ContainerCreate ContainerConfig
+instance HasBodyParam ContainerCreate ContainerConfigExtra
 
 -- | /Optional Param/ "name" - Assign the specified name to the container. Must match `/?[a-zA-Z0-9_-]+`.
 instance HasOptionalParam ContainerCreate Name where

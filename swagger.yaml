@@ -918,6 +918,134 @@ definitions:
               - "hyperv"
               - ""
 
+  ContainerConfigExtra:
+    description: "Same as ContainerConfig, but with HostConfig and NetworkingConfig added. Needed since allOf not working properly in ContainerCreate endpoint."
+    type: "object"
+    properties:
+      Hostname:
+        description: "The hostname to use for the container, as a valid RFC 1123 hostname."
+        type: "string"
+      Domainname:
+        description: "The domain name to use for the container."
+        type: "string"
+      User:
+        description: "The user that commands are run as inside the container."
+        type: "string"
+      AttachStdin:
+        description: "Whether to attach to `stdin`."
+        type: "boolean"
+        default: false
+      AttachStdout:
+        description: "Whether to attach to `stdout`."
+        type: "boolean"
+        default: true
+      AttachStderr:
+        description: "Whether to attach to `stderr`."
+        type: "boolean"
+        default: true
+      ExposedPorts:
+        description: |
+          An object mapping ports to an empty object in the form:
+
+          `{"<port>/<tcp|udp>": {}}`
+        type: "object"
+        additionalProperties:
+          type: "object"
+          enum:
+            - {}
+          default: {}
+      Tty:
+        description: "Attach standard streams to a TTY, including `stdin` if it is not closed."
+        type: "boolean"
+        default: false
+      OpenStdin:
+        description: "Open `stdin`"
+        type: "boolean"
+        default: false
+      StdinOnce:
+        description: "Close `stdin` after one attached client disconnects"
+        type: "boolean"
+        default: false
+      Env:
+        description: |
+          A list of environment variables to set inside the container in the form `["VAR=value", ...]`. A variable without `=` is removed from the environment, rather than to have an empty value.
+        type: "array"
+        items:
+          type: "string"
+      Cmd:
+        description: "Command to run specified as a string or an array of strings."
+        type: "array"
+        items:
+          type: "string"
+      Healthcheck:
+        $ref: "#/definitions/HealthConfig"
+      ArgsEscaped:
+        description: "Command is already escaped (Windows only)"
+        type: "boolean"
+      Image:
+        description: "The name of the image to use when creating the container"
+        type: "string"
+      Volumes:
+        description: "An object mapping mount point paths inside the container to empty objects."
+        type: "object"
+        properties:
+          additionalProperties:
+            type: "object"
+            enum:
+              - {}
+            default: {}
+      WorkingDir:
+        description: "The working directory for commands to run in."
+        type: "string"
+      Entrypoint:
+        description: |
+          The entry point for the container as a string or an array of strings.
+
+          If the array consists of exactly one empty string (`[""]`) then the entry point is reset to system default (i.e., the entry point used by docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+        type: "array"
+        items:
+          type: "string"
+      NetworkDisabled:
+        description: "Disable networking for the container."
+        type: "boolean"
+      MacAddress:
+        description: "MAC address of the container."
+        type: "string"
+      OnBuild:
+        description: "`ONBUILD` metadata that were defined in the image's `Dockerfile`."
+        type: "array"
+        items:
+          type: "string"
+      Labels:
+        description: "User-defined key/value metadata."
+        type: "object"
+        additionalProperties:
+          type: "string"
+      StopSignal:
+        description: "Signal to stop a container as a string or unsigned integer."
+        type: "string"
+        default: "SIGTERM"
+      StopTimeout:
+        description: "Timeout to stop a container in seconds."
+        type: "integer"
+        default: 10
+      Shell:
+        description: "Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell."
+        type: "array"
+        items:
+          type: "string"
+      HostConfig:
+        $ref: "#/definitions/HostConfig"
+      NetworkingConfig:
+        description: "This container's networking configuration."
+        type: "object"
+        properties:
+          EndpointsConfig:
+            description: "A mapping of network name to endpoint configuration for that network."
+            type: "object"
+            additionalProperties:
+              $ref: "#/definitions/EndpointSettings"
+
   ContainerConfig:
     description: "Configuration for a container that is portable between hosts"
     type: "object"
@@ -4511,140 +4639,7 @@ paths:
           in: "body"
           description: "Container to create"
           schema:
-            allOf:
-              - $ref: "#/definitions/ContainerConfig"
-              - type: "object"
-                properties:
-                  HostConfig:
-                    $ref: "#/definitions/HostConfig"
-                  NetworkingConfig:
-                    description: "This container's networking configuration."
-                    type: "object"
-                    properties:
-                      EndpointsConfig:
-                        description: "A mapping of network name to endpoint configuration for that network."
-                        type: "object"
-                        additionalProperties:
-                          $ref: "#/definitions/EndpointSettings"
-            example:
-              Hostname: ""
-              Domainname: ""
-              User: ""
-              AttachStdin: false
-              AttachStdout: true
-              AttachStderr: true
-              Tty: false
-              OpenStdin: false
-              StdinOnce: false
-              Env:
-                - "FOO=bar"
-                - "BAZ=quux"
-              Cmd:
-                - "date"
-              Entrypoint: ""
-              Image: "ubuntu"
-              Labels:
-                com.example.vendor: "Acme"
-                com.example.license: "GPL"
-                com.example.version: "1.0"
-              Volumes:
-                /volumes/data: {}
-              WorkingDir: ""
-              NetworkDisabled: false
-              MacAddress: "12:34:56:78:9a:bc"
-              ExposedPorts:
-                22/tcp: {}
-              StopSignal: "SIGTERM"
-              StopTimeout: 10
-              HostConfig:
-                Binds:
-                  - "/tmp:/tmp"
-                Links:
-                  - "redis3:redis"
-                Memory: 0
-                MemorySwap: 0
-                MemoryReservation: 0
-                KernelMemory: 0
-                NanoCPUs: 500000
-                CpuPercent: 80
-                CpuShares: 512
-                CpuPeriod: 100000
-                CpuRealtimePeriod: 1000000
-                CpuRealtimeRuntime: 10000
-                CpuQuota: 50000
-                CpusetCpus: "0,1"
-                CpusetMems: "0,1"
-                MaximumIOps: 0
-                MaximumIOBps: 0
-                BlkioWeight: 300
-                BlkioWeightDevice:
-                  - {}
-                BlkioDeviceReadBps:
-                  - {}
-                BlkioDeviceReadIOps:
-                  - {}
-                BlkioDeviceWriteBps:
-                  - {}
-                BlkioDeviceWriteIOps:
-                  - {}
-                MemorySwappiness: 60
-                OomKillDisable: false
-                OomScoreAdj: 500
-                PidMode: ""
-                PidsLimit: -1
-                PortBindings:
-                  22/tcp:
-                    - HostPort: "11022"
-                PublishAllPorts: false
-                Privileged: false
-                ReadonlyRootfs: false
-                Dns:
-                  - "8.8.8.8"
-                DnsOptions:
-                  - ""
-                DnsSearch:
-                  - ""
-                VolumesFrom:
-                  - "parent"
-                  - "other:ro"
-                CapAdd:
-                  - "NET_ADMIN"
-                CapDrop:
-                  - "MKNOD"
-                GroupAdd:
-                  - "newgroup"
-                RestartPolicy:
-                  Name: ""
-                  MaximumRetryCount: 0
-                AutoRemove: true
-                NetworkMode: "bridge"
-                Devices: []
-                Ulimits:
-                  - {}
-                LogConfig:
-                  Type: "json-file"
-                  Config: {}
-                SecurityOpt: []
-                StorageOpt: {}
-                CgroupParent: ""
-                VolumeDriver: ""
-                ShmSize: 67108864
-              NetworkingConfig:
-                EndpointsConfig:
-                  isolated_nw:
-                    IPAMConfig:
-                      IPv4Address: "172.20.30.33"
-                      IPv6Address: "2001:db8:abcd::3033"
-                      LinkLocalIPs:
-                        - "169.254.34.68"
-                        - "fe80::3468"
-                    Links:
-                      - "container_1"
-                      - "container_2"
-                    Aliases:
-                      - "server_x"
-                      - "server_y"
-
+            $ref: "#/definitions/ContainerConfigExtra"
           required: true
       responses:
         201:

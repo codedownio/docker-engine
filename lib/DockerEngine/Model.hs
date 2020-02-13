@@ -827,7 +827,7 @@ data ContainerConfig = ContainerConfig
   , containerConfigHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
   , containerConfigArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
   , containerConfigImage :: !(Maybe Text) -- ^ "Image" - The name of the image to use when creating the container
-  , containerConfigVolumes :: !(Maybe ContainerConfigVolumes) -- ^ "Volumes"
+  , containerConfigVolumes :: !(Maybe ContainerConfigExtraVolumes) -- ^ "Volumes"
   , containerConfigWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
   , containerConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;). 
   , containerConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.
@@ -933,33 +933,195 @@ mkContainerConfig =
   , containerConfigShell = Nothing
   }
 
--- ** ContainerConfigVolumes
--- | ContainerConfigVolumes
--- An object mapping mount point paths inside the container to empty objects.
-data ContainerConfigVolumes = ContainerConfigVolumes
-  { containerConfigVolumesAdditionalProperties :: !(Maybe A.Value) -- ^ "additionalProperties"
+-- ** ContainerConfigExtra
+-- | ContainerConfigExtra
+-- Same as ContainerConfig, but with HostConfig and NetworkingConfig added. Needed since allOf not working properly in ContainerCreate endpoint.
+data ContainerConfigExtra = ContainerConfigExtra
+  { containerConfigExtraHostname :: !(Maybe Text) -- ^ "Hostname" - The hostname to use for the container, as a valid RFC 1123 hostname.
+  , containerConfigExtraDomainname :: !(Maybe Text) -- ^ "Domainname" - The domain name to use for the container.
+  , containerConfigExtraUser :: !(Maybe Text) -- ^ "User" - The user that commands are run as inside the container.
+  , containerConfigExtraAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.
+  , containerConfigExtraAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.
+  , containerConfigExtraAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.
+  , containerConfigExtraExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp&gt;\&quot;: {}}&#x60; 
+  , containerConfigExtraTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.
+  , containerConfigExtraOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;
+  , containerConfigExtraStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects
+  , containerConfigExtraEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value. 
+  , containerConfigExtraCmd :: !(Maybe [Text]) -- ^ "Cmd" - Command to run specified as a string or an array of strings.
+  , containerConfigExtraHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
+  , containerConfigExtraArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
+  , containerConfigExtraImage :: !(Maybe Text) -- ^ "Image" - The name of the image to use when creating the container
+  , containerConfigExtraVolumes :: !(Maybe ContainerConfigExtraVolumes) -- ^ "Volumes"
+  , containerConfigExtraWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
+  , containerConfigExtraEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;). 
+  , containerConfigExtraNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.
+  , containerConfigExtraMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.
+  , containerConfigExtraOnBuild :: !(Maybe [Text]) -- ^ "OnBuild" - &#x60;ONBUILD&#x60; metadata that were defined in the image&#39;s &#x60;Dockerfile&#x60;.
+  , containerConfigExtraLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
+  , containerConfigExtraStopSignal :: !(Maybe Text) -- ^ "StopSignal" - Signal to stop a container as a string or unsigned integer.
+  , containerConfigExtraStopTimeout :: !(Maybe Int) -- ^ "StopTimeout" - Timeout to stop a container in seconds.
+  , containerConfigExtraShell :: !(Maybe [Text]) -- ^ "Shell" - Shell for when &#x60;RUN&#x60;, &#x60;CMD&#x60;, and &#x60;ENTRYPOINT&#x60; uses a shell.
+  , containerConfigExtraHostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
+  , containerConfigExtraNetworkingConfig :: !(Maybe ContainerConfigExtraNetworkingConfig) -- ^ "NetworkingConfig"
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerConfigVolumes
-instance A.FromJSON ContainerConfigVolumes where
-  parseJSON = A.withObject "ContainerConfigVolumes" $ \o ->
-    ContainerConfigVolumes
-      <$> (o .:? "additionalProperties")
+-- | FromJSON ContainerConfigExtra
+instance A.FromJSON ContainerConfigExtra where
+  parseJSON = A.withObject "ContainerConfigExtra" $ \o ->
+    ContainerConfigExtra
+      <$> (o .:? "Hostname")
+      <*> (o .:? "Domainname")
+      <*> (o .:? "User")
+      <*> (o .:? "AttachStdin")
+      <*> (o .:? "AttachStdout")
+      <*> (o .:? "AttachStderr")
+      <*> (o .:? "ExposedPorts")
+      <*> (o .:? "Tty")
+      <*> (o .:? "OpenStdin")
+      <*> (o .:? "StdinOnce")
+      <*> (o .:? "Env")
+      <*> (o .:? "Cmd")
+      <*> (o .:? "Healthcheck")
+      <*> (o .:? "ArgsEscaped")
+      <*> (o .:? "Image")
+      <*> (o .:? "Volumes")
+      <*> (o .:? "WorkingDir")
+      <*> (o .:? "Entrypoint")
+      <*> (o .:? "NetworkDisabled")
+      <*> (o .:? "MacAddress")
+      <*> (o .:? "OnBuild")
+      <*> (o .:? "Labels")
+      <*> (o .:? "StopSignal")
+      <*> (o .:? "StopTimeout")
+      <*> (o .:? "Shell")
+      <*> (o .:? "HostConfig")
+      <*> (o .:? "NetworkingConfig")
 
--- | ToJSON ContainerConfigVolumes
-instance A.ToJSON ContainerConfigVolumes where
-  toJSON ContainerConfigVolumes {..} =
+-- | ToJSON ContainerConfigExtra
+instance A.ToJSON ContainerConfigExtra where
+  toJSON ContainerConfigExtra {..} =
    _omitNulls
-      [ "additionalProperties" .= containerConfigVolumesAdditionalProperties
+      [ "Hostname" .= containerConfigExtraHostname
+      , "Domainname" .= containerConfigExtraDomainname
+      , "User" .= containerConfigExtraUser
+      , "AttachStdin" .= containerConfigExtraAttachStdin
+      , "AttachStdout" .= containerConfigExtraAttachStdout
+      , "AttachStderr" .= containerConfigExtraAttachStderr
+      , "ExposedPorts" .= containerConfigExtraExposedPorts
+      , "Tty" .= containerConfigExtraTty
+      , "OpenStdin" .= containerConfigExtraOpenStdin
+      , "StdinOnce" .= containerConfigExtraStdinOnce
+      , "Env" .= containerConfigExtraEnv
+      , "Cmd" .= containerConfigExtraCmd
+      , "Healthcheck" .= containerConfigExtraHealthcheck
+      , "ArgsEscaped" .= containerConfigExtraArgsEscaped
+      , "Image" .= containerConfigExtraImage
+      , "Volumes" .= containerConfigExtraVolumes
+      , "WorkingDir" .= containerConfigExtraWorkingDir
+      , "Entrypoint" .= containerConfigExtraEntrypoint
+      , "NetworkDisabled" .= containerConfigExtraNetworkDisabled
+      , "MacAddress" .= containerConfigExtraMacAddress
+      , "OnBuild" .= containerConfigExtraOnBuild
+      , "Labels" .= containerConfigExtraLabels
+      , "StopSignal" .= containerConfigExtraStopSignal
+      , "StopTimeout" .= containerConfigExtraStopTimeout
+      , "Shell" .= containerConfigExtraShell
+      , "HostConfig" .= containerConfigExtraHostConfig
+      , "NetworkingConfig" .= containerConfigExtraNetworkingConfig
       ]
 
 
--- | Construct a value of type 'ContainerConfigVolumes' (by applying it's required fields, if any)
-mkContainerConfigVolumes
-  :: ContainerConfigVolumes
-mkContainerConfigVolumes =
-  ContainerConfigVolumes
-  { containerConfigVolumesAdditionalProperties = Nothing
+-- | Construct a value of type 'ContainerConfigExtra' (by applying it's required fields, if any)
+mkContainerConfigExtra
+  :: ContainerConfigExtra
+mkContainerConfigExtra =
+  ContainerConfigExtra
+  { containerConfigExtraHostname = Nothing
+  , containerConfigExtraDomainname = Nothing
+  , containerConfigExtraUser = Nothing
+  , containerConfigExtraAttachStdin = Nothing
+  , containerConfigExtraAttachStdout = Nothing
+  , containerConfigExtraAttachStderr = Nothing
+  , containerConfigExtraExposedPorts = Nothing
+  , containerConfigExtraTty = Nothing
+  , containerConfigExtraOpenStdin = Nothing
+  , containerConfigExtraStdinOnce = Nothing
+  , containerConfigExtraEnv = Nothing
+  , containerConfigExtraCmd = Nothing
+  , containerConfigExtraHealthcheck = Nothing
+  , containerConfigExtraArgsEscaped = Nothing
+  , containerConfigExtraImage = Nothing
+  , containerConfigExtraVolumes = Nothing
+  , containerConfigExtraWorkingDir = Nothing
+  , containerConfigExtraEntrypoint = Nothing
+  , containerConfigExtraNetworkDisabled = Nothing
+  , containerConfigExtraMacAddress = Nothing
+  , containerConfigExtraOnBuild = Nothing
+  , containerConfigExtraLabels = Nothing
+  , containerConfigExtraStopSignal = Nothing
+  , containerConfigExtraStopTimeout = Nothing
+  , containerConfigExtraShell = Nothing
+  , containerConfigExtraHostConfig = Nothing
+  , containerConfigExtraNetworkingConfig = Nothing
+  }
+
+-- ** ContainerConfigExtraNetworkingConfig
+-- | ContainerConfigExtraNetworkingConfig
+-- This container's networking configuration.
+data ContainerConfigExtraNetworkingConfig = ContainerConfigExtraNetworkingConfig
+  { containerConfigExtraNetworkingConfigEndpointsConfig :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "EndpointsConfig" - A mapping of network name to endpoint configuration for that network.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerConfigExtraNetworkingConfig
+instance A.FromJSON ContainerConfigExtraNetworkingConfig where
+  parseJSON = A.withObject "ContainerConfigExtraNetworkingConfig" $ \o ->
+    ContainerConfigExtraNetworkingConfig
+      <$> (o .:? "EndpointsConfig")
+
+-- | ToJSON ContainerConfigExtraNetworkingConfig
+instance A.ToJSON ContainerConfigExtraNetworkingConfig where
+  toJSON ContainerConfigExtraNetworkingConfig {..} =
+   _omitNulls
+      [ "EndpointsConfig" .= containerConfigExtraNetworkingConfigEndpointsConfig
+      ]
+
+
+-- | Construct a value of type 'ContainerConfigExtraNetworkingConfig' (by applying it's required fields, if any)
+mkContainerConfigExtraNetworkingConfig
+  :: ContainerConfigExtraNetworkingConfig
+mkContainerConfigExtraNetworkingConfig =
+  ContainerConfigExtraNetworkingConfig
+  { containerConfigExtraNetworkingConfigEndpointsConfig = Nothing
+  }
+
+-- ** ContainerConfigExtraVolumes
+-- | ContainerConfigExtraVolumes
+-- An object mapping mount point paths inside the container to empty objects.
+data ContainerConfigExtraVolumes = ContainerConfigExtraVolumes
+  { containerConfigExtraVolumesAdditionalProperties :: !(Maybe A.Value) -- ^ "additionalProperties"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ContainerConfigExtraVolumes
+instance A.FromJSON ContainerConfigExtraVolumes where
+  parseJSON = A.withObject "ContainerConfigExtraVolumes" $ \o ->
+    ContainerConfigExtraVolumes
+      <$> (o .:? "additionalProperties")
+
+-- | ToJSON ContainerConfigExtraVolumes
+instance A.ToJSON ContainerConfigExtraVolumes where
+  toJSON ContainerConfigExtraVolumes {..} =
+   _omitNulls
+      [ "additionalProperties" .= containerConfigExtraVolumesAdditionalProperties
+      ]
+
+
+-- | Construct a value of type 'ContainerConfigExtraVolumes' (by applying it's required fields, if any)
+mkContainerConfigExtraVolumes
+  :: ContainerConfigExtraVolumes
+mkContainerConfigExtraVolumes =
+  ContainerConfigExtraVolumes
+  { containerConfigExtraVolumesAdditionalProperties = Nothing
   }
 
 -- ** ContainerCreateResponse

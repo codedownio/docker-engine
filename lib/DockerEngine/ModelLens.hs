@@ -387,7 +387,7 @@ containerConfigImageL f ContainerConfig{..} = (\containerConfigImage -> Containe
 {-# INLINE containerConfigImageL #-}
 
 -- | 'containerConfigVolumes' Lens
-containerConfigVolumesL :: Lens_' ContainerConfig (Maybe ContainerConfigVolumes)
+containerConfigVolumesL :: Lens_' ContainerConfig (Maybe ContainerConfigExtraVolumes)
 containerConfigVolumesL f ContainerConfig{..} = (\containerConfigVolumes -> ContainerConfig { containerConfigVolumes, ..} ) <$> f containerConfigVolumes
 {-# INLINE containerConfigVolumesL #-}
 
@@ -438,12 +438,160 @@ containerConfigShellL f ContainerConfig{..} = (\containerConfigShell -> Containe
 
 
 
--- * ContainerConfigVolumes
+-- * ContainerConfigExtra
 
--- | 'containerConfigVolumesAdditionalProperties' Lens
-containerConfigVolumesAdditionalPropertiesL :: Lens_' ContainerConfigVolumes (Maybe A.Value)
-containerConfigVolumesAdditionalPropertiesL f ContainerConfigVolumes{..} = (\containerConfigVolumesAdditionalProperties -> ContainerConfigVolumes { containerConfigVolumesAdditionalProperties, ..} ) <$> f containerConfigVolumesAdditionalProperties
-{-# INLINE containerConfigVolumesAdditionalPropertiesL #-}
+-- | 'containerConfigExtraHostname' Lens
+containerConfigExtraHostnameL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraHostnameL f ContainerConfigExtra{..} = (\containerConfigExtraHostname -> ContainerConfigExtra { containerConfigExtraHostname, ..} ) <$> f containerConfigExtraHostname
+{-# INLINE containerConfigExtraHostnameL #-}
+
+-- | 'containerConfigExtraDomainname' Lens
+containerConfigExtraDomainnameL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraDomainnameL f ContainerConfigExtra{..} = (\containerConfigExtraDomainname -> ContainerConfigExtra { containerConfigExtraDomainname, ..} ) <$> f containerConfigExtraDomainname
+{-# INLINE containerConfigExtraDomainnameL #-}
+
+-- | 'containerConfigExtraUser' Lens
+containerConfigExtraUserL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraUserL f ContainerConfigExtra{..} = (\containerConfigExtraUser -> ContainerConfigExtra { containerConfigExtraUser, ..} ) <$> f containerConfigExtraUser
+{-# INLINE containerConfigExtraUserL #-}
+
+-- | 'containerConfigExtraAttachStdin' Lens
+containerConfigExtraAttachStdinL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraAttachStdinL f ContainerConfigExtra{..} = (\containerConfigExtraAttachStdin -> ContainerConfigExtra { containerConfigExtraAttachStdin, ..} ) <$> f containerConfigExtraAttachStdin
+{-# INLINE containerConfigExtraAttachStdinL #-}
+
+-- | 'containerConfigExtraAttachStdout' Lens
+containerConfigExtraAttachStdoutL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraAttachStdoutL f ContainerConfigExtra{..} = (\containerConfigExtraAttachStdout -> ContainerConfigExtra { containerConfigExtraAttachStdout, ..} ) <$> f containerConfigExtraAttachStdout
+{-# INLINE containerConfigExtraAttachStdoutL #-}
+
+-- | 'containerConfigExtraAttachStderr' Lens
+containerConfigExtraAttachStderrL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraAttachStderrL f ContainerConfigExtra{..} = (\containerConfigExtraAttachStderr -> ContainerConfigExtra { containerConfigExtraAttachStderr, ..} ) <$> f containerConfigExtraAttachStderr
+{-# INLINE containerConfigExtraAttachStderrL #-}
+
+-- | 'containerConfigExtraExposedPorts' Lens
+containerConfigExtraExposedPortsL :: Lens_' ContainerConfigExtra (Maybe (Map.Map String A.Value))
+containerConfigExtraExposedPortsL f ContainerConfigExtra{..} = (\containerConfigExtraExposedPorts -> ContainerConfigExtra { containerConfigExtraExposedPorts, ..} ) <$> f containerConfigExtraExposedPorts
+{-# INLINE containerConfigExtraExposedPortsL #-}
+
+-- | 'containerConfigExtraTty' Lens
+containerConfigExtraTtyL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraTtyL f ContainerConfigExtra{..} = (\containerConfigExtraTty -> ContainerConfigExtra { containerConfigExtraTty, ..} ) <$> f containerConfigExtraTty
+{-# INLINE containerConfigExtraTtyL #-}
+
+-- | 'containerConfigExtraOpenStdin' Lens
+containerConfigExtraOpenStdinL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraOpenStdinL f ContainerConfigExtra{..} = (\containerConfigExtraOpenStdin -> ContainerConfigExtra { containerConfigExtraOpenStdin, ..} ) <$> f containerConfigExtraOpenStdin
+{-# INLINE containerConfigExtraOpenStdinL #-}
+
+-- | 'containerConfigExtraStdinOnce' Lens
+containerConfigExtraStdinOnceL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraStdinOnceL f ContainerConfigExtra{..} = (\containerConfigExtraStdinOnce -> ContainerConfigExtra { containerConfigExtraStdinOnce, ..} ) <$> f containerConfigExtraStdinOnce
+{-# INLINE containerConfigExtraStdinOnceL #-}
+
+-- | 'containerConfigExtraEnv' Lens
+containerConfigExtraEnvL :: Lens_' ContainerConfigExtra (Maybe [Text])
+containerConfigExtraEnvL f ContainerConfigExtra{..} = (\containerConfigExtraEnv -> ContainerConfigExtra { containerConfigExtraEnv, ..} ) <$> f containerConfigExtraEnv
+{-# INLINE containerConfigExtraEnvL #-}
+
+-- | 'containerConfigExtraCmd' Lens
+containerConfigExtraCmdL :: Lens_' ContainerConfigExtra (Maybe [Text])
+containerConfigExtraCmdL f ContainerConfigExtra{..} = (\containerConfigExtraCmd -> ContainerConfigExtra { containerConfigExtraCmd, ..} ) <$> f containerConfigExtraCmd
+{-# INLINE containerConfigExtraCmdL #-}
+
+-- | 'containerConfigExtraHealthcheck' Lens
+containerConfigExtraHealthcheckL :: Lens_' ContainerConfigExtra (Maybe HealthConfig)
+containerConfigExtraHealthcheckL f ContainerConfigExtra{..} = (\containerConfigExtraHealthcheck -> ContainerConfigExtra { containerConfigExtraHealthcheck, ..} ) <$> f containerConfigExtraHealthcheck
+{-# INLINE containerConfigExtraHealthcheckL #-}
+
+-- | 'containerConfigExtraArgsEscaped' Lens
+containerConfigExtraArgsEscapedL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraArgsEscapedL f ContainerConfigExtra{..} = (\containerConfigExtraArgsEscaped -> ContainerConfigExtra { containerConfigExtraArgsEscaped, ..} ) <$> f containerConfigExtraArgsEscaped
+{-# INLINE containerConfigExtraArgsEscapedL #-}
+
+-- | 'containerConfigExtraImage' Lens
+containerConfigExtraImageL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraImageL f ContainerConfigExtra{..} = (\containerConfigExtraImage -> ContainerConfigExtra { containerConfigExtraImage, ..} ) <$> f containerConfigExtraImage
+{-# INLINE containerConfigExtraImageL #-}
+
+-- | 'containerConfigExtraVolumes' Lens
+containerConfigExtraVolumesL :: Lens_' ContainerConfigExtra (Maybe ContainerConfigExtraVolumes)
+containerConfigExtraVolumesL f ContainerConfigExtra{..} = (\containerConfigExtraVolumes -> ContainerConfigExtra { containerConfigExtraVolumes, ..} ) <$> f containerConfigExtraVolumes
+{-# INLINE containerConfigExtraVolumesL #-}
+
+-- | 'containerConfigExtraWorkingDir' Lens
+containerConfigExtraWorkingDirL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraWorkingDirL f ContainerConfigExtra{..} = (\containerConfigExtraWorkingDir -> ContainerConfigExtra { containerConfigExtraWorkingDir, ..} ) <$> f containerConfigExtraWorkingDir
+{-# INLINE containerConfigExtraWorkingDirL #-}
+
+-- | 'containerConfigExtraEntrypoint' Lens
+containerConfigExtraEntrypointL :: Lens_' ContainerConfigExtra (Maybe [Text])
+containerConfigExtraEntrypointL f ContainerConfigExtra{..} = (\containerConfigExtraEntrypoint -> ContainerConfigExtra { containerConfigExtraEntrypoint, ..} ) <$> f containerConfigExtraEntrypoint
+{-# INLINE containerConfigExtraEntrypointL #-}
+
+-- | 'containerConfigExtraNetworkDisabled' Lens
+containerConfigExtraNetworkDisabledL :: Lens_' ContainerConfigExtra (Maybe Bool)
+containerConfigExtraNetworkDisabledL f ContainerConfigExtra{..} = (\containerConfigExtraNetworkDisabled -> ContainerConfigExtra { containerConfigExtraNetworkDisabled, ..} ) <$> f containerConfigExtraNetworkDisabled
+{-# INLINE containerConfigExtraNetworkDisabledL #-}
+
+-- | 'containerConfigExtraMacAddress' Lens
+containerConfigExtraMacAddressL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraMacAddressL f ContainerConfigExtra{..} = (\containerConfigExtraMacAddress -> ContainerConfigExtra { containerConfigExtraMacAddress, ..} ) <$> f containerConfigExtraMacAddress
+{-# INLINE containerConfigExtraMacAddressL #-}
+
+-- | 'containerConfigExtraOnBuild' Lens
+containerConfigExtraOnBuildL :: Lens_' ContainerConfigExtra (Maybe [Text])
+containerConfigExtraOnBuildL f ContainerConfigExtra{..} = (\containerConfigExtraOnBuild -> ContainerConfigExtra { containerConfigExtraOnBuild, ..} ) <$> f containerConfigExtraOnBuild
+{-# INLINE containerConfigExtraOnBuildL #-}
+
+-- | 'containerConfigExtraLabels' Lens
+containerConfigExtraLabelsL :: Lens_' ContainerConfigExtra (Maybe (Map.Map String Text))
+containerConfigExtraLabelsL f ContainerConfigExtra{..} = (\containerConfigExtraLabels -> ContainerConfigExtra { containerConfigExtraLabels, ..} ) <$> f containerConfigExtraLabels
+{-# INLINE containerConfigExtraLabelsL #-}
+
+-- | 'containerConfigExtraStopSignal' Lens
+containerConfigExtraStopSignalL :: Lens_' ContainerConfigExtra (Maybe Text)
+containerConfigExtraStopSignalL f ContainerConfigExtra{..} = (\containerConfigExtraStopSignal -> ContainerConfigExtra { containerConfigExtraStopSignal, ..} ) <$> f containerConfigExtraStopSignal
+{-# INLINE containerConfigExtraStopSignalL #-}
+
+-- | 'containerConfigExtraStopTimeout' Lens
+containerConfigExtraStopTimeoutL :: Lens_' ContainerConfigExtra (Maybe Int)
+containerConfigExtraStopTimeoutL f ContainerConfigExtra{..} = (\containerConfigExtraStopTimeout -> ContainerConfigExtra { containerConfigExtraStopTimeout, ..} ) <$> f containerConfigExtraStopTimeout
+{-# INLINE containerConfigExtraStopTimeoutL #-}
+
+-- | 'containerConfigExtraShell' Lens
+containerConfigExtraShellL :: Lens_' ContainerConfigExtra (Maybe [Text])
+containerConfigExtraShellL f ContainerConfigExtra{..} = (\containerConfigExtraShell -> ContainerConfigExtra { containerConfigExtraShell, ..} ) <$> f containerConfigExtraShell
+{-# INLINE containerConfigExtraShellL #-}
+
+-- | 'containerConfigExtraHostConfig' Lens
+containerConfigExtraHostConfigL :: Lens_' ContainerConfigExtra (Maybe HostConfig)
+containerConfigExtraHostConfigL f ContainerConfigExtra{..} = (\containerConfigExtraHostConfig -> ContainerConfigExtra { containerConfigExtraHostConfig, ..} ) <$> f containerConfigExtraHostConfig
+{-# INLINE containerConfigExtraHostConfigL #-}
+
+-- | 'containerConfigExtraNetworkingConfig' Lens
+containerConfigExtraNetworkingConfigL :: Lens_' ContainerConfigExtra (Maybe ContainerConfigExtraNetworkingConfig)
+containerConfigExtraNetworkingConfigL f ContainerConfigExtra{..} = (\containerConfigExtraNetworkingConfig -> ContainerConfigExtra { containerConfigExtraNetworkingConfig, ..} ) <$> f containerConfigExtraNetworkingConfig
+{-# INLINE containerConfigExtraNetworkingConfigL #-}
+
+
+
+-- * ContainerConfigExtraNetworkingConfig
+
+-- | 'containerConfigExtraNetworkingConfigEndpointsConfig' Lens
+containerConfigExtraNetworkingConfigEndpointsConfigL :: Lens_' ContainerConfigExtraNetworkingConfig (Maybe (Map.Map String EndpointSettings))
+containerConfigExtraNetworkingConfigEndpointsConfigL f ContainerConfigExtraNetworkingConfig{..} = (\containerConfigExtraNetworkingConfigEndpointsConfig -> ContainerConfigExtraNetworkingConfig { containerConfigExtraNetworkingConfigEndpointsConfig, ..} ) <$> f containerConfigExtraNetworkingConfigEndpointsConfig
+{-# INLINE containerConfigExtraNetworkingConfigEndpointsConfigL #-}
+
+
+
+-- * ContainerConfigExtraVolumes
+
+-- | 'containerConfigExtraVolumesAdditionalProperties' Lens
+containerConfigExtraVolumesAdditionalPropertiesL :: Lens_' ContainerConfigExtraVolumes (Maybe A.Value)
+containerConfigExtraVolumesAdditionalPropertiesL f ContainerConfigExtraVolumes{..} = (\containerConfigExtraVolumesAdditionalProperties -> ContainerConfigExtraVolumes { containerConfigExtraVolumesAdditionalProperties, ..} ) <$> f containerConfigExtraVolumesAdditionalProperties
+{-# INLINE containerConfigExtraVolumesAdditionalPropertiesL #-}
 
 
 
