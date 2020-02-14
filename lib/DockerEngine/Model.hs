@@ -2421,6 +2421,40 @@ mkExecInspectResponse =
   , execInspectResponsePid = Nothing
   }
 
+-- ** ExecStartConfig
+-- | ExecStartConfig
+-- ExecStartConfig
+-- 
+data ExecStartConfig = ExecStartConfig
+  { execStartConfigDetach :: !(Maybe Bool) -- ^ "Detach" - Detach from the command.
+  , execStartConfigTty :: !(Maybe Bool) -- ^ "Tty" - Allocate a pseudo-TTY.
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON ExecStartConfig
+instance A.FromJSON ExecStartConfig where
+  parseJSON = A.withObject "ExecStartConfig" $ \o ->
+    ExecStartConfig
+      <$> (o .:? "Detach")
+      <*> (o .:? "Tty")
+
+-- | ToJSON ExecStartConfig
+instance A.ToJSON ExecStartConfig where
+  toJSON ExecStartConfig {..} =
+   _omitNulls
+      [ "Detach" .= execStartConfigDetach
+      , "Tty" .= execStartConfigTty
+      ]
+
+
+-- | Construct a value of type 'ExecStartConfig' (by applying it's required fields, if any)
+mkExecStartConfig
+  :: ExecStartConfig
+mkExecStartConfig =
+  ExecStartConfig
+  { execStartConfigDetach = Nothing
+  , execStartConfigTty = Nothing
+  }
+
 -- ** GraphDriverData
 -- | GraphDriverData
 -- Information about a container's graph driver.
@@ -3535,28 +3569,33 @@ mkIndexInfo =
 
 -- ** InlineObject
 -- | InlineObject
--- Describes a permission accepted by the user upon installing the plugin.
 data InlineObject = InlineObject
-  { inlineObjectName :: !(Maybe Text) -- ^ "Name"
-  , inlineObjectDescription :: !(Maybe Text) -- ^ "Description"
-  , inlineObjectValue :: !(Maybe [Text]) -- ^ "Value"
+  { inlineObjectListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
+  , inlineObjectAdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
+  , inlineObjectDataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
+  , inlineObjectForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
+  , inlineObjectSpec :: !(Maybe SwarmSpec) -- ^ "Spec"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject
 instance A.FromJSON InlineObject where
   parseJSON = A.withObject "InlineObject" $ \o ->
     InlineObject
-      <$> (o .:? "Name")
-      <*> (o .:? "Description")
-      <*> (o .:? "Value")
+      <$> (o .:? "ListenAddr")
+      <*> (o .:? "AdvertiseAddr")
+      <*> (o .:? "DataPathAddr")
+      <*> (o .:? "ForceNewCluster")
+      <*> (o .:? "Spec")
 
 -- | ToJSON InlineObject
 instance A.ToJSON InlineObject where
   toJSON InlineObject {..} =
    _omitNulls
-      [ "Name" .= inlineObjectName
-      , "Description" .= inlineObjectDescription
-      , "Value" .= inlineObjectValue
+      [ "ListenAddr" .= inlineObjectListenAddr
+      , "AdvertiseAddr" .= inlineObjectAdvertiseAddr
+      , "DataPathAddr" .= inlineObjectDataPathAddr
+      , "ForceNewCluster" .= inlineObjectForceNewCluster
+      , "Spec" .= inlineObjectSpec
       ]
 
 
@@ -3565,19 +3604,21 @@ mkInlineObject
   :: InlineObject
 mkInlineObject =
   InlineObject
-  { inlineObjectName = Nothing
-  , inlineObjectDescription = Nothing
-  , inlineObjectValue = Nothing
+  { inlineObjectListenAddr = Nothing
+  , inlineObjectAdvertiseAddr = Nothing
+  , inlineObjectDataPathAddr = Nothing
+  , inlineObjectForceNewCluster = Nothing
+  , inlineObjectSpec = Nothing
   }
 
 -- ** InlineObject1
 -- | InlineObject1
 data InlineObject1 = InlineObject1
-  { inlineObject1ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP). This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the default swarm listening port is used.
+  { inlineObject1ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
   , inlineObject1AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
   , inlineObject1DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
-  , inlineObject1ForceNewCluster :: !(Maybe Bool) -- ^ "ForceNewCluster" - Force creation of a new swarm.
-  , inlineObject1Spec :: !(Maybe SwarmSpec) -- ^ "Spec"
+  , inlineObject1RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
+  , inlineObject1JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject1
@@ -3587,8 +3628,8 @@ instance A.FromJSON InlineObject1 where
       <$> (o .:? "ListenAddr")
       <*> (o .:? "AdvertiseAddr")
       <*> (o .:? "DataPathAddr")
-      <*> (o .:? "ForceNewCluster")
-      <*> (o .:? "Spec")
+      <*> (o .:? "RemoteAddrs")
+      <*> (o .:? "JoinToken")
 
 -- | ToJSON InlineObject1
 instance A.ToJSON InlineObject1 where
@@ -3597,8 +3638,8 @@ instance A.ToJSON InlineObject1 where
       [ "ListenAddr" .= inlineObject1ListenAddr
       , "AdvertiseAddr" .= inlineObject1AdvertiseAddr
       , "DataPathAddr" .= inlineObject1DataPathAddr
-      , "ForceNewCluster" .= inlineObject1ForceNewCluster
-      , "Spec" .= inlineObject1Spec
+      , "RemoteAddrs" .= inlineObject1RemoteAddrs
+      , "JoinToken" .= inlineObject1JoinToken
       ]
 
 
@@ -3610,39 +3651,27 @@ mkInlineObject1 =
   { inlineObject1ListenAddr = Nothing
   , inlineObject1AdvertiseAddr = Nothing
   , inlineObject1DataPathAddr = Nothing
-  , inlineObject1ForceNewCluster = Nothing
-  , inlineObject1Spec = Nothing
+  , inlineObject1RemoteAddrs = Nothing
+  , inlineObject1JoinToken = Nothing
   }
 
 -- ** InlineObject2
 -- | InlineObject2
 data InlineObject2 = InlineObject2
-  { inlineObject2ListenAddr :: !(Maybe Text) -- ^ "ListenAddr" - Listen address used for inter-manager communication if the node gets promoted to manager, as well as determining the networking interface used for the VXLAN Tunnel Endpoint (VTEP).
-  , inlineObject2AdvertiseAddr :: !(Maybe Text) -- ^ "AdvertiseAddr" - Externally reachable address advertised to other nodes. This can either be an address/port combination in the form &#x60;192.168.1.1:4567&#x60;, or an interface followed by a port number, like &#x60;eth0:4567&#x60;. If the port number is omitted, the port number from the listen address is used. If &#x60;AdvertiseAddr&#x60; is not specified, it will be automatically detected when possible.
-  , inlineObject2DataPathAddr :: !(Maybe Text) -- ^ "DataPathAddr" - Address or interface to use for data path traffic (format: &#x60;&lt;ip|interface&gt;&#x60;), for example,  &#x60;192.168.1.1&#x60;, or an interface, like &#x60;eth0&#x60;. If &#x60;DataPathAddr&#x60; is unspecified, the same address as &#x60;AdvertiseAddr&#x60; is used.  The &#x60;DataPathAddr&#x60; specifies the address that global scope network drivers will publish towards other nodes in order to reach the containers running on this node. Using this parameter it is possible to separate the container data traffic from the management traffic of the cluster. 
-  , inlineObject2RemoteAddrs :: !(Maybe Text) -- ^ "RemoteAddrs" - Addresses of manager nodes already participating in the swarm.
-  , inlineObject2JoinToken :: !(Maybe Text) -- ^ "JoinToken" - Secret token for joining this swarm.
+  { inlineObject2UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON InlineObject2
 instance A.FromJSON InlineObject2 where
   parseJSON = A.withObject "InlineObject2" $ \o ->
     InlineObject2
-      <$> (o .:? "ListenAddr")
-      <*> (o .:? "AdvertiseAddr")
-      <*> (o .:? "DataPathAddr")
-      <*> (o .:? "RemoteAddrs")
-      <*> (o .:? "JoinToken")
+      <$> (o .:? "UnlockKey")
 
 -- | ToJSON InlineObject2
 instance A.ToJSON InlineObject2 where
   toJSON InlineObject2 {..} =
    _omitNulls
-      [ "ListenAddr" .= inlineObject2ListenAddr
-      , "AdvertiseAddr" .= inlineObject2AdvertiseAddr
-      , "DataPathAddr" .= inlineObject2DataPathAddr
-      , "RemoteAddrs" .= inlineObject2RemoteAddrs
-      , "JoinToken" .= inlineObject2JoinToken
+      [ "UnlockKey" .= inlineObject2UnlockKey
       ]
 
 
@@ -3651,39 +3680,7 @@ mkInlineObject2
   :: InlineObject2
 mkInlineObject2 =
   InlineObject2
-  { inlineObject2ListenAddr = Nothing
-  , inlineObject2AdvertiseAddr = Nothing
-  , inlineObject2DataPathAddr = Nothing
-  , inlineObject2RemoteAddrs = Nothing
-  , inlineObject2JoinToken = Nothing
-  }
-
--- ** InlineObject3
--- | InlineObject3
-data InlineObject3 = InlineObject3
-  { inlineObject3UnlockKey :: !(Maybe Text) -- ^ "UnlockKey" - The swarm&#39;s unlock key.
-  } deriving (P.Show, P.Eq, P.Typeable)
-
--- | FromJSON InlineObject3
-instance A.FromJSON InlineObject3 where
-  parseJSON = A.withObject "InlineObject3" $ \o ->
-    InlineObject3
-      <$> (o .:? "UnlockKey")
-
--- | ToJSON InlineObject3
-instance A.ToJSON InlineObject3 where
-  toJSON InlineObject3 {..} =
-   _omitNulls
-      [ "UnlockKey" .= inlineObject3UnlockKey
-      ]
-
-
--- | Construct a value of type 'InlineObject3' (by applying it's required fields, if any)
-mkInlineObject3
-  :: InlineObject3
-mkInlineObject3 =
-  InlineObject3
-  { inlineObject3UnlockKey = Nothing
+  { inlineObject2UnlockKey = Nothing
   }
 
 -- ** InlineResponse400

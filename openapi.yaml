@@ -3325,7 +3325,7 @@ paths:
         schema:
           type: string
       requestBody:
-        $ref: '#/components/requestBodies/inline_object'
+        $ref: '#/components/requestBodies/ExecStartConfig'
         content:
           application/json:
             schema:
@@ -3339,6 +3339,7 @@ paths:
                 Tty:
                   description: Allocate a pseudo-TTY.
                   type: boolean
+              title: ExecStartConfig
               type: object
         required: false
       responses:
@@ -4969,7 +4970,7 @@ paths:
     post:
       operationId: SwarmInit
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
+        $ref: '#/components/requestBodies/inline_object'
         content:
           application/json:
             schema:
@@ -5113,7 +5114,7 @@ paths:
     post:
       operationId: SwarmJoin
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_2'
+        $ref: '#/components/requestBodies/inline_object_1'
         content:
           application/json:
             schema:
@@ -5379,7 +5380,7 @@ paths:
     post:
       operationId: SwarmUnlock
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_3'
+        $ref: '#/components/requestBodies/inline_object_2'
         content:
           application/json:
             schema:
@@ -6851,6 +6852,12 @@ components:
           schema:
             $ref: '#/components/schemas/inline_object_1'
       required: true
+    ExecStartConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExecStartConfig'
+      required: false
     NetworkConfig:
       content:
         application/json:
@@ -6862,7 +6869,10 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/inline_object'
-      required: false
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+      required: true
     NetworkDisconnectConfig:
       content:
         application/json:
@@ -6875,12 +6885,6 @@ components:
           schema:
             $ref: '#/components/schemas/NetworkConnectConfig'
       required: true
-    inline_object_3:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_3'
-      required: true
     VolumeConfig:
       content:
         application/json:
@@ -6890,9 +6894,6 @@ components:
     inline_object_2:
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_2'
-        text/plain:
           schema:
             $ref: '#/components/schemas/inline_object_2'
       required: true
@@ -12461,7 +12462,7 @@ components:
           type: string
       title: ExecConfig
       type: object
-    inline_object:
+    ExecStartConfig:
       example:
         Detach: false
         Tty: false
@@ -12472,6 +12473,7 @@ components:
         Tty:
           description: Allocate a pseudo-TTY.
           type: boolean
+      title: ExecStartConfig
       type: object
     ExecInspectResponse:
       example:
@@ -12759,7 +12761,7 @@ components:
           items:
             type: string
           type: array
-    inline_object_1:
+    inline_object:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12803,7 +12805,7 @@ components:
         Spec:
           $ref: '#/components/schemas/SwarmSpec'
       type: object
-    inline_object_2:
+    inline_object_1:
       example:
         ListenAddr: 0.0.0.0:2377
         AdvertiseAddr: 192.168.1.1:2377
@@ -12847,7 +12849,7 @@ components:
         UnlockKey:
           description: The swarm's unlock key.
           type: string
-    inline_object_3:
+    inline_object_2:
       example:
         UnlockKey: SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8
       properties:

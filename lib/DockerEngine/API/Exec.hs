@@ -155,7 +155,7 @@ execStart (Id id) =
   _mkRequest "POST" ["/exec/",toPath id,"/start"]
 
 data ExecStart 
-instance HasBodyParam ExecStart InlineObject 
+instance HasBodyParam ExecStart ExecStartConfig 
 
 -- | @application/json@
 instance Consumes ExecStart MimeJSON

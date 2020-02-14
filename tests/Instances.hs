@@ -662,6 +662,15 @@ genExecInspectResponse n =
     <*> arbitraryReducedMaybe n -- execInspectResponseContainerId :: Maybe Text
     <*> arbitraryReducedMaybe n -- execInspectResponsePid :: Maybe Int
   
+instance Arbitrary ExecStartConfig where
+  arbitrary = sized genExecStartConfig
+
+genExecStartConfig :: Int -> Gen ExecStartConfig
+genExecStartConfig n =
+  ExecStartConfig
+    <$> arbitraryReducedMaybe n -- execStartConfigDetach :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- execStartConfigTty :: Maybe Bool
+  
 instance Arbitrary GraphDriverData where
   arbitrary = sized genGraphDriverData
 
@@ -953,9 +962,11 @@ instance Arbitrary InlineObject where
 genInlineObject :: Int -> Gen InlineObject
 genInlineObject n =
   InlineObject
-    <$> arbitraryReducedMaybe n -- inlineObjectName :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObjectDescription :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObjectValue :: Maybe [Text]
+    <$> arbitraryReducedMaybe n -- inlineObjectListenAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObjectAdvertiseAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObjectDataPathAddr :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObjectForceNewCluster :: Maybe Bool
+    <*> arbitraryReducedMaybe n -- inlineObjectSpec :: Maybe SwarmSpec
   
 instance Arbitrary InlineObject1 where
   arbitrary = sized genInlineObject1
@@ -966,8 +977,8 @@ genInlineObject1 n =
     <$> arbitraryReducedMaybe n -- inlineObject1ListenAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject1AdvertiseAddr :: Maybe Text
     <*> arbitraryReducedMaybe n -- inlineObject1DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject1ForceNewCluster :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- inlineObject1Spec :: Maybe SwarmSpec
+    <*> arbitraryReducedMaybe n -- inlineObject1RemoteAddrs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- inlineObject1JoinToken :: Maybe Text
   
 instance Arbitrary InlineObject2 where
   arbitrary = sized genInlineObject2
@@ -975,19 +986,7 @@ instance Arbitrary InlineObject2 where
 genInlineObject2 :: Int -> Gen InlineObject2
 genInlineObject2 n =
   InlineObject2
-    <$> arbitraryReducedMaybe n -- inlineObject2ListenAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2AdvertiseAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2DataPathAddr :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2RemoteAddrs :: Maybe Text
-    <*> arbitraryReducedMaybe n -- inlineObject2JoinToken :: Maybe Text
-  
-instance Arbitrary InlineObject3 where
-  arbitrary = sized genInlineObject3
-
-genInlineObject3 :: Int -> Gen InlineObject3
-genInlineObject3 n =
-  InlineObject3
-    <$> arbitraryReducedMaybe n -- inlineObject3UnlockKey :: Maybe Text
+    <$> arbitraryReducedMaybe n -- inlineObject2UnlockKey :: Maybe Text
   
 instance Arbitrary InlineResponse400 where
   arbitrary = sized genInlineResponse400

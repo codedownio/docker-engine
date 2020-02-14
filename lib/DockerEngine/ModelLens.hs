@@ -1431,6 +1431,20 @@ execInspectResponsePidL f ExecInspectResponse{..} = (\execInspectResponsePid -> 
 
 
 
+-- * ExecStartConfig
+
+-- | 'execStartConfigDetach' Lens
+execStartConfigDetachL :: Lens_' ExecStartConfig (Maybe Bool)
+execStartConfigDetachL f ExecStartConfig{..} = (\execStartConfigDetach -> ExecStartConfig { execStartConfigDetach, ..} ) <$> f execStartConfigDetach
+{-# INLINE execStartConfigDetachL #-}
+
+-- | 'execStartConfigTty' Lens
+execStartConfigTtyL :: Lens_' ExecStartConfig (Maybe Bool)
+execStartConfigTtyL f ExecStartConfig{..} = (\execStartConfigTty -> ExecStartConfig { execStartConfigTty, ..} ) <$> f execStartConfigTty
+{-# INLINE execStartConfigTtyL #-}
+
+
+
 -- * GraphDriverData
 
 -- | 'graphDriverDataName' Lens
@@ -2331,20 +2345,30 @@ indexInfoOfficialL f IndexInfo{..} = (\indexInfoOfficial -> IndexInfo { indexInf
 
 -- * InlineObject
 
--- | 'inlineObjectName' Lens
-inlineObjectNameL :: Lens_' InlineObject (Maybe Text)
-inlineObjectNameL f InlineObject{..} = (\inlineObjectName -> InlineObject { inlineObjectName, ..} ) <$> f inlineObjectName
-{-# INLINE inlineObjectNameL #-}
+-- | 'inlineObjectListenAddr' Lens
+inlineObjectListenAddrL :: Lens_' InlineObject (Maybe Text)
+inlineObjectListenAddrL f InlineObject{..} = (\inlineObjectListenAddr -> InlineObject { inlineObjectListenAddr, ..} ) <$> f inlineObjectListenAddr
+{-# INLINE inlineObjectListenAddrL #-}
 
--- | 'inlineObjectDescription' Lens
-inlineObjectDescriptionL :: Lens_' InlineObject (Maybe Text)
-inlineObjectDescriptionL f InlineObject{..} = (\inlineObjectDescription -> InlineObject { inlineObjectDescription, ..} ) <$> f inlineObjectDescription
-{-# INLINE inlineObjectDescriptionL #-}
+-- | 'inlineObjectAdvertiseAddr' Lens
+inlineObjectAdvertiseAddrL :: Lens_' InlineObject (Maybe Text)
+inlineObjectAdvertiseAddrL f InlineObject{..} = (\inlineObjectAdvertiseAddr -> InlineObject { inlineObjectAdvertiseAddr, ..} ) <$> f inlineObjectAdvertiseAddr
+{-# INLINE inlineObjectAdvertiseAddrL #-}
 
--- | 'inlineObjectValue' Lens
-inlineObjectValueL :: Lens_' InlineObject (Maybe [Text])
-inlineObjectValueL f InlineObject{..} = (\inlineObjectValue -> InlineObject { inlineObjectValue, ..} ) <$> f inlineObjectValue
-{-# INLINE inlineObjectValueL #-}
+-- | 'inlineObjectDataPathAddr' Lens
+inlineObjectDataPathAddrL :: Lens_' InlineObject (Maybe Text)
+inlineObjectDataPathAddrL f InlineObject{..} = (\inlineObjectDataPathAddr -> InlineObject { inlineObjectDataPathAddr, ..} ) <$> f inlineObjectDataPathAddr
+{-# INLINE inlineObjectDataPathAddrL #-}
+
+-- | 'inlineObjectForceNewCluster' Lens
+inlineObjectForceNewClusterL :: Lens_' InlineObject (Maybe Bool)
+inlineObjectForceNewClusterL f InlineObject{..} = (\inlineObjectForceNewCluster -> InlineObject { inlineObjectForceNewCluster, ..} ) <$> f inlineObjectForceNewCluster
+{-# INLINE inlineObjectForceNewClusterL #-}
+
+-- | 'inlineObjectSpec' Lens
+inlineObjectSpecL :: Lens_' InlineObject (Maybe SwarmSpec)
+inlineObjectSpecL f InlineObject{..} = (\inlineObjectSpec -> InlineObject { inlineObjectSpec, ..} ) <$> f inlineObjectSpec
+{-# INLINE inlineObjectSpecL #-}
 
 
 
@@ -2365,53 +2389,24 @@ inlineObject1DataPathAddrL :: Lens_' InlineObject1 (Maybe Text)
 inlineObject1DataPathAddrL f InlineObject1{..} = (\inlineObject1DataPathAddr -> InlineObject1 { inlineObject1DataPathAddr, ..} ) <$> f inlineObject1DataPathAddr
 {-# INLINE inlineObject1DataPathAddrL #-}
 
--- | 'inlineObject1ForceNewCluster' Lens
-inlineObject1ForceNewClusterL :: Lens_' InlineObject1 (Maybe Bool)
-inlineObject1ForceNewClusterL f InlineObject1{..} = (\inlineObject1ForceNewCluster -> InlineObject1 { inlineObject1ForceNewCluster, ..} ) <$> f inlineObject1ForceNewCluster
-{-# INLINE inlineObject1ForceNewClusterL #-}
+-- | 'inlineObject1RemoteAddrs' Lens
+inlineObject1RemoteAddrsL :: Lens_' InlineObject1 (Maybe Text)
+inlineObject1RemoteAddrsL f InlineObject1{..} = (\inlineObject1RemoteAddrs -> InlineObject1 { inlineObject1RemoteAddrs, ..} ) <$> f inlineObject1RemoteAddrs
+{-# INLINE inlineObject1RemoteAddrsL #-}
 
--- | 'inlineObject1Spec' Lens
-inlineObject1SpecL :: Lens_' InlineObject1 (Maybe SwarmSpec)
-inlineObject1SpecL f InlineObject1{..} = (\inlineObject1Spec -> InlineObject1 { inlineObject1Spec, ..} ) <$> f inlineObject1Spec
-{-# INLINE inlineObject1SpecL #-}
+-- | 'inlineObject1JoinToken' Lens
+inlineObject1JoinTokenL :: Lens_' InlineObject1 (Maybe Text)
+inlineObject1JoinTokenL f InlineObject1{..} = (\inlineObject1JoinToken -> InlineObject1 { inlineObject1JoinToken, ..} ) <$> f inlineObject1JoinToken
+{-# INLINE inlineObject1JoinTokenL #-}
 
 
 
 -- * InlineObject2
 
--- | 'inlineObject2ListenAddr' Lens
-inlineObject2ListenAddrL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2ListenAddrL f InlineObject2{..} = (\inlineObject2ListenAddr -> InlineObject2 { inlineObject2ListenAddr, ..} ) <$> f inlineObject2ListenAddr
-{-# INLINE inlineObject2ListenAddrL #-}
-
--- | 'inlineObject2AdvertiseAddr' Lens
-inlineObject2AdvertiseAddrL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2AdvertiseAddrL f InlineObject2{..} = (\inlineObject2AdvertiseAddr -> InlineObject2 { inlineObject2AdvertiseAddr, ..} ) <$> f inlineObject2AdvertiseAddr
-{-# INLINE inlineObject2AdvertiseAddrL #-}
-
--- | 'inlineObject2DataPathAddr' Lens
-inlineObject2DataPathAddrL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2DataPathAddrL f InlineObject2{..} = (\inlineObject2DataPathAddr -> InlineObject2 { inlineObject2DataPathAddr, ..} ) <$> f inlineObject2DataPathAddr
-{-# INLINE inlineObject2DataPathAddrL #-}
-
--- | 'inlineObject2RemoteAddrs' Lens
-inlineObject2RemoteAddrsL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2RemoteAddrsL f InlineObject2{..} = (\inlineObject2RemoteAddrs -> InlineObject2 { inlineObject2RemoteAddrs, ..} ) <$> f inlineObject2RemoteAddrs
-{-# INLINE inlineObject2RemoteAddrsL #-}
-
--- | 'inlineObject2JoinToken' Lens
-inlineObject2JoinTokenL :: Lens_' InlineObject2 (Maybe Text)
-inlineObject2JoinTokenL f InlineObject2{..} = (\inlineObject2JoinToken -> InlineObject2 { inlineObject2JoinToken, ..} ) <$> f inlineObject2JoinToken
-{-# INLINE inlineObject2JoinTokenL #-}
-
-
-
--- * InlineObject3
-
--- | 'inlineObject3UnlockKey' Lens
-inlineObject3UnlockKeyL :: Lens_' InlineObject3 (Maybe Text)
-inlineObject3UnlockKeyL f InlineObject3{..} = (\inlineObject3UnlockKey -> InlineObject3 { inlineObject3UnlockKey, ..} ) <$> f inlineObject3UnlockKey
-{-# INLINE inlineObject3UnlockKeyL #-}
+-- | 'inlineObject2UnlockKey' Lens
+inlineObject2UnlockKeyL :: Lens_' InlineObject2 (Maybe Text)
+inlineObject2UnlockKeyL f InlineObject2{..} = (\inlineObject2UnlockKey -> InlineObject2 { inlineObject2UnlockKey, ..} ) <$> f inlineObject2UnlockKey
+{-# INLINE inlineObject2UnlockKeyL #-}
 
 
 
