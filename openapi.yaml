@@ -11989,7 +11989,9 @@ components:
           StartedAt: StartedAt
           Paused: true
         ResolvConfPath: ResolvConfPath
-        ExecIDs: ExecIDs
+        ExecIDs:
+        - ExecIDs
+        - ExecIDs
         Id: Id
         LogPath: LogPath
       properties:
@@ -12037,7 +12039,9 @@ components:
         AppArmorProfile:
           type: string
         ExecIDs:
-          type: string
+          items:
+            type: string
+          type: array
         HostConfig:
           $ref: '#/components/schemas/HostConfig'
         GraphDriver:

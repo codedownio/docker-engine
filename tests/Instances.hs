@@ -347,7 +347,7 @@ genContainerInspectResponse n =
     <*> arbitraryReducedMaybe n -- containerInspectResponseMountLabel :: Maybe Text
     <*> arbitraryReducedMaybe n -- containerInspectResponseProcessLabel :: Maybe Text
     <*> arbitraryReducedMaybe n -- containerInspectResponseAppArmorProfile :: Maybe Text
-    <*> arbitraryReducedMaybe n -- containerInspectResponseExecIDs :: Maybe Text
+    <*> arbitraryReducedMaybe n -- containerInspectResponseExecIDs :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerInspectResponseHostConfig :: Maybe HostConfig
     <*> arbitraryReducedMaybe n -- containerInspectResponseGraphDriver :: Maybe GraphDriverData
     <*> arbitraryReducedMaybe n -- containerInspectResponseSizeRw :: Maybe Integer

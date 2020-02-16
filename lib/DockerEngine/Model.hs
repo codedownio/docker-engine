@@ -1179,7 +1179,7 @@ data ContainerInspectResponse = ContainerInspectResponse
   , containerInspectResponseMountLabel :: !(Maybe Text) -- ^ "MountLabel"
   , containerInspectResponseProcessLabel :: !(Maybe Text) -- ^ "ProcessLabel"
   , containerInspectResponseAppArmorProfile :: !(Maybe Text) -- ^ "AppArmorProfile"
-  , containerInspectResponseExecIDs :: !(Maybe Text) -- ^ "ExecIDs"
+  , containerInspectResponseExecIDs :: !(Maybe [Text]) -- ^ "ExecIDs"
   , containerInspectResponseHostConfig :: !(Maybe HostConfig) -- ^ "HostConfig"
   , containerInspectResponseGraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
   , containerInspectResponseSizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container.

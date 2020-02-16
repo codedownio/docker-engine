@@ -697,7 +697,7 @@ containerInspectResponseAppArmorProfileL f ContainerInspectResponse{..} = (\cont
 {-# INLINE containerInspectResponseAppArmorProfileL #-}
 
 -- | 'containerInspectResponseExecIDs' Lens
-containerInspectResponseExecIDsL :: Lens_' ContainerInspectResponse (Maybe Text)
+containerInspectResponseExecIDsL :: Lens_' ContainerInspectResponse (Maybe [Text])
 containerInspectResponseExecIDsL f ContainerInspectResponse{..} = (\containerInspectResponseExecIDs -> ContainerInspectResponse { containerInspectResponseExecIDs, ..} ) <$> f containerInspectResponseExecIDs
 {-# INLINE containerInspectResponseExecIDsL #-}
 
