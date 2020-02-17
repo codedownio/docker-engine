@@ -603,7 +603,7 @@ containerCreateResponseIdL f ContainerCreateResponse{..} = (\containerCreateResp
 {-# INLINE containerCreateResponseIdL #-}
 
 -- | 'containerCreateResponseWarnings' Lens
-containerCreateResponseWarningsL :: Lens_' ContainerCreateResponse ([Text])
+containerCreateResponseWarningsL :: Lens_' ContainerCreateResponse (Maybe [Text])
 containerCreateResponseWarningsL f ContainerCreateResponse{..} = (\containerCreateResponseWarnings -> ContainerCreateResponse { containerCreateResponseWarnings, ..} ) <$> f containerCreateResponseWarnings
 {-# INLINE containerCreateResponseWarningsL #-}
 

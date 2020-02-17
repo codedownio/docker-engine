@@ -1129,7 +1129,7 @@ mkContainerConfigExtraVolumes =
 -- OK response to ContainerCreate operation
 data ContainerCreateResponse = ContainerCreateResponse
   { containerCreateResponseId :: !(Text) -- ^ /Required/ "Id" - The ID of the created container
-  , containerCreateResponseWarnings :: !([Text]) -- ^ /Required/ "Warnings" - Warnings encountered when creating the container
+  , containerCreateResponseWarnings :: !(Maybe [Text]) -- ^ "Warnings" - Warnings encountered when creating the container
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ContainerCreateResponse
@@ -1137,7 +1137,7 @@ instance A.FromJSON ContainerCreateResponse where
   parseJSON = A.withObject "ContainerCreateResponse" $ \o ->
     ContainerCreateResponse
       <$> (o .:  "Id")
-      <*> (o .:  "Warnings")
+      <*> (o .:? "Warnings")
 
 -- | ToJSON ContainerCreateResponse
 instance A.ToJSON ContainerCreateResponse where
@@ -1151,12 +1151,11 @@ instance A.ToJSON ContainerCreateResponse where
 -- | Construct a value of type 'ContainerCreateResponse' (by applying it's required fields, if any)
 mkContainerCreateResponse
   :: Text -- ^ 'containerCreateResponseId': The ID of the created container
-  -> [Text] -- ^ 'containerCreateResponseWarnings': Warnings encountered when creating the container
   -> ContainerCreateResponse
-mkContainerCreateResponse containerCreateResponseId containerCreateResponseWarnings =
+mkContainerCreateResponse containerCreateResponseId =
   ContainerCreateResponse
   { containerCreateResponseId
-  , containerCreateResponseWarnings
+  , containerCreateResponseWarnings = Nothing
   }
 
 -- ** ContainerInspectResponse

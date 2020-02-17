@@ -11753,11 +11753,10 @@ components:
           description: Warnings encountered when creating the container
           items:
             type: string
-          nullable: false
+          nullable: true
           type: array
       required:
       - Id
-      - Warnings
     ContainerInspectResponse_State:
       description: The state of the container.
       example:

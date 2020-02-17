@@ -4649,7 +4649,7 @@ paths:
             type: "object"
             title: "ContainerCreateResponse"
             description: "OK response to ContainerCreate operation"
-            required: [Id, Warnings]
+            required: [Id]
             properties:
               Id:
                 description: "The ID of the created container"
@@ -4658,7 +4658,7 @@ paths:
               Warnings:
                 description: "Warnings encountered when creating the container"
                 type: "array"
-                x-nullable: false
+                x-nullable: true
                 items:
                   type: "string"
           examples:

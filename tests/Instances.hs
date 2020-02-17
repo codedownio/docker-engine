@@ -322,7 +322,7 @@ genContainerCreateResponse :: Int -> Gen ContainerCreateResponse
 genContainerCreateResponse n =
   ContainerCreateResponse
     <$> arbitrary -- containerCreateResponseId :: Text
-    <*> arbitrary -- containerCreateResponseWarnings :: [Text]
+    <*> arbitraryReducedMaybe n -- containerCreateResponseWarnings :: Maybe [Text]
   
 instance Arbitrary ContainerInspectResponse where
   arbitrary = sized genContainerInspectResponse
