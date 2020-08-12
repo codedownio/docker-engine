@@ -3014,7 +3014,7 @@ networkSettingsLinkLocalIPv6PrefixLenL f NetworkSettings{..} = (\networkSettings
 {-# INLINE networkSettingsLinkLocalIPv6PrefixLenL #-}
 
 -- | 'networkSettingsPorts' Lens
-networkSettingsPortsL :: Lens_' NetworkSettings (Maybe (Map.Map String [PortBinding]))
+networkSettingsPortsL :: Lens_' NetworkSettings (Maybe (Map.Map String (Maybe [PortBinding])))
 networkSettingsPortsL f NetworkSettings{..} = (\networkSettingsPorts -> NetworkSettings { networkSettingsPorts, ..} ) <$> f networkSettingsPorts
 {-# INLINE networkSettingsPortsL #-}
 

@@ -4538,7 +4538,7 @@ data NetworkSettings = NetworkSettings
   , networkSettingsHairpinMode :: !(Maybe Bool) -- ^ "HairpinMode" - Indicates if hairpin NAT should be enabled on the virtual interface. 
   , networkSettingsLinkLocalIPv6Address :: !(Maybe Text) -- ^ "LinkLocalIPv6Address" - IPv6 unicast address using the link-local prefix.
   , networkSettingsLinkLocalIPv6PrefixLen :: !(Maybe Int) -- ^ "LinkLocalIPv6PrefixLen" - Prefix length of the IPv6 unicast address.
-  , networkSettingsPorts :: !(Maybe (Map.Map String [PortBinding])) -- ^ "Ports" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table. 
+  , networkSettingsPorts :: !(Maybe (Map.Map String (Maybe [PortBinding]))) -- ^ "Ports" - PortMap describes the mapping of container ports to host ports, using the container&#39;s port-number and protocol as key in the format &#x60;&lt;port&gt;/&lt;protocol&gt;&#x60;, for example, &#x60;80/udp&#x60;.  If a container&#39;s port is mapped for both &#x60;tcp&#x60; and &#x60;udp&#x60;, two separate entries are added to the mapping table. 
   , networkSettingsSandboxKey :: !(Maybe Text) -- ^ "SandboxKey" - SandboxKey identifies the sandbox
   , networkSettingsSecondaryIpAddresses :: !(Maybe [Address]) -- ^ "SecondaryIPAddresses" - 
   , networkSettingsSecondaryIPv6Addresses :: !(Maybe [Address]) -- ^ "SecondaryIPv6Addresses" - 
