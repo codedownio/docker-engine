@@ -5704,7 +5704,7 @@ volumeStatusL f Volume{..} = (\volumeStatus -> Volume { volumeStatus, ..} ) <$> 
 {-# INLINE volumeStatusL #-}
 
 -- | 'volumeLabels' Lens
-volumeLabelsL :: Lens_' Volume ((Map.Map String Text))
+volumeLabelsL :: Lens_' Volume (Maybe (Map.Map String Text))
 volumeLabelsL f Volume{..} = (\volumeLabels -> Volume { volumeLabels, ..} ) <$> f volumeLabels
 {-# INLINE volumeLabelsL #-}
 
