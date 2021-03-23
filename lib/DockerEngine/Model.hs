@@ -8696,7 +8696,7 @@ data Volume = Volume
   , volumeStatus :: !(Maybe (Map.Map String A.Value)) -- ^ "Status" - Low-level details about the volume, provided by the volume driver. Details are returned as a map with key/value pairs: &#x60;{\&quot;key\&quot;:\&quot;value\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&#x60;.  The &#x60;Status&#x60; field is optional, and is omitted if the volume driver does not support this feature. 
   , volumeLabels :: !(Maybe (Map.Map String Text)) -- ^ /Required/ "Labels" - User-defined key/value metadata.
   , volumeScope :: !(E'Scope) -- ^ /Required/ "Scope" - The level at which the volume exists. Either &#x60;global&#x60; for cluster-wide, or &#x60;local&#x60; for machine level.
-  , volumeOptions :: !((Map.Map String Text)) -- ^ /Required/ "Options" - The driver specific options used when creating the volume.
+  , volumeOptions :: !(Maybe (Map.Map String Text)) -- ^ /Required/ "Options" - The driver specific options used when creating the volume.
   , volumeUsageData :: !(Maybe VolumeUsageData) -- ^ "UsageData"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -8711,7 +8711,7 @@ instance A.FromJSON Volume where
       <*> (o .:? "Status")
       <*> (o .:? "Labels")
       <*> (o .:  "Scope")
-      <*> (o .:  "Options")
+      <*> (o .:?  "Options")
       <*> (o .:? "UsageData")
 
 -- | ToJSON Volume
@@ -8737,7 +8737,7 @@ mkVolume
   -> Text -- ^ 'volumeMountpoint': Mount path of the volume on the host.
   -> (Maybe (Map.Map String Text)) -- ^ 'volumeLabels': User-defined key/value metadata.
   -> E'Scope -- ^ 'volumeScope': The level at which the volume exists. Either `global` for cluster-wide, or `local` for machine level.
-  -> (Map.Map String Text) -- ^ 'volumeOptions': The driver specific options used when creating the volume.
+  -> (Maybe (Map.Map String Text)) -- ^ 'volumeOptions': The driver specific options used when creating the volume.
   -> Volume
 mkVolume volumeName volumeDriver volumeMountpoint volumeLabels volumeScope volumeOptions =
   Volume

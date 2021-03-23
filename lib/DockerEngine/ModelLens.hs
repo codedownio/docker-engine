@@ -5714,7 +5714,7 @@ volumeScopeL f Volume{..} = (\volumeScope -> Volume { volumeScope, ..} ) <$> f v
 {-# INLINE volumeScopeL #-}
 
 -- | 'volumeOptions' Lens
-volumeOptionsL :: Lens_' Volume ((Map.Map String Text))
+volumeOptionsL :: Lens_' Volume (Maybe (Map.Map String Text))
 volumeOptionsL f Volume{..} = (\volumeOptions -> Volume { volumeOptions, ..} ) <$> f volumeOptions
 {-# INLINE volumeOptionsL #-}
 
