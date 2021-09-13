@@ -77,8 +77,8 @@ data MimeResult res =
 data MimeError =
   MimeError {
     mimeError :: String -- ^ unrender/parser error
-  , mimeErrorResponse :: NH.Response BCL.ByteString -- ^ http response 
-  } deriving (Eq, Show)
+  , mimeErrorResponse :: NH.Response BCL.ByteString -- ^ http response
+  } deriving (Show)
 
 -- | send a request returning the 'MimeResult'
 dispatchMime

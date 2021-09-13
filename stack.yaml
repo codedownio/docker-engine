@@ -1,4 +1,4 @@
-resolver: lts-16.6
+resolver: nightly-2021-09-12
 build:
   haddock-arguments:
     haddock-args:
