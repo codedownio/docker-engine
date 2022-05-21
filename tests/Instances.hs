@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports -fno-warn-unused-matches #-}
 
 module Instances where
@@ -51,6 +52,7 @@ instance Arbitrary Date where
     arbitrary = Date <$> arbitrary
     shrink (Date xs) = Date <$> shrink xs
 
+#if !MIN_VERSION_aeson(2,0,0)
 -- | A naive Arbitrary instance for A.Value:
 instance Arbitrary A.Value where
   arbitrary = frequency [(3, simpleTypes), (1, arrayTypes), (1, objectTypes)]
@@ -71,7 +73,8 @@ instance Arbitrary A.Value where
       sizedObject n =
         liftM (A.object . map mapF) $
         replicateM n $ (,) <$> (arbitrary :: Gen String) <*> simpleAndArrays
-    
+#endif
+
 -- | Checks if a given list has no duplicates in _O(n log n)_.
 hasNoDups
   :: (Ord a)

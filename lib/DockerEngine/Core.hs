@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE CPP #-}
 {-
    Docker Engine API
 
@@ -400,7 +401,11 @@ _applyAuthMethods req config@(DockerEngineConfig {configAuthMethods = as}) =
 -- * Utils
 
 -- | Removes Null fields.  (OpenAPI-Specification 2.0 does not allow Null in JSON)
+#if MIN_VERSION_aeson(2,0,0)
+_omitNulls :: [(A.Key, A.Value)] -> A.Value
+#else
 _omitNulls :: [(Text, A.Value)] -> A.Value
+#endif
 _omitNulls = A.object . P.filter notNull
   where
     notNull (_, A.Null) = False
