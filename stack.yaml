@@ -1,4 +1,5 @@
-resolver: lts-19.7
+# resolver: lts-19.7
+resolver: nightly-2022-07-07
 build:
   haddock-arguments:
     haddock-args:
