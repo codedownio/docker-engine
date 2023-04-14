@@ -1,8 +1,9 @@
-# resolver: lts-19.7
-resolver: nightly-2022-07-07
+resolver: nightly-2023-04-14
+
 build:
   haddock-arguments:
     haddock-args:
     - "--odir=./docs"
+
 packages:
 - '.'
