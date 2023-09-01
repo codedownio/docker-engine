@@ -33,7 +33,6 @@ jobs:
 
     - name: Freeze
       run: |
-        cd sandwich
         cabal freeze
 
     - uses: actions/cache@v1
