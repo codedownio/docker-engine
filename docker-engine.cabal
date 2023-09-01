@@ -102,7 +102,7 @@ test-suite tests
     , QuickCheck
     , aeson
     , base >=4.7 && <5.0
-    , bytestring >=0.10.0 && <0.11
+    , bytestring >=0.10.0 && <0.12
     , containers
     , hspec >=1.8
     , iso8601-time

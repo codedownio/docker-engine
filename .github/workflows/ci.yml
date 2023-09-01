@@ -1,0 +1,101 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  cabal:
+    name: ${{ matrix.os }} / ghc ${{ matrix.ghc }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        ghc:
+        - "8.6.5"
+        - "8.8.4"
+        - "8.10.7"
+        - "9.0.2"
+        - "9.2.7"
+        - "9.4.5"
+        - "9.6.2"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: haskell/actions/setup@v2
+      id: setup-haskell-cabal
+      name: Setup Haskell
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        cabal-version: "latest"
+
+    - name: Freeze
+      run: |
+        cd sandwich
+        cabal freeze
+
+    - uses: actions/cache@v1
+      name: Cache ~/.cabal/store
+      with:
+        path: ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
+        key: ${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
+
+    - name: Build
+      run: |
+        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
+        cabal build all
+
+    - name: Test
+      run: |
+        cabal test all
+
+  stack:
+    name: stack / ghc ${{ matrix.ghc }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # - ghc: "8.6.5"
+        #   resolver: "lts-14.27"
+        # - ghc: "8.8.4"
+        #   resolver: "lts-16.31"
+        # - ghc: "8.10.7"
+        #   resolver: "lts-18.28"
+        # - ghc: "9.0.2"
+        #   resolver: "lts-19.33"
+        # - ghc: "9.2.8"
+        #   resolver: "lts-20.26"
+        - ghc: "9.4.6"
+          resolver: "lts-21.9"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: haskell/actions/setup@v2
+      name: Setup Haskell Stack
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        enable-stack: true
+        stack-version: "latest"
+
+    - uses: actions/cache@v1
+      name: Cache ~/.stack
+      with:
+        path: ~/.stack
+        key: ${{ runner.os }}-${{ matrix.ghc }}-${{ matrix.resolver }}-stack
+
+    # - name: apt
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y libx11-dev libxext-dev libxinerama-dev libxrandr-dev libxss-dev
+
+    - name: Build
+      run: |
+        stack build --stack-yaml stack/stack-${{matrix.resolver}}.yaml --system-ghc --test --bench --no-run-tests --no-run-benchmarks
+
+    - name: Test
+      run: |
+        stack test --stack-yaml stack/stack-${{matrix.resolver}}.yaml --system-ghc
