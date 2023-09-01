@@ -1,23 +1,17 @@
 name:           docker-engine
-version:        0.1.0.0
+version:        1.36.0.0
 synopsis:       Auto-generated docker-engine API Client
 description:    .
                 Client library for calling the Docker Engine API API based on http-client.
-                .
-                host: localhost
-                .
-                base path: http://localhost/v1.36
                 .
                 Docker Engine API API version: 1.36
                 .
                 OpenAPI version: 3.0.1
                 .
-category:       Web
-homepage:       https://openapi-generator.tech
-author:         Author Name Here
-maintainer:     author.name@email.com
-copyright:      YEAR - AUTHOR
-license:        UnspecifiedLicense
+category:       Network
+homepage:       https://docs.docker.com/engine/api/v1.36/
+maintainer:     tom@codedown.io
+license:        Apache-2.0
 build-type:     Simple
 cabal-version:  >= 1.10
 
