@@ -8,13 +8,24 @@
         pkgs = import nixpkgs { inherit system; };
       in
         {
-          apps.generate = let
-            generateScript = pkgs.writeShellScriptBin "generate.sh" ''
-              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --generator-name haskell-http-client
-            '';
-          in {
-            type = "app";
-            program = "${generateScript}/bin/generate.sh";
+          apps = {
+            generate = let
+              script = pkgs.writeShellScriptBin "generate.sh" ''
+                ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --generator-name haskell-http-client -i ./swagger.yaml
+              '';
+            in {
+              type = "app";
+              program = "${script}/bin/generate.sh";
+            };
+
+            openapi-version = let
+              script = pkgs.writeShellScriptBin "version.sh" ''
+                ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli version
+              '';
+            in {
+              type = "app";
+              program = "${script}/bin/version.sh";
+            };
           };
 
           packages = {
