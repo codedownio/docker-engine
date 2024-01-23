@@ -53,7 +53,7 @@ import qualified Data.Text.Encoding as T
 import qualified Data.Time as TI
 import qualified Data.Time.Format.Internal as TI
 import qualified Data.Time.ISO8601 as TI
-import qualified GHC.Base as P (Alternative)
+import qualified GHC.Base as P (Alternative, empty)
 import qualified Lens.Micro as L
 import qualified Network.HTTP.Client.MultipartFormData as NH
 import qualified Network.HTTP.Types as NH
@@ -446,6 +446,11 @@ instance P.Show DateTime where
   show (DateTime t) = _showDateTime t
 instance MimeRender MimeMultipartFormData DateTime where
   mimeRender _ = mimeRenderDefaultMultipartFormData
+
+instance Alternative (P.Either String) where
+    empty        = P.Left ""
+    P.Left _ <|> n = n
+    m      <|> _ = m
 
 -- | @_parseISO8601@
 _readDateTime :: (TI.ParseTime t, Monad m, Alternative m, P.MonadFail m) => String -> m t
