@@ -1,5 +1,5 @@
-{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-
    Docker Engine API
 
@@ -447,10 +447,12 @@ instance P.Show DateTime where
 instance MimeRender MimeMultipartFormData DateTime where
   mimeRender _ = mimeRenderDefaultMultipartFormData
 
+#if MIN_VERSION_transformers(0,6,0)
 instance Alternative (P.Either String) where
     empty        = P.Left ""
     P.Left _ <|> n = n
     m      <|> _ = m
+#endif
 
 -- | @_parseISO8601@
 _readDateTime :: (TI.ParseTime t, Monad m, Alternative m, P.MonadFail m) => String -> m t
