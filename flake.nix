@@ -9,13 +9,21 @@
 
         versionSuffix = 0;
 
-        mkApiYaml = { src, patchPhase ? true }: pkgs.stdenv.mkDerivation {
+        # Fix a spec issue where the ContainerSummary definition is wrongly specified as an array,
+        # rather than an object
+        fixContainerSummaryDefinition = ''
+          yq e -i '.definitions.ContainerSummary.type = "object"' api.yaml
+          yq e -i '.definitions.ContainerSummary.properties = .definitions.ContainerSummary.items.properties' api.yaml
+          yq e -i 'del(.definitions.ContainerSummary.items)' api.yaml
+        '';
+
+        mkApiYaml = { src, fixes ? [] }: pkgs.stdenv.mkDerivation {
           name = "docker-api-1.39.${toString versionSuffix}.yaml";
           inherit src;
           unpackPhase = ''
             cp $src api.yaml
           '';
-          inherit patchPhase;
+          patchPhase = pkgs.lib.concatStringsSep "\n" fixes;
           buildInputs = [pkgs.yq-go];
           dontConfigure = true;
           dontBuild = true;
@@ -24,28 +32,33 @@
           '';
         };
 
-        api_1_36 = pkgs.fetchurl {
-          url = "https://docs.docker.com/reference/engine/v1.36.yaml";
-          hash = "sha256-6kS2MJunowLqAEhdCqi+lXLHsGb9dr2M51fuG+ENX0Q=";
+        api_1_36 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.36.yaml";
+            hash = "sha256-6kS2MJunowLqAEhdCqi+lXLHsGb9dr2M51fuG+ENX0Q=";
+          };
+          fixes = [fixContainerSummaryDefinition];
         };
-        api_1_37 = pkgs.fetchurl {
-          url = "https://docs.docker.com/reference/engine/v1.37.yaml";
-          hash = "sha256-TSOJs7T7EDkehQIqRa7U59miFdxH72YIn8ynBx2uUOI=";
+        api_1_37 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.37.yaml";
+            hash = "sha256-TSOJs7T7EDkehQIqRa7U59miFdxH72YIn8ynBx2uUOI=";
+          };
+          fixes = [fixContainerSummaryDefinition];
         };
-        api_1_38 = pkgs.fetchurl {
-          url = "https://docs.docker.com/reference/engine/v1.38.yaml";
-          hash = "sha256-5eHhNFiO4YXVhl045OldlL8Mry72LybHzuAtJT1dfMc=";
+        api_1_38 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.38.yaml";
+            hash = "sha256-5eHhNFiO4YXVhl045OldlL8Mry72LybHzuAtJT1dfMc=";
+          };
+          fixes = [fixContainerSummaryDefinition];
         };
         api_1_39 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/engine/v1.39.yaml";
             hash = "sha256-Oswl1SJb2MCVpTQ/P9Cj+l1gM8d7E7IXxzffmeavhFM=";
           };
-          patchPhase = ''
-            yq e -i '.definitions.ContainerSummary.type = "object"' api.yaml
-            yq e -i '.definitions.ContainerSummary.properties = .definitions.ContainerSummary.items.properties' api.yaml
-            yq e -i 'del(.definitions.ContainerSummary.items)' api.yaml
-          '';
+          fixes = [fixContainerSummaryDefinition];
         };
         api_1_40 = pkgs.fetchurl {
           url = "https://docs.docker.com/reference/engine/v1.40.yaml";
