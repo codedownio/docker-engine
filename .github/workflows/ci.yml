@@ -103,6 +103,11 @@ jobs:
         - ${{matrix.version}}
         EOL
 
+        if [[ "${{ matrix.resolver }}" == "nightly-2024-07-26" ]]; then
+          echo "extra-deps:" >> stack.yaml
+          echo "- http-api-data-0.5.1" >> stack.yaml
+        fi
+
     - name: Build
       run: |
         stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
