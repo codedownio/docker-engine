@@ -51,18 +51,18 @@ jobs:
   #       cabal test all
 
   stack:
-    name: stack / ghc ${{ matrix.ghc }}
+    name: stack ${{matrix.resolver}} / ${{ matrix.version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         resolver:
-        - lts-18.28 # 8.10.7
-        - lts-19.33 # 9.0.2
-        - lts-20.26 # 9.2.8
-        - lts-21.25 # 9.4.8
-        - lts-22.30 # 9.6.6
         - nightly-2024-07-26 # 9.8.2
+        - lts-22.30 # 9.6.6
+        - lts-21.25 # 9.4.8
+        - lts-20.26 # 9.2.8
+        - lts-19.33 # 9.0.2
+        - lts-18.28 # 8.10.7
         version:
         - v1.36
         - v1.37

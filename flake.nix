@@ -9,6 +9,21 @@
 
         versionSuffix = 0;
 
+        mkApiYaml = { src, patchPhase ? true }: pkgs.stdenv.mkDerivation {
+          name = "docker-api-1.39.${toString versionSuffix}.yaml";
+          inherit src;
+          unpackPhase = ''
+            cp $src api.yaml
+          '';
+          inherit patchPhase;
+          buildInputs = [pkgs.yq-go];
+          dontConfigure = true;
+          dontBuild = true;
+          installPhase = ''
+            cp api.yaml "$out"
+          '';
+        };
+
         api_1_36 = pkgs.fetchurl {
           url = "https://docs.docker.com/reference/engine/v1.36.yaml";
           hash = "sha256-6kS2MJunowLqAEhdCqi+lXLHsGb9dr2M51fuG+ENX0Q=";
@@ -21,9 +36,16 @@
           url = "https://docs.docker.com/reference/engine/v1.38.yaml";
           hash = "sha256-5eHhNFiO4YXVhl045OldlL8Mry72LybHzuAtJT1dfMc=";
         };
-        api_1_39 = pkgs.fetchurl {
-          url = "https://docs.docker.com/reference/engine/v1.39.yaml";
-          hash = "sha256-Oswl1SJb2MCVpTQ/P9Cj+l1gM8d7E7IXxzffmeavhFM=";
+        api_1_39 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.39.yaml";
+            hash = "sha256-Oswl1SJb2MCVpTQ/P9Cj+l1gM8d7E7IXxzffmeavhFM=";
+          };
+          patchPhase = ''
+            yq e -i '.definitions.ContainerSummary.type = "object"' api.yaml
+            yq e -i '.definitions.ContainerSummary.properties = .definitions.ContainerSummary.items.properties' api.yaml
+            yq e -i 'del(.definitions.ContainerSummary.items)' api.yaml
+          '';
         };
         api_1_40 = pkgs.fetchurl {
           url = "https://docs.docker.com/reference/engine/v1.40.yaml";
@@ -83,6 +105,17 @@
         {
           packages = {
             inherit (pkgs) openapi-generator-cli;
+
+            inherit
+              api_1_36
+              api_1_37
+              api_1_38
+              api_1_39
+              api_1_40
+              api_1_41
+              api_1_42
+              api_1_43
+              api_1_44;
 
             generate1_36 = mkGenerateScript api_1_36 "v1.36";
             generate1_37 = mkGenerateScript api_1_37 "v1.37";

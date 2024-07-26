@@ -334,7 +334,7 @@ instance Produces ContainerKill MimeNoContent
 -- Returns a list of containers. For details on the format, see the [inspect endpoint](#operation/ContainerInspect).  Note that it uses a different, smaller representation of a container than inspecting a single container. For example, the list of linked containers is not propagated . 
 -- 
 containerList
-  :: DockerEngineRequest ContainerList MimeNoContent [ContainerSummaryInner] MimeJSON
+  :: DockerEngineRequest ContainerList MimeNoContent ContainerSummary MimeJSON
 containerList =
   _mkRequest "GET" ["/containers/json"]
 

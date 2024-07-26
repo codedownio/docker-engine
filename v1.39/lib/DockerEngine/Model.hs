@@ -1416,30 +1416,30 @@ mkContainerState =
   , containerStateHealth = Nothing
   }
 
--- ** ContainerSummaryInner
--- | ContainerSummaryInner
-data ContainerSummaryInner = ContainerSummaryInner
-  { containerSummaryInnerId :: !(Maybe Text) -- ^ "Id" - The ID of this container
-  , containerSummaryInnerNames :: !(Maybe [Text]) -- ^ "Names" - The names that this container has been given
-  , containerSummaryInnerImage :: !(Maybe Text) -- ^ "Image" - The name of the image used when creating this container
-  , containerSummaryInnerImageId :: !(Maybe Text) -- ^ "ImageID" - The ID of the image that this container was created from
-  , containerSummaryInnerCommand :: !(Maybe Text) -- ^ "Command" - Command to run when starting the container
-  , containerSummaryInnerCreated :: !(Maybe Integer) -- ^ "Created" - When the container was created
-  , containerSummaryInnerPorts :: !(Maybe [Port]) -- ^ "Ports" - The ports exposed by this container
-  , containerSummaryInnerSizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container
-  , containerSummaryInnerSizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container
-  , containerSummaryInnerLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , containerSummaryInnerState :: !(Maybe Text) -- ^ "State" - The state of this container (e.g. &#x60;Exited&#x60;)
-  , containerSummaryInnerStatus :: !(Maybe Text) -- ^ "Status" - Additional human-readable status of this container (e.g. &#x60;Exit 0&#x60;)
-  , containerSummaryInnerHostConfig :: !(Maybe ContainerSummaryInnerHostConfig) -- ^ "HostConfig"
-  , containerSummaryInnerNetworkSettings :: !(Maybe ContainerSummaryInnerNetworkSettings) -- ^ "NetworkSettings"
-  , containerSummaryInnerMounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
+-- ** ContainerSummary
+-- | ContainerSummary
+data ContainerSummary = ContainerSummary
+  { containerSummaryId :: !(Maybe Text) -- ^ "Id" - The ID of this container
+  , containerSummaryNames :: !(Maybe [Text]) -- ^ "Names" - The names that this container has been given
+  , containerSummaryImage :: !(Maybe Text) -- ^ "Image" - The name of the image used when creating this container
+  , containerSummaryImageId :: !(Maybe Text) -- ^ "ImageID" - The ID of the image that this container was created from
+  , containerSummaryCommand :: !(Maybe Text) -- ^ "Command" - Command to run when starting the container
+  , containerSummaryCreated :: !(Maybe Integer) -- ^ "Created" - When the container was created
+  , containerSummaryPorts :: !(Maybe [Port]) -- ^ "Ports" - The ports exposed by this container
+  , containerSummarySizeRw :: !(Maybe Integer) -- ^ "SizeRw" - The size of files that have been created or changed by this container
+  , containerSummarySizeRootFs :: !(Maybe Integer) -- ^ "SizeRootFs" - The total size of all the files in this container
+  , containerSummaryLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
+  , containerSummaryState :: !(Maybe Text) -- ^ "State" - The state of this container (e.g. &#x60;Exited&#x60;)
+  , containerSummaryStatus :: !(Maybe Text) -- ^ "Status" - Additional human-readable status of this container (e.g. &#x60;Exit 0&#x60;)
+  , containerSummaryHostConfig :: !(Maybe ContainerSummaryHostConfig) -- ^ "HostConfig"
+  , containerSummaryNetworkSettings :: !(Maybe ContainerSummaryNetworkSettings) -- ^ "NetworkSettings"
+  , containerSummaryMounts :: !(Maybe [MountPoint]) -- ^ "Mounts"
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummaryInner
-instance A.FromJSON ContainerSummaryInner where
-  parseJSON = A.withObject "ContainerSummaryInner" $ \o ->
-    ContainerSummaryInner
+-- | FromJSON ContainerSummary
+instance A.FromJSON ContainerSummary where
+  parseJSON = A.withObject "ContainerSummary" $ \o ->
+    ContainerSummary
       <$> (o .:? "Id")
       <*> (o .:? "Names")
       <*> (o .:? "Image")
@@ -1456,105 +1456,105 @@ instance A.FromJSON ContainerSummaryInner where
       <*> (o .:? "NetworkSettings")
       <*> (o .:? "Mounts")
 
--- | ToJSON ContainerSummaryInner
-instance A.ToJSON ContainerSummaryInner where
-  toJSON ContainerSummaryInner {..} =
+-- | ToJSON ContainerSummary
+instance A.ToJSON ContainerSummary where
+  toJSON ContainerSummary {..} =
    _omitNulls
-      [ "Id" .= containerSummaryInnerId
-      , "Names" .= containerSummaryInnerNames
-      , "Image" .= containerSummaryInnerImage
-      , "ImageID" .= containerSummaryInnerImageId
-      , "Command" .= containerSummaryInnerCommand
-      , "Created" .= containerSummaryInnerCreated
-      , "Ports" .= containerSummaryInnerPorts
-      , "SizeRw" .= containerSummaryInnerSizeRw
-      , "SizeRootFs" .= containerSummaryInnerSizeRootFs
-      , "Labels" .= containerSummaryInnerLabels
-      , "State" .= containerSummaryInnerState
-      , "Status" .= containerSummaryInnerStatus
-      , "HostConfig" .= containerSummaryInnerHostConfig
-      , "NetworkSettings" .= containerSummaryInnerNetworkSettings
-      , "Mounts" .= containerSummaryInnerMounts
+      [ "Id" .= containerSummaryId
+      , "Names" .= containerSummaryNames
+      , "Image" .= containerSummaryImage
+      , "ImageID" .= containerSummaryImageId
+      , "Command" .= containerSummaryCommand
+      , "Created" .= containerSummaryCreated
+      , "Ports" .= containerSummaryPorts
+      , "SizeRw" .= containerSummarySizeRw
+      , "SizeRootFs" .= containerSummarySizeRootFs
+      , "Labels" .= containerSummaryLabels
+      , "State" .= containerSummaryState
+      , "Status" .= containerSummaryStatus
+      , "HostConfig" .= containerSummaryHostConfig
+      , "NetworkSettings" .= containerSummaryNetworkSettings
+      , "Mounts" .= containerSummaryMounts
       ]
 
 
--- | Construct a value of type 'ContainerSummaryInner' (by applying it's required fields, if any)
-mkContainerSummaryInner
-  :: ContainerSummaryInner
-mkContainerSummaryInner =
-  ContainerSummaryInner
-  { containerSummaryInnerId = Nothing
-  , containerSummaryInnerNames = Nothing
-  , containerSummaryInnerImage = Nothing
-  , containerSummaryInnerImageId = Nothing
-  , containerSummaryInnerCommand = Nothing
-  , containerSummaryInnerCreated = Nothing
-  , containerSummaryInnerPorts = Nothing
-  , containerSummaryInnerSizeRw = Nothing
-  , containerSummaryInnerSizeRootFs = Nothing
-  , containerSummaryInnerLabels = Nothing
-  , containerSummaryInnerState = Nothing
-  , containerSummaryInnerStatus = Nothing
-  , containerSummaryInnerHostConfig = Nothing
-  , containerSummaryInnerNetworkSettings = Nothing
-  , containerSummaryInnerMounts = Nothing
+-- | Construct a value of type 'ContainerSummary' (by applying it's required fields, if any)
+mkContainerSummary
+  :: ContainerSummary
+mkContainerSummary =
+  ContainerSummary
+  { containerSummaryId = Nothing
+  , containerSummaryNames = Nothing
+  , containerSummaryImage = Nothing
+  , containerSummaryImageId = Nothing
+  , containerSummaryCommand = Nothing
+  , containerSummaryCreated = Nothing
+  , containerSummaryPorts = Nothing
+  , containerSummarySizeRw = Nothing
+  , containerSummarySizeRootFs = Nothing
+  , containerSummaryLabels = Nothing
+  , containerSummaryState = Nothing
+  , containerSummaryStatus = Nothing
+  , containerSummaryHostConfig = Nothing
+  , containerSummaryNetworkSettings = Nothing
+  , containerSummaryMounts = Nothing
   }
 
--- ** ContainerSummaryInnerHostConfig
--- | ContainerSummaryInnerHostConfig
-data ContainerSummaryInnerHostConfig = ContainerSummaryInnerHostConfig
-  { containerSummaryInnerHostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode"
+-- ** ContainerSummaryHostConfig
+-- | ContainerSummaryHostConfig
+data ContainerSummaryHostConfig = ContainerSummaryHostConfig
+  { containerSummaryHostConfigNetworkMode :: !(Maybe Text) -- ^ "NetworkMode"
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummaryInnerHostConfig
-instance A.FromJSON ContainerSummaryInnerHostConfig where
-  parseJSON = A.withObject "ContainerSummaryInnerHostConfig" $ \o ->
-    ContainerSummaryInnerHostConfig
+-- | FromJSON ContainerSummaryHostConfig
+instance A.FromJSON ContainerSummaryHostConfig where
+  parseJSON = A.withObject "ContainerSummaryHostConfig" $ \o ->
+    ContainerSummaryHostConfig
       <$> (o .:? "NetworkMode")
 
--- | ToJSON ContainerSummaryInnerHostConfig
-instance A.ToJSON ContainerSummaryInnerHostConfig where
-  toJSON ContainerSummaryInnerHostConfig {..} =
+-- | ToJSON ContainerSummaryHostConfig
+instance A.ToJSON ContainerSummaryHostConfig where
+  toJSON ContainerSummaryHostConfig {..} =
    _omitNulls
-      [ "NetworkMode" .= containerSummaryInnerHostConfigNetworkMode
+      [ "NetworkMode" .= containerSummaryHostConfigNetworkMode
       ]
 
 
--- | Construct a value of type 'ContainerSummaryInnerHostConfig' (by applying it's required fields, if any)
-mkContainerSummaryInnerHostConfig
-  :: ContainerSummaryInnerHostConfig
-mkContainerSummaryInnerHostConfig =
-  ContainerSummaryInnerHostConfig
-  { containerSummaryInnerHostConfigNetworkMode = Nothing
+-- | Construct a value of type 'ContainerSummaryHostConfig' (by applying it's required fields, if any)
+mkContainerSummaryHostConfig
+  :: ContainerSummaryHostConfig
+mkContainerSummaryHostConfig =
+  ContainerSummaryHostConfig
+  { containerSummaryHostConfigNetworkMode = Nothing
   }
 
--- ** ContainerSummaryInnerNetworkSettings
--- | ContainerSummaryInnerNetworkSettings
+-- ** ContainerSummaryNetworkSettings
+-- | ContainerSummaryNetworkSettings
 -- A summary of the container's network settings
-data ContainerSummaryInnerNetworkSettings = ContainerSummaryInnerNetworkSettings
-  { containerSummaryInnerNetworkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks"
+data ContainerSummaryNetworkSettings = ContainerSummaryNetworkSettings
+  { containerSummaryNetworkSettingsNetworks :: !(Maybe (Map.Map String EndpointSettings)) -- ^ "Networks"
   } deriving (P.Show, P.Eq, P.Typeable)
 
--- | FromJSON ContainerSummaryInnerNetworkSettings
-instance A.FromJSON ContainerSummaryInnerNetworkSettings where
-  parseJSON = A.withObject "ContainerSummaryInnerNetworkSettings" $ \o ->
-    ContainerSummaryInnerNetworkSettings
+-- | FromJSON ContainerSummaryNetworkSettings
+instance A.FromJSON ContainerSummaryNetworkSettings where
+  parseJSON = A.withObject "ContainerSummaryNetworkSettings" $ \o ->
+    ContainerSummaryNetworkSettings
       <$> (o .:? "Networks")
 
--- | ToJSON ContainerSummaryInnerNetworkSettings
-instance A.ToJSON ContainerSummaryInnerNetworkSettings where
-  toJSON ContainerSummaryInnerNetworkSettings {..} =
+-- | ToJSON ContainerSummaryNetworkSettings
+instance A.ToJSON ContainerSummaryNetworkSettings where
+  toJSON ContainerSummaryNetworkSettings {..} =
    _omitNulls
-      [ "Networks" .= containerSummaryInnerNetworkSettingsNetworks
+      [ "Networks" .= containerSummaryNetworkSettingsNetworks
       ]
 
 
--- | Construct a value of type 'ContainerSummaryInnerNetworkSettings' (by applying it's required fields, if any)
-mkContainerSummaryInnerNetworkSettings
-  :: ContainerSummaryInnerNetworkSettings
-mkContainerSummaryInnerNetworkSettings =
-  ContainerSummaryInnerNetworkSettings
-  { containerSummaryInnerNetworkSettingsNetworks = Nothing
+-- | Construct a value of type 'ContainerSummaryNetworkSettings' (by applying it's required fields, if any)
+mkContainerSummaryNetworkSettings
+  :: ContainerSummaryNetworkSettings
+mkContainerSummaryNetworkSettings =
+  ContainerSummaryNetworkSettings
+  { containerSummaryNetworkSettingsNetworks = Nothing
   }
 
 -- ** ContainerTopResponse
@@ -7413,7 +7413,7 @@ mkSystemAuthResponse systemAuthResponseStatus =
 data SystemDataUsageResponse = SystemDataUsageResponse
   { systemDataUsageResponseLayersSize :: !(Maybe Integer) -- ^ "LayersSize"
   , systemDataUsageResponseImages :: !(Maybe [ImageSummary]) -- ^ "Images"
-  , systemDataUsageResponseContainers :: !(Maybe [Array]) -- ^ "Containers"
+  , systemDataUsageResponseContainers :: !(Maybe [ContainerSummary]) -- ^ "Containers"
   , systemDataUsageResponseVolumes :: !(Maybe [Volume]) -- ^ "Volumes"
   , systemDataUsageResponseBuildCache :: !(Maybe [BuildCache]) -- ^ "BuildCache"
   } deriving (P.Show, P.Eq, P.Typeable)
