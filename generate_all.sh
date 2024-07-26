@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "$SCRIPTDIR"
+
+rm -rf ./v*
+
 nix run .#generate1_36
 nix run .#generate1_37
 nix run .#generate1_38
