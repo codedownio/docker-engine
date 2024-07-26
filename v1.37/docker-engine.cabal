@@ -15,17 +15,15 @@ description:    .
                 Generator version: 7.6.0
                 .
 category:       Web
-homepage:       https://openapi-generator.tech
-author:         Author Name Here
-maintainer:     author.name@email.com
-copyright:      YEAR - AUTHOR
-license:        UnspecifiedLicense
+homepage:       https://github.com/codedownio/docker-engine
+author:         Tom McLaughlin <tom@codedown.io>
+maintainer:     Tom McLaughlin <tom@codedown.io>
+license:        Apache-2.0
 build-type:     Simple
 cabal-version:  >= 1.10
 
 extra-source-files:
     README.md
-    openapi.yaml
 
 Flag UseKatip
   Description: Use the katip package to provide logging (if false, use the default monad-logger package)

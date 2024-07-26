@@ -57,9 +57,26 @@
           PACKAGE_VERSION="${builtins.replaceStrings ["_"] ["."] (builtins.substring 1 (-1) dir)}.${toString versionSuffix}"
           ${pkgs.gnused}/bin/sed -i "s/^version:\s*\(.*\)/version:        $PACKAGE_VERSION/" "${dir}/docker-engine.cabal"
 
+          # Fill in license
+          # https://docs.docker.com/engine/#licensing
+          ${pkgs.gnused}/bin/sed -i "s/^license:\s*\(.*\)/license:        Apache-2.0/" "${dir}/docker-engine.cabal"
+
+          # Fill in other metadata
+          ${pkgs.gnused}/bin/sed -i "s/^author:\s*\(.*\)/author:         Tom McLaughlin <tom@codedown.io>/" "${dir}/docker-engine.cabal"
+          ${pkgs.gnused}/bin/sed -i "s/^maintainer:\s*\(.*\)/maintainer:     Tom McLaughlin <tom@codedown.io>/" "${dir}/docker-engine.cabal"
+          ${pkgs.gnused}/bin/sed -i "s/^homepage:\s*\(.*\)/homepage:       https:\/\/github.com\/codedownio\/docker-engine/" "${dir}/docker-engine.cabal"
+          ${pkgs.gnused}/bin/sed -i '/copyright:/d' "${dir}/docker-engine.cabal"
+
           # Remove some unnecessary files
           rm "${dir}/openapi.yaml"
           rm "${dir}/.travis.yml"
+          rm "${dir}/stack.yaml"
+
+          # Delete openapi.yaml from the extra-source-files
+          ${pkgs.gnused}/bin/sed -i '/^\s*openapi\.yaml$/d' "${dir}/docker-engine.cabal"
+
+          # Patch up some problems
+          echo "type Map = A.Object" >> "${dir}/lib/DockerEngine/Model.hs"
         '';
 
       in

@@ -11315,3 +11315,4 @@ toTaskState = \case
 
 
 
+type Map = A.Object
