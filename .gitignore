@@ -7,3 +7,4 @@ cabal.project.local
 .cabal-sandbox
 cabal.sandbox.config
 test_runs
+result
