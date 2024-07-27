@@ -102,6 +102,9 @@
           ${pkgs.gnused}/bin/sed -i "s/^homepage:\s*\(.*\)/homepage:       https:\/\/github.com\/codedownio\/docker-engine/" "${dir}/docker-engine.cabal"
           ${pkgs.gnused}/bin/sed -i '/copyright:/d' "${dir}/docker-engine.cabal"
 
+          # Bump the bound on http-api-data
+          ${pkgs.gnused}/bin/sed -i "s/^[^,]*,\shttp-api-data.*$/    , http-api-data >= 0.3.4 \&\& <0.7/" "${dir}/docker-engine.cabal"
+
           # Remove some unnecessary files
           rm "${dir}/openapi.yaml"
           rm "${dir}/.travis.yml"
