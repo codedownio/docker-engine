@@ -7,7 +7,8 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        versionSuffix = 0;
+        majorVersion = 0;
+        minorVersion = 0;
 
         # Fix a spec issue where the ContainerSummary definition is wrongly specified as an array,
         # rather than an object
@@ -18,7 +19,7 @@
         '';
 
         mkApiYaml = { src, fixes ? [] }: pkgs.stdenv.mkDerivation {
-          name = "docker-api-1.39.${toString versionSuffix}.yaml";
+          name = "docker-api.yaml";
           inherit src;
           unpackPhase = ''
             cp $src api.yaml
@@ -89,7 +90,7 @@
             -o "${dir}"
 
           # Fill in the package version
-          PACKAGE_VERSION="${builtins.replaceStrings ["_"] ["."] (builtins.substring 1 (-1) dir)}.${toString versionSuffix}"
+          PACKAGE_VERSION="${toString majorVersion}.${builtins.replaceStrings ["."] [""] (builtins.substring 1 (-1) dir)}.${toString minorVersion}"
           ${pkgs.gnused}/bin/sed -i "s/^version:\s*\(.*\)/version:        $PACKAGE_VERSION/" "${dir}/docker-engine.cabal"
 
           # Fill in license
@@ -117,6 +118,9 @@
           # This "Map" type is emitted for the "Topology" definition. Not sure how to correct
           # the spec, so let's just provide a type alias here.
           echo "type Map = HM.HashMap String String" >> "${dir}/lib/DockerEngine/Model.hs"
+          # Similarly patch up the test instances
+          ${pkgs.gnused}/bin/sed -i '1i{-# LANGUAGE FlexibleInstances #-}' "${dir}/tests/Instances.hs"
+          echo 'instance Arbitrary (HM.HashMap String String) where arbitrary = HM.fromList <$> arbitrary' >> "${dir}/tests/Instances.hs"
         '';
 
       in

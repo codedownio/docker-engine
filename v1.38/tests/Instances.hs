@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE CPP #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports -fno-warn-unused-matches #-}
 
@@ -2435,3 +2436,4 @@ instance Arbitrary Reachability where
 instance Arbitrary TaskState where
   arbitrary = arbitraryBoundedEnum
 
+instance Arbitrary (HM.HashMap String String) where arbitrary = HM.fromList <$> arbitrary
