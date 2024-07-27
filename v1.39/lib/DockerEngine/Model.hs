@@ -10194,4 +10194,4 @@ toTaskState = \case
 
 
 
-type Map = A.Object
+type Map = HM.HashMap String String

@@ -113,8 +113,10 @@
           # Delete openapi.yaml from the extra-source-files
           ${pkgs.gnused}/bin/sed -i '/^\s*openapi\.yaml$/d' "${dir}/docker-engine.cabal"
 
-          # Patch up some problems
-          echo "type Map = A.Object" >> "${dir}/lib/DockerEngine/Model.hs"
+          # Patch up some problems.
+          # This "Map" type is emitted for the "Topology" definition. Not sure how to correct
+          # the spec, so let's just provide a type alias here.
+          echo "type Map = HM.HashMap String String" >> "${dir}/lib/DockerEngine/Model.hs"
         '';
 
       in
