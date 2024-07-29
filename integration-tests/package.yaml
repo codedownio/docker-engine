@@ -1,4 +1,4 @@
-name:                docker-engine-integration-tests
+name:                integration-tests
 version:             0.1.0.0
 license:             BSD3
 
@@ -18,11 +18,12 @@ default-extensions:
 
 ghc-options:
 - -threaded
-- -rtsopts
-- -with-rtsopts=-N
+- -Wall
 
 library:
   source-dirs: lib
+  exposed-modules:
+  - TestLib.Docker
   dependencies:
   - aeson
   - bytestring
@@ -46,6 +47,11 @@ library:
   - unliftio-core
 
 executables:
-  docker-engine-integration-tests:
+  integration-tests:
     main: Main.hs
     source-dirs: app
+    ghc-options:
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - integration-tests

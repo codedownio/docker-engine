@@ -1,23 +1,23 @@
 module Main where
 
-import Control.Concurrent
-import Control.Monad.IO.Class
 import Test.Sandwich
+import TestLib.Docker
+
 
 basic :: TopSpec
-basic = describe "Simple tests" $ do
-  describe "Arithmetic" $ do
-    it "adds" $ do
-      (2 + 2) `shouldBe` 4
-      (2 + 3) `shouldBe` 5
+basic = introduceDockerState $ do
+  describe "Networks" $ do
+    it "creates and deletes a network" $ do
+      ds <- getContext dockerState
 
-    it "subtracts" $ do
-      warn "This might not be right..."
-      (3 - 2) `shouldBe` 0
+      let name = "test-network"
+      doesNetworkExist ds name >>= (`shouldBe` False)
 
-  describe "Strings" $
-    it "concatenates" $
-      ("abc" <> "def") `shouldBe` "abcdef"
+      networkId <- createNetwork ds name mempty
+      doesNetworkExist ds name >>= (`shouldBe` True)
+
+      deleteNetwork ds networkId
+      doesNetworkExist ds name >>= (`shouldBe` False)
 
 main :: IO ()
 main = runSandwichWithCommandLineArgs defaultOptions basic
