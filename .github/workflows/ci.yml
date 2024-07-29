@@ -110,3 +110,7 @@ jobs:
     - name: Test
       run: |
         stack test --system-ghc
+
+    - name: Integration tests
+      run: |
+        stack run integration-tests --system-ghc
