@@ -101,6 +101,7 @@ jobs:
         resolver: ${{matrix.resolver}}
         packages:
         - ${{matrix.version}}
+        - ./integration-tests
         EOL
 
     - name: Build
