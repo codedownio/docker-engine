@@ -1,7 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main where
 
+import Control.Concurrent
+import Control.Monad.IO.Class
 import Test.Sandwich
 
 basic :: TopSpec
