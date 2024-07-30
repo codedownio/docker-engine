@@ -1,6 +1,10 @@
 module Main where
 
+import Control.Monad
 import Data.String.Interpolate
+import DockerEngine.API.Image
+import DockerEngine.Core
+import DockerEngine.MimeTypes
 import DockerEngine.Model
 import Test.Sandwich
 import TestLib.Docker
@@ -9,11 +13,18 @@ import TestLib.Docker
 basic :: TopSpec
 basic = introduceDockerState $ do
   describe "Networks" $ do
+    it "pulls an image" $ do
+      ds <- getContext dockerState
+      let req = imageCreate (ContentType MimePlainText)
+              -&- (FromImage "busybox")
+              -&- (Tag "latest")
+      void $ runDockerException ds req
+
     it "creates and deletes a container" $ do
       ds <- getContext dockerState
 
       let name = "test-container"
-      let image = "busybox"
+      let image = "busybox:latest"
 
       doesContainerExist ds name >>= (`shouldBe` False)
 
