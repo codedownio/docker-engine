@@ -3,6 +3,8 @@
 SCRIPTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$SCRIPTDIR"
 
+set -eo pipefail
+
 rm -rf ./v*
 
 nix run .#generate1_36
