@@ -8537,7 +8537,7 @@ data TaskSpecContainerSpec = TaskSpecContainerSpec
   , taskSpecContainerSpecDnsConfig :: !(Maybe TaskSpecContainerSpecDNSConfig) -- ^ "DNSConfig"
   , taskSpecContainerSpecSecrets :: !(Maybe [TaskSpecContainerSpecSecretsInner]) -- ^ "Secrets" - Secrets contains references to zero or more secrets that will be exposed to the service. 
   , taskSpecContainerSpecConfigs :: !(Maybe [TaskSpecContainerSpecConfigsInner]) -- ^ "Configs" - Configs contains references to zero or more configs that will be exposed to the service. 
-  , taskSpecContainerSpecIsolation :: !(Maybe E'Isolation) -- ^ "Isolation" - Isolation technology of the containers running the service. (Windows only) 
+  , taskSpecContainerSpecIsolation :: !(Maybe E'Isolation3) -- ^ "Isolation" - Isolation technology of the containers running the service. (Windows only) 
   , taskSpecContainerSpecInit :: !(Maybe Bool) -- ^ "Init" - Run an init inside the container that forwards signals and reaps processes. This field is omitted if empty, and the default (as configured on the daemon) is used. 
   , taskSpecContainerSpecSysctls :: !(Maybe (Map.Map String Text)) -- ^ "Sysctls" - Set kernel namedspaced parameters (sysctls) in the container. The Sysctls option on services accepts the same sysctls as the are supported on containers. Note that while the same sysctls are supported, no guarantees or checks are made about their suitability for a clustered environment, and it&#39;s up to the user to determine whether a given sysctl will work properly in a Service. 
   , taskSpecContainerSpecCapabilityAdd :: !(Maybe [Text]) -- ^ "CapabilityAdd" - A list of kernel capabilities to add to the default set for the container. 
@@ -9866,6 +9866,7 @@ data E'Isolation
   = E'Isolation'Default -- ^ @"default"@
   | E'Isolation'Process -- ^ @"process"@
   | E'Isolation'Hyperv -- ^ @"hyperv"@
+  | E'Isolation'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation where toJSON = A.toJSON . fromE'Isolation
@@ -9880,6 +9881,7 @@ fromE'Isolation = \case
   E'Isolation'Default -> "default"
   E'Isolation'Process -> "process"
   E'Isolation'Hyperv -> "hyperv"
+  E'Isolation'Empty -> ""
 
 -- | parse 'E'Isolation' enum
 toE'Isolation :: Text -> P.Either String E'Isolation
@@ -9887,6 +9889,7 @@ toE'Isolation = \case
   "default" -> P.Right E'Isolation'Default
   "process" -> P.Right E'Isolation'Process
   "hyperv" -> P.Right E'Isolation'Hyperv
+  "" -> P.Right E'Isolation'Empty
   s -> P.Left $ "toE'Isolation: enum parse failure: " P.++ P.show s
 
 
@@ -9920,6 +9923,38 @@ toE'Isolation2 = \case
   "hyperv" -> P.Right E'Isolation2'Hyperv
   "process" -> P.Right E'Isolation2'Process
   s -> P.Left $ "toE'Isolation2: enum parse failure: " P.++ P.show s
+
+
+-- ** E'Isolation3
+
+-- | Enum of 'Text' .
+-- Isolation technology of the containers running the service. (Windows only) 
+data E'Isolation3
+  = E'Isolation3'Default -- ^ @"default"@
+  | E'Isolation3'Process -- ^ @"process"@
+  | E'Isolation3'Hyperv -- ^ @"hyperv"@
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'Isolation3 where toJSON = A.toJSON . fromE'Isolation3
+instance A.FromJSON E'Isolation3 where parseJSON o = P.either P.fail (pure . P.id) . toE'Isolation3 =<< A.parseJSON o
+instance WH.ToHttpApiData E'Isolation3 where toQueryParam = WH.toQueryParam . fromE'Isolation3
+instance WH.FromHttpApiData E'Isolation3 where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'Isolation3
+instance MimeRender MimeMultipartFormData E'Isolation3 where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'Isolation3' enum
+fromE'Isolation3 :: E'Isolation3 -> Text
+fromE'Isolation3 = \case
+  E'Isolation3'Default -> "default"
+  E'Isolation3'Process -> "process"
+  E'Isolation3'Hyperv -> "hyperv"
+
+-- | parse 'E'Isolation3' enum
+toE'Isolation3 :: Text -> P.Either String E'Isolation3
+toE'Isolation3 = \case
+  "default" -> P.Right E'Isolation3'Default
+  "process" -> P.Right E'Isolation3'Process
+  "hyperv" -> P.Right E'Isolation3'Hyperv
+  s -> P.Left $ "toE'Isolation3: enum parse failure: " P.++ P.show s
 
 
 -- ** E'Mode

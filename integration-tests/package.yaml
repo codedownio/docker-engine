@@ -54,4 +54,6 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - docker-engine
     - integration-tests
+    - string-interpolate

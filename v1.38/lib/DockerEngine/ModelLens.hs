@@ -5188,7 +5188,7 @@ taskSpecContainerSpecConfigsL f TaskSpecContainerSpec{..} = (\taskSpecContainerS
 {-# INLINE taskSpecContainerSpecConfigsL #-}
 
 -- | 'taskSpecContainerSpecIsolation' Lens
-taskSpecContainerSpecIsolationL :: Lens_' TaskSpecContainerSpec (Maybe E'Isolation)
+taskSpecContainerSpecIsolationL :: Lens_' TaskSpecContainerSpec (Maybe E'Isolation3)
 taskSpecContainerSpecIsolationL f TaskSpecContainerSpec{..} = (\taskSpecContainerSpecIsolation -> TaskSpecContainerSpec { taskSpecContainerSpecIsolation, ..} ) <$> f taskSpecContainerSpecIsolation
 {-# INLINE taskSpecContainerSpecIsolationL #-}
 

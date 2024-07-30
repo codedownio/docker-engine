@@ -13,6 +13,7 @@ library
   exposed-modules:
       TestLib.Docker
   other-modules:
+      TestLib.Docker.Containers
       TestLib.Docker.Core
       TestLib.Docker.Networks
       TestLib.Docker.Types
@@ -73,6 +74,8 @@ executable integration-tests
   ghc-options: -threaded -Wall -rtsopts -with-rtsopts=-N
   build-depends:
       base
+    , docker-engine
     , integration-tests
     , sandwich
+    , string-interpolate
   default-language: Haskell2010

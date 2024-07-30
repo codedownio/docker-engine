@@ -2396,7 +2396,7 @@ genTaskSpecContainerSpec n =
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecDnsConfig :: Maybe TaskSpecContainerSpecDNSConfig
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecSecrets :: Maybe [TaskSpecContainerSpecSecretsInner]
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecConfigs :: Maybe [TaskSpecContainerSpecConfigsInner]
-    <*> arbitraryReducedMaybe n -- taskSpecContainerSpecIsolation :: Maybe E'Isolation
+    <*> arbitraryReducedMaybe n -- taskSpecContainerSpecIsolation :: Maybe E'Isolation3
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecInit :: Maybe Bool
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecSysctls :: Maybe (Map.Map String Text)
     <*> arbitraryReducedMaybe n -- taskSpecContainerSpecCapabilityAdd :: Maybe [Text]
@@ -2713,6 +2713,9 @@ instance Arbitrary E'Isolation where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Isolation2 where
+  arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary E'Isolation3 where
   arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary E'Mode where
