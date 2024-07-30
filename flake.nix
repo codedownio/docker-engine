@@ -112,6 +112,20 @@
           };
           fixes = [fixHostConfigIsolation];
         };
+        api_1_45 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.45.yaml";
+            hash = "sha256-PiGCCkbT/dHiSE4J+/rAX4MWfb1JR6FHkPui8DTFP7o=";
+          };
+          fixes = [fixHostConfigIsolation];
+        };
+        api_1_46 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/engine/v1.46.yaml";
+            hash = "sha256-bJr6mFqSvuFcN49NblO9pehFVCz7PSesBUweCicqRig=";
+          };
+          fixes = [fixHostConfigIsolation];
+        };
 
         mkGenerateScript = apiYaml: dir: pkgs.writeShellScriptBin "generate.sh" ''
           mkdir -p "${dir}"
@@ -172,7 +186,9 @@
               api_1_41
               api_1_42
               api_1_43
-              api_1_44;
+              api_1_44
+              api_1_45
+              api_1_46;
 
             generate1_36 = mkGenerateScript api_1_36 "v1.36";
             generate1_37 = mkGenerateScript api_1_37 "v1.37";
@@ -183,6 +199,8 @@
             generate1_42 = mkGenerateScript api_1_42 "v1.42";
             generate1_43 = mkGenerateScript api_1_43 "v1.43";
             generate1_44 = mkGenerateScript api_1_44 "v1.44";
+            generate1_45 = mkGenerateScript api_1_45 "v1.45";
+            generate1_46 = mkGenerateScript api_1_46 "v1.46";
           };
         }
     );

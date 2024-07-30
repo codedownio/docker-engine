@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module TestLib.Docker.Networks where
@@ -41,8 +42,13 @@ createNetwork ds networkName labels = do
   let networkConfig = (mkNetworkCreateRequest networkName) {
         networkCreateRequestLabels = Just $ M.mapKeys T.unpack labels
         }
+#if MIN_VERSION_docker_engine(0,146,0)
+  NetworkCreateResponse {networkCreateResponseId=x} <- runDockerException ds (networkCreate networkConfig)
+  return (Id x)
+#else
   NetworkCreateResponse {networkCreateResponseId=(Just x)} <- runDockerException ds (networkCreate networkConfig)
   return (Id x)
+#endif
 
 deleteNetwork :: (HasCallStack, MonadUnliftIO m, MonadLoggerIO m, MonadThrow m) => DockerState -> Id -> m ()
 deleteNetwork ds networkId = do
