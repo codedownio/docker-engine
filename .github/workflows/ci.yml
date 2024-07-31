@@ -95,7 +95,7 @@ jobs:
         enable-stack: true
         stack-version: "latest"
 
-    - uses: actions/setup-docker@v1
+    - uses: docker-practice/actions-setup-docker@v1
       with:
         docker_version: ${{ matrix.version.docker_version }}
 
