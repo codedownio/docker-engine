@@ -64,17 +64,28 @@ jobs:
         - lts-19.33 # 9.0.2
         - lts-18.28 # 8.10.7
         version:
-        - v1.46
-        - v1.45
-        - v1.44
-        - v1.43
-        - v1.42
-        - v1.41
-        # - v1.40
-        # - v1.39
-        # - v1.38
-        # - v1.37
-        # - v1.36
+        - api_version: v1.46
+          docker_version: 27.1
+        - api_version: v1.45
+          docker_version: 26.1
+        - api_version: v1.44
+          docker_version: 25.0
+        - api_version: v1.43
+          docker_version: 24.0
+        - api_version: v1.42
+          docker_version: 23.0
+        - api_version: v1.41
+          docker_version: 20.10
+        # - api_version: v1.40
+        #   docker_version: 19.03
+        # - api_version: v1.39
+        #   docker_version: 18.09
+        # - api_version: v1.38
+        #   docker_version: 18.06
+        # - api_version: v1.37
+        #   docker_version: 18.05
+        # - api_version: v1.36
+        #   docker_version: 18.02
     steps:
     - uses: actions/checkout@v4
 
@@ -84,11 +95,15 @@ jobs:
         enable-stack: true
         stack-version: "latest"
 
+    - uses: actions/setup-docker@v1
+      with:
+        docker_version: ${{ matrix.version.docker_version }}
+
     - uses: actions/cache@v1
       name: Cache ~/.stack
       with:
         path: ~/.stack
-        key: ${{ runner.os }}-${{ matrix.version }}-${{ matrix.resolver }}-stack
+        key: ${{ runner.os }}-${{ matrix.version.api_version }}-${{ matrix.resolver }}-stack
 
     # - name: apt
     #   run: |
@@ -102,7 +117,7 @@ jobs:
         cat >stack.yaml <<EOL
         resolver: ${{matrix.resolver}}
         packages:
-        - ${{matrix.version}}
+        - ${{matrix.version.api_version}}
         - ./integration-tests
         EOL
 
