@@ -51,7 +51,7 @@ jobs:
   #       cabal test all
 
   stack:
-    name: stack ${{matrix.resolver}} / ${{ matrix.version }}
+    name: stack ${{matrix.resolver}} / API ${{ matrix.version.api_version }} / Docker ${{ matrix.version.docker_version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
