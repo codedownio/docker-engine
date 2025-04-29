@@ -18,3 +18,6 @@ nix run .#generate1_43
 nix run .#generate1_44
 nix run .#generate1_45
 nix run .#generate1_46
+nix run .#generate1_47
+nix run .#generate1_48
+nix run .#generate1_49

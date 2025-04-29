@@ -628,7 +628,7 @@ mkConfig =
 data ConfigCreateRequest = ConfigCreateRequest
   { configCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configCreateRequestData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) config data. 
+  , configCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a config, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. The maximum allowed size is 1000KB, as defined in [MaxConfigSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/manager/controlapi#MaxConfigSize). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ConfigCreateRequest
@@ -664,7 +664,7 @@ mkConfigCreateRequest =
 data ConfigSpec = ConfigSpec
   { configSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) config data. 
+  , configSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a config, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. The maximum allowed size is 1000KB, as defined in [MaxConfigSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/manager/controlapi#MaxConfigSize). 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON ConfigSpec
@@ -5416,8 +5416,8 @@ mkPushImageInfo =
 -- | RegistryServiceConfig
 -- RegistryServiceConfig stores daemon registry services configuration. 
 data RegistryServiceConfig = RegistryServiceConfig
-  { registryServiceConfigAllowNondistributableArtifactsCidrs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior, and enables the daemon to push nondistributable artifacts to all registries whose resolved IP address is within the subnet described by the CIDR syntax.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
-  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior for the specified registries.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
+  { registryServiceConfigAllowNondistributableArtifactsCidrs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: Pushing nondistributable artifacts is now always enabled &gt; and this field is always &#x60;null&#x60;. 
+  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: Pushing nondistributable artifacts is now always enabled &gt; and this field is always &#x60;null&#x60;. 
   , registryServiceConfigInsecureRegistryCidrs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs" - List of IP ranges of insecure registries, using the CIDR syntax ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  By default, local registries (&#x60;127.0.0.0/8&#x60;) are configured as insecure. All other registries are secure. Communicating with an insecure registry is not possible if the daemon assumes that registry is secure.  This configuration override this behavior, insecure communication with registries whose resolved IP address is within the subnet described by the CIDR syntax.  Registries can also be marked insecure by hostname. Those registries are listed under &#x60;IndexConfigs&#x60; and have their &#x60;Secure&#x60; field set to &#x60;false&#x60;.  &gt; **Warning**: Using this option can be useful when running a local &gt; registry, but introduces security vulnerabilities. This option &gt; should therefore ONLY be used for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of trusted &gt; CAs instead of enabling this option. 
   , registryServiceConfigIndexConfigs :: !(Maybe (Map.Map String IndexInfo)) -- ^ "IndexConfigs"
   , registryServiceConfigMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of registry URLs that act as a mirror for the official (&#x60;docker.io&#x60;) registry. 
@@ -5822,7 +5822,7 @@ mkSecret =
 data SecretCreateRequest = SecretCreateRequest
   { secretCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretCreateRequestDriver :: !(Maybe Driver) -- ^ "Driver"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -5862,7 +5862,7 @@ mkSecretCreateRequest =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-3.2)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -6961,7 +6961,7 @@ mkSwarmSpecTaskDefaults =
 -- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value only affects new tasks. Existing tasks continue to use their previously configured log driver until recreated. 
 data SwarmSpecTaskDefaultsLogDriver = SwarmSpecTaskDefaultsLogDriver
   { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name" - The log driver to use as a default for new tasks. 
-  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selectd log driver, specified as key/value pairs. 
+  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selected log driver, specified as key/value pairs. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecTaskDefaultsLogDriver
@@ -8961,6 +8961,7 @@ data E'Isolation
   | E'Isolation'Process -- ^ @"process"@
   | E'Isolation'Hyperv -- ^ @"hyperv"@
   | E'Isolation'Empty -- ^ @""@
+  | E'Isolation'Empty2 -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation where toJSON = A.toJSON . fromE'Isolation
@@ -8976,6 +8977,7 @@ fromE'Isolation = \case
   E'Isolation'Process -> "process"
   E'Isolation'Hyperv -> "hyperv"
   E'Isolation'Empty -> ""
+  E'Isolation'Empty2 -> ""
 
 -- | parse 'E'Isolation' enum
 toE'Isolation :: Text -> P.Either String E'Isolation
@@ -8984,6 +8986,7 @@ toE'Isolation = \case
   "process" -> P.Right E'Isolation'Process
   "hyperv" -> P.Right E'Isolation'Hyperv
   "" -> P.Right E'Isolation'Empty
+  "" -> P.Right E'Isolation'Empty2
   s -> P.Left $ "toE'Isolation: enum parse failure: " P.++ P.show s
 
 
@@ -8995,6 +8998,7 @@ data E'Isolation2
   = E'Isolation2'Default -- ^ @"default"@
   | E'Isolation2'Hyperv -- ^ @"hyperv"@
   | E'Isolation2'Process -- ^ @"process"@
+  | E'Isolation2'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation2 where toJSON = A.toJSON . fromE'Isolation2
@@ -9009,6 +9013,7 @@ fromE'Isolation2 = \case
   E'Isolation2'Default -> "default"
   E'Isolation2'Hyperv -> "hyperv"
   E'Isolation2'Process -> "process"
+  E'Isolation2'Empty -> ""
 
 -- | parse 'E'Isolation2' enum
 toE'Isolation2 :: Text -> P.Either String E'Isolation2
@@ -9016,6 +9021,7 @@ toE'Isolation2 = \case
   "default" -> P.Right E'Isolation2'Default
   "hyperv" -> P.Right E'Isolation2'Hyperv
   "process" -> P.Right E'Isolation2'Process
+  "" -> P.Right E'Isolation2'Empty
   s -> P.Left $ "toE'Isolation2: enum parse failure: " P.++ P.show s
 
 
@@ -9027,6 +9033,7 @@ data E'Isolation3
   = E'Isolation3'Default -- ^ @"default"@
   | E'Isolation3'Process -- ^ @"process"@
   | E'Isolation3'Hyperv -- ^ @"hyperv"@
+  | E'Isolation3'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation3 where toJSON = A.toJSON . fromE'Isolation3
@@ -9041,6 +9048,7 @@ fromE'Isolation3 = \case
   E'Isolation3'Default -> "default"
   E'Isolation3'Process -> "process"
   E'Isolation3'Hyperv -> "hyperv"
+  E'Isolation3'Empty -> ""
 
 -- | parse 'E'Isolation3' enum
 toE'Isolation3 :: Text -> P.Either String E'Isolation3
@@ -9048,6 +9056,7 @@ toE'Isolation3 = \case
   "default" -> P.Right E'Isolation3'Default
   "process" -> P.Right E'Isolation3'Process
   "hyperv" -> P.Right E'Isolation3'Hyperv
+  "" -> P.Right E'Isolation3'Empty
   s -> P.Left $ "toE'Isolation3: enum parse failure: " P.++ P.show s
 
 

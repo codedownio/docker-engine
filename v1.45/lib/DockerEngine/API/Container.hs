@@ -509,21 +509,15 @@ instance Produces ContainerRename MimeNoContent
 -- 
 containerResize
   :: Id -- ^ "id" -  ID or name of the container
+  -> H -- ^ "h" -  Height of the TTY session in characters
+  -> W -- ^ "w" -  Width of the TTY session in characters
   -> DockerEngineRequest ContainerResize MimeNoContent NoContent MimeNoContent
-containerResize (Id id) =
+containerResize (Id id) (H h) (W w) =
   _mkRequest "POST" ["/containers/",toPath id,"/resize"]
+    `addQuery` toQuery ("h", Just h)
+    `addQuery` toQuery ("w", Just w)
 
 data ContainerResize  
-
--- | /Optional Param/ "h" - Height of the TTY session in characters
-instance HasOptionalParam ContainerResize H where
-  applyOptionalParam req (H xs) =
-    req `addQuery` toQuery ("h", Just xs)
-
--- | /Optional Param/ "w" - Width of the TTY session in characters
-instance HasOptionalParam ContainerResize W where
-  applyOptionalParam req (W xs) =
-    req `addQuery` toQuery ("w", Just xs)
 instance Produces ContainerResize MimeNoContent
 
 
@@ -580,7 +574,7 @@ instance Produces ContainerStart MimeNoContent
 -- 
 -- Get container stats based on resource usage
 -- 
--- This endpoint returns a live stream of a container’s resource usage statistics.  The `precpu_stats` is the CPU statistic of the *previous* read, and is used to calculate the CPU usage percentage. It is not an exact copy of the `cpu_stats` field.  If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is nil then for compatibility with older daemons the length of the corresponding `cpu_usage.percpu_usage` array should be used.  On a cgroup v2 host, the following fields are not set * `blkio_stats`: all fields other than `io_service_bytes_recursive` * `cpu_stats`: `cpu_usage.percpu_usage` * `memory_stats`: `max_usage` and `failcnt` Also, `memory_stats.stats` fields are incompatible with cgroup v1.  To calculate the values shown by the `stats` command of the docker cli tool the following formulas can be used: * used_memory = `memory_stats.usage - memory_stats.stats.cache` * available_memory = `memory_stats.limit` * Memory usage % = `(used_memory / available_memory) * 100.0` * cpu_delta = `cpu_stats.cpu_usage.total_usage - precpu_stats.cpu_usage.total_usage` * system_cpu_delta = `cpu_stats.system_cpu_usage - precpu_stats.system_cpu_usage` * number_cpus = `lenght(cpu_stats.cpu_usage.percpu_usage)` or `cpu_stats.online_cpus` * CPU usage % = `(cpu_delta / system_cpu_delta) * number_cpus * 100.0` 
+-- This endpoint returns a live stream of a container’s resource usage statistics.  The `precpu_stats` is the CPU statistic of the *previous* read, and is used to calculate the CPU usage percentage. It is not an exact copy of the `cpu_stats` field.  If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is nil then for compatibility with older daemons the length of the corresponding `cpu_usage.percpu_usage` array should be used.  On a cgroup v2 host, the following fields are not set * `blkio_stats`: all fields other than `io_service_bytes_recursive` * `cpu_stats`: `cpu_usage.percpu_usage` * `memory_stats`: `max_usage` and `failcnt` Also, `memory_stats.stats` fields are incompatible with cgroup v1.  To calculate the values shown by the `stats` command of the docker cli tool the following formulas can be used: * used_memory = `memory_stats.usage - memory_stats.stats.cache` * available_memory = `memory_stats.limit` * Memory usage % = `(used_memory / available_memory) * 100.0` * cpu_delta = `cpu_stats.cpu_usage.total_usage - precpu_stats.cpu_usage.total_usage` * system_cpu_delta = `cpu_stats.system_cpu_usage - precpu_stats.system_cpu_usage` * number_cpus = `length(cpu_stats.cpu_usage.percpu_usage)` or `cpu_stats.online_cpus` * CPU usage % = `(cpu_delta / system_cpu_delta) * number_cpus * 100.0` 
 -- 
 containerStats
   :: Id -- ^ "id" -  ID or name of the container

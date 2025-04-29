@@ -1058,7 +1058,7 @@ mkConfig =
 data ConfigCreateRequest = ConfigCreateRequest
   { configCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configCreateRequestData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) config data. 
+  , configCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a config, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. The maximum allowed size is 1000KB, as defined in [MaxConfigSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/manager/controlapi#MaxConfigSize). 
   , configCreateRequestTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -1127,7 +1127,7 @@ mkConfigReference =
 data ConfigSpec = ConfigSpec
   { configSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the config.
   , configSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , configSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) config data. 
+  , configSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a config, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. The maximum allowed size is 1000KB, as defined in [MaxConfigSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/manager/controlapi#MaxConfigSize). 
   , configSpecTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -3807,30 +3807,30 @@ mkIdResponse idResponseId =
 -- | ImageConfig
 -- Configuration of the image. These fields are used as defaults when starting a container from the image. 
 data ImageConfig = ImageConfig
-  { imageConfigHostname :: !(Maybe Text) -- ^ "Hostname" - The hostname to use for the container, as a valid RFC 1123 hostname.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.47. 
-  , imageConfigDomainname :: !(Maybe Text) -- ^ "Domainname" - The domain name to use for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.47. 
+  { imageConfigHostname :: !(Maybe Text) -- ^ "Hostname" - The hostname to use for the container, as a valid RFC 1123 hostname.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
+  , imageConfigDomainname :: !(Maybe Text) -- ^ "Domainname" - The domain name to use for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
   , imageConfigUser :: !(Maybe Text) -- ^ "User" - The user that commands are run as inside the container.
-  , imageConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
-  , imageConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
-  , imageConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
+  , imageConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
   , imageConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp|sctp&gt;\&quot;: {}}&#x60; 
-  , imageConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
-  , imageConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
-  , imageConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.47. 
+  , imageConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
   , imageConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value. 
   , imageConfigCmd :: !(Maybe [Text]) -- ^ "Cmd" - Command to run specified as a string or an array of strings. 
   , imageConfigHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
   , imageConfigArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
-  , imageConfigImage :: !(Maybe Text) -- ^ "Image" - The name (or reference) of the image to use when creating the container, or which was used when the container was created.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.47. 
+  , imageConfigImage :: !(Maybe Text) -- ^ "Image" - The name (or reference) of the image to use when creating the container, or which was used when the container was created.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
   , imageConfigVolumes :: !(Maybe (Map.Map String A.Value)) -- ^ "Volumes" - An object mapping mount point paths inside the container to empty objects. 
   , imageConfigWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
   , imageConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;). 
-  , imageConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.47. 
-  , imageConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.47. 
+  , imageConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
+  , imageConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
   , imageConfigOnBuild :: !(Maybe [Text]) -- ^ "OnBuild" - &#x60;ONBUILD&#x60; metadata that were defined in the image&#39;s &#x60;Dockerfile&#x60;. 
   , imageConfigLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
   , imageConfigStopSignal :: !(Maybe Text) -- ^ "StopSignal" - Signal to stop a container as a string or unsigned integer. 
-  , imageConfigStopTimeout :: !(Maybe Int) -- ^ "StopTimeout" - Timeout to stop a container in seconds.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.47. 
+  , imageConfigStopTimeout :: !(Maybe Int) -- ^ "StopTimeout" - Timeout to stop a container in seconds.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
   , imageConfigShell :: !(Maybe [Text]) -- ^ "Shell" - Shell for when &#x60;RUN&#x60;, &#x60;CMD&#x60;, and &#x60;ENTRYPOINT&#x60; uses a shell. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -4236,7 +4236,7 @@ data ImageSummary = ImageSummary
   , imageSummaryParentId :: !(Text) -- ^ /Required/ "ParentId" - ID of the parent image.  Depending on how the image was created, this field may be empty and is only set for images that were built/created locally. This field is empty if the image was pulled from an image registry. 
   , imageSummaryRepoTags :: !([Text]) -- ^ /Required/ "RepoTags" - List of image names/tags in the local image cache that reference this image.  Multiple image tags can refer to the same image, and this list may be empty if no tags reference the image, in which case the image is \&quot;untagged\&quot;, in which case it can still be referenced by its ID. 
   , imageSummaryRepoDigests :: !([Text]) -- ^ /Required/ "RepoDigests" - List of content-addressable digests of locally available image manifests that the image is referenced from. Multiple manifests can refer to the same image.  These digests are usually only available if the image was either pulled from a registry, or if the image was pushed to a registry, which is when the manifest is generated and its digest calculated. 
-  , imageSummaryCreated :: !(Int) -- ^ /Required/ "Created" - Date and time at which the image was created as a Unix timestamp (number of seconds sinds EPOCH). 
+  , imageSummaryCreated :: !(Int) -- ^ /Required/ "Created" - Date and time at which the image was created as a Unix timestamp (number of seconds since EPOCH). 
   , imageSummarySize :: !(Integer) -- ^ /Required/ "Size" - Total size of the image including all layers it is composed of. 
   , imageSummarySharedSize :: !(Integer) -- ^ /Required/ "SharedSize" - Total size of image layers that are shared between this image and other images.  This size is not calculated by default. &#x60;-1&#x60; indicates that the value has not been set / calculated. 
   , imageSummaryVirtualSize :: !(Maybe Integer) -- ^ "VirtualSize" - Total size of the image including all layers it is composed of.  Deprecated: this field is omitted in API v1.44, but kept for backward compatibility. Use Size instead.
@@ -4282,7 +4282,7 @@ mkImageSummary
   -> Text -- ^ 'imageSummaryParentId': ID of the parent image.  Depending on how the image was created, this field may be empty and is only set for images that were built/created locally. This field is empty if the image was pulled from an image registry. 
   -> [Text] -- ^ 'imageSummaryRepoTags': List of image names/tags in the local image cache that reference this image.  Multiple image tags can refer to the same image, and this list may be empty if no tags reference the image, in which case the image is \"untagged\", in which case it can still be referenced by its ID. 
   -> [Text] -- ^ 'imageSummaryRepoDigests': List of content-addressable digests of locally available image manifests that the image is referenced from. Multiple manifests can refer to the same image.  These digests are usually only available if the image was either pulled from a registry, or if the image was pushed to a registry, which is when the manifest is generated and its digest calculated. 
-  -> Int -- ^ 'imageSummaryCreated': Date and time at which the image was created as a Unix timestamp (number of seconds sinds EPOCH). 
+  -> Int -- ^ 'imageSummaryCreated': Date and time at which the image was created as a Unix timestamp (number of seconds since EPOCH). 
   -> Integer -- ^ 'imageSummarySize': Total size of the image including all layers it is composed of. 
   -> Integer -- ^ 'imageSummarySharedSize': Total size of image layers that are shared between this image and other images.  This size is not calculated by default. `-1` indicates that the value has not been set / calculated. 
   -> (Map.Map String Text) -- ^ 'imageSummaryLabels': User-defined key/value metadata.
@@ -4513,7 +4513,7 @@ data MountBindOptions = MountBindOptions
   { mountBindOptionsPropagation :: !(Maybe E'Propagation) -- ^ "Propagation" - A propagation mode with the value &#x60;[r]private&#x60;, &#x60;[r]shared&#x60;, or &#x60;[r]slave&#x60;.
   , mountBindOptionsNonRecursive :: !(Maybe Bool) -- ^ "NonRecursive" - Disable recursive bind mount.
   , mountBindOptionsCreateMountpoint :: !(Maybe Bool) -- ^ "CreateMountpoint" - Create mount point on host if missing
-  , mountBindOptionsReadOnlyNonRecursive :: !(Maybe Bool) -- ^ "ReadOnlyNonRecursive" - Make the mount non-recursively read-only, but still leave the mount recursive (unless NonRecursive is set to &#x60;true&#x60; in conjunction).  Addded in v1.44, before that version all read-only mounts were non-recursive by default. To match the previous behaviour this will default to &#x60;true&#x60; for clients on versions prior to v1.44. 
+  , mountBindOptionsReadOnlyNonRecursive :: !(Maybe Bool) -- ^ "ReadOnlyNonRecursive" - Make the mount non-recursively read-only, but still leave the mount recursive (unless NonRecursive is set to &#x60;true&#x60; in conjunction).  Added in v1.44, before that version all read-only mounts were non-recursive by default. To match the previous behaviour this will default to &#x60;true&#x60; for clients on versions prior to v1.44. 
   , mountBindOptionsReadOnlyForceRecursive :: !(Maybe Bool) -- ^ "ReadOnlyForceRecursive" - Raise an error if the mount cannot be made recursively read-only.
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -4730,7 +4730,7 @@ data Network = Network
   , networkEnableIpv6 :: !(Maybe Bool) -- ^ "EnableIPv6" - Whether the network was created with IPv6 enabled. 
   , networkIpam :: !(Maybe IPAM) -- ^ "IPAM"
   , networkInternal :: !(Maybe Bool) -- ^ "Internal" - Whether the network is created to only allow internal networking connectivity. 
-  , networkAttachable :: !(Maybe Bool) -- ^ "Attachable" - Wheter a global / swarm scope network is manually attachable by regular containers from workers in swarm mode. 
+  , networkAttachable :: !(Maybe Bool) -- ^ "Attachable" - Whether a global / swarm scope network is manually attachable by regular containers from workers in swarm mode. 
   , networkIngress :: !(Maybe Bool) -- ^ "Ingress" - Whether the network is providing the routing-mesh for the swarm cluster. 
   , networkConfigFrom :: !(Maybe ConfigReference) -- ^ "ConfigFrom"
   , networkConfigOnly :: !(Maybe Bool) -- ^ "ConfigOnly" - Whether the network is a config-only network. Config-only networks are placeholder networks for network configurations to be used by other networks. Config-only networks cannot be used directly to run containers or services. 
@@ -6516,8 +6516,8 @@ mkPushImageInfo =
 -- | RegistryServiceConfig
 -- RegistryServiceConfig stores daemon registry services configuration. 
 data RegistryServiceConfig = RegistryServiceConfig
-  { registryServiceConfigAllowNondistributableArtifactsCidrs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior, and enables the daemon to push nondistributable artifacts to all registries whose resolved IP address is within the subnet described by the CIDR syntax.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
-  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  Some images (for example, Windows base images) contain artifacts whose distribution is restricted by license. When these images are pushed to a registry, restricted artifacts are not included.  This configuration override this behavior for the specified registries.  This option is useful when pushing images containing nondistributable artifacts to a registry on an air-gapped network so hosts on that network can pull the images without connecting to another server.  &gt; **Warning**: Nondistributable artifacts typically have restrictions &gt; on how and where they can be distributed and shared. Only use this &gt; feature to push artifacts to private registries and ensure that you &gt; are in compliance with any terms that cover redistributing &gt; nondistributable artifacts. 
+  { registryServiceConfigAllowNondistributableArtifactsCidrs :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsCIDRs" - List of IP ranges to which nondistributable artifacts can be pushed, using the CIDR syntax [RFC 4632](https://tools.ietf.org/html/4632).  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: Pushing nondistributable artifacts is now always enabled &gt; and this field is always &#x60;null&#x60;. 
+  , registryServiceConfigAllowNondistributableArtifactsHostnames :: !(Maybe [Text]) -- ^ "AllowNondistributableArtifactsHostnames" - List of registry hostnames to which nondistributable artifacts can be pushed, using the format &#x60;&lt;hostname&gt;[:&lt;port&gt;]&#x60; or &#x60;&lt;IP address&gt;[:&lt;port&gt;]&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: Pushing nondistributable artifacts is now always enabled &gt; and this field is always &#x60;null&#x60;. 
   , registryServiceConfigInsecureRegistryCidrs :: !(Maybe [Text]) -- ^ "InsecureRegistryCIDRs" - List of IP ranges of insecure registries, using the CIDR syntax ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates from unknown CAs) communication.  By default, local registries (&#x60;127.0.0.0/8&#x60;) are configured as insecure. All other registries are secure. Communicating with an insecure registry is not possible if the daemon assumes that registry is secure.  This configuration override this behavior, insecure communication with registries whose resolved IP address is within the subnet described by the CIDR syntax.  Registries can also be marked insecure by hostname. Those registries are listed under &#x60;IndexConfigs&#x60; and have their &#x60;Secure&#x60; field set to &#x60;false&#x60;.  &gt; **Warning**: Using this option can be useful when running a local &gt; registry, but introduces security vulnerabilities. This option &gt; should therefore ONLY be used for testing purposes. For increased &gt; security, users should add their CA to their system&#39;s list of trusted &gt; CAs instead of enabling this option. 
   , registryServiceConfigIndexConfigs :: !(Maybe (Map.Map String IndexInfo)) -- ^ "IndexConfigs"
   , registryServiceConfigMirrors :: !(Maybe [Text]) -- ^ "Mirrors" - List of registry URLs that act as a mirror for the official (&#x60;docker.io&#x60;) registry. 
@@ -6930,7 +6930,7 @@ mkSecret =
 data SecretCreateRequest = SecretCreateRequest
   { secretCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretCreateRequestDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretCreateRequestTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6974,7 +6974,7 @@ mkSecretCreateRequest =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) data to store as secret.  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretSpecTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -8223,7 +8223,7 @@ mkSwarmSpecTaskDefaults =
 -- The log driver to use for tasks created in the orchestrator if unspecified by a service.  Updating this value only affects new tasks. Existing tasks continue to use their previously configured log driver until recreated. 
 data SwarmSpecTaskDefaultsLogDriver = SwarmSpecTaskDefaultsLogDriver
   { swarmSpecTaskDefaultsLogDriverName :: !(Maybe Text) -- ^ "Name" - The log driver to use as a default for new tasks. 
-  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selectd log driver, specified as key/value pairs. 
+  , swarmSpecTaskDefaultsLogDriverOptions :: !(Maybe (Map.Map String Text)) -- ^ "Options" - Driver-specific options for the selected log driver, specified as key/value pairs. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON SwarmSpecTaskDefaultsLogDriver
@@ -10459,6 +10459,7 @@ data E'Isolation
   | E'Isolation'Process -- ^ @"process"@
   | E'Isolation'Hyperv -- ^ @"hyperv"@
   | E'Isolation'Empty -- ^ @""@
+  | E'Isolation'Empty2 -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation where toJSON = A.toJSON . fromE'Isolation
@@ -10474,6 +10475,7 @@ fromE'Isolation = \case
   E'Isolation'Process -> "process"
   E'Isolation'Hyperv -> "hyperv"
   E'Isolation'Empty -> ""
+  E'Isolation'Empty2 -> ""
 
 -- | parse 'E'Isolation' enum
 toE'Isolation :: Text -> P.Either String E'Isolation
@@ -10482,6 +10484,7 @@ toE'Isolation = \case
   "process" -> P.Right E'Isolation'Process
   "hyperv" -> P.Right E'Isolation'Hyperv
   "" -> P.Right E'Isolation'Empty
+  "" -> P.Right E'Isolation'Empty2
   s -> P.Left $ "toE'Isolation: enum parse failure: " P.++ P.show s
 
 
@@ -10493,6 +10496,7 @@ data E'Isolation2
   = E'Isolation2'Default -- ^ @"default"@
   | E'Isolation2'Hyperv -- ^ @"hyperv"@
   | E'Isolation2'Process -- ^ @"process"@
+  | E'Isolation2'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation2 where toJSON = A.toJSON . fromE'Isolation2
@@ -10507,6 +10511,7 @@ fromE'Isolation2 = \case
   E'Isolation2'Default -> "default"
   E'Isolation2'Hyperv -> "hyperv"
   E'Isolation2'Process -> "process"
+  E'Isolation2'Empty -> ""
 
 -- | parse 'E'Isolation2' enum
 toE'Isolation2 :: Text -> P.Either String E'Isolation2
@@ -10514,6 +10519,7 @@ toE'Isolation2 = \case
   "default" -> P.Right E'Isolation2'Default
   "hyperv" -> P.Right E'Isolation2'Hyperv
   "process" -> P.Right E'Isolation2'Process
+  "" -> P.Right E'Isolation2'Empty
   s -> P.Left $ "toE'Isolation2: enum parse failure: " P.++ P.show s
 
 
@@ -10525,6 +10531,7 @@ data E'Isolation3
   = E'Isolation3'Default -- ^ @"default"@
   | E'Isolation3'Process -- ^ @"process"@
   | E'Isolation3'Hyperv -- ^ @"hyperv"@
+  | E'Isolation3'Empty -- ^ @""@
   deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
 
 instance A.ToJSON E'Isolation3 where toJSON = A.toJSON . fromE'Isolation3
@@ -10539,6 +10546,7 @@ fromE'Isolation3 = \case
   E'Isolation3'Default -> "default"
   E'Isolation3'Process -> "process"
   E'Isolation3'Hyperv -> "hyperv"
+  E'Isolation3'Empty -> ""
 
 -- | parse 'E'Isolation3' enum
 toE'Isolation3 :: Text -> P.Either String E'Isolation3
@@ -10546,6 +10554,7 @@ toE'Isolation3 = \case
   "default" -> P.Right E'Isolation3'Default
   "process" -> P.Right E'Isolation3'Process
   "hyperv" -> P.Right E'Isolation3'Hyperv
+  "" -> P.Right E'Isolation3'Empty
   s -> P.Left $ "toE'Isolation3: enum parse failure: " P.++ P.show s
 
 

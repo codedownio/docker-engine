@@ -63,7 +63,15 @@ jobs:
         - lts-20.26 # 9.2.8
         - lts-19.33 # 9.0.2
         - lts-18.28 # 8.10.7
+        # Version correspondence comes from
+        # https://docs.docker.com/reference/api/engine/#api-version-matrix
         version:
+        # - api_version: v1.49
+        #   docker_version:
+        - api_version: v1.48
+          docker_version: 28.0
+        - api_version: v1.47
+          docker_version: 27.5
         - api_version: v1.46
           docker_version: 27.1
         - api_version: v1.45

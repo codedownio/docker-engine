@@ -115,21 +115,15 @@ instance Produces ExecInspect MimeJSON
 -- 
 execResize
   :: Id -- ^ "id" -  Exec instance ID
+  -> H -- ^ "h" -  Height of the TTY session in characters
+  -> W -- ^ "w" -  Width of the TTY session in characters
   -> DockerEngineRequest ExecResize MimeNoContent NoContent MimeNoContent
-execResize (Id id) =
+execResize (Id id) (H h) (W w) =
   _mkRequest "POST" ["/exec/",toPath id,"/resize"]
+    `addQuery` toQuery ("h", Just h)
+    `addQuery` toQuery ("w", Just w)
 
 data ExecResize  
-
--- | /Optional Param/ "h" - Height of the TTY session in characters
-instance HasOptionalParam ExecResize H where
-  applyOptionalParam req (H xs) =
-    req `addQuery` toQuery ("h", Just xs)
-
--- | /Optional Param/ "w" - Width of the TTY session in characters
-instance HasOptionalParam ExecResize W where
-  applyOptionalParam req (W xs) =
-    req `addQuery` toQuery ("w", Just xs)
 instance Produces ExecResize MimeNoContent
 
 

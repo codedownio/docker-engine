@@ -535,7 +535,7 @@ instance Produces ImagePrune MimeJSON
 -- Push an image to a registry.  If you wish to push an image on to a private registry, that image must already have a tag which references the registry. For example, `registry.example.com/myimage:latest`.  The push is cancelled if the HTTP connection is closed. 
 -- 
 imagePush
-  :: Name -- ^ "name" -  Image name or ID.
+  :: Name -- ^ "name" -  Name of the image to push. For example, `registry.example.com/myimage`. The image must be present in the local image store with the same name.  The name should be provided without tag; if a tag is provided, it is ignored. For example, `registry.example.com/myimage:latest` is considered equivalent to `registry.example.com/myimage`.  Use the `tag` parameter to specify the tag to push. 
   -> XRegistryAuth -- ^ "xRegistryAuth" -  A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)
   -> DockerEngineRequest ImagePush MimeNoContent NoContent MimeNoContent
 imagePush (Name name) (XRegistryAuth xRegistryAuth) =
@@ -544,7 +544,7 @@ imagePush (Name name) (XRegistryAuth xRegistryAuth) =
 
 data ImagePush  
 
--- | /Optional Param/ "tag" - The tag to associate with the image on the registry.
+-- | /Optional Param/ "tag" - Tag of the image to push. For example, `latest`. If no tag is provided, all tags of the given image that are present in the local image store are pushed. 
 instance HasOptionalParam ImagePush Tag where
   applyOptionalParam req (Tag xs) =
     req `addQuery` toQuery ("tag", Just xs)

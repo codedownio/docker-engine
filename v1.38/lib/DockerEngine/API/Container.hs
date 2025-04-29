@@ -487,21 +487,15 @@ instance Produces ContainerRename MimeNoContent
 -- 
 containerResize
   :: Id -- ^ "id" -  ID or name of the container
+  -> H -- ^ "h" -  Height of the tty session in characters
+  -> W -- ^ "w" -  Width of the tty session in characters
   -> DockerEngineRequest ContainerResize MimeNoContent NoContent MimeNoContent
-containerResize (Id id) =
+containerResize (Id id) (H h) (W w) =
   _mkRequest "POST" ["/containers/",toPath id,"/resize"]
+    `addQuery` toQuery ("h", Just h)
+    `addQuery` toQuery ("w", Just w)
 
 data ContainerResize  
-
--- | /Optional Param/ "h" - Height of the tty session in characters
-instance HasOptionalParam ContainerResize H where
-  applyOptionalParam req (H xs) =
-    req `addQuery` toQuery ("h", Just xs)
-
--- | /Optional Param/ "w" - Width of the tty session in characters
-instance HasOptionalParam ContainerResize W where
-  applyOptionalParam req (W xs) =
-    req `addQuery` toQuery ("w", Just xs)
 instance Produces ContainerResize MimeNoContent
 
 

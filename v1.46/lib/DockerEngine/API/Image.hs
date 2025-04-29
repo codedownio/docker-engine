@@ -408,7 +408,7 @@ instance Produces ImageDelete MimeJSON
 -- 
 -- Export an image
 -- 
--- Get a tarball containing all images and metadata for a repository.  If `name` is a specific name and tag (e.g. `ubuntu:latest`), then only that image (and its parents) are returned. If `name` is an image ID, similarly only that image (and its parents) are returned, but with the exclusion of the `repositories` file in the tarball, as there were no image names referenced.  ### Image tarball format  An image tarball contains one directory per image layer (named using its long ID), each containing these files:  - `VERSION`: currently `1.0` - the file format version - `json`: detailed layer information, similar to `docker inspect layer_id` - `layer.tar`: A tarfile containing the filesystem changes in this layer  The `layer.tar` file contains `aufs` style `.wh..wh.aufs` files and directories for storing attribute changes and deletions.  If the tarball defines a repository, the tarball should also include a `repositories` file at the root that contains a list of repository and tag names mapped to layer IDs.  ```json {   \"hello-world\": {     \"latest\": \"565a9d68a73f6706862bfe8409a7f659776d4d60a8d096eb4a3cbce6999cc2a1\"   } } ``` 
+-- Get a tarball containing all images and metadata for a repository.  If `name` is a specific name and tag (e.g. `ubuntu:latest`), then only that image (and its parents) are returned. If `name` is an image ID, similarly only that image (and its parents) are returned, but with the exclusion of the `repositories` file in the tarball, as there were no image names referenced.  ### Image tarball format  An image tarball contains [Content as defined in the OCI Image Layout Specification](https://github.com/opencontainers/image-spec/blob/v1.1.1/image-layout.md#content).  Additionally, includes the manifest.json file associated with a backwards compatible docker save format.  If the tarball defines a repository, the tarball should also include a `repositories` file at the root that contains a list of repository and tag names mapped to layer IDs.  ```json {   \"hello-world\": {     \"latest\": \"565a9d68a73f6706862bfe8409a7f659776d4d60a8d096eb4a3cbce6999cc2a1\"   } } ``` 
 -- 
 imageGet
   :: Name -- ^ "name" -  Image name or ID
@@ -580,7 +580,7 @@ instance Produces ImagePrune MimeJSON
 -- Push an image to a registry.  If you wish to push an image on to a private registry, that image must already have a tag which references the registry. For example, `registry.example.com/myimage:latest`.  The push is cancelled if the HTTP connection is closed. 
 -- 
 imagePush
-  :: Name -- ^ "name" -  Image name or ID.
+  :: Name -- ^ "name" -  Name of the image to push. For example, `registry.example.com/myimage`. The image must be present in the local image store with the same name.  The name should be provided without tag; if a tag is provided, it is ignored. For example, `registry.example.com/myimage:latest` is considered equivalent to `registry.example.com/myimage`.  Use the `tag` parameter to specify the tag to push. 
   -> XRegistryAuth -- ^ "xRegistryAuth" -  A base64url-encoded auth configuration.  Refer to the [authentication section](#section/Authentication) for details. 
   -> DockerEngineRequest ImagePush MimeNoContent NoContent MimeNoContent
 imagePush (Name name) (XRegistryAuth xRegistryAuth) =
@@ -589,12 +589,12 @@ imagePush (Name name) (XRegistryAuth xRegistryAuth) =
 
 data ImagePush  
 
--- | /Optional Param/ "tag" - The tag to associate with the image on the registry.
+-- | /Optional Param/ "tag" - Tag of the image to push. For example, `latest`. If no tag is provided, all tags of the given image that are present in the local image store are pushed. 
 instance HasOptionalParam ImagePush Tag where
   applyOptionalParam req (Tag xs) =
     req `addQuery` toQuery ("tag", Just xs)
 
--- | /Optional Param/ "platform" - Select a platform-specific manifest to be pushed. OCI platform (JSON encoded)
+-- | /Optional Param/ "platform" - JSON-encoded OCI platform to select the platform-variant to push. If not provided, all available variants will attempt to be pushed.  If the daemon provides a multi-platform image store, this selects the platform-variant to push to the registry. If the image is a single-platform image, or if the multi-platform image does not provide a variant matching the given platform, an error is returned.  Example: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}` 
 instance HasOptionalParam ImagePush Platform2 where
   applyOptionalParam req (Platform2 xs) =
     req `addQuery` toQuery ("platform", Just xs)
