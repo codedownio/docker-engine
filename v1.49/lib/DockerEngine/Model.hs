@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.49) is used. For example, calling `/info` is the same as calling `/v1.49/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means the server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5) (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.49) is used. For example, calling `/info` is the same as calling `/v1.49/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means the server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5) (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.49
@@ -414,7 +414,7 @@ mkAddress =
 data AuthConfig = AuthConfig
   { authConfigUsername :: !(Maybe Text) -- ^ "username"
   , authConfigPassword :: !(Maybe Text) -- ^ "password"
-  , authConfigEmail :: !(Maybe Text) -- ^ "email"
+  , authConfigEmail :: !(Maybe Text) -- ^ "email" - Email is an optional value associated with the username.  &gt; **Deprecated**: This field is deprecated since docker 1.11 (API v1.23) and will be removed in a future release. 
   , authConfigServeraddress :: !(Maybe Text) -- ^ "serveraddress"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -454,7 +454,6 @@ mkAuthConfig =
 -- BuildCache contains information about a build cache record. 
 data BuildCache = BuildCache
   { buildCacheId :: !(Maybe Text) -- ^ "ID" - Unique ID of the build cache record. 
-  , buildCacheParent :: !(Maybe Text) -- ^ "Parent" - ID of the parent build cache record.  &gt; **Deprecated**: This field is deprecated, and omitted if empty. 
   , buildCacheParents :: !(Maybe [Text]) -- ^ "Parents" - List of parent build cache record IDs. 
   , buildCacheType :: !(Maybe E'Type3) -- ^ "Type" - Cache record type. 
   , buildCacheDescription :: !(Maybe Text) -- ^ "Description" - Description of the build-step that produced the build cache. 
@@ -471,7 +470,6 @@ instance A.FromJSON BuildCache where
   parseJSON = A.withObject "BuildCache" $ \o ->
     BuildCache
       <$> (o .:? "ID")
-      <*> (o .:? "Parent")
       <*> (o .:? "Parents")
       <*> (o .:? "Type")
       <*> (o .:? "Description")
@@ -487,7 +485,6 @@ instance A.ToJSON BuildCache where
   toJSON BuildCache {..} =
    _omitNulls
       [ "ID" .= buildCacheId
-      , "Parent" .= buildCacheParent
       , "Parents" .= buildCacheParents
       , "Type" .= buildCacheType
       , "Description" .= buildCacheDescription
@@ -506,7 +503,6 @@ mkBuildCache
 mkBuildCache =
   BuildCache
   { buildCacheId = Nothing
-  , buildCacheParent = Nothing
   , buildCacheParents = Nothing
   , buildCacheType = Nothing
   , buildCacheDescription = Nothing
@@ -3051,7 +3047,7 @@ data EndpointSettings = EndpointSettings
   , endpointSettingsMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address for the endpoint on this network. The network driver might ignore this parameter. 
   , endpointSettingsAliases :: !(Maybe [Text]) -- ^ "Aliases"
   , endpointSettingsDriverOpts :: !(Maybe (Map.Map String Text)) -- ^ "DriverOpts" - DriverOpts is a mapping of driver options and values. These options are passed directly to the driver and are driver specific. 
-  , endpointSettingsGwPriority :: !(Maybe Double) -- ^ "GwPriority" - This property determines which endpoint will provide the default gateway for a container. The endpoint with the highest priority will be used. If multiple endpoints have the same priority, endpoints are lexicographically sorted based on their network name, and the one that sorts first is picked. 
+  , endpointSettingsGwPriority :: !(Maybe Integer) -- ^ "GwPriority" - This property determines which endpoint will provide the default gateway for a container. The endpoint with the highest priority will be used. If multiple endpoints have the same priority, endpoints are lexicographically sorted based on their network name, and the one that sorts first is picked. 
   , endpointSettingsNetworkId :: !(Maybe Text) -- ^ "NetworkID" - Unique ID of the network. 
   , endpointSettingsEndpointId :: !(Maybe Text) -- ^ "EndpointID" - Unique ID for the service endpoint in a Sandbox. 
   , endpointSettingsGateway :: !(Maybe Text) -- ^ "Gateway" - Gateway address for this network. 
@@ -3717,6 +3713,34 @@ mkGenericResourcesInnerNamedResourceSpec =
   , genericResourcesInnerNamedResourceSpecValue = Nothing
   }
 
+-- ** GraphDriverData
+-- | GraphDriverData
+data GraphDriverData = GraphDriverData
+  { graphDriverDataData :: !(Maybe A.Value) -- ^ "Data"
+  } deriving (P.Show, P.Eq, P.Typeable)
+
+-- | FromJSON GraphDriverData
+instance A.FromJSON GraphDriverData where
+  parseJSON = A.withObject "GraphDriverData" $ \o ->
+    GraphDriverData
+      <$> (o .:? "Data")
+
+-- | ToJSON GraphDriverData
+instance A.ToJSON GraphDriverData where
+  toJSON GraphDriverData {..} =
+   _omitNulls
+      [ "Data" .= graphDriverDataData
+      ]
+
+
+-- | Construct a value of type 'GraphDriverData' (by applying it's required fields, if any)
+mkGraphDriverData
+  :: GraphDriverData
+mkGraphDriverData =
+  GraphDriverData
+  { graphDriverDataData = Nothing
+  }
+
 -- ** Health
 -- | Health
 -- Health stores information about the container's healthcheck results. 
@@ -4349,30 +4373,30 @@ mkIPAMConfig =
 -- | ImageConfig
 -- Configuration of the image. These fields are used as defaults when starting a container from the image. 
 data ImageConfig = ImageConfig
-  { imageConfigHostname :: !(Maybe Text) -- ^ "Hostname" - The hostname to use for the container, as a valid RFC 1123 hostname.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
-  , imageConfigDomainname :: !(Maybe Text) -- ^ "Domainname" - The domain name to use for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
+  { imageConfigHostname :: !(Maybe Text) -- ^ "Hostname" - The hostname to use for the container, as a valid RFC 1123 hostname.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.50. 
+  , imageConfigDomainname :: !(Maybe Text) -- ^ "Domainname" - The domain name to use for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.50. 
   , imageConfigUser :: !(Maybe Text) -- ^ "User" - The user that commands are run as inside the container.
-  , imageConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
-  , imageConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
-  , imageConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigAttachStdin :: !(Maybe Bool) -- ^ "AttachStdin" - Whether to attach to &#x60;stdin&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
+  , imageConfigAttachStdout :: !(Maybe Bool) -- ^ "AttachStdout" - Whether to attach to &#x60;stdout&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
+  , imageConfigAttachStderr :: !(Maybe Bool) -- ^ "AttachStderr" - Whether to attach to &#x60;stderr&#x60;.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
   , imageConfigExposedPorts :: !(Maybe (Map.Map String A.Value)) -- ^ "ExposedPorts" - An object mapping ports to an empty object in the form:  &#x60;{\&quot;&lt;port&gt;/&lt;tcp|udp|sctp&gt;\&quot;: {}}&#x60; 
-  , imageConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
-  , imageConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
-  , imageConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.48. 
+  , imageConfigTty :: !(Maybe Bool) -- ^ "Tty" - Attach standard streams to a TTY, including &#x60;stdin&#x60; if it is not closed.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
+  , imageConfigOpenStdin :: !(Maybe Bool) -- ^ "OpenStdin" - Open &#x60;stdin&#x60;  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
+  , imageConfigStdinOnce :: !(Maybe Bool) -- ^ "StdinOnce" - Close &#x60;stdin&#x60; after one attached client disconnects.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always false. It must not be used, and will be removed in API v1.50. 
   , imageConfigEnv :: !(Maybe [Text]) -- ^ "Env" - A list of environment variables to set inside the container in the form &#x60;[\&quot;VAR&#x3D;value\&quot;, ...]&#x60;. A variable without &#x60;&#x3D;&#x60; is removed from the environment, rather than to have an empty value. 
   , imageConfigCmd :: !(Maybe [Text]) -- ^ "Cmd" - Command to run specified as a string or an array of strings. 
   , imageConfigHealthcheck :: !(Maybe HealthConfig) -- ^ "Healthcheck"
   , imageConfigArgsEscaped :: !(Maybe Bool) -- ^ "ArgsEscaped" - Command is already escaped (Windows only)
-  , imageConfigImage :: !(Maybe Text) -- ^ "Image" - The name (or reference) of the image to use when creating the container, or which was used when the container was created.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.48. 
+  , imageConfigImage :: !(Maybe Text) -- ^ "Image" - The name (or reference) of the image to use when creating the container, or which was used when the container was created.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always empty. It must not be used, and will be removed in API v1.50. 
   , imageConfigVolumes :: !(Maybe (Map.Map String A.Value)) -- ^ "Volumes" - An object mapping mount point paths inside the container to empty objects. 
   , imageConfigWorkingDir :: !(Maybe Text) -- ^ "WorkingDir" - The working directory for commands to run in.
   , imageConfigEntrypoint :: !(Maybe [Text]) -- ^ "Entrypoint" - The entry point for the container as a string or an array of strings.  If the array consists of exactly one empty string (&#x60;[\&quot;\&quot;]&#x60;) then the entry point is reset to system default (i.e., the entry point used by docker when there is no &#x60;ENTRYPOINT&#x60; instruction in the &#x60;Dockerfile&#x60;). 
-  , imageConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
-  , imageConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
+  , imageConfigNetworkDisabled :: !(Maybe Bool) -- ^ "NetworkDisabled" - Disable networking for the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.50. 
+  , imageConfigMacAddress :: !(Maybe Text) -- ^ "MacAddress" - MAC address of the container.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.50. 
   , imageConfigOnBuild :: !(Maybe [Text]) -- ^ "OnBuild" - &#x60;ONBUILD&#x60; metadata that were defined in the image&#39;s &#x60;Dockerfile&#x60;. 
   , imageConfigLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
   , imageConfigStopSignal :: !(Maybe Text) -- ^ "StopSignal" - Signal to stop a container as a string or unsigned integer. 
-  , imageConfigStopTimeout :: !(Maybe Int) -- ^ "StopTimeout" - Timeout to stop a container in seconds.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.48. 
+  , imageConfigStopTimeout :: !(Maybe Int) -- ^ "StopTimeout" - Timeout to stop a container in seconds.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: this field is not part of the image specification and is &gt; always omitted. It must not be used, and will be removed in API v1.50. 
   , imageConfigShell :: !(Maybe [Text]) -- ^ "Shell" - Shell for when &#x60;RUN&#x60;, &#x60;CMD&#x60;, and &#x60;ENTRYPOINT&#x60; uses a shell. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -4551,7 +4575,6 @@ data ImageInspect = ImageInspect
   , imageInspectOs :: !(Maybe Text) -- ^ "Os" - Operating System the image is built to run on. 
   , imageInspectOsVersion :: !(Maybe Text) -- ^ "OsVersion" - Operating System version the image is built to run on (especially for Windows). 
   , imageInspectSize :: !(Maybe Integer) -- ^ "Size" - Total size of the image including all layers it is composed of. 
-  , imageInspectVirtualSize :: !(Maybe Integer) -- ^ "VirtualSize" - Total size of the image including all layers it is composed of.  Deprecated: this field is omitted in API v1.44, but kept for backward compatibility. Use Size instead. 
   , imageInspectGraphDriver :: !(Maybe DriverData) -- ^ "GraphDriver"
   , imageInspectRootFs :: !(Maybe ImageInspectRootFS) -- ^ "RootFS"
   , imageInspectMetadata :: !(Maybe ImageInspectMetadata) -- ^ "Metadata"
@@ -4577,7 +4600,6 @@ instance A.FromJSON ImageInspect where
       <*> (o .:? "Os")
       <*> (o .:? "OsVersion")
       <*> (o .:? "Size")
-      <*> (o .:? "VirtualSize")
       <*> (o .:? "GraphDriver")
       <*> (o .:? "RootFS")
       <*> (o .:? "Metadata")
@@ -4602,7 +4624,6 @@ instance A.ToJSON ImageInspect where
       , "Os" .= imageInspectOs
       , "OsVersion" .= imageInspectOsVersion
       , "Size" .= imageInspectSize
-      , "VirtualSize" .= imageInspectVirtualSize
       , "GraphDriver" .= imageInspectGraphDriver
       , "RootFS" .= imageInspectRootFs
       , "Metadata" .= imageInspectMetadata
@@ -4630,7 +4651,6 @@ mkImageInspect =
   , imageInspectOs = Nothing
   , imageInspectOsVersion = Nothing
   , imageInspectSize = Nothing
-  , imageInspectVirtualSize = Nothing
   , imageInspectGraphDriver = Nothing
   , imageInspectRootFs = Nothing
   , imageInspectMetadata = Nothing
@@ -4980,7 +5000,6 @@ data ImageSummary = ImageSummary
   , imageSummaryCreated :: !(Int) -- ^ /Required/ "Created" - Date and time at which the image was created as a Unix timestamp (number of seconds since EPOCH). 
   , imageSummarySize :: !(Integer) -- ^ /Required/ "Size" - Total size of the image including all layers it is composed of. 
   , imageSummarySharedSize :: !(Integer) -- ^ /Required/ "SharedSize" - Total size of image layers that are shared between this image and other images.  This size is not calculated by default. &#x60;-1&#x60; indicates that the value has not been set / calculated. 
-  , imageSummaryVirtualSize :: !(Maybe Integer) -- ^ "VirtualSize" - Total size of the image including all layers it is composed of.  Deprecated: this field is omitted in API v1.44, but kept for backward compatibility. Use Size instead.
   , imageSummaryLabels :: !((Map.Map String Text)) -- ^ /Required/ "Labels" - User-defined key/value metadata.
   , imageSummaryContainers :: !(Int) -- ^ /Required/ "Containers" - Number of containers using this image. Includes both stopped and running containers.  This size is not calculated by default, and depends on which API endpoint is used. &#x60;-1&#x60; indicates that the value has not been set / calculated. 
   , imageSummaryManifests :: !(Maybe [ImageManifestSummary]) -- ^ "Manifests" - Manifests is a list of manifests available in this image. It provides a more detailed view of the platform-specific image manifests or other image-attached data like build attestations.  WARNING: This is experimental and may change at any time without any backward compatibility. 
@@ -4998,7 +5017,6 @@ instance A.FromJSON ImageSummary where
       <*> (o .:  "Created")
       <*> (o .:  "Size")
       <*> (o .:  "SharedSize")
-      <*> (o .:? "VirtualSize")
       <*> (o .:  "Labels")
       <*> (o .:  "Containers")
       <*> (o .:? "Manifests")
@@ -5015,7 +5033,6 @@ instance A.ToJSON ImageSummary where
       , "Created" .= imageSummaryCreated
       , "Size" .= imageSummarySize
       , "SharedSize" .= imageSummarySharedSize
-      , "VirtualSize" .= imageSummaryVirtualSize
       , "Labels" .= imageSummaryLabels
       , "Containers" .= imageSummaryContainers
       , "Manifests" .= imageSummaryManifests
@@ -5044,7 +5061,6 @@ mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSum
   , imageSummaryCreated
   , imageSummarySize
   , imageSummarySharedSize
-  , imageSummaryVirtualSize = Nothing
   , imageSummaryLabels
   , imageSummaryContainers
   , imageSummaryManifests = Nothing
@@ -7736,7 +7752,7 @@ mkSecret =
 data SecretCreateRequest = SecretCreateRequest
   { secretCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretCreateRequestDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretCreateRequestTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -7780,7 +7796,7 @@ mkSecretCreateRequest =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretSpecTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -9191,8 +9207,8 @@ data SystemInfo = SystemInfo
   , systemInfoPidsLimit :: !(Maybe Bool) -- ^ "PidsLimit" - Indicates if the host kernel has PID limit support enabled.
   , systemInfoOomKillDisable :: !(Maybe Bool) -- ^ "OomKillDisable" - Indicates if OOM killer disable is supported on the host.
   , systemInfoIpv4Forwarding :: !(Maybe Bool) -- ^ "IPv4Forwarding" - Indicates IPv4 forwarding is enabled.
-  , systemInfoBridgeNfIptables :: !(Maybe Bool) -- ^ "BridgeNfIptables" - Indicates if &#x60;bridge-nf-call-iptables&#x60; is available on the host when the daemon was started.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: netfilter module is now loaded on-demand and no longer &gt; during daemon startup, making this field obsolete. This field is always &gt; &#x60;false&#x60; and will be removed in a API v1.49. 
-  , systemInfoBridgeNfIp6tables :: !(Maybe Bool) -- ^ "BridgeNfIp6tables" - Indicates if &#x60;bridge-nf-call-ip6tables&#x60; is available on the host.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: netfilter module is now loaded on-demand, and no longer &gt; during daemon startup, making this field obsolete. This field is always &gt; &#x60;false&#x60; and will be removed in a API v1.49. 
+  , systemInfoBridgeNfIptables :: !(Maybe Bool) -- ^ "BridgeNfIptables" - Indicates if &#x60;bridge-nf-call-iptables&#x60; is available on the host when the daemon was started.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: netfilter module is now loaded on-demand and no longer &gt; during daemon startup, making this field obsolete. This field is always &gt; &#x60;false&#x60; and will be removed in a API v1.50. 
+  , systemInfoBridgeNfIp6tables :: !(Maybe Bool) -- ^ "BridgeNfIp6tables" - Indicates if &#x60;bridge-nf-call-ip6tables&#x60; is available on the host.  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;  &gt; **Deprecated**: netfilter module is now loaded on-demand, and no longer &gt; during daemon startup, making this field obsolete. This field is always &gt; &#x60;false&#x60; and will be removed in a API v1.50. 
   , systemInfoDebug :: !(Maybe Bool) -- ^ "Debug" - Indicates if the daemon is running in debug-mode / with debug-level logging enabled. 
   , systemInfoNfd :: !(Maybe Int) -- ^ "NFd" - The total number of file Descriptors in use by the daemon process.  This information is only returned if debug-mode is enabled. 
   , systemInfoNGoroutines :: !(Maybe Int) -- ^ "NGoroutines" - The  number of goroutines that currently exist.  This information is only returned if debug-mode is enabled. 

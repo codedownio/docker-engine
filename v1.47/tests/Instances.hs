@@ -141,7 +141,6 @@ genBuildCache :: Int -> Gen BuildCache
 genBuildCache n =
   BuildCache
     <$> arbitraryReducedMaybe n -- buildCacheId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- buildCacheParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildCacheParents :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- buildCacheType :: Maybe E'Type3
     <*> arbitraryReducedMaybe n -- buildCacheDescription :: Maybe Text
@@ -858,6 +857,14 @@ genGenericResourcesInnerNamedResourceSpec n =
     <$> arbitraryReducedMaybe n -- genericResourcesInnerNamedResourceSpecKind :: Maybe Text
     <*> arbitraryReducedMaybe n -- genericResourcesInnerNamedResourceSpecValue :: Maybe Text
   
+instance Arbitrary GraphDriverData where
+  arbitrary = sized genGraphDriverData
+
+genGraphDriverData :: Int -> Gen GraphDriverData
+genGraphDriverData n =
+  GraphDriverData
+    <$> arbitraryReducedMaybeValue n -- graphDriverDataData :: Maybe A.Value
+  
 instance Arbitrary Health where
   arbitrary = sized genHealth
 
@@ -1089,7 +1096,6 @@ genImageInspect n =
     <*> arbitraryReducedMaybe n -- imageInspectOs :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectOsVersion :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectSize :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- imageInspectVirtualSize :: Maybe Integer
     <*> arbitraryReducedMaybe n -- imageInspectGraphDriver :: Maybe DriverData
     <*> arbitraryReducedMaybe n -- imageInspectRootFs :: Maybe ImageInspectRootFS
     <*> arbitraryReducedMaybe n -- imageInspectMetadata :: Maybe ImageInspectMetadata
@@ -1194,7 +1200,6 @@ genImageSummary n =
     <*> arbitrary -- imageSummaryCreated :: Int
     <*> arbitrary -- imageSummarySize :: Integer
     <*> arbitrary -- imageSummarySharedSize :: Integer
-    <*> arbitraryReducedMaybe n -- imageSummaryVirtualSize :: Maybe Integer
     <*> arbitrary -- imageSummaryLabels :: (Map.Map String Text)
     <*> arbitrary -- imageSummaryContainers :: Int
     <*> arbitraryReducedMaybe n -- imageSummaryManifests :: Maybe [ImageManifestSummary]

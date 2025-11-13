@@ -21,3 +21,6 @@ nix run .#generate1_46
 nix run .#generate1_47
 nix run .#generate1_48
 nix run .#generate1_49
+nix run .#generate1_50
+nix run .#generate1_51
+nix run .#generate1_52

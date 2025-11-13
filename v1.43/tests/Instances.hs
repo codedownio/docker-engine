@@ -141,7 +141,6 @@ genBuildCache :: Int -> Gen BuildCache
 genBuildCache n =
   BuildCache
     <$> arbitraryReducedMaybe n -- buildCacheId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- buildCacheParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildCacheParents :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- buildCacheType :: Maybe E'Type3
     <*> arbitraryReducedMaybe n -- buildCacheDescription :: Maybe Text

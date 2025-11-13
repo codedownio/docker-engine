@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.38) is used. For example, calling `/info` is the same as calling `/v1.38/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.38) is used. For example, calling `/info` is the same as calling `/v1.38/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a Base64 encoded (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.38
@@ -378,7 +378,7 @@ mkAddress =
 data AuthConfig = AuthConfig
   { authConfigUsername :: !(Maybe Text) -- ^ "username"
   , authConfigPassword :: !(Maybe Text) -- ^ "password"
-  , authConfigEmail :: !(Maybe Text) -- ^ "email"
+  , authConfigEmail :: !(Maybe Text) -- ^ "email" - Email is an optional value associated with the username.  &gt; **Deprecated**: This field is deprecated since docker 1.11 (API v1.23) and will be removed in a future release. 
   , authConfigServeraddress :: !(Maybe Text) -- ^ "serveraddress"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -1559,7 +1559,6 @@ data ContainerUpdateRequest = ContainerUpdateRequest
   , containerUpdateRequestDevices :: !(Maybe [DeviceMapping]) -- ^ "Devices" - A list of devices to add to the container.
   , containerUpdateRequestDeviceCgroupRules :: !(Maybe [Text]) -- ^ "DeviceCgroupRules" - a list of cgroup rules to apply to the container
   , containerUpdateRequestDiskQuota :: !(Maybe Integer) -- ^ "DiskQuota" - Disk limit (in bytes).
-  , containerUpdateRequestKernelMemory :: !(Maybe Integer) -- ^ "KernelMemory" - Kernel memory limit in bytes.
   , containerUpdateRequestMemoryReservation :: !(Maybe Integer) -- ^ "MemoryReservation" - Memory soft limit in bytes.
   , containerUpdateRequestMemorySwap :: !(Maybe Integer) -- ^ "MemorySwap" - Total memory limit (memory + swap). Set as &#x60;-1&#x60; to enable unlimited swap.
   , containerUpdateRequestMemorySwappiness :: !(Maybe Integer) -- ^ "MemorySwappiness" - Tune a container&#39;s memory swappiness behavior. Accepts an integer between 0 and 100.
@@ -1597,7 +1596,6 @@ instance A.FromJSON ContainerUpdateRequest where
       <*> (o .:? "Devices")
       <*> (o .:? "DeviceCgroupRules")
       <*> (o .:? "DiskQuota")
-      <*> (o .:? "KernelMemory")
       <*> (o .:? "MemoryReservation")
       <*> (o .:? "MemorySwap")
       <*> (o .:? "MemorySwappiness")
@@ -1634,7 +1632,6 @@ instance A.ToJSON ContainerUpdateRequest where
       , "Devices" .= containerUpdateRequestDevices
       , "DeviceCgroupRules" .= containerUpdateRequestDeviceCgroupRules
       , "DiskQuota" .= containerUpdateRequestDiskQuota
-      , "KernelMemory" .= containerUpdateRequestKernelMemory
       , "MemoryReservation" .= containerUpdateRequestMemoryReservation
       , "MemorySwap" .= containerUpdateRequestMemorySwap
       , "MemorySwappiness" .= containerUpdateRequestMemorySwappiness
@@ -1674,7 +1671,6 @@ mkContainerUpdateRequest =
   , containerUpdateRequestDevices = Nothing
   , containerUpdateRequestDeviceCgroupRules = Nothing
   , containerUpdateRequestDiskQuota = Nothing
-  , containerUpdateRequestKernelMemory = Nothing
   , containerUpdateRequestMemoryReservation = Nothing
   , containerUpdateRequestMemorySwap = Nothing
   , containerUpdateRequestMemorySwappiness = Nothing
@@ -2705,7 +2701,6 @@ data HostConfig = HostConfig
   , hostConfigDevices :: !(Maybe [DeviceMapping]) -- ^ "Devices" - A list of devices to add to the container.
   , hostConfigDeviceCgroupRules :: !(Maybe [Text]) -- ^ "DeviceCgroupRules" - a list of cgroup rules to apply to the container
   , hostConfigDiskQuota :: !(Maybe Integer) -- ^ "DiskQuota" - Disk limit (in bytes).
-  , hostConfigKernelMemory :: !(Maybe Integer) -- ^ "KernelMemory" - Kernel memory limit in bytes.
   , hostConfigMemoryReservation :: !(Maybe Integer) -- ^ "MemoryReservation" - Memory soft limit in bytes.
   , hostConfigMemorySwap :: !(Maybe Integer) -- ^ "MemorySwap" - Total memory limit (memory + swap). Set as &#x60;-1&#x60; to enable unlimited swap.
   , hostConfigMemorySwappiness :: !(Maybe Integer) -- ^ "MemorySwappiness" - Tune a container&#39;s memory swappiness behavior. Accepts an integer between 0 and 100.
@@ -2779,7 +2774,6 @@ instance A.FromJSON HostConfig where
       <*> (o .:? "Devices")
       <*> (o .:? "DeviceCgroupRules")
       <*> (o .:? "DiskQuota")
-      <*> (o .:? "KernelMemory")
       <*> (o .:? "MemoryReservation")
       <*> (o .:? "MemorySwap")
       <*> (o .:? "MemorySwappiness")
@@ -2852,7 +2846,6 @@ instance A.ToJSON HostConfig where
       , "Devices" .= hostConfigDevices
       , "DeviceCgroupRules" .= hostConfigDeviceCgroupRules
       , "DiskQuota" .= hostConfigDiskQuota
-      , "KernelMemory" .= hostConfigKernelMemory
       , "MemoryReservation" .= hostConfigMemoryReservation
       , "MemorySwap" .= hostConfigMemorySwap
       , "MemorySwappiness" .= hostConfigMemorySwappiness
@@ -2928,7 +2921,6 @@ mkHostConfig =
   , hostConfigDevices = Nothing
   , hostConfigDeviceCgroupRules = Nothing
   , hostConfigDiskQuota = Nothing
-  , hostConfigKernelMemory = Nothing
   , hostConfigMemoryReservation = Nothing
   , hostConfigMemorySwap = Nothing
   , hostConfigMemorySwappiness = Nothing
@@ -5521,7 +5513,6 @@ data Resources = Resources
   , resourcesDevices :: !(Maybe [DeviceMapping]) -- ^ "Devices" - A list of devices to add to the container.
   , resourcesDeviceCgroupRules :: !(Maybe [Text]) -- ^ "DeviceCgroupRules" - a list of cgroup rules to apply to the container
   , resourcesDiskQuota :: !(Maybe Integer) -- ^ "DiskQuota" - Disk limit (in bytes).
-  , resourcesKernelMemory :: !(Maybe Integer) -- ^ "KernelMemory" - Kernel memory limit in bytes.
   , resourcesMemoryReservation :: !(Maybe Integer) -- ^ "MemoryReservation" - Memory soft limit in bytes.
   , resourcesMemorySwap :: !(Maybe Integer) -- ^ "MemorySwap" - Total memory limit (memory + swap). Set as &#x60;-1&#x60; to enable unlimited swap.
   , resourcesMemorySwappiness :: !(Maybe Integer) -- ^ "MemorySwappiness" - Tune a container&#39;s memory swappiness behavior. Accepts an integer between 0 and 100.
@@ -5558,7 +5549,6 @@ instance A.FromJSON Resources where
       <*> (o .:? "Devices")
       <*> (o .:? "DeviceCgroupRules")
       <*> (o .:? "DiskQuota")
-      <*> (o .:? "KernelMemory")
       <*> (o .:? "MemoryReservation")
       <*> (o .:? "MemorySwap")
       <*> (o .:? "MemorySwappiness")
@@ -5594,7 +5584,6 @@ instance A.ToJSON Resources where
       , "Devices" .= resourcesDevices
       , "DeviceCgroupRules" .= resourcesDeviceCgroupRules
       , "DiskQuota" .= resourcesDiskQuota
-      , "KernelMemory" .= resourcesKernelMemory
       , "MemoryReservation" .= resourcesMemoryReservation
       , "MemorySwap" .= resourcesMemorySwap
       , "MemorySwappiness" .= resourcesMemorySwappiness
@@ -5633,7 +5622,6 @@ mkResources =
   , resourcesDevices = Nothing
   , resourcesDeviceCgroupRules = Nothing
   , resourcesDiskQuota = Nothing
-  , resourcesKernelMemory = Nothing
   , resourcesMemoryReservation = Nothing
   , resourcesMemorySwap = Nothing
   , resourcesMemorySwappiness = Nothing
@@ -5831,7 +5819,7 @@ mkSecret =
 data SecretCreateRequest = SecretCreateRequest
   { secretCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretCreateRequestDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretCreateRequestTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -5875,7 +5863,7 @@ mkSecretCreateRequest =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretSpecTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -7205,7 +7193,6 @@ data SystemInfo = SystemInfo
   , systemInfoPlugins :: !(Maybe PluginsInfo) -- ^ "Plugins"
   , systemInfoMemoryLimit :: !(Maybe Bool) -- ^ "MemoryLimit" - Indicates if the host has memory limit support enabled.
   , systemInfoSwapLimit :: !(Maybe Bool) -- ^ "SwapLimit" - Indicates if the host has memory swap limit support enabled.
-  , systemInfoKernelMemory :: !(Maybe Bool) -- ^ "KernelMemory" - Indicates if the host has kernel memory limit support enabled.
   , systemInfoCpuCfsPeriod :: !(Maybe Bool) -- ^ "CpuCfsPeriod" - Indicates if CPU CFS(Completely Fair Scheduler) period is supported by the host.
   , systemInfoCpuCfsQuota :: !(Maybe Bool) -- ^ "CpuCfsQuota" - Indicates if CPU CFS(Completely Fair Scheduler) quota is supported by the host.
   , systemInfoCpuShares :: !(Maybe Bool) -- ^ "CPUShares" - Indicates if CPU Shares limiting is supported by the host.
@@ -7268,7 +7255,6 @@ instance A.FromJSON SystemInfo where
       <*> (o .:? "Plugins")
       <*> (o .:? "MemoryLimit")
       <*> (o .:? "SwapLimit")
-      <*> (o .:? "KernelMemory")
       <*> (o .:? "CpuCfsPeriod")
       <*> (o .:? "CpuCfsQuota")
       <*> (o .:? "CPUShares")
@@ -7330,7 +7316,6 @@ instance A.ToJSON SystemInfo where
       , "Plugins" .= systemInfoPlugins
       , "MemoryLimit" .= systemInfoMemoryLimit
       , "SwapLimit" .= systemInfoSwapLimit
-      , "KernelMemory" .= systemInfoKernelMemory
       , "CpuCfsPeriod" .= systemInfoCpuCfsPeriod
       , "CpuCfsQuota" .= systemInfoCpuCfsQuota
       , "CPUShares" .= systemInfoCpuShares
@@ -7395,7 +7380,6 @@ mkSystemInfo =
   , systemInfoPlugins = Nothing
   , systemInfoMemoryLimit = Nothing
   , systemInfoSwapLimit = Nothing
-  , systemInfoKernelMemory = Nothing
   , systemInfoCpuCfsPeriod = Nothing
   , systemInfoCpuCfsQuota = Nothing
   , systemInfoCpuShares = Nothing

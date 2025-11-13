@@ -141,7 +141,6 @@ genBuildCache :: Int -> Gen BuildCache
 genBuildCache n =
   BuildCache
     <$> arbitraryReducedMaybe n -- buildCacheId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- buildCacheParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildCacheParents :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- buildCacheType :: Maybe E'Type3
     <*> arbitraryReducedMaybe n -- buildCacheDescription :: Maybe Text
@@ -1072,7 +1071,6 @@ genImageInspect n =
     <*> arbitraryReducedMaybe n -- imageInspectOs :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectOsVersion :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectSize :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- imageInspectVirtualSize :: Maybe Integer
     <*> arbitraryReducedMaybe n -- imageInspectGraphDriver :: Maybe GraphDriverData
     <*> arbitraryReducedMaybe n -- imageInspectRootFs :: Maybe ImageInspectRootFS
     <*> arbitraryReducedMaybe n -- imageInspectMetadata :: Maybe ImageInspectMetadata
@@ -1128,7 +1126,6 @@ genImageSummary n =
     <*> arbitrary -- imageSummaryCreated :: Int
     <*> arbitrary -- imageSummarySize :: Integer
     <*> arbitrary -- imageSummarySharedSize :: Integer
-    <*> arbitraryReducedMaybe n -- imageSummaryVirtualSize :: Maybe Integer
     <*> arbitrary -- imageSummaryLabels :: (Map.Map String Text)
     <*> arbitrary -- imageSummaryContainers :: Int
   

@@ -23,6 +23,12 @@
           yq e -i '.definitions.HostConfig.allOf[1].properties.Isolation.enum += [""]' api.yaml
         '';
 
+        # Docker may emit an empty string for HostConfig.Isolation
+        fixGraphDriverDataNullable = ''
+          yq e -i '.definitions.GraphDriverData.properties.Data.x-nullable = true' api.yaml
+          yq e -i '.definitions.GraphDriverData.required = ["Name"]' api.yaml
+        '';
+
         mkApiYaml = { src, fixes ? [] }: pkgs.stdenv.mkDerivation {
           name = "docker-api.yaml";
           inherit src;
@@ -41,7 +47,7 @@
         api_1_36 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.36.yaml";
-            hash = "sha256-mEyDAyzmk8C8iCHrl2Xr5mLUhVswaMfrWsbtNNl2iJc=";
+            hash = "sha256-WKRpvs5xRgmKrxYyroTWyJuq5nO6h4Pl+dk0nMleKEU=";
           };
           fixes = [
             fixContainerSummaryDefinition
@@ -51,7 +57,7 @@
         api_1_37 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.37.yaml";
-            hash = "sha256-UhhA7OI4NHOskRdl+Sik2hy4PE3ROJUltWlhqUoGNU4=";
+            hash = "sha256-xunRRt5+Mtk6+YkgVqfBShgXEMspz0F700dYdg3LFTo=";
           };
           fixes = [
             fixContainerSummaryDefinition
@@ -61,7 +67,7 @@
         api_1_38 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.38.yaml";
-            hash = "sha256-j/rJFwRCeu4eHCnqhm+zRP4GYr03Lj26ATVeSVxX1cE=";
+            hash = "sha256-UoMRl4uw2FUIGdC4NemurkyvNURPIIs310MHmkFzRPc=";
           };
           fixes = [
             fixContainerSummaryDefinition
@@ -71,7 +77,7 @@
         api_1_39 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.39.yaml";
-            hash = "sha256-uupt1p8Ly1Qj24f1G2RzV3Q+dDp7oTicBx+pszHPpeQ=";
+            hash = "sha256-9UfEzxsUf6Qy0uge9BZBecJh4OU2f/1P8KdcE/Y4VIA=";
           };
           fixes = [
             fixContainerSummaryDefinition
@@ -80,72 +86,117 @@
         api_1_40 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.40.yaml";
-            hash = "sha256-ridNju3jtGyB7hQkJijrGfMx5qbKxjyfzyCTxf9GX2A=";
+            hash = "sha256-tqNsoXVwRJFeTYivGzkZtLx83E8nHxfIYJq8MGThPKg=";
           };
           fixes = [fixHostConfigIsolation];
         };
         api_1_41 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.41.yaml";
-            hash = "sha256-d2NppRZqVfOfm9Xy0+iXdifLzBJ32rhvqFEHguh6UVQ=";
+            hash = "sha256-G7m+s1MgQWOoFLs/ZGHjBhdOH6cd9Q2OpSPk2EZ5EYM=";
           };
           fixes = [fixHostConfigIsolation];
         };
         api_1_42 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.42.yaml";
-            hash = "sha256-3Ef1qUE5v8bYdCP4DlF3SUQdAiBj18nWhmyeJniDVCY=";
+            hash = "sha256-ebY+WeB7qZBgInV0GsU4gB16N+nkqaniuo/W+dMYIB0=";
           };
           fixes = [fixHostConfigIsolation];
         };
         api_1_43 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.43.yaml";
-            hash = "sha256-Al2ECUOYYkfo76k/1TNlo3r+DuVJZ+nPYiy35/mPVCI=";
+            hash = "sha256-Y391vkcYJ5ncX33ts4lWlGvtfvr7C2kJbJ+lquh71sc=";
           };
           fixes = [fixHostConfigIsolation];
         };
         api_1_44 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.44.yaml";
-            hash = "sha256-vhPxelA6stBzLXVf/ycsqsPdABYpRcWuElIRaP1GsOs=";
+            hash = "sha256-gUHSS+/MSBRnapas1CKibX5zUkCmU9QmJymJ9A/pk1A=";
           };
           fixes = [fixHostConfigIsolation];
         };
         api_1_45 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.45.yaml";
-            hash = "sha256-7SvF0rSQhu5/Uve+R+n808z2Cg0aZdgckUBnS2F76mQ=";
+            hash = "sha256-dB5waDT6HeK3y5cnBzMXKGAfAyZfbryd91WkUa2IHNU=";
           };
-          fixes = [fixHostConfigIsolation];
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
         };
         api_1_46 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.46.yaml";
-            hash = "sha256-kRSv3IAXOzAmXSgE7wLAJlfFdTCR87/vwYzF/fUev4c";
+            hash = "sha256-u44GlkR1oZarTDZqrCPoycR594NTsvPws0ezoHqKvqw=";
           };
-          fixes = [fixHostConfigIsolation];
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
         };
         api_1_47 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.47.yaml";
-            hash = "sha256-yMchI2trdWQCT35roUey+zWm59KTHh9H0h6q6Qk9e30=";
+            hash = "sha256-5kVUKhYir7kO9o7DJ2WaaP2nhqiux0Hv/vBIJPsUsQc=";
           };
-          fixes = [fixHostConfigIsolation];
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
         };
         api_1_48 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.48.yaml";
-            hash = "sha256-nJ8yX9fZ/obJT4fO9QwRHDj+K9orkXhfu86tiND8wlw=";
+            hash = "sha256-a+x/1B48/kJjMPX//trTKsZXIbMHlBQIOIbEPuZqV50=";
           };
-          fixes = [fixHostConfigIsolation];
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
         };
         api_1_49 = mkApiYaml {
           src = pkgs.fetchurl {
             url = "https://docs.docker.com/reference/api/engine/version/v1.49.yaml";
-            hash = "sha256-9W8AOk6XkOXmRQlsH6j5fRKfQjEcIuWd9MR/sKnHqm0=";
+            hash = "sha256-a6onACRpydAab2ofRtgMjhytLuF+rTNiM2hjgudaVsU=";
           };
-          fixes = [fixHostConfigIsolation];
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
+        };
+        api_1_50 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/api/engine/version/v1.50.yaml";
+            hash = "sha256-opyyvlxHVYX15t/Qd2LgVdSyXnPVr9wxvHa645foDUI=";
+          };
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
+        };
+        api_1_51 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/api/engine/version/v1.51.yaml";
+            hash = "sha256-EwSc8DLG+qLaEexeckotLzZngGqOP1NzM5kmnaURcu0=";
+          };
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
+        };
+        api_1_52 = mkApiYaml {
+          src = pkgs.fetchurl {
+            url = "https://docs.docker.com/reference/api/engine/version/v1.52.yaml";
+            hash = "sha256-af4Szixu8eQqMX5cPWDJ4NvFv08w5WRyq5R5ddmm7ts=";
+          };
+          fixes = [
+            fixHostConfigIsolation
+            fixGraphDriverDataNullable
+          ];
         };
 
         mkGenerateScript = apiYaml: dir: pkgs.writeShellScriptBin "generate.sh" ''
@@ -213,6 +264,9 @@
               api_1_47
               api_1_48
               api_1_49
+              api_1_50
+              api_1_51
+              api_1_52
             ;
 
             generate1_36 = mkGenerateScript api_1_36 "v1.36";
@@ -229,6 +283,9 @@
             generate1_47 = mkGenerateScript api_1_47 "v1.47";
             generate1_48 = mkGenerateScript api_1_48 "v1.48";
             generate1_49 = mkGenerateScript api_1_49 "v1.49";
+            generate1_50 = mkGenerateScript api_1_50 "v1.50";
+            generate1_51 = mkGenerateScript api_1_51 "v1.51";
+            generate1_52 = mkGenerateScript api_1_52 "v1.52";
           };
         }
     );

@@ -141,7 +141,6 @@ genBuildCache :: Int -> Gen BuildCache
 genBuildCache n =
   BuildCache
     <$> arbitraryReducedMaybe n -- buildCacheId :: Maybe Text
-    <*> arbitraryReducedMaybe n -- buildCacheParent :: Maybe Text
     <*> arbitraryReducedMaybe n -- buildCacheParents :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- buildCacheType :: Maybe E'Type3
     <*> arbitraryReducedMaybe n -- buildCacheDescription :: Maybe Text
@@ -856,7 +855,7 @@ genGraphDriverData :: Int -> Gen GraphDriverData
 genGraphDriverData n =
   GraphDriverData
     <$> arbitrary -- graphDriverDataName :: Text
-    <*> arbitrary -- graphDriverDataData :: (Map.Map String Text)
+    <*> arbitraryReducedMaybe n -- graphDriverDataData :: Maybe (Map.Map String Text)
   
 instance Arbitrary Health where
   arbitrary = sized genHealth
@@ -1089,7 +1088,6 @@ genImageInspect n =
     <*> arbitraryReducedMaybe n -- imageInspectOs :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectOsVersion :: Maybe Text
     <*> arbitraryReducedMaybe n -- imageInspectSize :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- imageInspectVirtualSize :: Maybe Integer
     <*> arbitraryReducedMaybe n -- imageInspectGraphDriver :: Maybe GraphDriverData
     <*> arbitraryReducedMaybe n -- imageInspectRootFs :: Maybe ImageInspectRootFS
     <*> arbitraryReducedMaybe n -- imageInspectMetadata :: Maybe ImageInspectMetadata
@@ -1145,7 +1143,6 @@ genImageSummary n =
     <*> arbitrary -- imageSummaryCreated :: Int
     <*> arbitrary -- imageSummarySize :: Integer
     <*> arbitrary -- imageSummarySharedSize :: Integer
-    <*> arbitraryReducedMaybe n -- imageSummaryVirtualSize :: Maybe Integer
     <*> arbitrary -- imageSummaryLabels :: (Map.Map String Text)
     <*> arbitrary -- imageSummaryContainers :: Int
   

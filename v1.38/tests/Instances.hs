@@ -453,7 +453,6 @@ genContainerUpdateRequest n =
     <*> arbitraryReducedMaybe n -- containerUpdateRequestDevices :: Maybe [DeviceMapping]
     <*> arbitraryReducedMaybe n -- containerUpdateRequestDeviceCgroupRules :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- containerUpdateRequestDiskQuota :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- containerUpdateRequestKernelMemory :: Maybe Integer
     <*> arbitraryReducedMaybe n -- containerUpdateRequestMemoryReservation :: Maybe Integer
     <*> arbitraryReducedMaybe n -- containerUpdateRequestMemorySwap :: Maybe Integer
     <*> arbitraryReducedMaybe n -- containerUpdateRequestMemorySwappiness :: Maybe Integer
@@ -756,7 +755,6 @@ genHostConfig n =
     <*> arbitraryReducedMaybe n -- hostConfigDevices :: Maybe [DeviceMapping]
     <*> arbitraryReducedMaybe n -- hostConfigDeviceCgroupRules :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- hostConfigDiskQuota :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- hostConfigKernelMemory :: Maybe Integer
     <*> arbitraryReducedMaybe n -- hostConfigMemoryReservation :: Maybe Integer
     <*> arbitraryReducedMaybe n -- hostConfigMemorySwap :: Maybe Integer
     <*> arbitraryReducedMaybe n -- hostConfigMemorySwappiness :: Maybe Integer
@@ -1490,7 +1488,6 @@ genResources n =
     <*> arbitraryReducedMaybe n -- resourcesDevices :: Maybe [DeviceMapping]
     <*> arbitraryReducedMaybe n -- resourcesDeviceCgroupRules :: Maybe [Text]
     <*> arbitraryReducedMaybe n -- resourcesDiskQuota :: Maybe Integer
-    <*> arbitraryReducedMaybe n -- resourcesKernelMemory :: Maybe Integer
     <*> arbitraryReducedMaybe n -- resourcesMemoryReservation :: Maybe Integer
     <*> arbitraryReducedMaybe n -- resourcesMemorySwap :: Maybe Integer
     <*> arbitraryReducedMaybe n -- resourcesMemorySwappiness :: Maybe Integer
@@ -1940,7 +1937,6 @@ genSystemInfo n =
     <*> arbitraryReducedMaybe n -- systemInfoPlugins :: Maybe PluginsInfo
     <*> arbitraryReducedMaybe n -- systemInfoMemoryLimit :: Maybe Bool
     <*> arbitraryReducedMaybe n -- systemInfoSwapLimit :: Maybe Bool
-    <*> arbitraryReducedMaybe n -- systemInfoKernelMemory :: Maybe Bool
     <*> arbitraryReducedMaybe n -- systemInfoCpuCfsPeriod :: Maybe Bool
     <*> arbitraryReducedMaybe n -- systemInfoCpuCfsQuota :: Maybe Bool
     <*> arbitraryReducedMaybe n -- systemInfoCpuShares :: Maybe Bool

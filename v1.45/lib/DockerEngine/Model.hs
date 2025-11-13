@@ -1,7 +1,7 @@
 {-
    Docker Engine API
 
-   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.45) is used. For example, calling `/info` is the same as calling `/v1.45/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5) (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"email\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
+   The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate with the Engine, so everything the Docker client can do can be done with the API.  Most of the client's commands map directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists of several API calls.  # Errors  The API uses standard HTTP status codes to indicate the success or failure of the API call. The body of the response will be JSON in the following format:  ``` {   \"message\": \"page not found\" } ```  # Versioning  The API is usually changed in each release, so API calls are versioned to ensure that clients don't break. To lock to a specific version of the API, you prefix the URL with its version, for example, call `/v1.30/info` to use the v1.30 version of the `/info` endpoint. If the API version specified in the URL is not supported by the daemon, a HTTP `400 Bad Request` error message is returned.  If you omit the version-prefix, the current version of the API (v1.45) is used. For example, calling `/info` is the same as calling `/v1.45/info`. Using the API without a version-prefix is deprecated and will be removed in a future release.  Engine releases in the near future should support this version of the API, so your client will continue to work even if it is talking to a newer Engine.  The API uses an open schema model, which means server may add extra properties to responses. Likewise, the server will ignore any extra query parameters and request body properties. When you write clients, you need to ignore additional properties in responses to ensure they do not break when talking to newer daemons.   # Authentication  Authentication for registries is handled client side. The client has to send authentication details to various endpoints that need to communicate with registries, such as `POST /images/(name)/push`. These are sent as `X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5) (JSON) string with the following structure:  ``` {   \"username\": \"string\",   \"password\": \"string\",   \"serveraddress\": \"string\" } ```  The `serveraddress` is a domain/IP without a protocol. Throughout this structure, double quotes are required.  If you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth), you can just pass this instead of credentials:  ``` {   \"identitytoken\": \"9cbaf023786cd7...\" } ``` 
 
    OpenAPI Version: 3.0.1
    Docker Engine API API version: 1.45
@@ -402,7 +402,7 @@ mkAddress =
 data AuthConfig = AuthConfig
   { authConfigUsername :: !(Maybe Text) -- ^ "username"
   , authConfigPassword :: !(Maybe Text) -- ^ "password"
-  , authConfigEmail :: !(Maybe Text) -- ^ "email"
+  , authConfigEmail :: !(Maybe Text) -- ^ "email" - Email is an optional value associated with the username.  &gt; **Deprecated**: This field is deprecated since docker 1.11 (API v1.23) and will be removed in a future release. 
   , authConfigServeraddress :: !(Maybe Text) -- ^ "serveraddress"
   } deriving (P.Show, P.Eq, P.Typeable)
 
@@ -442,7 +442,6 @@ mkAuthConfig =
 -- BuildCache contains information about a build cache record. 
 data BuildCache = BuildCache
   { buildCacheId :: !(Maybe Text) -- ^ "ID" - Unique ID of the build cache record. 
-  , buildCacheParent :: !(Maybe Text) -- ^ "Parent" - ID of the parent build cache record.  &gt; **Deprecated**: This field is deprecated, and omitted if empty. 
   , buildCacheParents :: !(Maybe [Text]) -- ^ "Parents" - List of parent build cache record IDs. 
   , buildCacheType :: !(Maybe E'Type3) -- ^ "Type" - Cache record type. 
   , buildCacheDescription :: !(Maybe Text) -- ^ "Description" - Description of the build-step that produced the build cache. 
@@ -459,7 +458,6 @@ instance A.FromJSON BuildCache where
   parseJSON = A.withObject "BuildCache" $ \o ->
     BuildCache
       <$> (o .:? "ID")
-      <*> (o .:? "Parent")
       <*> (o .:? "Parents")
       <*> (o .:? "Type")
       <*> (o .:? "Description")
@@ -475,7 +473,6 @@ instance A.ToJSON BuildCache where
   toJSON BuildCache {..} =
    _omitNulls
       [ "ID" .= buildCacheId
-      , "Parent" .= buildCacheParent
       , "Parents" .= buildCacheParents
       , "Type" .= buildCacheType
       , "Description" .= buildCacheDescription
@@ -494,7 +491,6 @@ mkBuildCache
 mkBuildCache =
   BuildCache
   { buildCacheId = Nothing
-  , buildCacheParent = Nothing
   , buildCacheParents = Nothing
   , buildCacheType = Nothing
   , buildCacheDescription = Nothing
@@ -3075,7 +3071,7 @@ mkGenericResourcesInnerNamedResourceSpec =
 -- Information about the storage driver used to store the container's and image's filesystem. 
 data GraphDriverData = GraphDriverData
   { graphDriverDataName :: !(Text) -- ^ /Required/ "Name" - Name of the storage driver.
-  , graphDriverDataData :: !((Map.Map String Text)) -- ^ /Required/ "Data" - Low-level storage metadata, provided as key/value pairs.  This information is driver-specific, and depends on the storage-driver in use, and should be used for informational purposes only. 
+  , graphDriverDataData :: !(Maybe (Map.Map String Text)) -- ^ "Data" - Low-level storage metadata, provided as key/value pairs.  This information is driver-specific, and depends on the storage-driver in use, and should be used for informational purposes only. 
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON GraphDriverData
@@ -3083,7 +3079,7 @@ instance A.FromJSON GraphDriverData where
   parseJSON = A.withObject "GraphDriverData" $ \o ->
     GraphDriverData
       <$> (o .:  "Name")
-      <*> (o .:  "Data")
+      <*> (o .:? "Data")
 
 -- | ToJSON GraphDriverData
 instance A.ToJSON GraphDriverData where
@@ -3097,12 +3093,11 @@ instance A.ToJSON GraphDriverData where
 -- | Construct a value of type 'GraphDriverData' (by applying it's required fields, if any)
 mkGraphDriverData
   :: Text -- ^ 'graphDriverDataName': Name of the storage driver.
-  -> (Map.Map String Text) -- ^ 'graphDriverDataData': Low-level storage metadata, provided as key/value pairs.  This information is driver-specific, and depends on the storage-driver in use, and should be used for informational purposes only. 
   -> GraphDriverData
-mkGraphDriverData graphDriverDataName graphDriverDataData =
+mkGraphDriverData graphDriverDataName =
   GraphDriverData
   { graphDriverDataName
-  , graphDriverDataData
+  , graphDriverDataData = Nothing
   }
 
 -- ** Health
@@ -3937,7 +3932,6 @@ data ImageInspect = ImageInspect
   , imageInspectOs :: !(Maybe Text) -- ^ "Os" - Operating System the image is built to run on. 
   , imageInspectOsVersion :: !(Maybe Text) -- ^ "OsVersion" - Operating System version the image is built to run on (especially for Windows). 
   , imageInspectSize :: !(Maybe Integer) -- ^ "Size" - Total size of the image including all layers it is composed of. 
-  , imageInspectVirtualSize :: !(Maybe Integer) -- ^ "VirtualSize" - Total size of the image including all layers it is composed of.  Deprecated: this field is omitted in API v1.44, but kept for backward compatibility. Use Size instead. 
   , imageInspectGraphDriver :: !(Maybe GraphDriverData) -- ^ "GraphDriver"
   , imageInspectRootFs :: !(Maybe ImageInspectRootFS) -- ^ "RootFS"
   , imageInspectMetadata :: !(Maybe ImageInspectMetadata) -- ^ "Metadata"
@@ -3961,7 +3955,6 @@ instance A.FromJSON ImageInspect where
       <*> (o .:? "Os")
       <*> (o .:? "OsVersion")
       <*> (o .:? "Size")
-      <*> (o .:? "VirtualSize")
       <*> (o .:? "GraphDriver")
       <*> (o .:? "RootFS")
       <*> (o .:? "Metadata")
@@ -3984,7 +3977,6 @@ instance A.ToJSON ImageInspect where
       , "Os" .= imageInspectOs
       , "OsVersion" .= imageInspectOsVersion
       , "Size" .= imageInspectSize
-      , "VirtualSize" .= imageInspectVirtualSize
       , "GraphDriver" .= imageInspectGraphDriver
       , "RootFS" .= imageInspectRootFs
       , "Metadata" .= imageInspectMetadata
@@ -4010,7 +4002,6 @@ mkImageInspect =
   , imageInspectOs = Nothing
   , imageInspectOsVersion = Nothing
   , imageInspectSize = Nothing
-  , imageInspectVirtualSize = Nothing
   , imageInspectGraphDriver = Nothing
   , imageInspectRootFs = Nothing
   , imageInspectMetadata = Nothing
@@ -4169,7 +4160,6 @@ data ImageSummary = ImageSummary
   , imageSummaryCreated :: !(Int) -- ^ /Required/ "Created" - Date and time at which the image was created as a Unix timestamp (number of seconds since EPOCH). 
   , imageSummarySize :: !(Integer) -- ^ /Required/ "Size" - Total size of the image including all layers it is composed of. 
   , imageSummarySharedSize :: !(Integer) -- ^ /Required/ "SharedSize" - Total size of image layers that are shared between this image and other images.  This size is not calculated by default. &#x60;-1&#x60; indicates that the value has not been set / calculated. 
-  , imageSummaryVirtualSize :: !(Maybe Integer) -- ^ "VirtualSize" - Total size of the image including all layers it is composed of.  Deprecated: this field is omitted in API v1.44, but kept for backward compatibility. Use Size instead.
   , imageSummaryLabels :: !((Map.Map String Text)) -- ^ /Required/ "Labels" - User-defined key/value metadata.
   , imageSummaryContainers :: !(Int) -- ^ /Required/ "Containers" - Number of containers using this image. Includes both stopped and running containers.  This size is not calculated by default, and depends on which API endpoint is used. &#x60;-1&#x60; indicates that the value has not been set / calculated. 
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -4185,7 +4175,6 @@ instance A.FromJSON ImageSummary where
       <*> (o .:  "Created")
       <*> (o .:  "Size")
       <*> (o .:  "SharedSize")
-      <*> (o .:? "VirtualSize")
       <*> (o .:  "Labels")
       <*> (o .:  "Containers")
 
@@ -4200,7 +4189,6 @@ instance A.ToJSON ImageSummary where
       , "Created" .= imageSummaryCreated
       , "Size" .= imageSummarySize
       , "SharedSize" .= imageSummarySharedSize
-      , "VirtualSize" .= imageSummaryVirtualSize
       , "Labels" .= imageSummaryLabels
       , "Containers" .= imageSummaryContainers
       ]
@@ -4227,7 +4215,6 @@ mkImageSummary imageSummaryId imageSummaryParentId imageSummaryRepoTags imageSum
   , imageSummaryCreated
   , imageSummarySize
   , imageSummarySharedSize
-  , imageSummaryVirtualSize = Nothing
   , imageSummaryLabels
   , imageSummaryContainers
   }
@@ -6857,7 +6844,7 @@ mkSecret =
 data SecretCreateRequest = SecretCreateRequest
   { secretCreateRequestName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretCreateRequestLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretCreateRequestData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretCreateRequestDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretCreateRequestTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)
@@ -6901,7 +6888,7 @@ mkSecretCreateRequest =
 data SecretSpec = SecretSpec
   { secretSpecName :: !(Maybe Text) -- ^ "Name" - User-defined name of the secret.
   , secretSpecLabels :: !(Maybe (Map.Map String Text)) -- ^ "Labels" - User-defined key/value metadata.
-  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0-20250103191802-8c1959736554/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
+  , secretSpecData :: !(Maybe Text) -- ^ "Data" - Data is the data to store as a secret, formatted as a Base64-url-safe-encoded ([RFC 4648](https://tools.ietf.org/html/rfc4648#section-5)) string. It must be empty if the Driver field is set, in which case the data is loaded from an external secret store. The maximum allowed size is 500KB, as defined in [MaxSecretSize](https://pkg.go.dev/github.com/moby/swarmkit/v2@v2.0.0/api/validation#MaxSecretSize).  This field is only used to _create_ a secret, and is not returned by other endpoints. 
   , secretSpecDriver :: !(Maybe Driver) -- ^ "Driver"
   , secretSpecTemplating :: !(Maybe Driver) -- ^ "Templating"
   } deriving (P.Show, P.Eq, P.Typeable)

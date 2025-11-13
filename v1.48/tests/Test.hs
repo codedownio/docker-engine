@@ -90,6 +90,7 @@ main =
       propMimeEq MimeJSON (Proxy :: Proxy GenericResourcesInner)
       propMimeEq MimeJSON (Proxy :: Proxy GenericResourcesInnerDiscreteResourceSpec)
       propMimeEq MimeJSON (Proxy :: Proxy GenericResourcesInnerNamedResourceSpec)
+      propMimeEq MimeJSON (Proxy :: Proxy GraphDriverData)
       propMimeEq MimeJSON (Proxy :: Proxy Health)
       propMimeEq MimeJSON (Proxy :: Proxy HealthConfig)
       propMimeEq MimeJSON (Proxy :: Proxy HealthcheckResult)
